@@ -718,7 +718,7 @@ Define a <td>load function. The load function</td> is executed when the URL of t
 &lt;/script&gt;
 
 <i class="conum" data-value="2"></i><b>(2)</b>
-&lt;h1&gt;{hello.message}&lt;/h1&gt;</code></pre>
+&lt;h1 id="message"&gt;{hello.message}&lt;/h1&gt;</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -763,7 +763,6 @@ Controllers are implemented using JAX-RS</p>. </div>
 
 import dev.aulait.svqk.domain.hello.HelloEntity;
 import dev.aulait.svqk.domain.hello.HelloService;
-import dev.aulait.svqk.interfaces.common.ApiPath;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -777,7 +776,8 @@ public class HelloController {
 
   private final HelloService helloService; <i class="conum" data-value="3"></i><b>(3)</b>
 
-  static final String HELLO_PATH = ApiPath.ROOT + "/hello";
+  @SuppressWarnings("java:S1075")
+  static final String HELLO_PATH = "/api/v1/hello";
 
   @SuppressWarnings("java:S1075")
   @Path(HELLO_GET_PATH)
@@ -947,7 +947,7 @@ mvnw install -P setup
 </div>
 <div class="paragraph">
 <p>When the setup command is executed, each project is built sequentially. The process for these builds</p> is shown below. </div>
-<table class="tableblock frame-all grid-all stretch">
+<table class="tableblock frame-none grid-none stretch">
 <caption class="title">Table 4. Handling build commands for each project</caption>
 <colgroup>
 <col style="width: 50%;">
@@ -1014,7 +1014,7 @@ Installing packages used by the <td class="tableblock halign-left valign-top"><p
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Process-resources</p></td>
 <pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">DB_USER=$ {db.username}</code></pre>
-<pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">DB_USER=value defined in parent POM property `db.username`</code></pre>
+<pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">db_user=svqk</code></pre>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Resources Plugin copies the src/main/resources/.env file directly under the container project. At this time, some environment variables (DB connection information, etc.) in the.env file</p></div> are replaced with project property values using the Filter function of the plug-in. <div class="listingblock"><div class="title">Contents of the </div><div class="content">src/main/resources/.env file Contents</div></div><div class="listingblock"><div class="title"> of the.env copied directly under the container project </div><div class="content"></div></div><div class="paragraph"><p>This.env file is intended to be used as an environment variable for Docker Compose which is subsequently launched.</p></div> <div class="paragraph"><p>See: <a href="https://docs.docker.com/compose/environment-variables/set-environment-variables/">Set environment variables within your container's environment </a></p></div></div></td></tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">compile</p></td>
@@ -1053,14 +1053,23 @@ Since the migration project has set the container project as dependency, it is e
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Generate-sources</p></td>
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">pnpm install
-pnpm build</code></pre>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>If the setup profile is valid, the Maven Exec Plugin will execute the following command.</p></div> <div class="listingblock"><div class="content"></div></div>The <div class="paragraph"><p>pnpm build command builds the FRONT project as an SPA. The materials after the build are generated in the build directory directly under the front project</p></div></div></td>. </tr>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">pnpm install</code></pre>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>If the setup profile is valid, the Maven Exec Plugin will execute the following command.</p></div> <div class="listingblock"><div class="content"></div></div></div></td></tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generate-sources</p></td>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">pnpm build</code></pre>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Exec Plugin will execute the following command.</p></div> <div class="listingblock"><div class="content"></div></div>The <div class="paragraph"><p>pnpm build command builds the FRONT project as an SPA. The materials after the build are generated in the build directory directly under the front project</p></div></div></td>. </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Process-resources</p></td>
 <pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">PUBLIC_BACKEND_URL= http://localhost:${back.port}</code></pre>
-<pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">PUBLIC_BACKEND_URL= http://localhost:親POMのプロパティ value defined in `back.port`</code></pre>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Resources Plugin will copy the following 2 times.</p></div> Copy the <div class="ulist"><ul><li><p>resources/.env file directly under the front project. At this time, some environment variables (Backend port numbers, etc.) in the.env file</p></li></ul></div> are replaced with project property values using the Filter function of the plug-in. <div class="listingblock"><div class="title">Contents of the </div><div class="content">resources/.env file Contents</div></div><div class="listingblock"><div class="title"> of the.env copied directly under the front project</div> <div class="content"></div></div>Copy all files under the <div class="ulist"><ul><li><p>build directory to target/classes/meta-inf/resources/webjars/front. The target/classes directory archives jar files, and the following meta-inf/resources/webjars/front hierarchy is for using</p></li></ul></div> jar files as WebJars. <div class="paragraph"><p>Reference: <a href="https://quarkus.io/guides/web-dependency-locator#webjars">Webjars</a></p></div></div></td></tr> </tbody> </table> </div>
+<pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">PUBLIC_BACKEND_URL=8081</code></pre>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Resources Plugin will copy the following.</p></div> Copy the <div class="ulist"><ul><li><p>resources/.env file directly under the front project. At this time, some environment variables (Backend port numbers, etc.) in the.env file</p></li></ul></div> are replaced with project property values using the Filter function of the plug-in. <div class="listingblock"><div class="title">Contents of the </div><div class="content">resources/.env file Contents</div></div><div class="listingblock"><div class="title"> of the.env copied directly under the front project</div> <div class="content"></div></div></div></td></tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">process-classes</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Resources Plugin will copy the following.</p></div> Copy all files under the <div class="ulist"><ul><li><p>build directory to target/classes/meta-inf/resources/webjars/front. The target/classes directory archives jar files, and the following meta-inf/resources/webjars/front hierarchy is for using</p></li></ul></div> jar files as WebJars. <div class="paragraph"><p>Reference: <a href="https://quarkus.io/guides/web-dependency-locator#webjars">Webjars</a></p></div></div></td></tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pacakge</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven JAR Plugin will generate a JAR file containing materials after the FRONT project has been built.</p></div></div></td> </tr> </tbody> </table> </div>
 <div class="sect3">
 <h4 id="_back">Buck</h4>
 <div class="paragraph">
@@ -1078,7 +1087,7 @@ Since the back project has set the front project as dependency, it is executed a
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Process-resources</p></td>
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.datasource.username=$ {db.username}</code></pre>
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.datasource.username=value defined in parent POM property `db.username`</code></pre>
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">quarkus.datasource.username=svqk</code></pre>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Resources Plugin copies the src/main/resources/application.properties file into the target/classes directory. At this time, some property values (DB connection information, etc.) in the application.properties file are replaced with project property values using the Filter function of the plug-in</p></div>. <div class="listingblock"><div class="title">src/main/resources/application.properties file target/classes</div><div class="content"></div></div> <div class="listingblock"><div class="title"> application.properties file copied to the directory</div><div class="content"></div></div></div></td></tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">package</p></td>
@@ -1118,8 +1127,11 @@ pnpm playwright-install</code></pre>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Exec Plugin will execute the following command.</p></div> <div class="listingblock"><div class="content"></div></div><div class="paragraph"><p>This will run PlayWright tests (*.spec.ts) under the tests directory.</p></div></div> </td></tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">post-intgration-test</p></td>
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">Docker compose down</code></pre>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Exec Plugin will execute the following command.</p></div> <div class="listingblock"><div class="content"></div></div><div class="paragraph"><p>This will stop and remove the Backend container.</p></div></div> </td></tr> </tbody> </table> </div> </div>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">docker compose down
+
+# on browse-e2etest profile
+playwright show-report</code></pre>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"><p>The Maven Exec Plugin will execute the following command.</p></div> <div class="listingblock"><div class="content"></div></div><div class="paragraph"><p>This will stop and remove the Backend container. Also, if the browse-e2etest profile is valid, the browser will launch and the Playwright test report</p></div></div></td> will be displayed. </tr> </tbody> </table> </div> </div>
 <div class="sect2">
 <h3 id="_ローカル開発環境">Local development environment</h3>
 <div class="sect3">

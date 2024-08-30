@@ -145,8 +145,8 @@ The above ` mvn archetype:generate ` command generates a project with the follow
 
 ## Document
 
-- [Implementation Guide](http://sitoolkit-dev.monocrea.co.jp/gitbucket/project-au-lait/svqk/pages/0.6/en/impl-guide/index.html)
-- [Archetecture Specification](http://sitoolkit-dev.monocrea.co.jp/gitbucket/project-au-lait/svqk/pages/0.6/en/arch-spec/index.html)
+- [Implementation Guide](https://aulait.dev/svqk/0.6/en/impl-guide/)
+- [Archetecture Specification](https://aulait.dev/svqk/0.6/en/arch-spec/)
 
 ## License
 

@@ -598,7 +598,7 @@ brew install --cask visual-studio-code</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"># プロジェクト資材の取得
-git clone http://sitoolkit-dev.monocrea.co.jp/gitbucket/git/project-au-lait/svqk.git
+git clone https://github.com/project-au-lait/svqk.git
 cd svqk
 
 # 以下、開発環境のセットアップ
@@ -1046,8 +1046,8 @@ public class IssueStatusDto {
 import java.util.List;
 
 import dev.aulait.svqk.arch.util.BeanUtils;
+import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.domain.issue.IssueStatusService;
-import dev.aulait.svqk.interfaces.common.ApiPath;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
