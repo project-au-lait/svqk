@@ -1,0 +1,33 @@
+
+skinparam linetype ortho
+
+folder root {
+  folder front {
+    file "package.json"
+  }
+  folder back {
+    file "pom.xml"
+  }
+  folder container {
+    file "compose.yml"
+  }
+}
+
+node Docker {
+  database DB
+}
+
+node Vite {
+  component Frontend
+}
+
+node Quarkus {
+  component Backend
+}
+
+front --> Vite: pnpm vite dev
+back --> Quarkus: mvnw quarkus:dev
+container --> Docker: docker compose up
+
+Frontend -> Backend: HTTP
+Backend -> DB: JDBC

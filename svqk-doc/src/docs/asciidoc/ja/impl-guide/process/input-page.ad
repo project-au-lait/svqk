@@ -1,0 +1,310 @@
+ifndef::imagesdir[:imagesdir: ../images]
+:project_root: ../../../../../../..
+=== 登録画面
+
+ここでは登録画面の実装プロセスを説明します。
+説明ではリファレンス実装のチケット登録画面を例に挙げます。
+
+.登録画面の例　チケット登録画面
+image::input-page.png[width=700]
+
+登録画面には、登録内容を入力する項目と、登録を実行するボタンが配置されます。
+また、登録画面では以下の2つの処理があります。
+
+. 画面に遷移して来た際の初期化処理
+. 画面に入力されたデータの登録処理
+
+以降では、それぞれの処理に対する実装を説明します。
+
+==== 初期化処理
+
+登録画面の初期化処理のシーケンスは以下の通りです。
+
+.画面初期表示時の処理シーケンス
+[cols="3,2",frame=none,grid=none]
+|===
+a|
+[plantuml]
+----
+include::input-page-init.pu[]
+----
+
+a|[.description]
+. ユーザーが登録画面に遷移します。
+. PageLoaderのload functionが呼び出されます。
+. PageLoaderが画面の入力値を格納するmodelのインスタンスを生成します。インスタンスのプロパティには画面項目の初期値を設定します。
+. PageLoaderが画面で使用するコード値等を取得するWeb APIを呼び出します。取得した結果はmodelとしてPageに返却します。
+. ControllerがServiceを呼び出します。
+. ServiceがRepositoryを呼び出します。
+. RepositoryがDBに対しSELECTを実行します。
+. ControllerがServiceから取得したentityをdtoに変換します。
+. PageがPageLoaderから取得したmodelを元に画面のHTMLを構築します。また入力項目のバリデーションを定義します。
+|===
+
+以降では、上記の処理シーケンスの各要素を以下の順に実装します。
+
+. Frontend:  体裁とバリデーションの実装
+. DB: テーブルを作成するマイグレーションスクリプトの実装
+. Backend: Web APIの実装
+. Frontend: Web API Clientの生成と組み込み
+
+===== Frontend
+
+登録画面の実装プロセスでは、初めにFrontendの体裁部分を実装します。
+
+====== Page
+
+Pageに画面項目を配置し、バリデーションの定義を実装します。
+Pageのスクリプトセクションには、バリデーションの定義とマークアップセクションで必要な変数を宣言します。
+
+.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte スクリプトセクション
+[source,ts]
+----
+  import { IssueModel } from '$lib/arch/api/Api';
+  import InputField from '$lib/components/InputField.svelte';
+  import * as yup from 'yup';
+  import FormValidator from '$lib/arch/form/FormValidator';
+
+  const issue : IssueModel = {}; // <.>
+
+  const spec = {
+    subject: yup.string().required()
+  }; // <.>
+
+  const form = FormValidator.createForm(spec, () => {}); // <.>
+----
+
+. Modelのインスタンスを生成します。この時点では仮実装で空のオブジェクトを生成します。
+. `yup.object` 関数を使用し、バリデーションの仕様を定義します。仕様は、入力項目ごとのプロパティと、プロパティのバリデーションを定義したオブジェクトです。ここでは、 `subject` という名前のstring型の必須入力項目を定義しています。
+. `FormValidator.createForm` 関数を使用し、バリデーションをhtml要素に適用するためのオブジェクトを生成します。この時点では第2引数は仮実装で空の関数「() => {}」を指定します。
+
+Pageのマークアップセクションには画面項目を配置します。
+
+.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte マークアップセクション
+[source,html]
+----
+<form use:form>  <.>
+  <div>
+    <InputField id="subject" label="題名" bind:value={issue.subject} />  <.>
+  </div>
+  
+
+  <div>
+    <button>登録</button> <.>
+  </div>
+</form>
+----
+
+. formタグを配置します。formタグにはスクリプトセクションで生成したformオブジェクトを設定します。
+. divタグで1行分の領域を確保し、その中に入力項目を配置します。
+. 処理を実行するボタンを配置します。
+
+[NOTE]
+====
+Frontendの実装は、Frontendサーバーを起動した状態で行います。
+これにより、ブラウザで画面の体裁とバリデーションの挙動を確認しながら実装を進めることができます。
+Frontendサーバーの起動方法は<<#project-usage>>を参照してください。
+====
+
+===== DB
+
+マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
+
+.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="1..12"]
+----
+
+. テーブルを作成するCREATE文を実装します。
+. 作成対象のテーブルに共通カラム(作成者、作成日、など)を追加します。
+. テーブルにデータを投入するINSERT文を実装します。
+
+マイグレーションスクリプトを実装したら、VSCode Task: `migration` を実行します。
+
+===== Backend
+
+BackendにDBから値を取得するWeb APIを実装します。
+
+====== Entity
+
+Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
+
+.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
+[source,yml]
+----
+packages:
+  ${project.groupId}.domain.issue:  # <.>
+    - issue_status
+----
+
+. packages属性にEntityの生成先パッケージとテーブル名を追加します。
+** "Entityの生成先パッケージ" : ["テーブル名"]
+
+jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
+
+.{project-artifactid}-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java
+[source,java]
+----
+include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java[]
+----
+
+====== Repository
+
+Repositoryのjavaファイルをドメインパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java[]
+----
+
+. JpaRepositoryを継承します。型パラメータにはEntityとEntityのIDの型を指定します。
+
+====== Service
+
+Serviceのjavaファイルをドメインパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java[]
+----
+
+. @ApplicationScopedをServiceクラスに設定します。
+. @RequiredArgsConstructorをServiceクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
+. Serviceが使用するRepositoryをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
+. RepositoryからEntityを取得します。
+
+====== DTO
+
+DTOのjavaファイルをインターフェースパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java[]
+----
+
+. @Dataを設定します。これにより、フィールドのGetter、Setter等が実装しなくても使用可能になります。
+. 対応するEntityのプロパティの中で、外部に公開するものをDTOのフィールドとして定義します。
+
+====== Controller
+
+Controllerのjavaファイルをインターフェースパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
+----
+
+. @PathをControllerクラスに設定します。これにより、このControllerクラスがAPIのエンドポイントして認識されます。
+. @RequiredArgsConstructorをControllerクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
+. Controllerが使用するServiceをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にServiceのインスタンスがInjectされます。
+. @GetをAPIのエンドポイントとなるメソッドに設定します。
+. ServiceからEntityを取得し、それをDTOに変換したものをレスポンスとして返却します。
+
+
+[NOTE]
+====
+Backendの実装が終わったらBackendサーバーを起動し、Swagger UIを使用して動作確認を行います。
+Backendサーバーの起動方法は<<#project-usage>>を、Swagger UIのアクセス先は<<#access-info>>をそれぞれ参照してください。
+====
+
+===== Frontend
+
+API Clientを生成し、Web APIの呼び出し処理を追加します。
+
+====== API Client
+
+VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
+生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
+
+====== PageLoader
+
+.{project-artifactId}-front/src/routes/issues/[issueId]/+page.ts
+[source,ts]
+----
+import type { IssueModel, IssueStatusModel } from '$lib/arch/api/Api';
+import ApiHandler from '$lib/arch/api/ApiHandler';
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ fetch, params }) => {  // <.>
+
+  const issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) =>
+    api.issueStatuses.issueStatusesList()
+  ))!; // <.>
+
+  return {
+    issueStatuses // <.>
+  };
+};
+----
+
+. load関数を定義します。
+. ApiHandler.handle関数を使用してWeb APIを呼び出します。
+. Web APIの呼び出し結果を返却します。
+
+
+====== Page
+
+Pageの画面項目にPageLoaderからの返却値を設定します。
+
+.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte スクリプトセクション
+[source,ts]
+----
+  import type { PageData } from './$types';
+
+  export let data: PageData;  // <.>
+
+  const issueStatuses = data.issueStatuses;  // <.>
+----
+
+. PageLoaderからの返却値を格納する変数を宣言します。
+. 返却値を変数に格納します。
+
+.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte マークアップセクション
+[source,html]
+----
+<form use:form>
+
+    <div>
+      <SelectBox
+        id="status"
+        label="ステータス"
+        options={issueStatuses}  <.>
+        bind:value={issue.issueStatus.id}
+      />
+    </div>
+
+</form>
+----
+
+. PageLoaderからの返却値を画面項目に設定します。
+
+[NOTE]
+====
+Frontendサーバー、Backendサーバー、DBを全て起動した状態で画面操作を行い、期待通りの挙動になること、BackendサーバーのログにWeb APIの処理のログ等が出力されることを確認します。
+====
+
+==== 登録処理
+
+登録画面の登録時の処理シーケンスは以下の通りです。
+
+.登録時の処理シーケンス
+[plantuml]
+----
+include::input-page-save.pu[]
+----
+
+. ユーザーが登録操作を実行します。
+. PageがWeb APIを呼び出します。
+. ControlelrがPOSTされたdtoをentityに変換します。
+. ControllerがServiceを呼び出します。
+. ServiceがRepositoryを呼び出します。
+. Repositoryがentityの状態に応じてINSERTまたはUPDATEを実行します。
+. Repositoryがentityを返却します。
+. Serviceがentityを返却します。
+. Controllerがentityのidとversionプロパティを返却します。
+

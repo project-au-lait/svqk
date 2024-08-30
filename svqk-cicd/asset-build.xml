@@ -1,0 +1,79 @@
+<!-- 
+This build script is only for SVQK asset build and should be excluded to SVQK archetypes.
+
+Usage:
+command to translate docs
+
+./mvnw -f svqk-cicd -D ant.file=asset-build.xml -D ant.target=trans-readme
+./mvnw -f svqk-cicd -D ant.file=asset-build.xml -D ant.target=trans-docs
+
+
+command to set version
+
+./mvnw -f svqk-cicd -D ant.file=asset-build.xml -D ant.target=set-version -D version=1.x.x
+-->
+<project xmlns:if="ant:if" xmlns:unless="ant:unless" name="svqk-asset-build">
+
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+
+  <condition property="mvn.cmd" value="${basedir}/../mvnw.cmd" else="${basedir}/../mvnw">
+    <os family="windows" />
+  </condition>
+
+
+  <target name="trans-readme">
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg
+        line="-N batch-translator:translate
+        -Dbt.source=../svqk-doc/src/docs/markdown/ja/README.md
+        -Dbt.target=../README.md
+        -Dbt.mode=ja2en
+        -Dbt.engine=minhon" />
+    </exec>
+  </target>
+
+
+  <target name="trans-docs">
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg
+        line="-N batch-translator:translate
+        -Dbt.source=../docs/${project.version}/ja/
+        -Dbt.target=../docs/${project.version}/en/
+        -Dbt.filePattern=*.html
+        -Dbt.mode=ja2en
+        -Dbt.engine=aws" />
+    </exec>
+  </target>
+
+
+  <target name="set-version">
+    <property name="version" value="" />
+    <fail
+      if:blank="${version}"
+      message="Please specify version in the system properties. (e.g. mvnw -f svqk-cicd -D ant.target=set-version -D version=1.x.x" />
+
+    <exec executable="${mvn.cmd}" dir="${basedir}/../" failonerror="true">
+      <arg line="-N versions:set -D newVersion=${version} -D generateBackupPoms=false" />
+    </exec>
+
+    <if>
+      <not>
+        <matches string="${version}" pattern="^.*-SNAPSHOT$" />
+      </not>
+      <then>
+        <replaceregexp flags="g">
+          <regexp
+            pattern="((?&lt;=archetypeVersion.*)|(?&lt;=/pages/.*)|(?&lt;=artifactId&gt;svqk&lt;.*\n{0,1}.*version.*))(\d+[\.\d]+\d+)(-SNAPSHOT){0,1}" />
+          <substitution expression="${version}" />
+          <fileset dir="${basedir}/../">
+            <include name="svqk-archetype/pom.xml" />
+            <include name="svqk-doc/**/README.md" />
+            <include name="README.md" />
+          </fileset>
+        </replaceregexp>
+      </then>
+    </if>
+  </target>
+
+</project>

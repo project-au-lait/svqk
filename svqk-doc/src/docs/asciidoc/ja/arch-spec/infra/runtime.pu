@@ -1,0 +1,29 @@
+
+rectangle AWS {
+  
+  rectangle EC2 {
+
+    rectangle "Docker Compose" {
+
+      rectangle back <<service>>{
+        component Backend <<jar>>
+        component Frontend <<wabjar>>
+        Backend -> Frontend: 3.a read
+      }
+
+      rectangle dbms <<service>> {
+        database DB
+        Backend --> DB: 3.b JDBC
+      }
+    }
+  }
+
+
+  rectangle "Route53\nCloudFront\nALB" as rca
+}
+
+rectangle Browser
+
+
+Browser --> rca: 1. HTTPS
+rca --> Backend: 2. HTTP

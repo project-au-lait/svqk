@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <artifactId>svqk-front</artifactId>
+
+  <parent>
+    <groupId>dev.aulait.svqk</groupId>
+    <artifactId>svqk</artifactId>
+    <version>0.6-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+
+  <!-- Build -->
+  <build>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>.env</include>
+        </includes>
+        <targetPath>../../</targetPath>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>build</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec-plugin-version}</version>
+        <configuration>
+          <executable>pnpm</executable>
+        </configuration>
+        <executions>
+          <execution>
+            <?m2e ignore?>
+            <id>pnpm-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <commandlineArgs>build</commandlineArgs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-build-resources</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/META-INF/resources/webjars/front</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>build</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>setup</id>
+
+      <activation>
+        <property>
+          <name>setup</name>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-plugin-version}</version>
+            <configuration>
+              <executable>pnpm</executable>
+            </configuration>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <id>pnpm-install</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <commandlineArgs>install</commandlineArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+</project>

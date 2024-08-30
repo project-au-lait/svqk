@@ -1,0 +1,32 @@
+services:
+  sonarqube:
+    image: sonarqube
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - 9000:9000
+
+  registry:
+    image: registry
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - 5000:5000
+
+  jenkins:
+    build:
+      context: ./.jenkins/image
+    environment:
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+      TZ: Asia/Tokyo
+    ports:
+      - 8070:8080
+    # volumes:
+    #   - ./.jenkins/adminPassword:/var/jenkins_home/secrets/initialAdminPassword
+
+  nexus:
+    image:  sonatype/nexus3
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - 8082:8081

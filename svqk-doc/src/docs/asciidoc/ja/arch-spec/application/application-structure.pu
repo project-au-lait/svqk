@@ -1,0 +1,23 @@
+@startuml application-structure
+
+skinparam rectangle {
+  backgroundColor white
+}
+
+actor User
+
+component "Frontend" as Frontend <<SvelteKit>>
+component "Backend" as Backend <<Quarkus>>
+database DB <<PostgreSQL>>
+
+User -> Frontend: HTTP \n(with Browser)
+Frontend -> Backend: HTTP
+Backend -> DB: JDBC
+
+rectangle "* User Interface\n* Validatioin\n* Web API Call" as fnote {
+}
+Frontend .. fnote
+
+rectangle "* Web API\n* Validation\n* Transaction\n* Business Logic\n* DB Access" as bnote {
+}
+Backend .. bnote

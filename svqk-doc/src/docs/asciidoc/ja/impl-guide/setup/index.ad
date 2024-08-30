@@ -1,0 +1,214 @@
+
+[[setup-process]]
+== 開発環境構築手順
+ifndef::imagesdir[:imagesdir: ../images]
+
+=== 必要なソフトウェアのインストール
+
+開発には以下のソフトウェアが必要です。
+
+* Docker Desktop
+* JDK v21
+* Node.js v20
+* pnpm
+* Git
+* Visual Studio Code
+
+次のOSごとの手順に従ってソフトウェアをインストールしてください。
+
+==== Windows
+
+WindowsではChocolateyを使用してソフトウェアをインストールします。
+
+管理者権限でPowershellを起動します。(起動操作は下記参照)
+
+1. ショートカットキー kbd:[Windows+R] を実行します。
+2. 表示された `ファイル名を選択して実行` ダイアログで `powershell` と入力します。
+3. ショートカットキー kbd:[Ctrl+Shift+Enter] を実行します。
+
+表示されたPowershellウィンドウで以下のコマンドを実行します。
+
+[source,ps1]
+----
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+----
+
+続けて以下のコマンドを実行し、必要なソフトウェアをインストールします。
+
+[source,ps1]
+----
+choco install -y docker-desktop
+choco install -y corretto21jdk
+choco install -y nodejs-lts
+choco install -y pnpm
+choco install -y git
+choco install -y vscode
+----
+
+==== macOS
+
+macOSではHomebrewを使用してソフトウェアをインストールします。
+
+ターミナルで以下のコマンドを実行し、Homebrewをインストールします。
+
+[source,sh]
+----
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+----
+
+続けて以下のコマンドを実行し、必要なソフトウェアをインストールします。
+
+[source,sh]
+----
+brew install --cask docker
+brew install --cask corretto@21
+brew install node@20
+brew install pnpm
+brew install git
+brew install --cask visual-studio-code
+----
+
+
+=== プロジェクト資材の取得とセットアップ
+
+コマンドプロンプト(Windows)/ターミナル(macOS)で以下のコマンドを実行し、プロジェクト資材の取得と開発環境のセットアップを行います。
+
+[source,sh]
+----
+# プロジェクト資材の取得
+git clone http://sitoolkit-dev.monocrea.co.jp/gitbucket/git/project-au-lait/svqk.git
+cd svqk
+
+# 以下、開発環境のセットアップ
+
+## コマンドプロンプト(Windows)
+chcp 65001
+mvnw install -T 1C -P setup,browse-e2etest
+
+
+## ターミナル(macOS)
+./mvnw install -T 1C -P setup,browse-e2etest
+----
+
+[TIP]
+====
+上記のセットアップコマンドの処理内容、及び実現方式はxref:../arch-spec/index.adoc#build-structure[ビルド構成]を参照してください。
+====
+
+== 開発環境使用方法
+
+=== プロジェクトを開く
+
+以下のコマンドを実行し、プロジェクトをVSCodeワークスペースとして開きます。
+
+```sh
+code svqk.code-workspace
+```
+
+[NOTE]
+====
+VSCodeワークスペースが開いたら、ウィンドウ右下に表示される以下のダイアログで `Install` ボタンをクリックして拡張機能をインストールします。
+
+image::recommended-extension.png[width=450]
+====
+
+[TIP]
+====
+一度開いたVSCodeワークスペースは、以下の手順で開けるようになります。
+
+. VSCodeを起動
+.  `File` メニュー > `Open Recent` > svqk(Workspace)を選択
+====
+
+[[project-usage]]
+=== プロジェクトの使い方
+
+.プロジェクトの使い方
+[cols="2,4,5"]
+|====
+^|使い方 ^| 操作  ^| 挙動
+
+|DBMSの起動
+|VSCode Task: `start-db` +
+Command: mvnw -f svqk-container compile -P setup
+|DBMS(PostgreSQL)が起動します。 +
+このVSCode TaskはVSCodeワークスペースを開いた際にも自動で実行されます。
+
+|Backendの起動
+|VSCode Task: `start-back` +
+Command: mvnw -f svqk-back quarkus:dev
+|Backendサーバー(Quarkus)が起動します。 +
+Backendサーバーが起動すると、backプロジェクト内で実装されているWeb APIアプリが使用可能になります。
+
+|Backendのデバッグ実行
+|VSCodeデバッグ構成: `Attach Quarkus`
+|VSCodeがBackendサーバーのデバッグポートにアタッチします。 +
+これによりVSCodeのデバッグ実行(ブレークポイントによるステップ実行等)が有効になります。 +
+この操作はBackendが起動した状態で実行可能です。
+
+|Frontendの起動
+|VSCode Task: `start-front` +
+Command: pnpm dev --open +
+(at svqk-front directory)
+|Frontendサーバー(Vite)が起動します。 +
+Frontendサーバーが起動すると、ブラウザが起動しfrontプロジェクト内で実装されているWebアプリが表示されます。
+
+|DBマイグレーションの実行
+|VSCode Task: `migrage` +
+Command: mvnw -f svqk-migration compile -P setup
+|DSマイグレーションツール(Flyway)が実行されます。 +
+実行が終了すると、migrationプロジェクト内のマイグレーション資材(sql、java)がDBに反映されます。 +
+この操作はDBMSが起動した状態で実行可能です。
+
+|Entityの生成
+|VSCode Task: `gen-entity` 
+|jpa-entity-generatorが実行されます。 +
+実行が終了すると、JPA Entityのjavaファイルがentityプロジェクト内に生成されます。 +
+この操作はDBMSが起動した状態で実行可能です。
+
+|Front用API Clientの生成
+|VSCode Task: `gen-api-client` +
+Command: pnpm gen-api-client +
+(at svqk-front directory)
+|swagger-typescript-apiが実行されます。
+実行が終了すると、API Clientがfrontプロジェクトとe2etestプロジェクト内に生成されます。 +
+この操作はBackendが起動した状態で実行可能です。
+|====
+
+
+**VSCode Taskの実行方法**
+
+1. ショートカットキー  kbd:[Ctrl+Shift+P] を実行
+2. 表示されたコマンドパレットに `task` と入力
+3. `Tasks: Run Task` を選択
+
+
+[[access-info]]
+=== アクセス情報
+
+.アクセス情報
+[cols="2,3"]
+|====
+^|接続先 ^|接続情報/URL
+
+|DBMS
+a|
+* port: {db-port}
+* db: {db-name}
+* schema: {db-schema}
+* user: {db-username}
+* password: {db-password}
+
+|Quaruks Developer UI
+|http://localhost:{back-port}/q/dev-ui
+
+|Backend Web APIs (Swagger UI)
+|http://localhost:{back-port}/q/dev-ui/io.quarkus.quarkus-smallrye-openapi/swagger-ui
+
+|Frontend Web App
+a|
+* Hosted on Vite:
+** http://localhost:5173
+* Hosted on Backend:
+** http://localhost:{back-port} 
+|====

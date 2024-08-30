@@ -1,0 +1,97 @@
+:project_root: ../../../../../../..
+=== Frontend
+
+==== パッケージ構成
+
+frontプロジェクトのパッケージ構成はSvelteKitのプロジェクト構成を元にしています。
+
+
+[source,text,subs="callouts,attributes"]
+----
+include::frontend-dir-structure.txt[]
+----
+
+. ライブラリを配置するディレクトリです。この配下のファイルは`$lib` から始まるパスでimport可能です。
+. 共通機能のライブラリを配置するディレクトリです。この配下には機能ごとにディレクトリを作成し、UIComponentやUtilityを配置します。
+. ドメイン固有のライブラリを配置するディレクトリです。この配下にはドメインごとにディレクトリを作成し、UIComponentやUtilityを配置します。
+. SvelteKitのRoutingが使用するディレクトリです。この配下にはURLの階層ごとにディレクトリを作成し、Page、PageLoaderを配置します。
+
+[NOTE]
+====
+SvelteKitのプロジェクト構成の詳細はSvelteKitのドキュメントを参照してください。
+
+* https://kit.svelte.dev/docs/project-structure[SvelteKit Project structure]
+====
+
+
+==== Page
+
+Pageは、画面項目の配置、バリデーションの定義、画面イベントのハンドリング、Web APIの呼び出しを担うコンポーネントです。
+
+Pageは、SvelteKitのRoutingで使用する `+page.svelte` ファイルで実装します。`+page.svelte` ファイルとRoutingとの関係は以下の通りです。
+
+* `+page.svelte` ファイルはsrc/routes以下の任意の階層に配置します。
+* `+page.svelte` ファイルを配置したsrc/routes以下のパスが、当該画面にアクセスするURLのパスになります。
+** 例 +
+    配置: src/routes/a/b/c/+page.svelte +
+    URL: http://host:port/a/b/c
+
+
+[NOTE]
+====
+SvelteKitのRoutingと `+page.svelte` ファイルの詳細な仕様はSvelteKitのドキュメントを参照してください。
+
+* https://kit.svelte.dev/docs/routing[SvelteKit Routing]
+* https://kit.svelte.dev/docs/routing#page[SvelteKit Routing +page.svelte]
+====
+
+Pageの実装内容は以下の通りです。
+
+.+page.svelte
+[source,html]
+----
+<script lang="ts">
+
+  // script section <.>
+
+</script>
+
+ <.>
+ <!-- tepmlate section -->
+----
+
+<.> スクリプトセクションには、TypeScriptでバリデーションの定義や画面イベントのハンドリング、Web APIを呼び出し等を実装します。
+<.> テンプレートセクションには、HTML + Svelteの構文で画面項目の配置を実装します。
+
+==== PageLoader
+
+PageLoaderは、画面初期化時のWeb APIを使用したデータ取得、入力項目の初期化を担うコンポーネントです。
+
+PageLoaderは、SvelteKitのLoading dataで使用する `+page.ts` ファイルで実装します。
+
+* `+page.ts` ファイルは画面の `+page.svelte` ファイルと同じディレクトリに配置する。 
+
+[NOTE]
+====
+SvelteKitのLoading dataの詳細な仕様はSvelteKitのドキュメントを参照してください。
+
+* https://kit.svelte.dev/docs/load[SvelteKit Loading data]
+====
+
+.+page.ts
+[source,ts]
+----
+include::{project_root}/svqk-front/src/routes/hello/+page.ts[]
+----
+
+<.> load関数を定義します。load関数は対応する画面のURLにアクセスされた際に実行されます。
+<.> Pageで必要なデータをオブジェクトとして返却します。
+
+.+page.svelte
+[source,html]
+----
+include::{project_root}/svqk-front/src/routes/hello/+page.svelte[]
+----
+
+<.> PageLoaderで返却したオブジェクトを格納するための変数を宣言します。
+<.> この変数経由でPageLoaderで取得したデータが参照可能となります。

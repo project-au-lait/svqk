@@ -1,0 +1,83 @@
+= SVQK Maven Archetype
+
+ここでは、SVQK Maven Archetype(以下 svqk-archetype)の概要と作成する仕組みを説明します。
+
+== 概要
+
+svqk-archetypeは、Mavenアーキタイプであり、Mavenプロジェクトを作成する際の雛形として使用します。
+svqk-archetypeから作成したMavenプロジェクトは、SVQKが具備する以下の仕組みを具備します。
+
+* ローカル開発環境
+** DBMSの自動セットアップ
+** DBマイグレーション
+** JPA Entityの自動生成
+** API Client生成
+* ローカル実行環境
+** FrontendからBackendへのAPI Call
+** BackendからDBMSへのDBアクセス
+* CI
+** Unit Test
+** Integration Test
+** End to End Test
+
+== アーキタイプ作成
+
+svqk-archetypeは、SVQKプロジェクトから以下のファイルを除外したものです。
+
+* リファレンス実装固有のファイル +
+  チケットのCRUD機能を実現する画面、処理を実装したファイル
+* svqk-archetype-buildプロジェクト
+
+svqk-archetypeを作成するための資材はsvqk-archetype-buildプロジェクトに格納されています。
+svqk-archetyp-buildプロジェクトの主要なファイル・ディレクトリは以下の通りです。
+
+.ディレクトリ構成
+----
+include::directory-structure.txt[]
+----
+
+. Antビルドファイル +
+  svqk-archetypeの作成・テストの処理をAntタスクとして実装しています。
+. アーキタイプ用POM +
+  svqk-archetypeをMavenリポジトリに登録するための情報を定義したPOMです。
+. archetype.workdir +
+  アーキタイプに含めるファイルを集めるためのディレクトリです。
+. archetype.gendir +
+  maven-archetype-plugin:create-from-projectによって生成されるアーキタイプ資材を格納したディレクトリです。
+. archetype.testdir +
+  svqk-archetypeのテストに使用するディレクトリです。
+  テストでは、svqk-archetypeから新規にプロジェクトを作成し、そのプロジェクトがCIテストをパスすることを確認します。
+
+svqk-archetypeを作成する処理はsvqk-archetype-build/build.xmlに実装されています。
+
+.svqk-archetype-build/build.xml内のタスク
+[cols="1,3,3"]
+|====
+^|Antタスク名 ^|処理概要 ^|主要コマンド
+
+|prepare
+|SVQKプロジェクト内のsvqk-archetypeに含めるファイルをarchetype.workdirにコピーします。
+|Ant Copy Task
+
+|create
+|アーキタイプとなる資材をarchetype.gendir以下に生成します。
+アーキタイプ用POMをコピーします。
+|mvnw archetype:create-from-project (at archetype.workdir)
+
+|install
+|svqk-archetypeをMavenローカルリポジトリにインストールします。
+|mvnw install (at archetype.gendir)
+
+|generate-project
+|svqk-archetypeを用いて新規プロジェクトを作成します。
+|mvnw archetype:generate (at archetype.testdir)
+
+|test
+|generate-projectで作成したプロジェクトのCIテストを実行します。
+|mvnw -f project-cicd -D ant.target=test (at archetype.testdir/project)
+
+|deploy (TODO 実装)
+|svqk-archetypeをMavenリモートリポジトリにデプロイします。
+|mvnw deploy:deploy (at archetype.gendir)
+|====
+

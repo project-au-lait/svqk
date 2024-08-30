@@ -1,0 +1,28 @@
+packages:
+  ${project.groupId}.domain.issue:
+    - issue
+    - issue_status
+  ${project.groupId}.domain.hello:
+    - hello
+baseClassDefs:
+  - tables:
+      - "issue"
+      - "issue_status"
+    baseClass: ${project.groupId}.arch.jpa.BaseEntity
+annotationDefs:
+  GenerationType.IDENTITY:
+    type: jakarta.persistence.GeneratedValue
+    attributes:
+      strategy: jakarta.persistence.GenerationType.IDENTITY
+annotatedCols:
+  issue.id:
+    - GenerationType.IDENTITY
+excludedColmuns:
+  - version
+  - created_by
+  - created_at
+  - updated_by
+  - updated_at
+excludedTables:
+  - flyway_schema_history
+formatter: google

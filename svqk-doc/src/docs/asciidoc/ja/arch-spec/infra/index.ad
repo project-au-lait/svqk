@@ -1,0 +1,66 @@
+== インフラアーキテクチャ
+
+=== 実行構成
+
+.実行構成図
+[plantuml]
+----
+include::runtime.pu[]
+----
+
+. ブラウザはサービスURLに対してHTTPSリクエストを送信します。 リクエストはRoute53、CloudFront、ALBを経由します。
+. ALBはSSL暗号化を複合し、HTTPリクエストをBackendに送信します。 
+. Backendはリクエストのパスごとに以下の処理を行います。
+.. リクエストのパスがFrontend資材の場合 +
+  BackendはFrontend資材をwebjarから取得し、レスポンスとして返却します。
+.. リクエストのパスがAPIの場合 +
+  BackendはAPIの処理を実行し結果をレスポンスとして返却します。処理内でDBアクセスを行う場合もあります。
+
+
+=== デプロイ構成
+
+[plantuml]
+----
+include::deploy.pu[]
+----
+
+. 環境固有の変数はParameterStoreに格納され、EC2インスタンスのOSの環境変数を経由して各サービスが使用します。
+. migrationサービス、backサービスはECRからコンテナイメージを取得します。
+. Flywayを使用してDBマイグレーションを実行します。
+
+
+=== ログ収集・監視
+
+* Backendが出力するログ
+* DBMSが出力するログ
+* EC2インスタンスのOSのログ
+
+=== 死活監視
+
+* EndToEnd +
+  CloudWatchからRoute53経由でQuarkusのヘルスチェックURLにHTTPリクエストを送信することで監視
+  See https://quarkus.io/guides/smallrye-health
+* EC2インスタンス +
+  管理コンソール？
+* Docker Compose +
+  docker psの結果を監視？
+
+=== 性能監視
+
+
+=== バックアップ・リストア
+
+EC2インスタンス作成時に、以下のデータの格納先にEBSを指定します。
+
+* Docker Image
+* DBMSのバックアップファイル
+
+バックアップの取得
+
+. サイトクローズ +
+  CloudFrontの向き先をS3に変更(メンテナンスページとメンテナンスjsonを配信)
+. backサービスを停止
+. バックアップ取得 +
+  DBMSのバックアップ取得コマンドを実行(PostgreSQLの場合はpg_dump)
+. サイトオープン
+  CloudFrontの向き先をALBに変更

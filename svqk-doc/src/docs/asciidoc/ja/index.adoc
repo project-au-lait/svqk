@@ -1,0 +1,4 @@
+= 開発者向けドキュメント
+
+- xref:arch-spec/index.adoc[アーキテクチャ仕様書]
+- xref:impl-guide/index.adoc[実装ガイド]

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!-- The Basics -->
+  <groupId>dev.aulait.svqk</groupId>
+  <artifactId>svqk</artifactId>
+  <version>0.6-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>svqk-back</module>
+    <module>svqk-cicd</module>
+    <module>svqk-container</module>
+    <module>svqk-doc</module>
+    <module>svqk-e2etest</module>
+    <module>svqk-entity</module>
+    <module>svqk-front</module>
+    <module>svqk-migration</module>
+  </modules>
+
+  <properties>
+    <back.port>8081</back.port>
+
+    <build-helper-plugin.version>3.6.0</build-helper-plugin.version>
+
+    <db.jdbc.groupId>org.postgresql</db.jdbc.groupId>
+    <db.jdbc.artifactId>postgresql</db.jdbc.artifactId>
+    <db.jdbc.driver>org.postgresql.Driver</db.jdbc.driver>
+    <db.jdbc.version>42.2.18</db.jdbc.version>
+    <db.jdbc.url>jdbc:postgresql://${db.host}:${db.port}/${db.name}?currentSchema=${db.schema}</db.jdbc.url>
+    <db.host>localhost</db.host>
+    <db.name>postgres</db.name>
+    <db.password>svqk</db.password>
+    <db.port>5431</db.port>
+    <db.schema>public</db.schema>
+    <db.username>svqk</db.username>
+
+    <exec-plugin-version>3.2.0</exec-plugin-version>
+
+    <image.registry>localhost:5000</image.registry>
+
+    <lombok.version>1.18.32</lombok.version>
+
+    <maven.compiler.release>21</maven.compiler.release>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <surefire-plugin.version>3.2.5</surefire-plugin.version>
+  </properties>
+
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>3.1.0</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.ant</groupId>
+              <artifactId>ant</artifactId>
+              <version>1.10.9</version>
+            </dependency>
+            <dependency>
+              <groupId>ant-contrib</groupId>
+              <artifactId>ant-contrib</artifactId>
+              <version>1.0b3</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

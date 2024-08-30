@@ -1,0 +1,81 @@
+{
+  "extensions": {
+    "recommendations": [
+      "aprilandjan.ascii-tree-generator",
+      "asciidoctor.asciidoctor-vscode",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "GabrielBB.vscode-lombok",
+      "josevseb.google-java-format-for-vs-code",
+      "mhutchie.git-graph",
+      "redhat.vscode-xml",
+      "redhat.vscode-yaml",
+      "sonarsource.sonarlint-vscode",
+      "svelte.svelte-vscode",
+      "vmware.vscode-boot-dev-pack",
+      "vscjava.vscode-java-pack"
+    ]
+  },
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "svqk-e2etest"
+    },
+    {
+      "path": "svqk-front"
+    }
+  ],
+  "settings": {
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[svelte]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[xml]": {
+      "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "[yaml]": {
+      "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "asciidoc.preview.scrollPreviewWithEditor": false,
+    "asciidoc.preview.scrollEditorWithPreview": false,
+    "editor.formatOnSave": true,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.format.settings.google.version": "12.22.0",
+    "java.test.config": {
+      "vmArgs": [
+        "-Dquarkus.http.test-host=localhost",
+        "-Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+      ]
+    },
+    "sqltools.format": {
+      "linesBetweenQueries": 3
+    },
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.profiles.windows": {
+      "Command Prompt": {
+        "path": ["${env:windir}\\System32\\cmd.exe"],
+        "args": ["/k", "chcp", "65001"]
+      }
+    },
+    "terminal.integrated.automationProfile.windows": {
+      "path": "${env:windir}\\System32\\cmd.exe",
+      "args": ["/c", "chcp", "65001", "&&", "cmd"]
+    }
+  }
+}

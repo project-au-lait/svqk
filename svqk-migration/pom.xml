@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <artifactId>svqk-migration</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>svqk-container</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <parent>
+    <groupId>dev.aulait.svqk</groupId>
+    <artifactId>svqk</artifactId>
+    <version>0.6-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <properties>
+    <flyway.configFiles>src/local/resources/flyway.conf</flyway.configFiles>
+    <flyway.version>10.10.0</flyway.version>
+  </properties>
+
+  <!-- Build -->
+  <build>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.flywaydb</groupId>
+          <artifactId>flyway-maven-plugin</artifactId>
+          <version>${flyway.version}</version>
+          <configuration>
+            <cleanDisabled>false</cleanDisabled>
+            <password>${db.password}</password>
+            <schemas>${db.schema}</schemas>
+            <user>${db.username}</user>
+            <url>${db.jdbc.url}</url>
+            <validateOnMigrate>false</validateOnMigrate>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.flywaydb</groupId>
+              <artifactId>flyway-database-postgresql</artifactId>
+              <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>${db.jdbc.groupId}</groupId>
+              <artifactId>${db.jdbc.artifactId}</artifactId>
+              <version>${db.jdbc.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.44.0</version>
+        <configuration>
+          <images>
+            <image>
+              <name>${image.registry}/${project.parent.artifactId}/${project.artifactId}</name>
+              <build>
+                <from>flyway/flyway:10-alpine</from>
+                <assemblies>
+                  <assembly>
+                    <name>jar</name>
+                    <descriptorRef>artifact</descriptorRef>
+                    <targetDir>/flyway/jars</targetDir>
+                  </assembly>
+                  <assembly>
+                    <name>conf</name>
+                    <inline>
+                      <files>
+                        <file>
+                          <source>${flyway.configFiles}</source>
+                        </file>
+                      </files>
+                    </inline>
+                    <targetDir>/flyway/conf</targetDir>
+                  </assembly>
+                </assemblies>
+              </build>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>setup</id>
+
+      <activation>
+        <property>
+          <name>setup</name>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <goals>
+                  <goal>clean</goal>
+                  <goal>migrate</goal>
+                  <goal>info</goal>
+                </goals>
+                <phase>compile</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

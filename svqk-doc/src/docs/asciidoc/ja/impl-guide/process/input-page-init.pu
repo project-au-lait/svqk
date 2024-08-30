@@ -1,0 +1,39 @@
+hide footbox
+autonumber
+
+actor User
+
+box "Frontend" #ffffff
+  participant Page
+  participant PageLoader
+end box
+
+box "Backend" #ffffff
+  participant Controller
+  participant Service
+  participant Repository
+end box
+
+database DB
+
+User -> Page: navigate
+Page -> PageLoader: load
+PageLoader -> PageLoader: init model
+PageLoader -> Controller: GET
+
+Controller -> Service: execute
+Service -> Repository: select
+Repository -> DB: SELECT
+autonumber stop
+Repository <-- DB
+Service <-- Repository: entity
+Controller <-- Service: entity
+
+autonumber resume
+Controller -> Controller: entity -> dto
+autonumber stop
+PageLoader <-- Controller: dto -> model
+
+Page <-- PageLoader: model
+autonumber resume
+Page -> Page: render

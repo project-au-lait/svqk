@@ -1,0 +1,20 @@
+{
+  "activity": "活動",
+  "advancedSearch": "詳細検索",
+  "description": "説明",
+  "dueDate": "期日",
+  "home": "ホーム",
+  "issue": "チケット",
+  "multipleStatuses": "ステータス(複数選択可)",
+  "newIssue": "新しいチケット",
+  "noData": "表示するデータがありません",
+  "option": "オプション",
+  "project": "プロジェクト",
+  "register": "登録",
+  "saved": "保存しました。",
+  "searchBySubjectOnly": "題名のみで検索",
+  "status": "ステータス",
+  "subject": "題名",
+  "update": "更新",
+  "updatedAt": "更新日"
+}

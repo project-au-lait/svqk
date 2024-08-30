@@ -1,0 +1,103 @@
+=== プロジェクト構成
+
+本システムは、資材(ソースファイル、設定ファイル)を役割ごとにプロジェクトに分けて格納します。プロジェクトと主な格納資材は以下の通りです。
+
+.プロジェクトと主な格納資材
+[cols="1,2,6"]
+|===
+2+^|プロジェクト ^| 主な格納資材
+
+2+|{project-artifactId}
+a|
+アプリケーション・開発・テストに関する資材をそれぞれの子プロジェクトとして格納します。
+
+* pom.xml +
+  DB接続情報など各プロジェクトで使用可能なプロパティを定義
+* .vscode/tasks.json, launch.json +
+  VSCode Taskと起動構成を定義
+* root.code-workspace +
+  VSCodeの各種設定
+
+
+.6+|
+|{project-artifactId}-container
+a|
+ローカル開発環境・CIで使用するコンテナを作成するための資材を格納します。
+
+* compose.yml +
+  ローカル開発環境・CIで使用するコンテナを定義
+* .env +
+  Mavenのプロパティをコンテナに伝搬するための設定ファイル
+* pom.xml +
+  コンテナの起動をMavenのビルドプロセスに統合
+
+
+|{project-artifactId}-migration
+a|
+Flywayを用いたDBマイグレーションのための資材を格納します。
+
+* pom.xml +
+  Flyway Maven Pluginの設定
+* V*.sql, V*.java +
+  Flywayのマイグレーションスクリプト
+
+
+|{project-artifactId}-entity
+a|
+JPA Entityを生成し、ライブラリ化するための資材を格納します。
+
+* pom.xml +
+  JPA Entity Generator Maven Pluginの設定
+* jeg-cofig.yml +
+  JPA Entity Generatorの設定ファイル
+* *Entity.java +
+  JPA Entity Generatorにより生成されたEntityのjavaファイル
+
+
+|{project-artifactId}-back
+a|
+Backendの資材を格納します。
+このプロジェクトはQuarkus Maven Pluginで作成したものを元にしています。
+
+* pom.xml +
+  Backendが使用するライブラリ(dependency)の定義
+  Quarkus Maven Pluginの設定
+* application.properties +
+  Quarkusの設定ファイル
+* *.java +
+  Backendのソースファイル
+
+
+|{project-artifactId}-front
+a|
+Frontendの資材を格納します。
+このプロジェクトはSvelteKitのテンプレートから作成したものを元にしています。
+
+* package.json +
+  Frontendが使用するライブラリ(dependency)の定義
+  SvelteKitの実行の設定
+  API Client生成の設定
+* svelte.config.js +
+  SvelteKitの設定ファイル
+* *.svelte, *.ts +
+  Frontendのソースファイル
+* pom.xml +
+  NodeモジュールのインストールやFrontendのビルドをMavenのビルドプロセスに統合
+
+
+|{project-artifactId}-e2etest
+a|
+End to End Testの資材を格納します。
+このプロジェクトはPlaywrightのテンプレートから作成したものを元にしています。
+
+* package.json +
+  Playwrightの実行の設定
+* playwright.config.ts +
+  Playwrightの設定ファイル
+* *.ts +
+  Playwrightのテストスクリプト
+* pom.xml +
+  Playwrightの実行をMavenのビルドプロセスに統合
+* compose.yml +
+  End to Endで使用するコンテナの定義
+|===

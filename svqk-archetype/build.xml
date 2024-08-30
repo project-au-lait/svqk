@@ -1,0 +1,156 @@
+<project xmlns:if="ant:if" xmlns:unless="ant:unless" name="svqk-archetype" basedir="."
+  default="install">
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+  <property name="archetype.prjdir" value="${basedir}/../" />
+  <condition property="mvnw" value="${archetype.prjdir}/mvnw.cmd" else="${archetype.prjdir}/mvnw">
+    <os family="windows" />
+  </condition>
+  <property name="archetype.workdir" value="${basedir}/target/archetype-work" />
+  <property name="archetype.gendir" value="${basedir}/../target/generated-sources/archetype" />
+
+
+  <target name="deploy" depends="install">
+    <condition property="maven-central" value=",maven-central" else="">
+      <not>
+        <matches pattern="-SNAPSHOT$" string="${project.version}" />
+      </not>
+    </condition>
+
+    <exec executable="${mvnw}" dir="${archetype.gendir}" failonerror="true">
+      <arg line="deploy -P release${maven-central}" />
+    </exec>
+  </target>
+
+
+  <target name="install" depends="create">
+    <exec executable="${mvnw}" dir="${archetype.gendir}" failonerror="true">
+      <arg line="clean install" />
+    </exec>
+  </target>
+
+
+  <target name="adapt-resources">
+    <if>
+      <or>
+        <equals arg1="${archetype.type}" arg2="arch" />
+        <equals arg1="${archetype.type}" arg2="skeleton" />
+      </or>
+      <then>
+        <condition property="rm.prop.skeleton" value="|baseClassDefs" else="">
+          <equals arg1="${archetype.type}" arg2="skeleton" />
+        </condition>
+
+        <replaceregexp flags="g">
+          <regexp
+            pattern="( *).*(annotatedCols|annotationDefs|issue${rm.prop.skeleton}).*:.*\n(\1  .*\n)*" />
+          <substitution expression="" />
+          <fileset dir="${archetype.gendir}">
+            <include name="**/jeg-config.yml" />
+          </fileset>
+        </replaceregexp>
+      </then>
+    </if>
+  </target>
+
+
+  <target name="create">
+    <property file="${basedir}/src/archetype/exclude.properties" />
+
+    <condition property="excludePatterns" value="${exclude.refimpl}">
+      <equals arg1="${archetype.type}" arg2="refimpl" />
+    </condition>
+    <condition property="excludePatterns" value="${exclude.refimpl},${exclude.arch}">
+      <equals arg1="${archetype.type}" arg2="arch" />
+    </condition>
+    <condition property="excludePatterns"
+      value="${exclude.refimpl},${exclude.arch},${exclude.skeleton}">
+      <equals arg1="${archetype.type}" arg2="skeleton" />
+    </condition>
+
+    <propertyfile file="${archetype.prjdir}/archetype.properties">
+      <entry key="excludePatterns" value="${excludePatterns}" />
+      <entry key="archetype.filteredExtensions" value="java,properties,yml,json,code-workspace" />
+    </propertyfile>
+
+    <exec executable="${mvnw}" dir="${archetype.prjdir}" failonerror="true">
+      <arg line="-N clean archetype:create-from-project" />
+    </exec>
+
+    <copy file="${basedir}/src/archetype/pom.xml" tofile="${archetype.gendir}/pom.xml"
+      overwrite="true" />
+
+    <replace file="${archetype.gendir}/pom.xml" token="[project-version]" value="${project.version}" />
+    <replace file="${archetype.gendir}/pom.xml" token="[archetype-type]" value="${archetype.type}" />
+
+    <replace
+      file="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml"
+      token="svqk.code-workspace" value="__artifactId__.code-workspace" />
+
+    <antcall target="adapt-resources" />
+
+    <if>
+      <equals arg1="${archetype.type}" arg2="skeleton" />
+      <then>
+        <antcall target="add-front-controller" />
+      </then>
+    </if>
+  </target>
+
+
+  <target name="add-front-controller">
+    <copy
+      file="${archetype.prjdir}/svqk-back/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
+      todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-back/src/main/java/arch/front"
+      overwrite="true">
+      <filterchain>
+        <replacetokens begintoken="" endtoken="">
+          <token key="${project.groupId}" value="${package}" />
+        </replacetokens>
+        <linecontains negate="true">
+          <contains value="FrontController" />
+        </linecontains>
+      </filterchain>
+    </copy>
+  </target>
+
+
+  <target name="generate-project" depends="install">
+
+    <property name="archetype.testdir" value="${project.build.directory}/test" />
+    <property name="project" value="tsvqk" />
+    <property name="projectdir" value="${archetype.testdir}/${project}" />
+
+    <delete dir="${archetype.testdir}" />
+    <mkdir dir="${archetype.testdir}" />
+
+    <exec executable="${mvnw}" dir="${archetype.testdir}" failonerror="true">
+      <arg line="org.apache.maven.plugins:maven-archetype-plugin:3.2.0:generate -B" />
+      <arg line="-DarchetypeCatalog=local" />
+      <arg line="-DarchetypeGroupId=dev.aulait.svqk" />
+      <arg line="-DarchetypeArtifactId=svqk-archetype-${archetype.type}" />
+      <arg line="-DarchetypeVersion=${project.version}" />
+      <arg line="-DgroupId=a.b.c" />
+      <arg line="-DartifactId=${project}" />
+    </exec>
+  </target>
+
+
+  <target name="test" depends="generate-project">
+    <condition property="mvnw.local" value="${projectdir}/mvnw.cmd" else="${projectdir}/mvnw">
+      <os family="windows" />
+    </condition>
+
+    <chmod perm="u+x" file="${projectdir}/mvnw" />
+
+    <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
+      <arg line="-f ${project}-cicd -D ant.target=test" />
+    </exec>
+
+    <exec executable="docker" dir="${projectdir}/${project}-container">
+      <arg line="compose down" />
+    </exec>
+
+  </target>
+
+</project>

@@ -1,0 +1,16 @@
+services:
+  back:
+    image: ${BACK_IMAGE}
+    environment:
+      QUARKUS_DATASOURCE_USERNAME: ${DB_USER}
+      QUARKUS_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      QUARKUS_DATASOURCE_JDBC_URL: ${DB_JDBC_URL}
+      QUARKUS_HTTP_PORT: ${BACK_PORT}
+      TZ: ${OS_TIMEZONE}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:${BACK_PORT}/q/health/ready"]
+      interval: 1s
+      timeout: 10s
+      retries: 5
+    ports:
+      - ${BACK_PORT}:${BACK_PORT}

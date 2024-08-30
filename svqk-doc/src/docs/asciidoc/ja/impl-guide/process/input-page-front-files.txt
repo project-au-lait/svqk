@@ -1,0 +1,14 @@
+svqk
+├── svqk-front
+│   └── src
+│       ├── routes/issues/[issueId]
+│       │   ├── +page.svelte --- 1, 6
+│       │   └── +page.ts --- 5
+│       └── arch/api
+│           └── Api.ts --- 4
+└── svqk-back
+    └── src
+        └── main/java/dev/aulait/svqk
+            └── interfaces/issue
+                ├── IssueStatusController.java --- 2
+                └── IssueStatusDto.java  --- 3

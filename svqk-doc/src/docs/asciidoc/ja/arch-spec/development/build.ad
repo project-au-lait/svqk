@@ -1,0 +1,317 @@
+[[build-structure]]
+=== ビルド構成
+
+ここでは、セットアップコマンド内の処理とその実現方式を説明します。
+
+.セットアップコマンド
+[source,sh]
+----
+# Windows
+mvnw install -P setup
+
+#macOS
+./mvnw install -P setup
+----
+
+セットアップコマンドを実行すると、各プロジェクトのビルドが順次実行されます。これらのビルドの処理を以下に示します。
+
+.各プロジェクトのビルドコマンドの処理
+[cols="1,1",frame=none,grid=none]
+|===
+a|
+[plantuml]
+----
+include::setup-process.pu[]
+----
+
+a|
+. containerプロジェクトがDockerを使用してDBを起動します。
+. migrationプロジェクトがFlywayを使用してDBマイグレーションを実行します。
+. frontプロジェクトがSveltKitアプリであるFrontendをビルドします。
+. backプロジェクトがQuarkusアプリであるBackendをビルドします。
+. backプロジェクトがBackendに対してUnit・Integrationテストを実行します。
+. e2etestプロジェクトがPlaywrightを使用してEnd to Endテストを実行します。
+|===
+
+
+各プロジェクトのビルドで実行されるコマンドとその処理内容は以下の通りです。
+(コマンドは実行順に上から並んでいます。)
+
+.セットアップコマンドの処理内で実行されるコマンドとその処理内容
+[cols="1,2,3"]
+|===
+^|Project ^|Command ^|Process
+
+|container
+|mvnw resources:resources +
+docker compose up
+|Docker Composeが使用する.envファイルの作成 +
+DBMSコンテナの起動
+
+|migration
+|mvnw flyway:clean +
+mvnw flyway:migrate +
+mvnw flyway:info
+|DBスキーマの初期化 +
+DBマイグレーションの実行 +
+DBマイグレーションの状態を表示
+
+|front
+|pnpm install +
+vite build +
+mvnw resources:resources +
+mvnw jar:jar
+|frontプロジェクトが使用するパッケージのインストール +
+Frontend(SvelteKitアプリ)のビルド +
+frontプロジェクトが使用する.envファイルの作成 +
+FrontendのWebJarを作成
+
+|entity
+|mvnw compiler:compile +
+mvnw jar:jar
+|Entityのjavaファイルをコンパイル +
+Entityクラスを含むjarファイルを作成
+
+|back
+|mvnw resources:resources +
+mvnw compiler:compile +
+mvnw surefire:test +
+mvnw jar:jar +
+mvnw quarkus:build +
+mvnw failsafe:integration-test
+|Quarkusが使用するapplication.propertiesファイルの作成 +
+Backendのjavaファイルのコンパイル +
+Unit Testの実行 +
+Backendのjarファイルを作成 +
+Backendのコンテナイメージを作成 +
+Integration Test(Web API Test)を実行
+
+|e2etest
+|pnpm install +
+playwright install +
+mvnw resources:resources +
+docker compose up +
+playwright test +
+docker compose down
+|e2etestプロジェクトが使用するパッケージのインストール +
+Playwrightが使用するブラウザのインストール +
+e2etestプロジェクトが使用する.envファイルの作成 +
+Backendコンテナの起動 +
+End to End Test(Playwright Test)を実行 +
+Backendコンテナの停止・削除
+|===
+
+上記のコマンドは、Mavenの https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle[ビルドライフサイクル] に統合されています。
+
+
+
+==== container
+
+ここではcontainerプロジェクトのビルド構成を説明します。
+
+.containerプロジェクトのビルドフェーズごとの処理
+[cols="1,2"]
+|===
+^|Build Phase ^| Process
+
+|process-resources
+a|Maven Resources Pluginがsrc/main/resources/.envファイルをcontainerプロジェクト直下にコピーします。この際、.envファイル内の一部の環境変数(DB接続情報等)は当該PluginのFilter機能によりプロジェクトのプロパティ値で置換されます。
+
+.src/main/resources/.envファイルの内容
+[source,env]
+----
+DB_USER=${db.username}
+----
+
+.containerプロジェクト直下にコピーされた.envの内容
+[source,env,subs="attributes"]
+----
+DB_USER={db-username}
+----
+
+この.envファイルは、後続で起動されるDocker Composeの環境変数として使用されることを意図しています。
+
+参考: https://docs.docker.com/compose/environment-variables/set-environment-variables/[Set environment variables within your container's environment]
+
+|compile
+a|Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+docker compose up -d --wait
+----
+
+これにより、containerプロジェクト直下のcompose.ymlに従いDocker Composeが起動し、DBMSが使用可能になります。
+|===
+
+==== migration
+
+ここではmigrationプロジェクトのビルド構成を説明します。
+migrationプロジェクトはcontainerプロジェクトをdependency設定しているため、containerプロジェクトのビルド後に実行されます。
+
+.migrationプロジェクトのビルドフェーズごとの処理
+[cols="1,2"]
+|===
+^|Build Phase ^| Process
+
+|compile
+a|setupプロファイルが有効である場合、Flyway Maven Pluginが `clean`、 `migrate`、`info` ゴールを実行します。
+|===
+
+==== front
+
+ここでは、frontプロジェクトのビルド構成を説明します。
+
+.frontプロジェクトのビルドフェーズごとの処理
+[cols="1,2"]
+|===
+^|Build Phase ^| Process
+
+|generate-sources
+a|setupプロファイルが有効である場合、Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+pnpm install
+----
+
+|generate-sources
+a|Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+pnpm build
+----
+
+pnpm buildコマンドはfrontプロジェクトをSPAとしてビルドします。ビルド後の資材はfrontプロジェクト直下のbuildディレクトリに生成されます。
+
+|process-resources
+a|Maven Resources Pluginが以下のコピーを行います。
+
+* resources/.envファイルをfrontプロジェクト直下にコピーします。この際、.envファイル内の一部の環境変数(Backendのポート番号等)は当該PluginのFilter機能によりプロジェクトのプロパティ値で置換されます。
+
+.resources/.envファイルの内容
+[source,env]
+----
+PUBLIC_BACKEND_URL=http://localhost:${back.port}
+----
+
+.frontプロジェクト直下にコピーされた.envの内容
+[source,env,subs="attributes"]
+----
+PUBLIC_BACKEND_URL={back-port}
+----
+
+|process-classes
+a|Maven Resources Pluginが以下のコピーを行います。
+
+* buildディレクトリ以下の全ファイルをtarget/classes/META-INF/resources/webjars/front以下にコピーします。target/classesディレクトリはjarファイルにアーカイブするものであり、それ以下のMETA-INF/resources/webjars/frontの階層は、jarファイルをWebJarsとして使用するためのものです。
+
+参考: https://quarkus.io/guides/web-dependency-locator#webjars[Webjars]
+
+|pacakge
+a|Maven JAR Pluginがfrontプロジェクトのビルド後の資材を含むjarファイルを生成します。
+
+|===
+
+
+==== back
+
+ここでは、backプロジェクトのビルド構成を説明します。
+backプロジェクトはfrontプロジェクトをdependency設定しているため、frontプロジェクトのビルド後に実行されます。
+
+
+.backプロジェクトのビルドフェーズごとの処理
+[cols="1,2"]
+|===
+^|Build Phase ^| Process
+
+|process-resources
+a|Maven Resources Pluginがsrc/main/resources/application.propertiesファイルをtarget/classesディレクトリにコピーします。この際、application.propertiesファイル内の一部のプロパティ値(DB接続情報等)は当該PluginのFilter機能によりプロジェクトのプロパティ値で置換されます。
+
+.src/main/resources/application.propertiesファイル
+[source,properties]
+----
+quarkus.datasource.username=${db.username}
+----
+
+.target/classesディレクトリにコピーされたapplication.propertiesファイル
+[source,properties,subs="attributes"]
+----
+quarkus.datasource.username={db-username}
+----
+
+|package
+a|Maven JAR Pluginがbackプロジェクトをビルドしjarファイルを生成します。  +
+Quarkus Maven Plugin がこのjarファイルを使用してBackendのコンテナイメージをビルドします。このコンテナイメージにはfrontプロジェクトのビルド資材であるWebJarsも含まれます。
+
+|integration-test
+a|Maven Failsafe Plugnがsrc/integration-test/javaディレクトリ以下のテストクラス(*IT.java)を実行します。
+テストクラスは@QuarkusIntegrationTestアノテーションが宣言されていることを想定します。これはintegration-test実行時にQuarkusを自動的に起動させることを意図しています。
+
+参考: https://quarkus.io/guides/getting-started-testing#quarkus-integration-test:[Using @QuarkusIntegrationTest]
+|===
+
+
+==== e2etest
+
+ここではe2etestプロジェクトのビルド構成を説明します。
+e2etestプロジェクトはbackプロジェクトをdependency設定しているため、backプロジェクトのビルド後に実行されます。
+
+.e2etestプロジェクトのビルドフェーズごとの処理
+[cols="1,2"]
+|===
+^|Build Phase ^| Process
+
+|generate-sources
+a|setupプロファイルが有効である場合、Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+pnpm install
+pnpm playwright-install
+----
+
+|process-resources
+a|Maven Resources Pluginがresources/.envファイルをe2etestプロジェクト直下にコピーします。この際、.envファイル内の一部の文字列は当該PluginのFilter機能によりプロジェクトのプロパティ値で置換されます。
+
+|pre-integration-test
+a|Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+docker compose up -d --wait
+----
+
+これにより、e2etestプロジェクト直下のcompose.ymlに従いDocker Composeが起動し、Backendコンテナが使用可能になります。
+
+|integration-test
+a|Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+pnpm e2etest
+----
+
+これにより、testsディレクトリ以下のPlaywrightテスト(*.spec.ts)が実行されます。
+
+
+|post-intgration-test
+a|Maven Exec Pluginが以下のコマンドを実行します。
+
+[source,sh]
+----
+docker compose down
+
+# on browse-e2etest profile
+playwright show-report
+----
+
+これにより、Backendコンテナが停止、削除されます。
+また、browse-e2etestプロファイルが有効である場合、ブラウザが起動し、Playwrightのテストレポートが表示されます。
+|===
+
+
+
+
+

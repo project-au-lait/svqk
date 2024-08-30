@@ -1,0 +1,16 @@
+== 開発アーキテクチャ
+
+include::env-structure.ad[]
+
+include::project-structure.ad[]
+
+include::build.ad[]
+
+include::local.ad[]
+
+
+// === CI/CD
+
+// ```sh
+// mvnw -f svqk-cicd -D ant.target=test
+// ```

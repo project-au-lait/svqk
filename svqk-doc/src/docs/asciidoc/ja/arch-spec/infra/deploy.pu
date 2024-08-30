@@ -1,0 +1,24 @@
+
+rectangle ParameterStore
+rectangle ECR
+
+rectangle EC2 {
+
+  EC2 --> ParameterStore: 1. read
+
+  rectangle "Docker Compose" {
+    component migration <<servcie>>
+    ECR --> migration: 2. docker pull
+
+    component back <<service>>
+    ECR --> back: 2. docker pull
+
+    component dbms <<service>>
+    migration --> dbms: 3. flyway:migrate
+
+  }
+
+}
+
+
+

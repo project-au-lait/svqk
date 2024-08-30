@@ -1,0 +1,10 @@
+= Document
+
+|===
+^|Version ^| Link
+
+|v0.8-SNAPSHOT
+a|
+* link:0.8-SNAPSHOT/en/index.html[English]
+* link:0.8-SNAPSHOT/ja/index.html[日本語]
+|===

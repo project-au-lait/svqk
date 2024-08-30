@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <groupId>dev.aulait.svqk</groupId>
+  <artifactId>svqk-archetype-[archetype-type]</artifactId>
+  <version>[project-version]</version>
+  <packaging>maven-archetype</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <!-- Build Settings -->
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>3.2.1</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>3.2.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+
+  <!-- More Project Information -->
+  <name>svqk-archetype</name>
+  <description>SVQK Maven Architype</description>
+  <url>https://project-au-lait.dev/</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>yuichi.kuwahara</id>
+      <name>Yuichi Kuwahara</name>
+      <email>yuichi.kuwahara.0@gmail.com</email>
+    </developer>
+  </developers>
+
+  <!-- Environment Settings -->
+  <scm>
+    <connection>scm:git:git//github.com/project-au-lait/svqk.git</connection>
+    <developerConnection>scm:git:git//github.com/project-au-lait/svqk.git</developerConnection>
+    <url>https://github.com/project-au-lait/svqk.git</url>
+  </scm>
+
+  <distributionManagement>
+    <!-- <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+      <id>local-nexus</id>
+      <url>http://localhost:8082/repository/maven-snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>local-nexus</id>
+      <url>http://localhost:8082/repository/maven-releases/</url>
+    </repository> -->
+    <snapshotRepository>
+      <id>github</id>
+      <name>GitHub Project Au Lait Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/project-au-lait/svqk</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <profiles>
+
+    <profile>
+      <id>release</id>
+
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+      </properties>
+
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.3.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.7.0</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+            </configuration>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <profile>
+      <id>maven-central</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.5.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>false</autoPublish>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

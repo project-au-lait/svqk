@@ -1,0 +1,14 @@
+svqk
+└── svqk-archetype
+    ├── build.xml   1. Antビルドファイル
+    ├── src/archetype
+    │   └── pom.xml   2. アーキタイプ用POM
+    └── target
+        ├── archetype-work    3. archetype.workdir
+        │   ├── .mvn
+        │   ├── svqk-back
+        │   ├── svqk-cicd
+        │   ├── :
+        │   ├── pom.xml
+        │   └── target/generated-sources/archetype   4. archetype.gendir
+        └── archetype-test    5. archetype.testdir

@@ -1,0 +1,20 @@
+{
+  "activity": "Activity",
+  "advancedSearch": "Advanced Search",
+  "description": "Description",
+  "dueDate": "Due Date",
+  "home": "Home",
+  "issue": "Issue",
+  "multipleStatuses": "Status (Multiple Selections Possible)",
+  "newIssue": "New Issue",
+  "noData": "No data to display",
+  "option": "Option",
+  "project": "Project",
+  "register": "Register",
+  "saved": "Saved",
+  "searchBySubjectOnly": "Search by subject only",
+  "status": "Status",
+  "subject": "Subject",
+  "update": "Update",
+  "updatedAt": "Update Date"
+}

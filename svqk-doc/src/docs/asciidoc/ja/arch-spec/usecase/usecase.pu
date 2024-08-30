@@ -1,0 +1,19 @@
+@startuml usecase
+
+left to right direction
+
+actor User
+
+rectangle システム {
+
+  usecase チケットの削除 as delete
+  usecase チケットの更新 as update
+  usecase チケットの検索 as reference
+  usecase チケットの作成 as create
+
+}
+
+User --> create
+User --> reference
+User --> update
+User --> delete

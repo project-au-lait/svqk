@@ -1,0 +1,35 @@
+<project xmlns:if="ant:if" xmlns:unless="ant:unless" name="svqk-cicd" default="install">
+
+  <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+  <property name="prjdir" value="${basedir}/.." />
+
+  <condition property="mvn.cmd" value="${prjdir}/mvnw.cmd" else="${prjdir}/mvnw">
+    <os family="windows" />
+  </condition>
+
+
+  <target name="test">
+    <exec executable="${mvn.cmd}" failonerror="true">
+      <arg line="build-helper:reserve-network-port" />
+    </exec>
+
+    <property file="${port.file}" />
+
+    <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
+      <arg line="-T 1C clean verify -D setup" />
+      <arg line="-D db.port=${db.port.random} -D back.port=${back.port.random}" />
+    </exec>
+  </target>
+
+
+  <target name="push-image">
+    <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
+      <arg line="-f svqk-back quarkus:build -Dquarkus.container-image.push=true" />
+    </exec>
+
+    <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
+      <arg line="-f svqk-migration docker:build docker:push" />
+    </exec>
+  </target>
+</project>

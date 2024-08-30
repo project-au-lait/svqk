@@ -1,0 +1,15 @@
+{project-artifactId}-front
+└── src
+    ├── lib -- 1
+    │   ├── arch -- 2
+    │   │   └── (function)
+    │   │       ├── *.svelte
+    │   │       └── *.ts
+    │   └── domain -- 3
+    │       └── (domain)
+    │           ├── *.svelte
+    │           └── *.ts
+    └── routes -- 4
+        └── (path...)
+            ├── +page.svelte
+            └── +page.ts

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <artifactId>svqk-e2etest</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>svqk-back</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <parent>
+    <groupId>dev.aulait.svqk</groupId>
+    <artifactId>svqk</artifactId>
+    <version>0.6-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <properties>
+    <playwright.test.args>--timeout 30000</playwright.test.args>
+    <container.image>
+      ${image.registry}/${project.parent.artifactId}/${project.parent.artifactId}-back:${project.version}</container.image>
+  </properties>
+
+
+  <!-- Build -->
+  <build>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+        <includes>
+          <include>.env</include>
+        </includes>
+        <filtering>true</filtering>
+        <targetPath>../../</targetPath>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec-plugin-version}</version>
+        <executions>
+          <execution>
+            <?m2e ignore?>
+            <id>start-backend</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>docker</executable>
+              <commandlineArgs>compose up -d --wait</commandlineArgs>
+            </configuration>
+          </execution>
+          <execution>
+            <?m2e ignore?>
+            <id>pnpm-integration-test</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>pnpm</executable>
+              <commandlineArgs>e2etest ${playwright.test.args}</commandlineArgs>
+              <environmentVariables>
+                <BACKEND_BASE_URL>http://localhost:${back.port}</BACKEND_BASE_URL>
+                <CI>true</CI>
+              </environmentVariables>
+              <successCodes>
+                <successCode>0</successCode>
+                <successCode>1</successCode>
+              </successCodes>
+            </configuration>
+          </execution>
+          <execution>
+            <?m2e ignore?>
+            <id>transform-report</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>pnpm</executable>
+              <commandlineArgs>transform-report</commandlineArgs>
+            </configuration>
+          </execution>
+          <execution>
+            <?m2e ignore?>
+            <id>stop-backend</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>docker</executable>
+              <commandlineArgs>compose down</commandlineArgs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>setup</id>
+
+      <activation>
+        <property>
+          <name>setup</name>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-plugin-version}</version>
+            <configuration>
+              <executable>pnpm</executable>
+            </configuration>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <id>pnpm-install</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <commandlineArgs>install</commandlineArgs>
+                </configuration>
+              </execution>
+              <execution>
+                <?m2e ignore?>
+                <id>pnpm-playwright-install</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <commandlineArgs>playwright-install</commandlineArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>browse-e2etest</id>
+
+      <properties>
+        <playwright.test.args>--headed</playwright.test.args>
+      </properties>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-plugin-version}</version>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <id>show-report</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>pnpm</executable>
+                  <commandlineArgs>playwright-show-report</commandlineArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

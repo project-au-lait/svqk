@@ -1,0 +1,44 @@
+=== ローカル開発環境
+
+==== 実行環境
+
+.実行環境
+[plantuml]
+----
+include::local-dev-env-run.pu[]
+----
+
+==== 開発支援
+
+
+
+===== フォーマッター
+
+本プロジェクトで使用するフォーマッターは全てVSCode Extensionであり、VSCodeでソースファイルを保存した際に自動的にフォーマットが実行されるように構成されています。
+ソースファイルの言語ごとのフォーマッターは以下の通りです。
+
+.言語と使用するフォーマッター
+[cols="1,1"]
+|===
+^|言語 ^|フォーマッター(VSCode Extention)
+
+|html|esbenp.prettier-vscode
+
+|java
+|josevseb.google-java-format-for-vs-code +
+(google-java-formatの
+https://github.com/google/google-java-format/releases/tag/v1.22.0[v1.22.0]を使用)
+
+
+|javascript|esbenp.prettier-vscode
+|json|esbenp.prettier-vscode
+|jsonc|esbenp.prettier-vscode
+|svelte|esbenp.prettier-vscode
+|typescript|esbenp.prettier-vscode
+|xml|redhat.vscode-xml
+|yaml|redhat.vscode-yaml
+|===
+
+これらのフォーマッターのインストール、言語ごとの適用、保存時の実行は全て
+VSCodeのワークスペース設定ファイル(.code-workspace)に設定されています。
+

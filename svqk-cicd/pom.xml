@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <groupId>dev.aulait.svqk</groupId>
+  <artifactId>svqk-cicd</artifactId>
+  <packaging>pom</packaging>
+
+  <parent>
+    <groupId>dev.aulait.svqk</groupId>
+    <artifactId>svqk</artifactId>
+    <version>0.6-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <properties>
+    <port.file>${project.build.directory}/port.properties</port.file>
+    <ant.file>${project.basedir}/build.xml</ant.file>
+  </properties>
+
+  <!-- Build Settings -->
+  <build>
+
+    <defaultGoal>antrun:run</defaultGoal>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <configuration>
+          <target>
+            <ant antfile="${ant.file}" target="${ant.target}" />
+          </target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>${build-helper-plugin.version}</version>
+        <inherited>false</inherited>
+        <configuration>
+          <outputFile>${port.file}</outputFile>
+          <portNames>
+            <portName>back.port.random</portName>
+            <portName>db.port.random</portName>
+          </portNames>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>dev.aulait.bt</groupId>
+        <artifactId>batch-translator-maven-plugin</artifactId>
+        <version>1.0.0</version>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

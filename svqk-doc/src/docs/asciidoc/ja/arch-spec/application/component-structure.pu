@@ -1,0 +1,36 @@
+@startuml component-structure
+
+skinparam linetype ortho
+
+actor User
+database DB
+
+rectangle Frontend {
+  component Page
+  component PageLoader
+  component UIComponent
+
+  Page --> UIComponent: Model
+  Page -> PageLoader: Model
+}
+
+
+rectangle Backend {
+  component Controller
+  component Service
+  component Repository
+  component Logic as blogic
+  component Validator
+  component Factory
+
+  Controller --> Service: Entity
+  Controller -> Validator: DTO
+  Controller -> Factory: Entity\n/ DTO
+  Service --> Repository: Entity
+  Service -> blogic: Entity
+}
+
+User --> Page
+Page -> Controller: DTO\n/ Model
+PageLoader -> Controller: DTO\n/ Model
+Repository --> DB

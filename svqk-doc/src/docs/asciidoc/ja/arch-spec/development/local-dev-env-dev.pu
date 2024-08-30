@@ -1,0 +1,21 @@
+@startuml local
+
+database Git
+
+rectangle Docker {
+  database DB
+}
+
+rectangle VSCode {
+  folder "Project" {
+    folder "others"
+    folder container
+    folder migration
+    folder entity
+  }
+}
+
+Git <--> Project: git clone, pull, push
+container --> Docker: docker compose up
+migration --> DB: mvnw flyway:migrate
+DB --> entity: mvnw jeg:generate

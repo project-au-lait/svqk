@@ -1,0 +1,28 @@
+svqk
+├── svqk-front
+│   └── src
+│       ├── routes/issues/[issueId]
+│       │   └── #page.svelte --- 1.a, 1.d
+│       └── lib/api
+│           └── Api.ts --- 1.c
+├── svqk-back
+│   └── src
+│       ├── main/java/a/b/c/svqk
+│       │   ├── interfaces/issue
+│       │   │   ├── IssueController.java --- 1.b, 3.b
+│       │   │   └── IssueDto.java  --- 1.b
+│       │   └── domain/issue
+│       │       ├── IssueService.java --- 3.a
+│       │       └── IssueRepository.java --- 3.a
+│       └── integration-test/java/a/b/c/svqk/interfaces/issue
+│           ├── IssueControllerIT.java --- 4.b
+│           └── IssueClient.java --- 4.a
+├── svqk-migration
+│   └── src/main/resources/db/migration
+│       └── V001__init.sql --- 2.a
+└── svqk-entity
+    └── src
+        ├── tool/resources
+        │   └── jeg-config.json --- 2.b
+        └── main/java/a/b/c/svqk/domain/issue
+            └── IssueEntity.java --- 2.b

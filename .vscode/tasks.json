@@ -1,0 +1,94 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start-db",
+      "type": "shell",
+      "osx": {
+        "command": "./mvnw"
+      },
+      "windows": {
+        "command": ".\\mvnw"
+      },
+      "args": ["-f", "svqk-container", "-P", "setup", "compile"],
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "start-back",
+      "type": "shell",
+      "osx": {
+        "command": "./mvnw"
+      },
+      "windows": {
+        "command": ".\\mvnw"
+      },
+      "args": ["-f", "svqk-back", "quarkus:dev"],
+      "problemMatcher": []
+    },
+    {
+      "label": "gen-doc",
+      "type": "shell",
+      "osx": {
+        "command": "./mvnw"
+      },
+      "windows": {
+        "command": ".\\mvnw"
+      },
+      "args": ["-f", "svqk-doc", "-P", "gen-doc"],
+      "problemMatcher": []
+    },
+    {
+      "label": "migrage",
+      "type": "shell",
+      "osx": {
+        "command": "./mvnw"
+      },
+      "windows": {
+        "command": ".\\mvnw"
+      },
+      "args": ["-f", "svqk-migration", "compile", "-P", "setup"],
+      "problemMatcher": []
+    },
+    {
+      "label": "gen-entity",
+      "type": "shell",
+      "osx": {
+        "command": "./mvnw"
+      },
+      "windows": {
+        "command": ".\\mvnw"
+      },
+      "args": [
+        "-f",
+        "svqk-entity",
+        "process-resources",
+        "jpa-entity-generator:reverse",
+        "clean",
+        "install"
+      ],
+      "options": {
+        "env": {
+          "MAVEN_OPTS": "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "build-back-image",
+      "type": "shell",
+      "osx": {
+        "command": "./mvnw"
+      },
+      "windows": {
+        "command": ".\\mvnw"
+      },
+      "args": ["-f", "svqk-back", "package", "-P", "setup"],
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+
+
+package container {
+  database "1. DB" as DB <<PostgreSQL,\nDocker>>
+}
+
+
+package migration {
+  file DDL <<Flyway>>
+}
+DDL -left-> DB: 2. migrate
+
+
+package back {
+  node "4. Backend" as Backend <<Quarkus>>
+
+  component "      UnitTest\nIntegrationTest" <<JUnit>> as UIT
+  UIT  -left-> Backend: 5. test
+}
+Backend -up-> DB: access
+
+
+package front {
+  node "3. Frontend" as Frontend <<SvelteKit>>
+}
+Frontend -up-> Backend: access
+
+
+package e2etest {
+  component EndToEndTest <<Playwright>>
+}
+EndToEndTest -up-> Frontend: 6. test

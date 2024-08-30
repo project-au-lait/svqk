@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
+  <artifactId>svqk-doc</artifactId>
+
+  <parent>
+    <groupId>dev.aulait.svqk</groupId>
+    <artifactId>svqk</artifactId>
+    <version>0.6-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <build>
+    <defaultGoal>clean asciidoctor:process-asciidoc process-resources</defaultGoal>
+
+    <resources>
+      <resource>
+        <directory>${project.build.directory}/generated-docs</directory>
+        <includes>
+          <include>ja/**/index.html</include>
+        </includes>
+        <targetPath>${project.basedir}/../docs/${project.version}</targetPath>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-docs</directory>
+        <includes>
+          <include>/index.html</include>
+        </includes>
+        <targetPath>${project.basedir}/../docs</targetPath>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>2.2.6</version>
+
+        <dependencies>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj-diagram</artifactId>
+            <version>2.3.0</version>
+          </dependency>
+        </dependencies>
+
+        <configuration>
+          <attributes>
+            <back-port>${back.port}</back-port>
+            <db-port>${db.port}</db-port>
+            <db-name>${db.name}</db-name>
+            <db-schema>${db.schema}</db-schema>
+            <db-username>${db.username}</db-username>
+            <db-password>${db.password}</db-password>
+            <experimental>true</experimental>
+            <icons>font</icons>
+            <imagesdir>images</imagesdir>
+            <nofooter>true</nofooter>
+            <project-artifactId>${project.parent.artifactId}</project-artifactId>
+            <source-highlighter>highlight.js</source-highlighter>
+            <toc>left</toc>
+            <tocLevels>5</tocLevels>
+          </attributes>
+          <doctype>book</doctype>
+          <embedAssets>true</embedAssets>
+          <preserveDirectories>true</preserveDirectories>
+          <relativeBaseDir>true</relativeBaseDir>
+          <requires>
+            <require>asciidoctor-diagram</require>
+          </requires>
+          <sourceDocumentExtensions>adoc</sourceDocumentExtensions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>gen-doc</id>
+      <build>
+        <defaultGoal>clean asciidoctor:process-asciidoc process-resources</defaultGoal>
+      </build>
+    </profile>
+  </profiles>
+</project>

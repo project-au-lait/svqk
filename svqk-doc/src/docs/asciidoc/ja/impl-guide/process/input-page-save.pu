@@ -1,0 +1,31 @@
+hide footbox
+autonumber
+
+actor User
+
+box "Frontend" #ffffff
+  participant Page
+end box
+
+box "Backend" #ffffff
+  participant Controller
+  participant Service
+  participant Repository
+end box
+
+database DB
+
+User -> Page: action
+Page -> Controller: POST dto
+
+Controller -> Controller: dto -> entity
+group Transaction
+  Controller -> Service: save(entity)
+  Service -> Repository: save(entity)
+  Repository -> DB: INSERT / UPDATE
+  Service <-- Repository: entity
+  Controller <-- Service: entity
+end group
+
+Page <-- Controller: entity.id,\lentity.version
+User <-- Page: message

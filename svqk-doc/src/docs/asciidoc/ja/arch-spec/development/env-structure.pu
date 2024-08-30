@@ -1,0 +1,31 @@
+
+
+rectangle "Local Env" {
+  folder project as local {
+  }
+}
+
+database Git {
+  folder project as git {
+  }
+
+}
+
+rectangle "CI Env" {
+  folder project as ci {
+  }
+}
+
+database "Registry" {
+  component Image
+}
+
+rectangle "Test / Prd Env" {
+  component Container
+}
+
+local <- git: pull
+local -> git: push
+git -> ci: pull
+ci -> Image: push
+Image -> Container: pull

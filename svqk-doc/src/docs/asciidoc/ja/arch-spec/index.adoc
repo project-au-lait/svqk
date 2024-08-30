@@ -1,0 +1,9 @@
+= アーキテクチャ仕様書
+
+// include::usecase/index.ad[]
+
+include::application/index.ad[]
+
+include::development/index.ad[]
+
+// include::test/index.ad[]

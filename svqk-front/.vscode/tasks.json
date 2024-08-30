@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start-front",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev", "--open"],
+      "problemMatcher": []
+    },
+    {
+      "label": "gen-api-client",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["gen-api-client"],
+      "problemMatcher": []
+    }
+  ]
+}

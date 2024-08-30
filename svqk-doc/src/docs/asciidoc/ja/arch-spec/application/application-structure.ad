@@ -1,0 +1,18 @@
+[[application-structure]]
+=== アプリケーション構成
+
+SVQKはFrontendとBackendの2つのアプリケーションとDBで構成されます。
+
+.アプリケーション構成
+[plantuml]
+----
+include::application-structure.pu[]
+----
+
+FrontendはSvelteKitで実装されたWebアプリケーションです。
+ユーザーに対しブラウザで利用可能なユーザーインターフェースを提供します。
+また、ユーザーの入力に対する簡易的なバリデーションや、Web APIの呼び出しを行います。
+
+BackendはQuarkusで実装されたWeb APIアプリケーションです。
+フロントエンドアプリケーションに対しWeb APIを提供します。
+Web API内部では、リクエストに対する厳密なバリデーションや、DBのトランザクション制御、ビジネスロジック、DBアクセスを行います。
