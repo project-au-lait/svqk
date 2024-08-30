@@ -131,7 +131,7 @@ The above ` mvn archetype:generate ` command generates a project with the follow
   - The usual ` docker compose ` command can be used because it contains a compose. yml file.
 - **my-artifactid-e2etest**
   - Project for End to End Test in Planwright.
-  - Because the project was created using standard Playwright functionality, the directory structure and functionality available are the same as standard Playwright. [Playwright - Installing Playwright](https://playwright. dev/docs/intro #installing-playwright)
+  - Because the project was created using standard Playwright functionality, the directory structure and functionality available are the same as standard Playwright. [Playwright - Installing Playwright](https://playwright.dev/docs/intro#installing-playwright)
     - Ex. You can use the usual Playwright commands, such as  ` pnpm playwright test `.
 - **my-artifactid-migration**
   - A project for DB Migration with Flyway.
