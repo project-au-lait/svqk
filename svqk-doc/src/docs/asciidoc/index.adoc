@@ -3,8 +3,8 @@
 |===
 ^|Version ^| Link
 
-|v0.6-SNAPSHOT
+|0.6
 a|
-* link:0.6-SNAPSHOT/en/index.html[English]
-* link:0.6-SNAPSHOT/ja/index.html[日本語]
+* link:0.6/en/index.html[English]
+* link:0.6/ja/index.html[日本語]
 |===
