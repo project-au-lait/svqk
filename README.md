@@ -30,6 +30,7 @@ To develop applications using SVQK, you need the following software:
 
 - Docker Desktop
 - JDK v21
+- Maven
 - Node.js v20
 - pnpm
 - Git
@@ -54,6 +55,8 @@ To create a project from Archetype, run the following command:
 - Windows (command prompt)
 
 ```sh
+chcp 65001
+
 mvn archetype:generate ^
     -DarchetypeGroupId=dev.aulait.svqk ^
     -DarchetypeArtifactId=svqk-archetype-refimpl ^

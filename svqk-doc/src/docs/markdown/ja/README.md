@@ -30,6 +30,7 @@ SVQKを使用してアプリケーションを開発するには、以下のソ�
 
 - Docker Desktop
 - JDK v21
+- Maven
 - Node.js v20
 - pnpm
 - Git
@@ -54,6 +55,8 @@ Archetypeからプロジェクトを作成するには、以下のコマンド�
 - Windows (コマンドプロンプト)
 
 ```sh
+chcp 65001
+
 mvn archetype:generate ^
     -DarchetypeGroupId=dev.aulait.svqk ^
     -DarchetypeArtifactId=svqk-archetype-refimpl ^
