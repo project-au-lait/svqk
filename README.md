@@ -60,7 +60,7 @@ chcp 65001
 mvn archetype:generate ^
     -DarchetypeGroupId=dev.aulait.svqk ^
     -DarchetypeArtifactId=svqk-archetype-refimpl ^
-    -DarchetypeVersion=0.6 ^
+    -DarchetypeVersion=0.6.1 ^
     -DgroupId=my.group.id ^
     -DartifactId=my-artifactid ^
     -Dversion=1.0-SNAPSHOT
@@ -78,7 +78,7 @@ code my-artifactid.code-workspace
 mvn archetype:generate  \
     -DarchetypeGroupId=dev.aulait.svqk \
     -DarchetypeArtifactId=svqk-archetype-refimpl \
-    -DarchetypeVersion=0.6 \
+    -DarchetypeVersion=0.6.1 \
     -DgroupId=my.group.id \
     -DartifactId=my-artifactid \
     -Dversion=1.0-SNAPSHOT
