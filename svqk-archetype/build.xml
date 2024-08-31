@@ -1,3 +1,8 @@
+<!-- 
+Usage:
+
+./mvnw -f svqk-archetype -D ant.target=test -D archetype.type=refimpl
+-->
 <project xmlns:if="ant:if" xmlns:unless="ant:unless" name="svqk-archetype" basedir="."
   default="install">
   <taskdef resource="net/sf/antcontrib/antlib.xml" />
@@ -10,7 +15,7 @@
   <property name="archetype.gendir" value="${basedir}/../target/generated-sources/archetype" />
 
 
-  <target name="deploy" depends="install">
+  <target name="deploy" depends="test">
     <condition property="maven-central" value=",maven-central" else="">
       <not>
         <matches pattern="-SNAPSHOT$" string="${project.version}" />
@@ -68,9 +73,14 @@
       <equals arg1="${archetype.type}" arg2="skeleton" />
     </condition>
 
-    <propertyfile file="${archetype.prjdir}/archetype.properties">
+    <property name="propsfile" value="${archetype.prjdir}/archetype.properties" />
+    <delete file="${propsfile}" />
+    <propertyfile file="${propsfile}">
       <entry key="excludePatterns" value="${excludePatterns}" />
-      <entry key="archetype.filteredExtensions" value="java,properties,yml,json,code-workspace" />
+      <entry key="archetype.filteredExtensions" value="java,json,code-workspace" />
+      <!-- This value is to avoid the possibility of incorrectly replacing the version string in
+      package.json files. -->
+      <entry key="version" value="string that cannot be matched" />
     </propertyfile>
 
     <exec executable="${mvnw}" dir="${archetype.prjdir}" failonerror="true">
