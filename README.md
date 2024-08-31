@@ -148,8 +148,8 @@ The above ` mvn archetype:generate ` command generates a project with the follow
 
 ## Document
 
-- [Implementation Guide](https://aulait.dev/svqk/0.6/en/impl-guide/)
-- [Archetecture Specification](https://aulait.dev/svqk/0.6/en/arch-spec/)
+- [Implementation Guide](https://aulait.dev/svqk/0.6.1/en/impl-guide/)
+- [Archetecture Specification](https://aulait.dev/svqk/0.6.1/en/arch-spec/)
 
 ## License
 

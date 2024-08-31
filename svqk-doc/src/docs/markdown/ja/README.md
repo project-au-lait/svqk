@@ -148,8 +148,8 @@ code my-artifactid.code-workspace
 
 ## ドキュメント
 
-- [実装ガイド](http://sitoolkit-dev.monocrea.co.jp/gitbucket/project-au-lait/svqk/pages/0.6.1/ja/impl-guide/index.html)
-- [アーキテクチャ仕様書](http://sitoolkit-dev.monocrea.co.jp/gitbucket/project-au-lait/svqk/pages/0.6.1/ja/arch-spec/index.html)
+- [実装ガイド](https://aulait.dev/svqk/0.6.1/en/impl-guide/)
+- [アーキテクチャ仕様書](https://aulait.dev/svqk/0.6.1/en/arch-spec/)
 
 ## ライセンス
 
