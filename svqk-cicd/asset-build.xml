@@ -57,6 +57,10 @@ command to set version
       <arg line="-N versions:set -D newVersion=${version} -D generateBackupPoms=false" />
     </exec>
 
+    <replaceregexp file="${basedir}/../svqk-archetype/pom.xml"
+      match="(?&lt;=artifactId&gt;svqk&lt;.*\n{0,1}.*version.*)(\d+[\.\d]+\d+)(-SNAPSHOT){0,1}"
+      replace="${version}" />
+
     <if>
       <not>
         <matches string="${version}" pattern="^.*-SNAPSHOT$" />
@@ -64,10 +68,9 @@ command to set version
       <then>
         <replaceregexp flags="g">
           <regexp
-            pattern="((?&lt;=archetypeVersion.*)|(?&lt;=/pages/.*)|(?&lt;=artifactId&gt;svqk&lt;.*\n{0,1}.*version.*))(\d+[\.\d]+\d+)(-SNAPSHOT){0,1}" />
+            pattern="((?&lt;=archetypeVersion.*)|(?&lt;=/pages/.*))(\d+[\.\d]+\d+)(-SNAPSHOT){0,1}" />
           <substitution expression="${version}" />
           <fileset dir="${basedir}/../">
-            <include name="svqk-archetype/pom.xml" />
             <include name="svqk-doc/**/README.md" />
             <include name="README.md" />
           </fileset>
