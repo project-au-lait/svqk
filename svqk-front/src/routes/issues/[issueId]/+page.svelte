@@ -5,9 +5,9 @@
   import * as yup from 'yup';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import type { IdModel } from '$lib/arch/api/Api';
-  import InputField from '$lib/components/InputField.svelte';
+  import InputField from '$lib/arch/components/InputField.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
-  import SelectBox from '$lib/components/SelectBox.svelte';
+  import SelectBox from '$lib/arch/components/SelectBox.svelte';
   import { pageStore } from '$lib/arch/global/PageStore';
   import { t } from '$lib/translations';
 

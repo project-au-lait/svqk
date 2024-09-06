@@ -2,8 +2,8 @@
   import type { PageData } from '../issues/$types';
   import { pageStore } from '$lib/arch/global/PageStore';
   import FormValidator from '$lib/arch/form/FormValidator';
-  import Pagination from '$lib/components/Pagination.svelte';
-  import SelectBox from '$lib/components/SelectBox.svelte';
+  import Pagination from '$lib/arch/components/Pagination.svelte';
+  import SelectBox from '$lib/arch/components/SelectBox.svelte';
   import type { IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';

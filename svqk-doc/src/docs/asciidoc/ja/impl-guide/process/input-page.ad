@@ -61,7 +61,7 @@ Pageのスクリプトセクションには、バリデーションの定義と�
 [source,ts]
 ----
   import { IssueModel } from '$lib/arch/api/Api';
-  import InputField from '$lib/components/InputField.svelte';
+  import InputField from '$lib/arch/components/InputField.svelte';
   import * as yup from 'yup';
   import FormValidator from '$lib/arch/form/FormValidator';
 
