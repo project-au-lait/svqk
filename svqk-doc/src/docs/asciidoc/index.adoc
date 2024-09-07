@@ -12,4 +12,9 @@ a|
 a|
 * link:0.6.1/en/index.html[English]
 * link:0.6.1/ja/index.html[日本語]
+
+|0.6.2
+a|
+* link:0.6.2/en/index.html[English]
+* link:0.6.2/ja/index.html[日本語]
 |===
