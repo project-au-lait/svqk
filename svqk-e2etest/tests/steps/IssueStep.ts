@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import IssueInputOperation from '../operations/IssueInputOperation';
 import IssueListOperation from '../operations/IssueListOperation';
-import IssueInputFactory from '../factories/IssueFormFactory';
+import IssueInputFactory from '../factories/IssueFactory';
 import type { IssueModel } from '../api/Api';
 import BaseStep from '../arch/BaseStep';
 import { DryRun } from '../arch/DryRun';
@@ -21,10 +21,10 @@ export class IssueStep extends BaseStep {
 
   async createIssue() {
     this.startStep('チケットの登録');
-    const issue = IssueInputFactory.createRandomForm();
+    const issue = IssueInputFactory.createRandomIssue();
     await this.top.gotoTop();
     await this.issueInput.gotoNewIssue();
-    await this.issueInput.inputForm(issue);
+    await this.issueInput.save(issue);
     return issue;
   }
 
@@ -43,8 +43,8 @@ export class IssueStep extends BaseStep {
 
   async updateIssue() {
     this.startStep('チケットの更新');
-    const issueToUpdate = IssueInputFactory.createRandomForm();
-    await this.issueInput.inputForm(issueToUpdate);
+    const issueToUpdate = IssueInputFactory.createRandomIssue();
+    await this.issueInput.save(issueToUpdate);
     await this.issueList.gotoIssueList();
     await this.issueList.gotoIssue(issueToUpdate.subject);
     await this.issueInput.expectIssue(issueToUpdate);

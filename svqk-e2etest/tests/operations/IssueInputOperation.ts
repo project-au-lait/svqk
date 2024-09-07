@@ -14,9 +14,9 @@ export default class IssueInputOperation {
     await this.issueInputPage.gotoInput();
   }
 
-  async inputForm(issue: IssueModel) {
-    await this.issueInputPage.inputFormSubject(issue.subject);
-    await this.issueInputPage.inputFormDescription(issue.description!);
+  async save(issue: IssueModel) {
+    await this.issueInputPage.inputSubject(issue.subject);
+    await this.issueInputPage.inputDescription(issue.description!);
 
     await this.issueInputPage.save();
   }

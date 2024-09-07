@@ -12,12 +12,12 @@ export default class IssueInputPage extends BasePage {
     await this.click('#newIssue', '新しいチケットリンク');
   }
 
-  async inputFormSubject(formSubject: string) {
-    await this.inputText('#subject', '題名', formSubject);
+  async inputSubject(subject: string) {
+    await this.inputText('#subject', '題名', subject);
   }
 
-  async inputFormDescription(formDescription: string) {
-    await this.inputText('#description', '説明', formDescription);
+  async inputDescription(description: string) {
+    await this.inputText('#description', '説明', description);
   }
 
   async save() {
