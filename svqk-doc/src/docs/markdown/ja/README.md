@@ -60,7 +60,7 @@ chcp 65001
 mvn archetype:generate ^
     -DarchetypeGroupId=dev.aulait.svqk ^
     -DarchetypeArtifactId=svqk-archetype-refimpl ^
-    -DarchetypeVersion=0.6.1 ^
+    -DarchetypeVersion=0.6.2 ^
     -DgroupId=my.group.id ^
     -DartifactId=my-artifactid ^
     -Dversion=1.0-SNAPSHOT
@@ -78,7 +78,7 @@ code my-artifactid.code-workspace
 mvn archetype:generate  \
     -DarchetypeGroupId=dev.aulait.svqk \
     -DarchetypeArtifactId=svqk-archetype-refimpl \
-    -DarchetypeVersion=0.6.1 \
+    -DarchetypeVersion=0.6.2 \
     -DgroupId=my.group.id \
     -DartifactId=my-artifactid \
     -Dversion=1.0-SNAPSHOT
@@ -148,8 +148,8 @@ code my-artifactid.code-workspace
 
 ## ドキュメント
 
-- [実装ガイド](https://aulait.dev/svqk/0.6.1/en/impl-guide/)
-- [アーキテクチャ仕様書](https://aulait.dev/svqk/0.6.1/en/arch-spec/)
+- [実装ガイド](https://aulait.dev/svqk/0.6.2/en/impl-guide/)
+- [アーキテクチャ仕様書](https://aulait.dev/svqk/0.6.2/en/arch-spec/)
 
 ## ライセンス
 

@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>dev.aulait.svqk</groupId>
   <artifactId>svqk</artifactId>
-  <version>0.6.2-SNAPSHOT</version>
+  <version>0.6.2</version>
   <packaging>pom</packaging>
 
   <modules>
