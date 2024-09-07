@@ -11,14 +11,14 @@ export default class IssueInputOperation {
   }
 
   async gotoNewIssue() {
-    await this.issueInputPage.gotoInput();
+    await this.issueInputPage.clickNewIssueLink();
   }
 
   async save(issue: IssueModel) {
     await this.issueInputPage.inputSubject(issue.subject);
     await this.issueInputPage.inputDescription(issue.description!);
 
-    await this.issueInputPage.save();
+    await this.issueInputPage.clickSaveBtn();
   }
 
   async expectIssue(issue: IssueModel) {

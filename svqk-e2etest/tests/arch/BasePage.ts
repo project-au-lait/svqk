@@ -31,7 +31,7 @@ export default abstract class BasePage {
     await this.run(Action.INPUT, itemName, () => this.page.locator(selector).fill(value), value);
   }
 
-  protected async goTo(path: string) {
+  protected async open(path: string) {
     await this.run(Action.GOTO, path, () => this.page.goto(path));
   }
 

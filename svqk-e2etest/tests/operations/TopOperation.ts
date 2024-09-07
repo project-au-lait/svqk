@@ -8,7 +8,7 @@ export default class TopOperation {
     this.topPage = new TopPage(page, dryRun);
   }
 
-  async gotoTop() {
-    await this.topPage.gotoTop();
+  async openTopPage() {
+    await this.topPage.open();
   }
 }

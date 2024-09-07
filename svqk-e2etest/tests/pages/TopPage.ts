@@ -5,7 +5,7 @@ export default class TopPage extends BasePage {
     return 'トップ画面';
   }
 
-  async gotoTop() {
-    await this.goTo('/');
+  async open() {
+    await super.open('/');
   }
 }

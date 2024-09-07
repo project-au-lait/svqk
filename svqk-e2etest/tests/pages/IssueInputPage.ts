@@ -7,7 +7,7 @@ export default class IssueInputPage extends BasePage {
     return 'チケット入力画面';
   }
 
-  async gotoInput() {
+  async clickNewIssueLink() {
     await this.click('#issue', 'チケットリンク');
     await this.click('#newIssue', '新しいチケットリンク');
   }
@@ -20,7 +20,7 @@ export default class IssueInputPage extends BasePage {
     await this.inputText('#description', '説明', description);
   }
 
-  async save() {
+  async clickSaveBtn() {
     await this.click('#save', '登録 or 更新ボタン');
     await this.expectGlobalMessage(t('msg.saved'));
   }

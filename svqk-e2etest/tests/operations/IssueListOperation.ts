@@ -9,7 +9,7 @@ export default class IssueListOperation {
   }
 
   async gotoIssueList() {
-    await this.issueListPage.gotoIssueList();
+    await this.issueListPage.clickIssueLink();
   }
 
   async gotoIssue(subject: string) {

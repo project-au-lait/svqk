@@ -5,7 +5,7 @@ export default class IssueListPage extends BasePage {
     return 'チケット一覧画面';
   }
 
-  async gotoIssueList() {
+  async clickIssueLink() {
     await this.click('#issue', 'チケットリンク');
   }
 
