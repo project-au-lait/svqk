@@ -5,12 +5,12 @@ const config = {
     {
       locale: 'en',
       key: 'msg',
-      loader: async () => (await import('./translations/en.json')).default
+      loader: async () => (await import('./en.json')).default
     },
     {
       locale: 'ja',
       key: 'msg',
-      loader: async () => (await import('./translations/ja.json')).default
+      loader: async () => (await import('./ja.json')).default
     }
   ],
   fallbackLocale: 'en'
