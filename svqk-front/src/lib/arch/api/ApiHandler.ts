@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/public';
-import { messageStore } from '$lib/arch/message/MessageStore';
+import { messageStore } from '$lib/arch/global/MessageStore';
 import { Api, type HttpResponse } from './Api';
 
 export default class ApiHandler {

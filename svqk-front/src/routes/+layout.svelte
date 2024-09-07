@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { messageStore } from '$lib/arch/message/MessageStore';
+  import { messageStore } from '$lib/arch/global/MessageStore';
   import '@picocss/pico/css/pico.min.css';
   import '@picocss/pico/css/pico.colors.min.css';
   import { pageStore } from '$lib/arch/global/PageStore';
