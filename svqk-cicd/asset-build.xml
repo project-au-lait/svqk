@@ -68,7 +68,7 @@ command to set version
       <then>
         <replaceregexp flags="g">
           <regexp
-            pattern="((?&lt;=archetypeVersion.*)|(?&lt;=/pages/.*))(\d+[\.\d]+\d+)(-SNAPSHOT){0,1}" />
+            pattern="((?&lt;=archetypeVersion.*)|(?&lt;=/svqk/.*))(\d+[\.\d]+\d+)(-SNAPSHOT){0,1}" />
           <substitution expression="${version}" />
           <fileset dir="${basedir}/../">
             <include name="svqk-doc/**/README.md" />
