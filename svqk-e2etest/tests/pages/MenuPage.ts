@@ -1,7 +1,7 @@
 import BasePage from '../arch/BasePage';
 
 export default abstract class MenuPage extends BasePage {
-  async gotoIssuePage() {
+  async clickIssueLink() {
     await this.click('#issue', 'チケットリンク');
   }
 }

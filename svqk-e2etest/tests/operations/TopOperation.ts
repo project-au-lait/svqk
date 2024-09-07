@@ -11,4 +11,8 @@ export default class TopOperation {
   async openTopPage() {
     await this.topPage.open();
   }
+
+  async gotoIssueListPage() {
+    await this.topPage.clickIssueLink();
+  }
 }

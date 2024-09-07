@@ -1,12 +1,12 @@
-import BasePage from '../arch/BasePage';
+import MenuPage from './MenuPage';
 
-export default class IssueListPage extends BasePage {
+export default class IssueListPage extends MenuPage {
   get pageName() {
     return 'チケット一覧画面';
   }
 
-  async clickIssueLink() {
-    await this.click('#issue', 'チケットリンク');
+  async clickNewIssueLink() {
+    await this.click('#newIssue', '新しいチケットリンク');
   }
 
   async clickIssueNoLinkBySubject(subject: string) {

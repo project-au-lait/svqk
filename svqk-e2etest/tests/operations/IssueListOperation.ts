@@ -12,6 +12,10 @@ export default class IssueListOperation {
     await this.issueListPage.clickIssueLink();
   }
 
+  async gotoNewIssuePage() {
+    await this.issueListPage.clickNewIssueLink();
+  }
+
   async gotoIssue(subject: string) {
     await this.issueListPage.clickIssueNoLinkBySubject(subject);
   }

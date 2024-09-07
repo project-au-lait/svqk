@@ -10,10 +10,6 @@ export default class IssueInputOperation {
     this.issueInputPage = new IssueInputPage(page, dryRun);
   }
 
-  async gotoNewIssue() {
-    await this.issueInputPage.clickNewIssueLink();
-  }
-
   async save(issue: IssueModel) {
     await this.issueInputPage.inputSubject(issue.subject);
     await this.issueInputPage.inputDescription(issue.description!);

@@ -23,7 +23,8 @@ export class IssueStep extends BaseStep {
     this.startStep('チケットの登録');
     const issue = IssueInputFactory.createRandomIssue();
     await this.top.openTopPage();
-    await this.issueInput.gotoNewIssue();
+    await this.top.gotoIssueListPage();
+    await this.issueList.gotoNewIssuePage();
     await this.issueInput.save(issue);
     return issue;
   }

@@ -1,6 +1,6 @@
-import BasePage from '../arch/BasePage';
+import MenuPage from './MenuPage';
 
-export default class TopPage extends BasePage {
+export default class TopPage extends MenuPage {
   get pageName() {
     return 'トップ画面';
   }
