@@ -39,10 +39,6 @@ export default abstract class BasePage {
     await this.run(Action.CLICK, itemName, () => this.page.locator(selector).click());
   }
 
-  protected async getTd(selector: string) {
-    return await this.page.locator(`td${selector}`);
-  }
-
   protected async expectGlobalMessage(message: string) {
     await this.run(Action.EXPECT_VISIBLE, message, () =>
       expect(this.page.locator('#globalMessage')).toHaveText(message)

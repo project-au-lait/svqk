@@ -1,4 +1,4 @@
-import BasePage from './BasePage';
+import BasePage from '../arch/BasePage';
 
 export default class IssueListPage extends BasePage {
   get pageName() {

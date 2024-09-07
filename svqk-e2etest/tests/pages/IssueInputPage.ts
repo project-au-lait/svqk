@@ -1,6 +1,6 @@
 import type { IssueModel } from '../api/Api';
 import { t } from '../arch/MultiLng';
-import BasePage from './BasePage';
+import BasePage from '../arch/BasePage';
 
 export default class IssueInputPage extends BasePage {
   get pageName() {

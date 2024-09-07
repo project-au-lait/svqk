@@ -3,7 +3,7 @@ import IssueInputOperation from '../operations/IssueInputOperation';
 import IssueListOperation from '../operations/IssueListOperation';
 import IssueInputFactory from '../factories/IssueFormFactory';
 import type { IssueModel } from '../api/Api';
-import BaseStep from './BaseStep';
+import BaseStep from '../arch/BaseStep';
 import { DryRun } from '../arch/DryRun';
 import TopOperation from '../operations/TopOperation';
 
