@@ -1,53 +1,32 @@
-import type { Page } from '@playwright/test';
 import IssueInputOperation from '../operations/IssueInputOperation';
-import IssueListOperation from '../operations/IssueListOperation';
-import IssueInputFactory from '../factories/IssueFactory';
 import type { IssueModel } from '../api/Api';
 import BaseStep from '../arch/BaseStep';
-import { DryRun } from '../arch/DryRun';
-import TopOperation from '../operations/TopOperation';
+import MenuOperation from '../operations/MenuOperation';
 
 export class IssueStep extends BaseStep {
-  private issueInput: IssueInputOperation;
-  private issueList: IssueListOperation;
-  private top: TopOperation;
-
-  constructor(page: Page, dryRun: DryRun) {
-    super(dryRun);
-    this.top = new TopOperation(page, dryRun);
-    this.issueInput = new IssueInputOperation(page, dryRun);
-    this.issueList = new IssueListOperation(page, dryRun);
-  }
-
-  async createIssue() {
+  async createIssue(menuOp: MenuOperation, issue: IssueModel) {
     this.startStep('チケットの登録');
-    const issue = IssueInputFactory.createRandomIssue();
-    await this.top.openTopPage();
-    await this.top.gotoIssueListPage();
-    await this.issueList.gotoNewIssuePage();
-    await this.issueInput.save(issue);
-    return issue;
+    const issueListOp = await menuOp.gotoIssueListPage();
+    const issueInputOp = await issueListOp.gotoNewIssuePage();
+    await issueInputOp.save(issue);
+    return issueInputOp;
   }
 
-  async searchIssue(subject: string) {
-    this.startStep('チケットの検索');
-    await this.issueList.gotoIssueList();
-    await this.issueList.searchIssue(subject);
+  async referenceIssueBySubject(menuOp: MenuOperation, subject: string) {
+    this.startStep('チケットの照会');
+    const issueListOp = await menuOp.gotoIssueListPage();
+    await issueListOp.searchIssueBySubject(subject);
+    const issueInputOp = await issueListOp.gotoIssueBySubject(subject);
+
+    return issueInputOp;
   }
 
-  async referenceIssue(issue: IssueModel) {
-    this.startStep('チケットの参照');
-    await this.issueList.gotoIssueList();
-    await this.issueList.gotoIssue(issue.subject);
-    await this.issueInput.expectIssue(issue);
-  }
-
-  async updateIssue() {
+  async updateIssue(issueInputOp: IssueInputOperation, issue: IssueModel) {
     this.startStep('チケットの更新');
-    const issueToUpdate = IssueInputFactory.createRandomIssue();
-    await this.issueInput.save(issueToUpdate);
-    await this.issueList.gotoIssueList();
-    await this.issueList.gotoIssue(issueToUpdate.subject);
-    await this.issueInput.expectIssue(issueToUpdate);
+    await issueInputOp.save(issue);
+  }
+
+  async expectIssue(issueInputOp: IssueInputOperation, issue: IssueModel) {
+    await issueInputOp.expectIssue(issue);
   }
 }

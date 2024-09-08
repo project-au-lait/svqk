@@ -1,13 +1,12 @@
-import { Page } from '@playwright/test';
 import IssueInputPage from '../pages/IssueInputPage';
 import type { IssueModel } from '../api/Api';
-import { DryRun } from '../arch/DryRun';
+import BasePage from '../arch/BasePage';
 
 export default class IssueInputOperation {
   private issueInputPage: IssueInputPage;
 
-  constructor(page: Page, dryRun: DryRun) {
-    this.issueInputPage = new IssueInputPage(page, dryRun);
+  constructor(page: BasePage) {
+    this.issueInputPage = new IssueInputPage(page);
   }
 
   async save(issue: IssueModel) {
@@ -18,6 +17,7 @@ export default class IssueInputOperation {
   }
 
   async expectIssue(issue: IssueModel) {
-    await this.issueInputPage.expectIssueDetail(issue);
+    await this.issueInputPage.expectSubject(issue.subject);
+    await this.issueInputPage.expectDescription(issue.description);
   }
 }

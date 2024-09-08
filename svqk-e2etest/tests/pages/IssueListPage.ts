@@ -1,6 +1,6 @@
-import MenuPage from './MenuPage';
+import BasePage from '../arch/BasePage';
 
-export default class IssueListPage extends MenuPage {
+export default class IssueListPage extends BasePage {
   get pageName() {
     return 'チケット一覧画面';
   }

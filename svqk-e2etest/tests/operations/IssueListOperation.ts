@@ -1,26 +1,25 @@
-import type { Page } from '@playwright/test';
 import IssueListPage from '../pages/IssueListPage';
-import { DryRun } from '../arch/DryRun';
+import IssueInputOperation from './IssueInputOperation';
+import BasePage from '../arch/BasePage';
 
 export default class IssueListOperation {
   private issueListPage: IssueListPage;
-  constructor(page: Page, dryRun: DryRun) {
-    this.issueListPage = new IssueListPage(page, dryRun);
-  }
 
-  async gotoIssueList() {
-    await this.issueListPage.clickIssueLink();
+  constructor(page: BasePage) {
+    this.issueListPage = new IssueListPage(page);
   }
 
   async gotoNewIssuePage() {
     await this.issueListPage.clickNewIssueLink();
+    return new IssueInputOperation(this.issueListPage);
   }
 
-  async gotoIssue(subject: string) {
+  async gotoIssueBySubject(subject: string) {
     await this.issueListPage.clickIssueNoLinkBySubject(subject);
+    return new IssueInputOperation(this.issueListPage);
   }
 
-  async searchIssue(subject: string) {
+  async searchIssueBySubject(subject: string) {
     await this.issueListPage.inputSearch(subject);
     await this.issueListPage.clickSearchBtn();
     await this.issueListPage.expectSearchResult(subject);

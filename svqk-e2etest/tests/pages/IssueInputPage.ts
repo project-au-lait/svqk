@@ -1,15 +1,9 @@
-import type { IssueModel } from '../api/Api';
-import { t } from '../arch/MultiLng';
 import BasePage from '../arch/BasePage';
+import { t } from '../arch/MultiLng';
 
 export default class IssueInputPage extends BasePage {
   get pageName() {
     return 'チケット入力画面';
-  }
-
-  async clickNewIssueLink() {
-    await this.click('#issue', 'チケットリンク');
-    await this.click('#newIssue', '新しいチケットリンク');
   }
 
   async inputSubject(subject: string) {
@@ -25,8 +19,11 @@ export default class IssueInputPage extends BasePage {
     await this.expectGlobalMessage(t('msg.saved'));
   }
 
-  async expectIssueDetail(issue: IssueModel) {
-    await this.expectText('#subject', '題名', issue.subject);
-    await this.expectText('#description', '説明', issue.description!);
+  async expectSubject(subject: string) {
+    await this.expectText('#subject', '題名', subject);
+  }
+
+  async expectDescription(description?: string) {
+    await this.expectText('#description', '説明', description ?? '');
   }
 }

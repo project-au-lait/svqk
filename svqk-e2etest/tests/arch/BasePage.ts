@@ -2,7 +2,13 @@ import { expect, type Page } from '@playwright/test';
 import { Action, DryRun } from '../arch/DryRun';
 
 export default abstract class BasePage {
-  constructor(protected page: Page, private dryRun: DryRun) {}
+  page: Page;
+  dryRun: DryRun;
+
+  constructor(page: BasePage | { page: Page; dryRun: DryRun }) {
+    this.page = page.page;
+    this.dryRun = page.dryRun;
+  }
 
   abstract get pageName(): string;
 
