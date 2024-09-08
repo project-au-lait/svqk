@@ -16,7 +16,7 @@ export default class IssueInputPage extends BasePage {
 
   async clickSaveBtn() {
     await this.click('#save', '登録 or 更新ボタン');
-    await this.expectGlobalMessage(t('msg.saved'));
+    await this.expectGlobalMessage(t('saved'));
   }
 
   async expectSubject(subject: string) {

@@ -40,6 +40,13 @@
         <filtering>true</filtering>
         <targetPath>../../</targetPath>
       </resource>
+      <resource>
+        <directory>../svqk-front/src/lib/translations</directory>
+        <includes>
+          <include>*.json</include>
+        </includes>
+        <targetPath>../../tests/translations</targetPath>
+      </resource>
     </resources>
 
     <plugins>

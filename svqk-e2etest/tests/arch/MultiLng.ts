@@ -13,7 +13,7 @@ await i18next.use(Backend).init(
     fallbackLng: 'en',
     debug: false,
     backend: {
-      loadPath: 'tests/translations/message_{{lng}}.json'
+      loadPath: 'tests/translations/{{lng}}.json'
     }
   }
   // ,
