@@ -1,24 +1,24 @@
 import BasePage from '../arch/BasePage';
 
 export default class IssueListPage extends BasePage {
-  get pageName() {
-    return 'チケット一覧画面';
+  get pageNameKey() {
+    return 'issue';
   }
 
   async clickNewIssueLink() {
-    await this.click('#newIssue', '新しいチケットリンク');
+    await this.click('#newIssue');
   }
 
   async clickIssueNoLinkBySubject(subject: string) {
-    await this.clickInRow(subject, 'チケット番号リンク');
+    await this.clickInRow(subject);
   }
 
   async inputSearch(searchValue: string) {
-    await this.inputText('input[type="search"]', '検索ワード', searchValue);
+    await this.inputText('input[type="search"]', searchValue);
   }
 
   async clickSearchBtn() {
-    await this.click('input[type="submit"]', '検索ボタン');
+    await this.click('input[type="submit"]');
   }
 
   async expectSearchResult(expectValue: string) {

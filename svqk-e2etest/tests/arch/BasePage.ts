@@ -10,15 +10,15 @@ export default abstract class BasePage {
     this.dryRun = page.dryRun;
   }
 
-  abstract get pageName(): string;
+  abstract get pageNameKey(): string;
 
   private async run(
     action: Action,
-    itemName: string,
+    itemNameKey: string,
     runAction: () => Promise<any>,
     additionalValue?: string
   ) {
-    const log = this.dryRun.log(this.pageName, itemName, action, additionalValue);
+    const log = this.dryRun.log(this.pageNameKey, itemNameKey, action, additionalValue);
 
     if (this.dryRun.isOn) {
       return;
@@ -33,16 +33,16 @@ export default abstract class BasePage {
     await this.page.evaluate("console.log('" + log + "');");
   }
 
-  protected async inputText(selector: string, itemName: string, value: string) {
-    await this.run(Action.INPUT, itemName, () => this.page.locator(selector).fill(value), value);
+  protected async inputText(selector: string, value: string) {
+    await this.run(Action.INPUT, selector, () => this.page.locator(selector).fill(value), value);
   }
 
   protected async open(path: string) {
     await this.run(Action.GOTO, path, () => this.page.goto(path));
   }
 
-  protected async click(selector: string, itemName: string) {
-    await this.run(Action.CLICK, itemName, () => this.page.locator(selector).click());
+  protected async click(selector: string) {
+    await this.run(Action.CLICK, selector, () => this.page.locator(selector).click());
   }
 
   protected async expectGlobalMessage(message: string) {
@@ -57,17 +57,17 @@ export default abstract class BasePage {
     );
   }
 
-  protected async expectText(selector: string, itemName: string, value: string) {
+  protected async expectText(selector: string, value: string) {
     await this.run(
       Action.EXPECT_TEXT,
-      itemName,
+      selector,
       () => expect(this.page.locator(selector)).toHaveValue(value),
       value
     );
   }
 
-  protected async clickInRow(text: string, itemName: string) {
+  protected async clickInRow(text: string) {
     await this.expectTdTextExists(text);
-    await this.click(`tr:has(td:has-text("${text}")) a`, itemName);
+    await this.click(`tr:has(td:has-text("${text}")) a`);
   }
 }

@@ -5,7 +5,7 @@ import MenuOperation from '../operations/MenuOperation';
 
 export class IssueStep extends BaseStep {
   async createIssue(menuOp: MenuOperation, issue: IssueModel) {
-    this.startStep('チケットの登録');
+    this.startStep('Issue Registration');
     const issueListOp = await menuOp.gotoIssueListPage();
     const issueInputOp = await issueListOp.gotoNewIssuePage();
     await issueInputOp.save(issue);
@@ -13,7 +13,7 @@ export class IssueStep extends BaseStep {
   }
 
   async referenceIssueBySubject(menuOp: MenuOperation, subject: string) {
-    this.startStep('チケットの照会');
+    this.startStep('Issue Reference');
     const issueListOp = await menuOp.gotoIssueListPage();
     await issueListOp.searchIssueBySubject(subject);
     const issueInputOp = await issueListOp.gotoIssueBySubject(subject);
@@ -22,7 +22,7 @@ export class IssueStep extends BaseStep {
   }
 
   async updateIssue(issueInputOp: IssueInputOperation, issue: IssueModel) {
-    this.startStep('チケットの更新');
+    this.startStep('Issue Update');
     await issueInputOp.save(issue);
   }
 

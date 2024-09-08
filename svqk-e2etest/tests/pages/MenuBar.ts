@@ -1,11 +1,11 @@
 import BasePage from '../arch/BasePage';
 
 export default class MenuBar extends BasePage {
-  get pageName(): string {
-    return 'menu';
+  get pageNameKey(): string {
+    return 'MenuBar';
   }
 
   async clickIssueLink() {
-    await this.click('#issue', 'チケットリンク');
+    await this.click('#issue');
   }
 }

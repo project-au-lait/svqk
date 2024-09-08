@@ -2,28 +2,28 @@ import BasePage from '../arch/BasePage';
 import { t } from '../arch/MultiLng';
 
 export default class IssueInputPage extends BasePage {
-  get pageName() {
-    return 'チケット入力画面';
+  get pageNameKey() {
+    return 'newIssue';
   }
 
   async inputSubject(subject: string) {
-    await this.inputText('#subject', '題名', subject);
+    await this.inputText('#subject', subject);
   }
 
   async inputDescription(description: string) {
-    await this.inputText('#description', '説明', description);
+    await this.inputText('#description', description);
   }
 
   async clickSaveBtn() {
-    await this.click('#save', '登録 or 更新ボタン');
+    await this.click('#save');
     await this.expectGlobalMessage(t('saved'));
   }
 
   async expectSubject(subject: string) {
-    await this.expectText('#subject', '題名', subject);
+    await this.expectText('#subject', subject);
   }
 
   async expectDescription(description?: string) {
-    await this.expectText('#description', '説明', description ?? '');
+    await this.expectText('#description', description ?? '');
   }
 }
