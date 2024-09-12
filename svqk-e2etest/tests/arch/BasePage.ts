@@ -30,7 +30,7 @@ export default abstract class BasePage {
   }
 
   private async consoleLog(log: string) {
-    await this.page.evaluate("console.log('" + log + "');");
+    await this.page.evaluate(`console.log(\`${log}\`);`);
   }
 
   protected async inputText(selector: string, value: string) {
