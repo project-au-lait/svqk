@@ -18,3 +18,9 @@
 <th on:click={onClick}>
   <span>{label}{sortMark}</span>
 </th>
+
+<style>
+  th span {
+    cursor: pointer;
+  }
+</style>

@@ -152,10 +152,6 @@
 {/if}
 
 <style>
-  th span {
-    cursor: pointer;
-  }
-
   table.list td.updatedAt {
     white-space: nowrap;
   }
