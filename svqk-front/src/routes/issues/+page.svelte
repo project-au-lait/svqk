@@ -9,6 +9,7 @@
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
+  import SortDirection from '$lib/components/SortDirection.svelte';
 
   pageStore.setTitle($t('msg.issue'));
 
@@ -84,33 +85,36 @@
     <table class="list">
       <thead>
         <tr>
-          <th on:click={() => handleSort('id')}
-            ><span>#{SortOrderUtils.getSortMark(condition.sortOrders, 'id')}</span>
-          </th>
-          <th on:click={() => handleSort('issueStatus')}>
-            <span>
-              {$t('msg.status')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'issueStatus')}
-            </span>
-          </th>
-          <th on:click={() => handleSort('subject')}
-            ><span
-              >{$t('msg.subject')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'subject')}
-            </span>
-          </th>
-          <th on:click={() => handleSort('dueDate')}>
-            <span>
-              {$t('msg.dueDate')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'dueDate')}
-            </span>
-          </th>
-          <th on:click={() => handleSort('updatedAt')}>
-            <span>
-              {$t('msg.updatedAt')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'updatedAt')}
-            </span>
-          </th>
+          <SortDirection
+            sortOrders={condition.sortOrders}
+            label="#"
+            sortKey="id"
+            on:sort={(e) => handleSort(e.detail.sortKey)}
+          />
+          <SortDirection
+            sortOrders={condition.sortOrders}
+            label={$t('msg.status')}
+            sortKey="issueStatus"
+            on:sort={(e) => handleSort(e.detail.sortKey)}
+          />
+          <SortDirection
+            sortOrders={condition.sortOrders}
+            label={$t('msg.subject')}
+            sortKey="subject"
+            on:sort={(e) => handleSort(e.detail.sortKey)}
+          />
+          <SortDirection
+            sortOrders={condition.sortOrders}
+            label={$t('msg.dueDate')}
+            sortKey="dueDate"
+            on:sort={(e) => handleSort(e.detail.sortKey)}
+          />
+          <SortDirection
+            sortOrders={condition.sortOrders}
+            label={$t('msg.updatedAt')}
+            sortKey="updatedAt"
+            on:sort={(e) => handleSort(e.detail.sortKey)}
+          />
         </tr>
       </thead>
       <tbody>
