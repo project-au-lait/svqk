@@ -9,12 +9,15 @@ export default class SortOrderUtils {
     const index = sortOrders.findIndex((sortOrder) => sortOrder.field == field);
 
     if (index == -1) {
-      sortOrders.push({ field } as SortOrderModel);
-    } else if (index == sortOrders.length - 1) {
-      sortOrders[index].asc = !sortOrders[index].asc;
+      sortOrders.unshift({ field, asc: true } as SortOrderModel);
     } else {
-      sortOrders.splice(index, 1);
-      sortOrders.push({ field } as SortOrderModel);
+      sortOrders[index].asc = !sortOrders[index].asc;
+      const [existingSortOrder] = sortOrders.splice(index, 1);
+      sortOrders.unshift(existingSortOrder);
+    }
+
+    if (sortOrders.length > 2) {
+      sortOrders.pop();
     }
 
     return sortOrders;
