@@ -30,12 +30,6 @@
       result = r;
     }
   }
-
-  async function handleSort(field: string) {
-    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field);
-    condition = condition;
-    search();
-  }
 </script>
 
 <section>
