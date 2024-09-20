@@ -9,7 +9,7 @@
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
-  import SortDirection from '$lib/components/SortDirection.svelte';
+  import SortDirection from '$lib/arch/components/SortDirection.svelte';
 
   pageStore.setTitle($t('msg.issue'));
 
