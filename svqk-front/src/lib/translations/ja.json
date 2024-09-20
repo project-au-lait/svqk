@@ -16,5 +16,6 @@
   "status": "ステータス",
   "subject": "題名",
   "update": "更新",
-  "updatedAt": "更新日"
+  "updatedAt": "更新日",
+  "label": { "issue": { "subject": "題名" } }
 }

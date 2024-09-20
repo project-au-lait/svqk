@@ -16,5 +16,6 @@
   "status": "Status",
   "subject": "Subject",
   "update": "Update",
-  "updatedAt": "Update Date"
+  "updatedAt": "Update Date",
+  "label": { "issue": { "subject": "subject" } }
 }
