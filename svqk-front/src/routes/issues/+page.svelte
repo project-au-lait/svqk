@@ -6,7 +6,6 @@
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
   import type { IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
-  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
   import SortDirection from '$lib/arch/components/SortDirection.svelte';
