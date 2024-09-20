@@ -85,36 +85,11 @@
     <table class="list">
       <thead>
         <tr>
-          <SortDirection
-            sortOrders={condition.sortOrders}
-            label="#"
-            sortKey="id"
-            on:sort={(e) => handleSort(e.detail.sortKey)}
-          />
-          <SortDirection
-            sortOrders={condition.sortOrders}
-            label={$t('msg.status')}
-            sortKey="issueStatus"
-            on:sort={(e) => handleSort(e.detail.sortKey)}
-          />
-          <SortDirection
-            sortOrders={condition.sortOrders}
-            label={$t('msg.subject')}
-            sortKey="subject"
-            on:sort={(e) => handleSort(e.detail.sortKey)}
-          />
-          <SortDirection
-            sortOrders={condition.sortOrders}
-            label={$t('msg.dueDate')}
-            sortKey="dueDate"
-            on:sort={(e) => handleSort(e.detail.sortKey)}
-          />
-          <SortDirection
-            sortOrders={condition.sortOrders}
-            label={$t('msg.updatedAt')}
-            sortKey="updatedAt"
-            on:sort={(e) => handleSort(e.detail.sortKey)}
-          />
+          <SortDirection {condition} label="#" sortKey="id" {search} />
+          <SortDirection {condition} label={$t('msg.status')} sortKey="issueStatus" {search} />
+          <SortDirection {condition} label={$t('msg.subject')} sortKey="subject" {search} />
+          <SortDirection {condition} label={$t('msg.dueDate')} sortKey="dueDate" {search} />
+          <SortDirection {condition} label={$t('msg.updatedAt')} sortKey="updatedAt" {search} />
         </tr>
       </thead>
       <tbody>

@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import type { IssueSearchConditionModel } from '$lib/arch/api/Api';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
 
-  export let sortOrders;
-  export let label;
+  export let condition: IssueSearchConditionModel;
+  export let label: string;
   export let sortKey: string;
+  export let search: () => Promise<void>;
 
-  const dispatch = createEventDispatcher();
+  $: sortMark = SortOrderUtils.getSortMark(condition.sortOrders, sortKey);
 
-  $: sortMark = SortOrderUtils.getSortMark(sortOrders, sortKey);
-
-  function onClick() {
-    dispatch('sort', { sortKey });
+  async function onClick() {
+    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, sortKey);
+    await search();
   }
 </script>
 
