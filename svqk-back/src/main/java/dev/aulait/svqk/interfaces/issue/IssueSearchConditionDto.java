@@ -8,6 +8,7 @@ import dev.aulait.svqk.arch.search.FieldConditionVo;
 import dev.aulait.svqk.arch.search.OperatorCd;
 import dev.aulait.svqk.arch.search.SearchConditionDto;
 import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.SortOrderDto;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import lombok.Data;
@@ -32,6 +33,13 @@ public class IssueSearchConditionDto extends SearchConditionDto {
     fields.add(
         FieldConditionVo.of("issueStatus", OperatorCd.IN, BeanUtils.mapAll(issueStatuses, IssueStatusEntity.class)));
     fields.add(FieldConditionVo.of("dueDate", dueDate));
+
+    if(this.getSortOrders().isEmpty()) {
+      SortOrderDto sortOrderDto = new SortOrderDto();
+      sortOrderDto.setField("id");
+      sortOrderDto.setAsc(false);
+      this.getSortOrders().add(sortOrderDto);
+    }
 
     return SearchConditionVo.of(fields, build());
   }
