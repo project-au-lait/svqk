@@ -24,7 +24,7 @@
   $: action = isNew ? $t('msg.register') : $t('msg.update');
 
   const spec = {
-    subject: yup.string().required()
+    subject: yup.string().required().label($t('msg.label.issue.subject'))
   };
 
   const form = FormValidator.createForm(spec, save);
