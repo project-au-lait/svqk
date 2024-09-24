@@ -6,6 +6,7 @@
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
   import type { IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
+  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
   import SortDirection from '$lib/arch/components/SortDirection.svelte';
@@ -28,6 +29,12 @@
     if (r) {
       result = r;
     }
+  }
+
+  async function handleSort(field: string) {
+    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field);
+    condition = condition;
+    await search();
   }
 </script>
 
@@ -78,11 +85,21 @@
     <table class="list">
       <thead>
         <tr>
-          <SortDirection {condition} label="#" sortKey="id" {search} />
-          <SortDirection {condition} label={$t('msg.status')} sortKey="issueStatus" {search} />
-          <SortDirection {condition} label={$t('msg.subject')} sortKey="subject" {search} />
-          <SortDirection {condition} label={$t('msg.dueDate')} sortKey="dueDate" {search} />
-          <SortDirection {condition} label={$t('msg.updatedAt')} sortKey="updatedAt" {search} />
+          <th on:click={() => handleSort('id')}>
+            <SortDirection {condition} label="#" sortKey="id" />
+          </th>
+          <th on:click={() => handleSort('issueStatus')}>
+            <SortDirection {condition} label={$t('msg.status')} sortKey="issueStatus" />
+          </th>
+          <th on:click={() => handleSort('subject')}>
+            <SortDirection {condition} label={$t('msg.subject')} sortKey="subject" />
+          </th>
+          <th on:click={() => handleSort('dueDate')}>
+            <SortDirection {condition} label={$t('msg.dueDate')} sortKey="dueDate" />
+          </th>
+          <th on:click={() => handleSort('updatedAt')}>
+            <SortDirection {condition} label={$t('msg.updatedAt')} sortKey="updatedAt" />
+          </th>
         </tr>
       </thead>
       <tbody>
