@@ -52,20 +52,24 @@ public class SearchQueryBuilder {
     Iterator<FieldConditionVo> itr = fieldConditions.stream().filter(FieldConditionVo::hasValue).iterator();
 
     while (itr.hasNext()) {
-      FieldConditionVo fieldCondition = itr.next();
-      String field = fieldCondition.getField();
+        FieldConditionVo fieldCondition = itr.next();
+        String field = fieldCondition.getField();
 
-      sb.append(shortName + "." + field + " ");
+        sb.append(shortName + "." + field + " ");
 
-      OperatorCd operator = fieldCondition.getOperator();
+        OperatorCd operator = fieldCondition.getOperator();
 
-      sb.append(operator.getValue() + " :" + field);
+        if (operator == OperatorCd.LIKE) {
+            sb.append(operator.getValue() + " :" + field);
+            queryParams.put(field, "%" + fieldCondition.getValue() + "%");
+        } else {
+            sb.append(operator.getValue() + " :" + field);
+            queryParams.put(field, fieldCondition.getValue());
+        }
 
-      queryParams.put(field, fieldCondition.getValue());
-
-      if (itr.hasNext()) {
-        sb.append(" " + fieldCondition.getConjunction() + " ");
-      }
+        if (itr.hasNext()) {
+            sb.append(" " + fieldCondition.getConjunction() + " ");
+        }
     }
 
     return sb.toString();
