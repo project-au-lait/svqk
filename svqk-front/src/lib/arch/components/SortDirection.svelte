@@ -1,11 +1,11 @@
 <script lang="ts">
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
+  import type { SortOrderModel } from '$lib/arch/api/Api';
 
-  export let condition;
+  export let sortOrders: SortOrderModel[] = [];
   export let label: string;
   export let sortKey: string;
 
-  $: sortOrders = condition.sortOrders;
   $: sortMark = SortOrderUtils.getSortMark(sortOrders, sortKey);
 </script>
 

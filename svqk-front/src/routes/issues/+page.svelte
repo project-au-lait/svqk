@@ -86,19 +86,35 @@
       <thead>
         <tr>
           <th on:click={() => handleSort('id')}>
-            <SortDirection {condition} label="#" sortKey="id" />
+            <SortDirection sortOrders={condition.sortOrders} label="#" sortKey="id" />
           </th>
           <th on:click={() => handleSort('issueStatus')}>
-            <SortDirection {condition} label={$t('msg.status')} sortKey="issueStatus" />
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.status')}
+              sortKey="issueStatus"
+            />
           </th>
           <th on:click={() => handleSort('subject')}>
-            <SortDirection {condition} label={$t('msg.subject')} sortKey="subject" />
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.subject')}
+              sortKey="subject"
+            />
           </th>
           <th on:click={() => handleSort('dueDate')}>
-            <SortDirection {condition} label={$t('msg.dueDate')} sortKey="dueDate" />
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.dueDate')}
+              sortKey="dueDate"
+            />
           </th>
           <th on:click={() => handleSort('updatedAt')}>
-            <SortDirection {condition} label={$t('msg.updatedAt')} sortKey="updatedAt" />
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.updatedAt')}
+              sortKey="updatedAt"
+            />
           </th>
         </tr>
       </thead>
