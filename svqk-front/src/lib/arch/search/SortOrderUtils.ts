@@ -23,16 +23,23 @@ export default class SortOrderUtils {
     return sortOrders;
   }
 
+  static getSortOrder(sortOrders: SortOrderModel[] | undefined, field: string) {
+    if (!sortOrders) {
+      return undefined;
+    }
+
+    const sortOrder = sortOrders.find((sortOrder) => sortOrder.field == field);
+
+    if (sortOrder) {
+      return sortOrder.asc;
+    }
+  }
+
   static getSortMark(sortOrders: SortOrderModel[] | undefined, key: string) {
-    if (!sortOrders || sortOrders.length === 0) {
+    const order = this.getSortOrder(sortOrders, key);
+    if (order == undefined) {
       return '';
     }
-
-    const order = sortOrders[0];
-    if (order.field === key) {
-      return order.asc ? '↑' : '↓';
-    }
-
-    return '';
+    return order ? '↑' : '↓';
   }
 }
