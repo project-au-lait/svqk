@@ -56,7 +56,7 @@
     "asciidoc.preview.scrollEditorWithPreview": false,
     "editor.formatOnSave": true,
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.format.settings.google.version": "12.22.0",
+    "java.format.settings.google.version": "1.22.0",
     "java.test.config": {
       "vmArgs": [
         "-Dquarkus.http.test-host=localhost",
