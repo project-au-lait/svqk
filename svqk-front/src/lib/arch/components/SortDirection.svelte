@@ -10,3 +10,9 @@
 </script>
 
 <span>{label}{sortMark}</span>
+
+<style>
+  span {
+    cursor: pointer;
+  }
+</style>
