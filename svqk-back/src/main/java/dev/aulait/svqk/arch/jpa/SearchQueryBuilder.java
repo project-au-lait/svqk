@@ -59,13 +59,10 @@ public class SearchQueryBuilder {
 
       OperatorCd operator = fieldCondition.getOperator();
 
-      if (operator == OperatorCd.LIKE) {
-        sb.append(operator.getValue() + " :" + field);
-        queryParams.put(field, "%" + fieldCondition.getValue() + "%");
-      } else {
-        sb.append(operator.getValue() + " :" + field);
-        queryParams.put(field, fieldCondition.getValue());
-      }
+      sb.append(operator.getValue() + " :" + field);
+
+      queryParams.put(field,
+          operator == OperatorCd.LIKE ? "%" + fieldCondition.getValue() + "%" : fieldCondition.getValue());
 
       if (itr.hasNext()) {
         sb.append(" " + fieldCondition.getConjunction() + " ");
