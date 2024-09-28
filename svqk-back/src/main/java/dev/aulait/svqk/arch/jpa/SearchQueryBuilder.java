@@ -61,7 +61,8 @@ public class SearchQueryBuilder {
 
       sb.append(operator.getValue() + " :" + field);
 
-      queryParams.put(field, fieldCondition.getValue());
+      queryParams.put(field,
+          operator == OperatorCd.LIKE ? "%" + fieldCondition.getValue() + "%" : fieldCondition.getValue());
 
       if (itr.hasNext()) {
         sb.append(" " + fieldCondition.getConjunction() + " ");
