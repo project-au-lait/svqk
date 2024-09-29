@@ -9,6 +9,7 @@
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
+  import SortDirection from '$lib/arch/components/SortDirection.svelte';
 
   pageStore.setTitle($t('msg.issue'));
 
@@ -33,7 +34,7 @@
   async function handleSort(field: string) {
     condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field);
     condition = condition;
-    search();
+    await search();
   }
 </script>
 
@@ -84,32 +85,36 @@
     <table class="list">
       <thead>
         <tr>
-          <th on:click={() => handleSort('id')}
-            ><span>#{SortOrderUtils.getSortMark(condition.sortOrders, 'id')}</span>
+          <th on:click={() => handleSort('id')}>
+            <SortDirection sortOrders={condition.sortOrders} label="#" sortKey="id" />
           </th>
           <th on:click={() => handleSort('issueStatus')}>
-            <span>
-              {$t('msg.status')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'issueStatus')}
-            </span>
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.status')}
+              sortKey="issueStatus"
+            />
           </th>
-          <th on:click={() => handleSort('subject')}
-            ><span
-              >{$t('msg.subject')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'subject')}
-            </span>
+          <th on:click={() => handleSort('subject')}>
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.subject')}
+              sortKey="subject"
+            />
           </th>
           <th on:click={() => handleSort('dueDate')}>
-            <span>
-              {$t('msg.dueDate')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'dueDate')}
-            </span>
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.dueDate')}
+              sortKey="dueDate"
+            />
           </th>
           <th on:click={() => handleSort('updatedAt')}>
-            <span>
-              {$t('msg.updatedAt')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'updatedAt')}
-            </span>
+            <SortDirection
+              sortOrders={condition.sortOrders}
+              label={$t('msg.updatedAt')}
+              sortKey="updatedAt"
+            />
           </th>
         </tr>
       </thead>
@@ -148,10 +153,6 @@
 {/if}
 
 <style>
-  th span {
-    cursor: pointer;
-  }
-
   table.list td.updatedAt {
     white-space: nowrap;
   }
