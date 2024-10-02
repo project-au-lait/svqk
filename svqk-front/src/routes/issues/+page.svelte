@@ -85,35 +85,39 @@
     <table class="list">
       <thead>
         <tr>
-          <th on:click={() => handleSort('id')}>
-            <SortDirection sortOrders={condition.sortOrders} label="#" sortKey="id" />
+          <th>
+            <SortDirection sortOrders={condition.sortOrders} label="#" sortKey="id" {handleSort} />
           </th>
-          <th on:click={() => handleSort('issueStatus')}>
+          <th>
             <SortDirection
               sortOrders={condition.sortOrders}
               label={$t('msg.status')}
               sortKey="issueStatus"
+              {handleSort}
             />
           </th>
-          <th on:click={() => handleSort('subject')}>
+          <th>
             <SortDirection
               sortOrders={condition.sortOrders}
               label={$t('msg.subject')}
               sortKey="subject"
+              {handleSort}
             />
           </th>
-          <th on:click={() => handleSort('dueDate')}>
+          <th>
             <SortDirection
               sortOrders={condition.sortOrders}
               label={$t('msg.dueDate')}
               sortKey="dueDate"
+              {handleSort}
             />
           </th>
-          <th on:click={() => handleSort('updatedAt')}>
+          <th>
             <SortDirection
               sortOrders={condition.sortOrders}
               label={$t('msg.updatedAt')}
               sortKey="updatedAt"
+              {handleSort}
             />
           </th>
         </tr>
