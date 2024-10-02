@@ -84,6 +84,11 @@ export interface SortOrderModel {
   field?: string;
 }
 
+export interface TrackerModel {
+  id: string;
+  name: string;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
@@ -307,7 +312,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title svqk-back API
- * @version 0.8-SNAPSHOT
+ * @version 0.7-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   front = {
@@ -420,6 +425,85 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/v1/issues/${issueId}`,
         method: 'GET',
         format: 'json',
+        ...params
+      })
+  };
+  tracker = {
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerList
+     * @request GET:/api/v1/tracker
+     */
+    trackerList: (params: RequestParams = {}) =>
+      this.request<TrackerModel[], any>({
+        path: `/api/v1/tracker`,
+        method: 'GET',
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerCreate
+     * @request POST:/api/v1/tracker
+     */
+    trackerCreate: (data: TrackerModel, params: RequestParams = {}) =>
+      this.request<TrackerModel, any>({
+        path: `/api/v1/tracker`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerDetail
+     * @request GET:/api/v1/tracker/{trackerId}
+     */
+    trackerDetail: (trackerId: string, params: RequestParams = {}) =>
+      this.request<TrackerModel, any>({
+        path: `/api/v1/tracker/${trackerId}`,
+        method: 'GET',
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerUpdate
+     * @request PUT:/api/v1/tracker/{trackerId}
+     */
+    trackerUpdate: (trackerId: string, data: TrackerModel, params: RequestParams = {}) =>
+      this.request<TrackerModel, any>({
+        path: `/api/v1/tracker/${trackerId}`,
+        method: 'PUT',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerDelete
+     * @request DELETE:/api/v1/tracker/{trackerId}
+     */
+    trackerDelete: (trackerId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/v1/tracker/${trackerId}`,
+        method: 'DELETE',
         ...params
       })
   };
