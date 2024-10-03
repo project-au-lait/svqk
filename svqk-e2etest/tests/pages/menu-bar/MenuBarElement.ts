@@ -1,6 +1,6 @@
-import BasePage from '../arch/BasePage';
+import BasePageElement from '../../arch/BasePageElement';
 
-export default class MenuBar extends BasePage {
+export default class MenuBarElement extends BasePageElement {
   get pageNameKey(): string {
     return 'MenuBar';
   }

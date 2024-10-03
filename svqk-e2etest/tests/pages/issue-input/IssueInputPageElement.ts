@@ -1,7 +1,7 @@
-import BasePage from '../arch/BasePage';
-import { t } from '../arch/MultiLng';
+import BasePageElement from '../../arch/BasePageElement';
+import { t } from '../../arch/MultiLng';
 
-export default class IssueInputPage extends BasePage {
+export default class IssueInputPageElement extends BasePageElement {
   get pageNameKey() {
     return 'newIssue';
   }
