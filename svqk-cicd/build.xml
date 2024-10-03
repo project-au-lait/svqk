@@ -10,6 +10,10 @@
 
 
   <target name="test">
+    <condition property="analyze.profile" value="-P analyze">
+      <equals arg1="${analyze}" arg2="true" />
+    </condition>
+
     <exec executable="${mvn.cmd}" failonerror="true">
       <arg line="build-helper:reserve-network-port" />
     </exec>
@@ -17,7 +21,7 @@
     <property file="${port.file}" />
 
     <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-      <arg line="-T 1C clean verify -D setup" />
+      <arg line="-T 1C clean verify -D setup ${analyze.profile}" />
       <arg line="-D db.port=${db.port.random} -D back.port=${back.port.random}" />
     </exec>
 
@@ -25,7 +29,7 @@
       <equals arg1="${analyze}" arg2="true" />
       <then>
         <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-          <arg line="sonar:sonar -P analyze --fail-at-end" />
+          <arg line="sonar:sonar --fail-at-end" />
         </exec>
       </then>
     </if>
