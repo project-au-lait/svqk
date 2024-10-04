@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import dev.aulait.svqk.interfaces.tracker.TrackerDto;
+
 @Data
 public class IssueDto {
 
@@ -23,6 +25,9 @@ public class IssueDto {
 
   @Schema(required = true)
   private IssueStatusDto issueStatus;
+
+  @Schema(required = true)
+  private TrackerDto tracker;
 
   @Schema(required = true)
   private long version;
