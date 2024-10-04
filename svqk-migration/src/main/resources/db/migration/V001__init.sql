@@ -18,8 +18,8 @@ CREATE TABLE tracker (
   --${commonColumns}
 );
 
-INSERT INTO tracker (name)
-VALUES ('バグ'), ('機能'), ('サポート');
+INSERT INTO tracker (id, name)
+VALUES (1, 'Feature'), (2, 'Bug'), (3, 'Support');
 
 
 CREATE TABLE issue (
