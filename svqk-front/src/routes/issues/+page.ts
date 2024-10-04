@@ -1,7 +1,8 @@
 import type {
   IssueSearchConditionModel,
   IssueSearchResultModel,
-  IssueStatusModel
+  IssueStatusModel,
+  TrackerModel
 } from '$lib/arch/api/Api';
 import ApiHandler from '$lib/arch/api/ApiHandler';
 import type { PageLoad } from './$types';
@@ -18,9 +19,14 @@ export const load: PageLoad = async ({ fetch }) => {
     api.issueStatuses.issueStatusesList()
   ))!;
 
+  const trackers = (await ApiHandler.handle<TrackerModel[]>(fetch, (api) =>
+    api.tracker.trackerList()
+  ))!;
+
   return {
     condition,
     issueStatuses,
+    trackers,
     result
   };
 };
