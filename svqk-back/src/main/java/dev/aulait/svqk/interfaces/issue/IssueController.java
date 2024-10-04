@@ -12,6 +12,8 @@ import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.arch.web.IdDto;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
+import dev.aulait.svqk.domain.tracker.TrackerEntity;
+import dev.aulait.svqk.domain.tracker.TrackerService;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class IssueController {
 
   private final IssueService service;
+  private final TrackerService trackerService;
 
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
 
@@ -37,6 +40,10 @@ public class IssueController {
   public IdDto save(@RequestBody @Valid IssueDto dto) {
 
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
+
+    TrackerEntity trackerEntity = trackerService.findById(dto.getTracker().getId());
+    entity.setTracker(trackerEntity);
+
     IssueEntity savedEntity = service.save(entity);
 
     return BeanUtils.map(savedEntity, IdDto.class);
