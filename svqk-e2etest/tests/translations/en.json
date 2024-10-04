@@ -15,6 +15,7 @@
   "searchBySubjectOnly": "Search by subject only",
   "status": "Status",
   "subject": "Subject",
+  "tracker": "Tracker",
   "update": "Update",
   "updatedAt": "Update Date",
   "label": { "issue": { "subject": "subject" } }
