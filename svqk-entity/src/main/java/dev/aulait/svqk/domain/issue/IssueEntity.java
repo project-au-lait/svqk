@@ -1,5 +1,6 @@
 package dev.aulait.svqk.domain.issue;
 
+import dev.aulait.svqk.domain.tracker.TrackerEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,4 +35,8 @@ public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "status_id")
   private IssueStatusEntity issueStatus;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "tracker_id")
+  private TrackerEntity tracker;
 }
