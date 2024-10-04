@@ -15,6 +15,7 @@
   "searchBySubjectOnly": "題名のみで検索",
   "status": "ステータス",
   "subject": "題名",
+  "tracker": "トラッカー",
   "update": "更新",
   "updatedAt": "更新日",
   "label": { "issue": { "subject": "題名" } }

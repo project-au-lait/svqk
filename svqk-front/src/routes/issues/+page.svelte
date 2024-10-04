@@ -87,6 +87,12 @@
           <th on:click={() => handleSort('id')}
             ><span>#{SortOrderUtils.getSortMark(condition.sortOrders, 'id')}</span>
           </th>
+          <th on:click={() => handleSort('tracker')}>
+            <span>
+              {$t('msg.tracker')}
+              {SortOrderUtils.getSortMark(condition.sortOrders, 'tracker')}
+            </span>
+          </th>
           <th on:click={() => handleSort('issueStatus')}>
             <span>
               {$t('msg.status')}
@@ -121,6 +127,7 @@
                 {issue.id}
               </a>
             </td>
+            <td>{issue.tracker.name}</td>
             <td>{issue.issueStatus.name}</td>
             <td>{issue.subject}</td>
             <td>{DateUtils.date(issue.dueDate)}</td>
