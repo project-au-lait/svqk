@@ -11,21 +11,25 @@ test('CRUD of Issue', async ({ browser }) => {
   });
   const page = await context.newPage();
   const dryRun = DryRun.build();
-  const issueFacade = new IssueFacade(dryRun);
+
   const topPage = new TopPage(page, dryRun);
+  const menuBar = await topPage.open();
+
+  let issueListPage = await menuBar.gotoIssueListPage();
+  let issueInputPage = await issueListPage.gotoNewIssuePage();
+
+  // Create
   const issue = IssueInputFactory.createRandomIssue();
+  await issueInputPage.save(issue);
 
-  const menuBar = await topPage.openTopPage();
+  // Rererence
+  const issueFacade = new IssueFacade(dryRun);
+  issueInputPage = await issueFacade.referenceIssueBySubject(menuBar, issue.subject);
 
-  await issueFacade.createIssue(menuBar, issue);
-
-  const issueInputPage = await issueFacade.referenceIssueBySubject(menuBar, issue.subject);
-
+  // Update
   const updatingIssue = IssueInputFactory.createRandomIssue();
-
-  await issueFacade.updateIssue(issueInputPage, updatingIssue);
-
-  await issueFacade.expectIssue(issueInputPage, updatingIssue);
+  issueInputPage.save(updatingIssue);
+  issueInputPage.expectIssue(updatingIssue);
 
   // TODO: Add issue delete step
 });

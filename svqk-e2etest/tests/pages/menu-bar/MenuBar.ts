@@ -1,12 +1,12 @@
 import BasePageElement from '../../arch/BasePageElement';
-import MenuBarElement from './MenuBarElement';
+import MenuBarPageElement from './MenuBarPageElement';
 import IssueListPage from '../issue-list/IssueListPage';
 
 export default class MenuBar {
-  private menuBarEl: MenuBarElement;
+  private menuBarEl: MenuBarPageElement;
 
   constructor(page: BasePageElement) {
-    this.menuBarEl = new MenuBarElement(page);
+    this.menuBarEl = new MenuBarPageElement(page);
   }
 
   async gotoIssueListPage() {

@@ -10,7 +10,7 @@ export default class TopPage {
     this.topPageEl = new TopPageElement({ page, dryRun });
   }
 
-  async openTopPage() {
+  async open() {
     await this.topPageEl.open();
     return new MenuBar(this.topPageEl);
   }

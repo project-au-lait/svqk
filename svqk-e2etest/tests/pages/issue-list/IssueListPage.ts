@@ -1,6 +1,7 @@
 import IssueListPageElement from './IssueListPageElement';
 import IssueInputPage from '../issue-input/IssueInputPage';
 import BasePageElement from '../../arch/BasePageElement';
+import { IssueSearchConditionModel } from '../../api/Api';
 
 export default class IssueListPage {
   private issueListPageEl: IssueListPageElement;
@@ -19,9 +20,8 @@ export default class IssueListPage {
     return new IssueInputPage(this.issueListPageEl);
   }
 
-  async searchIssueBySubject(subject: string) {
-    await this.issueListPageEl.inputSearch(subject);
+  async searchIssue(condition: IssueSearchConditionModel) {
+    await this.issueListPageEl.inputSearch(condition.text!);
     await this.issueListPageEl.clickSearchBtn();
-    await this.issueListPageEl.expectSearchResult(subject);
   }
 }
