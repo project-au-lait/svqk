@@ -4,10 +4,13 @@ packages:
     - issue_status
   ${project.groupId}.domain.hello:
     - hello
+  ${project.groupId}.domain.tracker:
+    - tracker
 baseClassDefs:
   - tables:
       - "issue"
       - "issue_status"
+      - "tracker"
     baseClass: ${project.groupId}.arch.jpa.BaseEntity
 annotationDefs:
   GenerationType.IDENTITY:
