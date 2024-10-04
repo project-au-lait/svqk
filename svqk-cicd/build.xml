@@ -10,7 +10,7 @@
 
 
   <target name="test">
-    <condition property="analyze.profile" value=",analyze">
+    <condition property="analyze.profile" value=",analyze" else="">
       <equals arg1="${analyze}" arg2="true" />
     </condition>
 
