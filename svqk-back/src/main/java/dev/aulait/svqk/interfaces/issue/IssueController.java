@@ -1,9 +1,5 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import java.util.List;
-
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-
 import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.search.SearchResultDto;
 import dev.aulait.svqk.arch.search.SearchResultVo;
@@ -17,7 +13,9 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Path(IssueController.ISSUES_PATH)
 @RequiredArgsConstructor
@@ -25,13 +23,14 @@ public class IssueController {
 
   private final IssueService service;
 
+  private final IssueFactory factory;
+
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
 
   @SuppressWarnings("java:S1075")
   static final String ISSUES_GET_PATH = "/{issueId}";
 
-  public static class IssueSearchResultModel extends SearchResultDto<IssueDto> {
-  }
+  public static class IssueSearchResultModel extends SearchResultDto<IssueDto> {}
 
   @POST
   public IdDto save(@RequestBody @Valid IssueDto dto) {
@@ -53,12 +52,10 @@ public class IssueController {
   @POST
   @Path("/search")
   public IssueSearchResultModel search(IssueSearchConditionDto dto) {
-    SearchConditionVo vo = dto.buildVo();
+    SearchConditionVo vo = factory.build(dto);
     SearchResultVo<IssueEntity> result = service.search(vo);
     List<IssueDto> list = BeanUtils.mapAll(result.getList(), IssueDto.class);
 
     return SearchResultDto.build(vo, result, list, IssueSearchResultModel.class);
-
   }
-
 }
