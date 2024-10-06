@@ -17,10 +17,11 @@ class IssueFactoryTests {
     cond.setSubjectOnly(true);
 
     SearchQueryBuilder builder = new SearchQueryBuilder();
-    builder.buildQuery("IssueEntity", factory.build(cond));
+    builder.buildQuery(factory.build(cond));
 
     assertEquals(
-        "SELECT e FROM IssueEntity e WHERE e.subject LIKE :subject ORDER BY e.id DESC",
+        "SELECT IssueEntity FROM IssueEntity JOIN IssueEntity.issueStatus WHERE IssueEntity.subject"
+            + " LIKE :subject ORDER BY IssueEntity.id DESC",
         builder.getSearchQuery());
   }
 }

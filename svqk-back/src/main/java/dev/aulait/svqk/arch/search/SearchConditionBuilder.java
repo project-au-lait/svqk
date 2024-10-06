@@ -10,26 +10,69 @@ import org.springframework.data.domain.Sort.Order;
 
 public class SearchConditionBuilder {
 
+  private Class<?> mainEntity;
+  private List<JoinVo> joins = new ArrayList<>();
   private List<FieldConditionVo> fields = new ArrayList<>();
   private Order defaultOrder;
 
+  public SearchConditionBuilder from(Class<?> mainEntity) {
+    this.mainEntity = mainEntity;
+    return this;
+  }
+
+  public SearchConditionBuilder join(String rightEntityField) {
+    return join(rightEntityField, rightEntityField);
+  }
+
+  public SearchConditionBuilder join(String rightEntityField, String alias) {
+    return join(null, rightEntityField, alias);
+  }
+
+  public SearchConditionBuilder join(String fieldOwner, String field, String alias) {
+    joins.add(
+        JoinVo.builder()
+            .fieldOwner(fieldOwner)
+            .field(field)
+            .alias(alias)
+            .left(false)
+            .fetch(true)
+            .build());
+
+    return this;
+  }
+
   public SearchConditionBuilder where(String field, Object value) {
-    return this.where(field, OperatorCd.EQ, value);
+    return where(field, OperatorCd.EQ, value);
+  }
+
+  public SearchConditionBuilder where(String entityAlias, String field, Object value) {
+    return where(ConjunctionCd.AND, entityAlias, field, OperatorCd.EQ, value);
   }
 
   public SearchConditionBuilder where(String field, OperatorCd operator, Object value) {
-    return where(field, operator, ConjunctionCd.AND, value);
+    return where(ConjunctionCd.AND, field, operator, value);
   }
 
   public SearchConditionBuilder where(
-      String field, OperatorCd operator, ConjunctionCd conjunction, Object value) {
+      ConjunctionCd conjunction, String field, OperatorCd operator, Object value) {
+
+    return where(conjunction, null, field, operator, value);
+  }
+
+  public SearchConditionBuilder where(
+      ConjunctionCd conjunction,
+      String entityAlias,
+      String field,
+      OperatorCd operator,
+      Object value) {
 
     fields.add(
         FieldConditionVo.builder()
+            .conjunction(conjunction)
+            .entityAlias(entityAlias)
             .field(field)
             .operator(operator)
             .value(value)
-            .conjunction(conjunction)
             .build());
 
     return this;
@@ -41,14 +84,17 @@ public class SearchConditionBuilder {
   }
 
   public SearchConditionVo build(SearchConditionDto condition) {
-    return SearchConditionVo.of(fields, buildPageable(condition));
+    return SearchConditionVo.builder()
+        .mainEntity(mainEntity)
+        .joins(joins)
+        .fieldConditions(fields)
+        .pageable(buildPageable(condition))
+        .build();
   }
 
   private Pageable buildPageable(SearchConditionDto cond) {
 
-    List<Order> orders = cond.getSortOrders().stream().map(this::map).toList();
-
-    Sort sort = orders.isEmpty() ? Sort.by(defaultOrder) : Sort.by(orders);
+    Sort sort = buildSort(cond.getSortOrders());
 
     int pageNumberSd = cond.getPageNumber() - 1;
 
@@ -56,6 +102,20 @@ public class SearchConditionBuilder {
         pageNumberSd < 0 ? 0 : pageNumberSd,
         cond.getPageSize() < 1 ? 10 : cond.getPageSize(),
         sort);
+  }
+
+  private Sort buildSort(List<SortOrderDto> sortOrders) {
+    if (sortOrders.isEmpty()) {
+
+      if (defaultOrder == null) {
+        return Sort.unsorted();
+      } else {
+        return Sort.by(defaultOrder);
+      }
+    }
+
+    List<Order> orders = sortOrders.stream().map(this::map).toList();
+    return Sort.by(orders);
   }
 
   private Order map(SortOrderDto sortOrder) {

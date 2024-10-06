@@ -27,7 +27,6 @@ public class IssueService {
   }
 
   public SearchResultVo<IssueEntity> search(SearchConditionVo condition) {
-    return SearchUtils.search(em, IssueEntity.class, condition);
+    return SearchUtils.search(em, condition);
   }
-
 }
