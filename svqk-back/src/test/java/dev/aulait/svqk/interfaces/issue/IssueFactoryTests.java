@@ -20,8 +20,8 @@ class IssueFactoryTests {
     builder.buildQuery(factory.build(cond));
 
     assertEquals(
-        "SELECT IssueEntity FROM IssueEntity JOIN IssueEntity.issueStatus WHERE IssueEntity.subject"
-            + " LIKE :subject ORDER BY IssueEntity.id DESC",
+        "SELECT issue FROM IssueEntity issue JOIN FETCH issue.issueStatus issueStatus WHERE"
+            + " issue.subject LIKE :subject ORDER BY issue.id DESC",
         builder.getSearchQuery());
   }
 }
