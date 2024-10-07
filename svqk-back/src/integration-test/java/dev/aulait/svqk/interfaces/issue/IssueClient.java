@@ -7,8 +7,8 @@ import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
 
 public class IssueClient {
 
-  public IssueDto save(IssueDto issue) {
-    return given()
+  public IssueDto save(IssueDto issue) { // <.>
+    return given() // <.>
         .body(issue)
         .post(ISSUES_PATH)
         .then()

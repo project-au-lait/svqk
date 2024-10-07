@@ -1,0 +1,87 @@
+:project_root: ../../../../../../../
+=== Integration Test
+
+Integration Testでは、Backendが提供するREST APIが仕様通りに動作することを確認します。
+これはREST APIの呼び出しをテストプログラムによって自動化する事で行います。
+Integration Testのアプリケーション構成を以下に示します。
+
+.Integration Testのアプリケーション構成
+[plantuml]
+----
+include::integration-test-application-structure.pu[]
+----
+
+==== コンポーネント構成
+
+Integration Testのテストプログラムを構成するコンポーネントとそれらの相互作用を以下の通り定義します。
+
+.テストプログラムのコンポーネント構成
+[plantuml]
+----
+include::integration-test-component-structure.pu[]
+----
+
+各コンポーネントが担う責務とコンポーネントを定義する単位を以下の通り定義します。
+
+.コンポーネントの責務と定義単位
+[cols="1,3,2,2"]
+|===
+^|コンポーネント ^|責務 ^|ファイル(クラス)単位 ^| メソッド単位
+
+|TestCase
+|テストケースに従いREST APIの呼び出しと期待値の検証を行います。
+|テスト対象のControllerごとに1つ
+|テストケースごとに1つ
+
+|RestClient
+|REST APIの呼び出しと、そのRequest・ResponseのDTOへの変換を担います。
+|テスト対象のControllerごとに1つ
+|REST APIの呼び出しごとに1つ
+
+|DataFactory
+|テストで必要なデータを格納したDTOの生成を行います。
+|テスト対象のControllerごとに1つ
+|テストで必要なデータパターンごとに1つ
+|===
+
+===== TestCase
+
+TestCaseは、テストケースに従いREST APIの呼び出しと期待値の検証を担うコンポーネントです。
+
+.TestCaseの実装
+[source,java]
+----
+include::{project_root}/svqk-back/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueControllerIT.java[lines="1..26,44..45"]
+----
+
+<.> @QuarkusIntegrationTestをTestCaseクラスに設定します。
+<.> RestClientインスタンスを初期化します。
+<.> JUnitの作法に従い、テストケースごとにメソッドを定義し@Testを設定します。
+<.> DataFactoryを使用してテストデータを格納したDTOインスタンスを生成します。
+<.> RestClientを使用してREST APIの呼び出しを行います。
+<.> JUnitのAPIを使用して期待値の検証を行います。
+
+===== RestClient
+
+RestClientは、REST APIの呼び出しと、そのRequest・ResponseのDTOへの変換を担うコンポーネントです。
+
+.RestClientの実装
+[source,java]
+----
+include::{project_root}/svqk-back/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueClient.java[lines="1..18,38"]
+----
+
+<.> REST APIの呼び出しを行うメソッドを定義します。メソッドの引数はRequestのDTO、戻り値の型はResponseのDTOとします。
+<.> RestAssuredのAPIを使用して、REST APIの呼び出しを実装します。
+
+===== DataFactroy
+
+DataFactroyは、テストで必要なデータを格納したDTOの生成を担うコンポーネントです。
+
+.DataFactoryの実装
+[source,java]
+----
+include::{project_root}/svqk-back/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueDataFactory.java[lines="1..18,38"]
+----
+
+<.> テストで必要なデータパターンごとにメソッドを定義します。上記の例は、`subject` にランダムな文字列を格納した `IssueDto` インスタンスを生成するメソッドを定義しています。

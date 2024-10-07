@@ -1,5 +1,7 @@
 == テストアーキテクチャ
 
+include::integration-test.ad[]
+
 === End to End Test
 
 End to End Testでは、システムがユースケースシナリオ通りに動作することを確認します。

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IssueDataFactory {
 
-  public static IssueDto createRandomIssue() {
+  public static IssueDto createRandomIssue() { // <.>
     IssueDto issue = new IssueDto();
     issue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
 
