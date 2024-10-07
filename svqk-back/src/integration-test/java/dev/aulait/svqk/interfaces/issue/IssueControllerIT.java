@@ -15,17 +15,16 @@ class IssueControllerIT {
 
   @Test
   void testCrud() {
-    IssueDto issue = new IssueDto();
-    issue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
+    IssueDto issue = IssueDataFactory.createRandomIssue();
 
-    IssueStatusDto status = new IssueStatusDto();
-    status.setId("1");
-    issue.setIssueStatus(status);
-
+    // Create
     int issueId = client.save(issue).getId();
 
+    // Reference
     IssueDto createdIssue = client.get(issueId);
+    assertEquals(issue.getSubject(), createdIssue.getSubject());
 
+    // Update
     createdIssue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
     client.save(createdIssue);
 
