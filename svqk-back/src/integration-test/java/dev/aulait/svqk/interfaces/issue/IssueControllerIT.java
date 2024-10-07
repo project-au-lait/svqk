@@ -2,13 +2,11 @@ package dev.aulait.svqk.interfaces.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ResourceBundle;
-
+import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
+import dev.aulait.svqk.arch.test.ValidationMessageUtils;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
-
-import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
-import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
 class IssueControllerIT {
@@ -42,9 +40,7 @@ class IssueControllerIT {
 
     ConstraintViolationResponseDto error = client.createButValidationError(issue);
 
-    ResourceBundle rb = ResourceBundle.getBundle("org.hibernate.validator.ValidationMessages");
-    String errorMsg = rb.getString("jakarta.validation.constraints.NotBlank.message");
-
-    assertEquals(errorMsg, error.getViolations().get(0).getMessage());
+    assertEquals(
+        ValidationMessageUtils.getNotBlankMsg(), error.getViolations().get(0).getMessage());
   }
 }
