@@ -1,5 +1,7 @@
 == テストアーキテクチャ
 
+include::test-automation-guidelines.ad[]
+
 include::integration-test.ad[]
 
 === End to End Test
