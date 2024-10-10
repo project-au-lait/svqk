@@ -1,21 +1,4 @@
-ifndef::imagesdir[:imagesdir: ../images]
-:project_root: ../../../../../../..
-=== 登録画面
-
-ここでは登録画面の実装プロセスを説明します。
-説明ではリファレンス実装のチケット登録画面を例に挙げます。
-
-.登録画面の例　チケット登録画面
-image::input-page.png[width=700]
-
-登録画面には、登録内容を入力する項目と、登録を実行するボタンが配置されます。
-また、登録画面では以下の2つの処理があります。
-
-. 画面に遷移して来た際の初期化処理
-. 画面に入力されたデータの登録処理
-
-以降では、それぞれの処理に対する実装を説明します。
-
+:project_root: ../../../../../../../../
 ==== 初期化処理
 
 登録画面の初期化処理のシーケンスは以下の通りです。
@@ -287,24 +270,3 @@ Pageの画面項目にPageLoaderからの返却値を設定します。
 ====
 Frontendサーバー、Backendサーバー、DBを全て起動した状態で画面操作を行い、期待通りの挙動になること、BackendサーバーのログにWeb APIの処理のログ等が出力されることを確認します。
 ====
-
-==== 登録処理
-
-登録画面の登録時の処理シーケンスは以下の通りです。
-
-.登録時の処理シーケンス
-[plantuml]
-----
-include::input-page-save.pu[]
-----
-
-. ユーザーが登録操作を実行します。
-. PageがWeb APIを呼び出します。
-. ControlelrがPOSTされたdtoをentityに変換します。
-. ControllerがServiceを呼び出します。
-. ServiceがRepositoryを呼び出します。
-. Repositoryがentityの状態に応じてINSERTまたはUPDATEを実行します。
-. Repositoryがentityを返却します。
-. Serviceがentityを返却します。
-. Controllerがentityのidとversionプロパティを返却します。
-

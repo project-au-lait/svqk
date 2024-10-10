@@ -12,6 +12,7 @@ VALUES('1', 'New'),
   ('3', 'Closed');
 
 
+-- <.>
 CREATE TABLE issue (
   id SERIAL PRIMARY KEY,
   subject VARCHAR(128) NOT NULL,
