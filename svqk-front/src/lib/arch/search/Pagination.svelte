@@ -1,7 +1,12 @@
 <script lang="ts">
+  export let result: {
+    start: number;
+    end: number;
+    count: number;
+    lastPage: number;
+    pageNums: number[];
+  };
   export let currentPage = 1;
-  export let lastPage = 1;
-  export let pageNums = [1];
   export let handlePage: (page: number) => Promise<void>;
 
   async function gotoPage(page: number) {
@@ -10,7 +15,11 @@
   }
 </script>
 
-{#if lastPage > 1}
+<div style="display: flex; justify-content: end;">
+  <span>( {result.start}-{result.end} / {result.count} )</span>
+</div>
+
+{#if result.lastPage > 1}
   <div class="page" role="group">
     <button class="outline" disabled={currentPage <= 1} on:click={() => gotoPage(1)}> « </button>
 
@@ -18,7 +27,7 @@
       &lt;
     </button>
 
-    {#each pageNums as page}
+    {#each result.pageNums as page}
       <button class:outline={page != currentPage} on:click={() => gotoPage(page)}>
         {page}
       </button>
@@ -26,13 +35,17 @@
 
     <button
       class="outline"
-      disabled={currentPage >= lastPage}
+      disabled={currentPage >= result.lastPage}
       on:click={() => gotoPage(currentPage + 1)}
     >
       &gt;
     </button>
 
-    <button class="outline" disabled={currentPage >= lastPage} on:click={() => gotoPage(lastPage)}>
+    <button
+      class="outline"
+      disabled={currentPage >= result.lastPage}
+      on:click={() => gotoPage(result.lastPage)}
+    >
       »
     </button>
   </div>

@@ -117,19 +117,10 @@
         {/each}
       </tbody>
     </table>
-
-    <div style="display: flex; justify-content: end;">
-      <span>( {result.start}-{result.end} / {result.count} )</span>
-    </div>
   </section>
 
   <section>
-    <Pagination
-      bind:currentPage={condition.pageNumber}
-      lastPage={result.lastPage}
-      pageNums={result.pageNums}
-      handlePage={search}
-    />
+    <Pagination bind:currentPage={condition.pageNumber} {result} handlePage={search} />
   </section>
 {:else}
   {$t('msg.noData')}
