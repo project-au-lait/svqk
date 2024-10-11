@@ -19,6 +19,7 @@
 
   const resultHeaders = [
     { label: '#', key: 'id' },
+    { label: $t('msg.tracker'), key: 'tracker' },
     { label: $t('msg.status'), key: 'issueStatus' },
     { label: $t('msg.subject'), key: 'subject' },
     { label: $t('msg.dueDate'), key: 'dueDate' },
