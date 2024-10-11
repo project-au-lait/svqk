@@ -9,6 +9,7 @@
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
+  import SortDirection from '$lib/arch/components/SortDirection.svelte';
 
   pageStore.setTitle($t('msg.issue'));
 
@@ -17,6 +18,14 @@
   const issueStatuses = data.issueStatuses;
 
   let condition = data.condition;
+
+  const resultHeaders = [
+    { label: '#', key: 'id' },
+    { label: $t('msg.status'), key: 'issueStatus' },
+    { label: $t('msg.subject'), key: 'subject' },
+    { label: $t('msg.dueDate'), key: 'dueDate' },
+    { label: $t('msg.updatedAt'), key: 'updatedAt' }
+  ];
 
   const form = FormValidator.createForm({}, search);
 
@@ -33,7 +42,7 @@
   async function handleSort(field: string) {
     condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field);
     condition = condition;
-    search();
+    await search();
   }
 </script>
 
@@ -84,47 +93,26 @@
     <table class="list">
       <thead>
         <tr>
-          <th on:click={() => handleSort('id')}
-            ><span>#{SortOrderUtils.getSortMark(condition.sortOrders, 'id')}</span>
-          </th>
-          <th on:click={() => handleSort('issueStatus')}>
-            <span>
-              {$t('msg.status')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'issueStatus')}
-            </span>
-          </th>
-          <th on:click={() => handleSort('subject')}
-            ><span
-              >{$t('msg.subject')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'subject')}
-            </span>
-          </th>
-          <th on:click={() => handleSort('dueDate')}>
-            <span>
-              {$t('msg.dueDate')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'dueDate')}
-            </span>
-          </th>
-          <th on:click={() => handleSort('updatedAt')}>
-            <span>
-              {$t('msg.updatedAt')}
-              {SortOrderUtils.getSortMark(condition.sortOrders, 'updatedAt')}
-            </span>
-          </th>
+          {#each resultHeaders as rh}
+            <th>
+              <SortDirection
+                sortOrders={condition.sortOrders}
+                label={rh.label}
+                sortKey={rh.key}
+                {handleSort}
+              />
+            </th>
+          {/each}
         </tr>
       </thead>
       <tbody>
         {#each result.list as issue}
           <tr>
-            <td>
-              <a href={`/issues/${issue.id}`}>
-                {issue.id}
-              </a>
-            </td>
+            <td><a href={`/issues/${issue.id}`}>{issue.id}</a></td>
             <td>{issue.issueStatus.name}</td>
-            <td>{issue.subject}</td>
+            <td class="subject">{issue.subject}</td>
             <td>{DateUtils.date(issue.dueDate)}</td>
-            <td class="updatedAt">{DateUtils.datetime(issue.updatedAt)}</td>
+            <td>{DateUtils.datetime(issue.updatedAt)}</td>
           </tr>
         {/each}
       </tbody>
@@ -148,11 +136,8 @@
 {/if}
 
 <style>
-  th span {
-    cursor: pointer;
-  }
-
-  table.list td.updatedAt {
+  table.list td:not(.subject) {
+    text-align: center;
     white-space: nowrap;
   }
 </style>
