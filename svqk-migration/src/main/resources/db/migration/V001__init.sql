@@ -13,16 +13,16 @@ VALUES('1', 'New'),
 
 
 CREATE TABLE tracker (
-  id SERIAL PRIMARY KEY,
+  id CHAR(1) PRIMARY KEY,
   name VARCHAR(128) NOT NULL,
-  --${commonColumns}
+  --${commonColumns}  -- <.>
 );
 
 
 INSERT INTO tracker (id, name)
-VALUES (1, 'Feature'),
-  (2, 'Bug'),
-  (3, 'Support');
+VALUES ('1', 'Feature'),
+  ('2', 'Bug'),
+  ('3', 'Support');
 
 
 -- <.>
@@ -31,7 +31,7 @@ CREATE TABLE issue (
   subject VARCHAR(128) NOT NULL,
   due_date DATE,
   status_id CHAR(1) NOT NULL REFERENCES issue_status,
-  tracker_id INTEGER REFERENCES tracker,
+  tracker_id CHAR(1) NOT NULL REFERENCES tracker,
   description VARCHAR(8192),
   --${commonColumns}
 )

@@ -13,8 +13,4 @@ public class TrackerService {
   public List<TrackerEntity> findAll() {
     return repository.findAll();
   }
-
-  public TrackerEntity findById(Integer id) {
-    return repository.findById(id).orElse(null);
-  }
 }

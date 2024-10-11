@@ -22,7 +22,7 @@ class IssueControllerIT {
     issue.setIssueStatus(status);
 
     TrackerDto tracker = new TrackerDto();
-    tracker.setId(1);
+    tracker.setId("1");
     issue.setTracker(tracker);
 
     // Create

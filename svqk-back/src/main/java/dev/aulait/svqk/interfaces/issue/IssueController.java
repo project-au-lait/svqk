@@ -9,8 +9,6 @@ import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.arch.web.IdDto;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
-import dev.aulait.svqk.domain.issue.TrackerEntity;
-import dev.aulait.svqk.domain.issue.TrackerService;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -24,8 +22,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 public class IssueController {
 
   private final IssueService service;
-  private final TrackerService trackerService;
-
   private final IssueFactory factory;
 
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
@@ -39,9 +35,6 @@ public class IssueController {
   public IdDto save(@RequestBody @Valid IssueDto dto) {
 
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
-
-    TrackerEntity trackerEntity = trackerService.findById(dto.getTracker().getId());
-    entity.setTracker(trackerEntity);
 
     IssueEntity savedEntity = service.save(entity);
 

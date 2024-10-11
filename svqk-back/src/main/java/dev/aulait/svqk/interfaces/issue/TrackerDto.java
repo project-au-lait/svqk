@@ -7,8 +7,11 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class TrackerDto {
 
   @Schema(required = true, readOnly = true)
-  private Integer id;
+  private String id;
 
   @Schema(required = true)
   private String name;
+
+  @Schema(required = true, readOnly = true)
+  private long version;
 }

@@ -16,7 +16,7 @@ public class TrackerEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
 
   @Id
   @Column(name = "id")
-  private Integer id;
+  private String id;
 
   @Column(name = "name")
   private String name;
