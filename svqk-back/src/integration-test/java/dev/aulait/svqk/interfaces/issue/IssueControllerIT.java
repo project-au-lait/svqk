@@ -17,14 +17,6 @@ class IssueControllerIT {
   void testCrud() {
     IssueDto issue = IssueDataFactory.createRandomIssue(); // <.>
 
-    IssueStatusDto status = new IssueStatusDto();
-    status.setId("1");
-    issue.setIssueStatus(status);
-
-    TrackerDto tracker = new TrackerDto();
-    tracker.setId("1");
-    issue.setTracker(tracker);
-
     // Create
     int issueId = client.save(issue).getId(); // <.>
 
