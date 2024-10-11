@@ -86,9 +86,10 @@ export interface SortOrderModel {
 }
 
 export interface TrackerModel {
-  /** @format int32 */
-  id: number;
+  id: string;
   name: string;
+  /** @format int64 */
+  version: number;
 }
 
 export type QueryParamsType = Record<string | number, any>;
