@@ -1,4 +1,4 @@
-package dev.aulait.svqk.domain.tracker;
+package dev.aulait.svqk.domain.issue;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

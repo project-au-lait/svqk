@@ -1,9 +1,8 @@
-package dev.aulait.svqk.domain.tracker;
+package dev.aulait.svqk.domain.issue;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor

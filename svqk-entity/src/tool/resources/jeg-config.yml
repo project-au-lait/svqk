@@ -2,10 +2,9 @@ packages:
   ${project.groupId}.domain.issue:
     - issue
     - issue_status
+    - tracker
   ${project.groupId}.domain.hello:
     - hello
-  ${project.groupId}.domain.tracker:
-    - tracker
 baseClassDefs:
   - tables:
       - "issue"

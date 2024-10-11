@@ -1,6 +1,5 @@
 package dev.aulait.svqk.domain.issue;
 
-import dev.aulait.svqk.domain.tracker.TrackerEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

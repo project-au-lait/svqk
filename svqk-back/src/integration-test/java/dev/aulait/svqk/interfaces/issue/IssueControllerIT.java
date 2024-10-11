@@ -8,10 +8,6 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
-import dev.aulait.svqk.interfaces.tracker.TrackerDto;
-import io.quarkus.test.junit.QuarkusIntegrationTest;
-
 @QuarkusIntegrationTest // <.>
 class IssueControllerIT {
 

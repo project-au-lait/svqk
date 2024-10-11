@@ -1,13 +1,12 @@
-package dev.aulait.svqk.interfaces.tracker;
+package dev.aulait.svqk.interfaces.issue;
 
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.web.ApiPath;
-import dev.aulait.svqk.domain.tracker.TrackerService;
+import dev.aulait.svqk.domain.issue.TrackerService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Path(TrackerController.TRACKERS_PATH)
 @RequiredArgsConstructor

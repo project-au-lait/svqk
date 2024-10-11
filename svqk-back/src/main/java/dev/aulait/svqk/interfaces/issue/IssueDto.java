@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import dev.aulait.svqk.interfaces.tracker.TrackerDto;
-
 @Data // <.>
 public class IssueDto {
 
