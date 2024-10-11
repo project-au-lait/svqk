@@ -14,10 +14,8 @@
   pageStore.setTitle($t('msg.issue'));
 
   export let data: PageData;
-  $: result = data.result;
+  let { result, condition } = data;
   const issueStatuses = data.issueStatuses;
-
-  let condition = data.condition;
 
   const resultHeaders = [
     { label: '#', key: 'id' },
