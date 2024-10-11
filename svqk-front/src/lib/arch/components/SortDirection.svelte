@@ -15,3 +15,9 @@
 </script>
 
 <a href="#/" on:click={onClick}>{label}{sortMark}</a>
+
+<style>
+  a {
+    text-decoration: none
+  }
+</style>
