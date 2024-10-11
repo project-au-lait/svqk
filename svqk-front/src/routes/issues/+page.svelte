@@ -31,7 +31,7 @@
 
   async function search() {
     const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearchCreate(condition)
+      api.issues.issuesSearch(condition)
     );
 
     if (r) {

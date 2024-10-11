@@ -11,7 +11,7 @@ export const load: PageLoad = async ({ fetch }) => {
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearchCreate(condition)
+      api.issues.issuesSearch(condition)
     )) || ({} as IssueSearchResultModel);
 
   const issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) =>

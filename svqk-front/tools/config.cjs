@@ -3,10 +3,13 @@ exports.hooks = {
     const nextCharOfVersion = templateRouteName.match(/^v\d(.)/);
 
     if (nextCharOfVersion) {
-      const newTemplateRouteName = templateRouteName.replace(
+      let newTemplateRouteName = templateRouteName.replace(
         /^v\d./,
         nextCharOfVersion[1].toLowerCase()
       );
+
+      newTemplateRouteName = newTemplateRouteName.replace(/SearchCreate$/, 'Search');
+
       console.log(`     Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`);
       return newTemplateRouteName;
     }
