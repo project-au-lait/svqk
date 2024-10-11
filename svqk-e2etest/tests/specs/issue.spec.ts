@@ -1,33 +1,35 @@
 import { test } from '@playwright/test';
-import { IssueStep } from '../steps/IssueStep';
+import { IssueFacade } from '../facades/IssueFacade';
 import { DryRun } from '../arch/DryRun';
 import { locale } from '../arch/MultiLng';
-import TopOperation from '../operations/TopOperation';
+import TopPage from '../pages/top/TopPage';
 import IssueInputFactory from '../factories/IssueFactory';
 
-test.describe('Issue', () => {
-  test('CRUD of Issue', async ({ browser }) => {
-    const context = await browser.newContext({
-      locale: locale
-    });
-    const page = await context.newPage();
-    const dryRun = DryRun.build();
-    const issueStep = new IssueStep(dryRun);
-    const topOp = new TopOperation(page, dryRun);
-    const issue = IssueInputFactory.createRandomIssue();
-
-    const menuOp = await topOp.openTopPage();
-
-    await issueStep.createIssue(menuOp, issue);
-
-    const issueInputOp = await issueStep.referenceIssueBySubject(menuOp, issue.subject);
-
-    const updatingIssue = IssueInputFactory.createRandomIssue();
-
-    await issueStep.updateIssue(issueInputOp, updatingIssue);
-
-    await issueStep.expectIssue(issueInputOp, updatingIssue);
-
-    // TODO: Add issue delete step
+test('CRUD of Issue', async ({ browser }) => {
+  const context = await browser.newContext({
+    locale: locale
   });
+  const page = await context.newPage();
+  const dryRun = DryRun.build();
+
+  const topPage = new TopPage(page, dryRun);
+  const menuBar = await topPage.open();
+
+  let issueListPage = await menuBar.gotoIssueListPage();
+  let issueInputPage = await issueListPage.gotoNewIssuePage();
+
+  // Create
+  const issue = IssueInputFactory.createRandomIssue();
+  await issueInputPage.save(issue);
+
+  // Rererence
+  const issueFacade = new IssueFacade(dryRun);
+  issueInputPage = await issueFacade.referenceIssueBySubject(menuBar, issue.subject);
+
+  // Update
+  const updatingIssue = IssueInputFactory.createRandomIssue();
+  issueInputPage.save(updatingIssue);
+  issueInputPage.expectIssue(updatingIssue);
+
+  // TODO: Add issue delete step
 });

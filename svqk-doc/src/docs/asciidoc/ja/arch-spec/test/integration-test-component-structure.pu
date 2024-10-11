@@ -1,0 +1,24 @@
+@startuml integration-test-component-structure
+
+skinparam linetype ortho
+
+rectangle TestProgram {
+  component TestRunner <<JUnit>>
+  component HttpClient  <<REST Assured>>
+
+  rectangle TestCode {
+    component TestCase
+    component RestClient
+    component DataFactory
+  }
+
+}
+
+rectangle Backend
+
+TestRunner -> TestCase
+TestCase --> RestClient
+TestCase -> DataFactory
+RestClient -> HttpClient
+
+HttpClient --> Backend

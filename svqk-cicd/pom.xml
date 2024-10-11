@@ -18,6 +18,7 @@
   <properties>
     <port.file>${project.build.directory}/port.properties</port.file>
     <ant.file>${project.basedir}/build.xml</ant.file>
+    <sonar.skip>true</sonar.skip>
   </properties>
 
   <!-- Build Settings -->
@@ -51,7 +52,7 @@
       <plugin>
         <groupId>dev.aulait.bt</groupId>
         <artifactId>batch-translator-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>1.1</version>
       </plugin>
     </plugins>
   </build>

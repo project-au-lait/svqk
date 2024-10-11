@@ -3,6 +3,7 @@ package dev.aulait.svqk.arch.util;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,9 @@ public class BeanUtils {
   }
 
   public static <S, D> List<D> mapAll(Collection<S> srcs, Class<D> dstType) {
+    if (srcs == null) {
+      return Collections.emptyList();
+    }
     return srcs.stream().map(src -> mapper.map(src, dstType)).toList();
   }
 }

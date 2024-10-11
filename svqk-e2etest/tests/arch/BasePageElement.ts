@@ -1,11 +1,11 @@
 import { expect, type Page } from '@playwright/test';
-import { Action, DryRun } from '../arch/DryRun';
+import { Action, DryRun } from './DryRun';
 
-export default abstract class BasePage {
+export default abstract class BasePageElement {
   page: Page;
   dryRun: DryRun;
 
-  constructor(page: BasePage | { page: Page; dryRun: DryRun }) {
+  constructor(page: BasePageElement | { page: Page; dryRun: DryRun }) {
     this.page = page.page;
     this.dryRun = page.dryRun;
   }

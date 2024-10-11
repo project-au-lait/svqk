@@ -1,0 +1,8 @@
+@startuml it-application-structure
+
+component TestProgram
+component Backend
+database DB
+
+TestProgram -> Backend: HTTP
+Backend -> DB: JDBC

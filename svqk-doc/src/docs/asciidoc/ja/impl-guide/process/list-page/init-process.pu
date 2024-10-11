@@ -1,0 +1,49 @@
+@startuml search-page-init
+
+hide footbox
+autonumber
+
+actor User
+
+box "Frontend" #ffffff
+  participant Page
+  participant PageLoader
+end box
+
+box "Backend" #ffffff
+  participant Controller
+  participant Factory
+  participant Service
+  participant SearchUtils
+end box
+
+database DB
+
+User -> Page: navigate
+Page -> PageLoader: load
+PageLoader -> Controller: POST condidion \l model -> dto
+
+Controller -> Factory: build(condition) \n dto -> vo
+autonumber stop
+Controller <-- Factory
+autonumber resume
+Controller -> Service: search(condition)
+Service -> SearchUtils: search(condition)
+SearchUtils -> DB: SELECT COUNT
+autonumber stop
+SearchUtils <-- DB: count
+alt count > 0
+  autonumber resume
+  SearchUtils -> DB: SELECT
+  autonumber stop
+  SearchUtils <-- DB
+end alt
+Service <-- SearchUtils: result
+Controller <-- Service: result
+autonumber resume
+Controller -> Factory: build(result) \l vo -> dto
+autonumber stop
+Controller <-- Factory
+
+PageLoader <-- Controller: result \l model <- dto 
+Page <-- PageLoader: result

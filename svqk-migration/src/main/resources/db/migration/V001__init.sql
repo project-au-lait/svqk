@@ -18,10 +18,14 @@ CREATE TABLE tracker (
   --${commonColumns}
 );
 
+
 INSERT INTO tracker (id, name)
-VALUES (1, 'Feature'), (2, 'Bug'), (3, 'Support');
+VALUES (1, 'Feature'),
+  (2, 'Bug'),
+  (3, 'Support');
 
 
+-- <.>
 CREATE TABLE issue (
   id SERIAL PRIMARY KEY,
   subject VARCHAR(128) NOT NULL,

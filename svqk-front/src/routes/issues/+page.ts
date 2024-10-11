@@ -8,12 +8,12 @@ import ApiHandler from '$lib/arch/api/ApiHandler';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch }) => {
-  const condition = { issueStatuses: [] } as IssueSearchConditionModel;
+  const condition = { issueStatuses: [] } as IssueSearchConditionModel; // <.>
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearchCreate(condition)
-    )) || ({} as IssueSearchResultModel);
+      api.issues.issuesSearch(condition)
+    )) || ({} as IssueSearchResultModel); // <.>
 
   const issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) =>
     api.issueStatuses.issueStatusesList()
@@ -28,5 +28,5 @@ export const load: PageLoad = async ({ fetch }) => {
     issueStatuses,
     trackers,
     result
-  };
+  }; // <.>
 };

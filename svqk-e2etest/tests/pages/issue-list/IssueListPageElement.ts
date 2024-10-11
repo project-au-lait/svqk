@@ -1,6 +1,6 @@
-import BasePage from '../arch/BasePage';
+import BasePageElement from '../../arch/BasePageElement';
 
-export default class IssueListPage extends BasePage {
+export default class IssueListPageElement extends BasePageElement {
   get pageNameKey() {
     return 'issue';
   }

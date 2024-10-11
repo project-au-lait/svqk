@@ -6,4 +6,4 @@ include::application/index.ad[]
 
 include::development/index.ad[]
 
-// include::test/index.ad[]
+include::test/index.ad[]

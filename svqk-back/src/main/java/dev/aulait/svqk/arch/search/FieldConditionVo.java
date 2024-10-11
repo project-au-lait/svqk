@@ -1,13 +1,13 @@
 package dev.aulait.svqk.arch.search;
 
 import java.util.Collection;
-
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
 public class FieldConditionVo {
+  private String entityAlias;
   private String field;
   private OperatorCd operator;
   private ConjunctionCd conjunction;
@@ -21,9 +21,14 @@ public class FieldConditionVo {
     return of(field, operator, ConjunctionCd.AND, value);
   }
 
-  public static FieldConditionVo of(String field, OperatorCd operator, ConjunctionCd conjunction, Object value) {
-    return FieldConditionVo.builder().field(field).operator(operator).value(value)
-        .conjunction(conjunction).build();
+  public static FieldConditionVo of(
+      String field, OperatorCd operator, ConjunctionCd conjunction, Object value) {
+    return FieldConditionVo.builder()
+        .field(field)
+        .operator(operator)
+        .value(value)
+        .conjunction(conjunction)
+        .build();
   }
 
   public boolean hasValue() {
@@ -41,5 +46,4 @@ public class FieldConditionVo {
 
     return true;
   }
-
 }
