@@ -19,6 +19,7 @@
 
   const resultHeaders = [
     { label: '#', key: 'id' },
+    { label: $t('msg.tracker'), key: 'tracker' },
     { label: $t('msg.status'), key: 'issueStatus' },
     { label: $t('msg.subject'), key: 'subject' },
     { label: $t('msg.dueDate'), key: 'dueDate' },
@@ -107,6 +108,7 @@
         {#each result.list as issue}
           <tr>
             <td><a href={`/issues/${issue.id}`}>{issue.id}</a></td>
+            <td>{issue.tracker.name}</td>
             <td>{issue.issueStatus.name}</td>
             <td class="subject">{issue.subject}</td>
             <td>{DateUtils.date(issue.dueDate)}</td>

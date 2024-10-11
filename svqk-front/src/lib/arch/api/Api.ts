@@ -28,6 +28,7 @@ export interface IssueModel {
   description?: string;
   dueDate?: LocalDate;
   issueStatus: IssueStatusModel;
+  tracker: TrackerModel;
   /** @format int64 */
   version: number;
   updatedAt: LocalDateTime;
@@ -82,6 +83,13 @@ export type LocalDateTime = string;
 export interface SortOrderModel {
   asc?: boolean;
   field?: string;
+}
+
+export interface TrackerModel {
+  id: string;
+  name: string;
+  /** @format int64 */
+  version: number;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -418,6 +426,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     issuesDetail: (issueId: number, params: RequestParams = {}) =>
       this.request<IssueModel, any>({
         path: `/api/v1/issues/${issueId}`,
+        method: 'GET',
+        format: 'json',
+        ...params
+      })
+  };
+  tracker = {
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerList
+     * @request GET:/api/v1/tracker
+     */
+    trackerList: (params: RequestParams = {}) =>
+      this.request<TrackerModel[], any>({
+        path: `/api/v1/tracker`,
         method: 'GET',
         format: 'json',
         ...params

@@ -13,7 +13,7 @@
 
   export let data: PageData;
 
-  $: ({ issue, issueStatuses, isNew } = data);
+  $: ({ issue, issueStatuses, trackers, isNew } = data);
   $: {
     const subject = isNew ? $t('msg.newIssue') : issue.subject;
     pageStore.setTitle(subject);
@@ -57,6 +57,14 @@
         label={$t('msg.status')}
         options={issueStatuses}
         bind:value={issue.issueStatus.id}
+      />
+    </div>
+    <div>
+      <SelectBox
+        id="tracker"
+        label={$t('msg.tracker')}
+        options={trackers}
+        bind:value={issue.tracker.id}
       />
     </div>
     <div>

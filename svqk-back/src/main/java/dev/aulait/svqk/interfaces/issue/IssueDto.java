@@ -25,6 +25,9 @@ public class IssueDto {
   private IssueStatusDto issueStatus;
 
   @Schema(required = true)
+  private TrackerDto tracker;
+
+  @Schema(required = true)
   private long version;
 
   @Schema(required = true, readOnly = true)
