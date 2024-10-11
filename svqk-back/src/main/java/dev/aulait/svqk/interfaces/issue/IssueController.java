@@ -22,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 public class IssueController {
 
   private final IssueService service;
+
   private final IssueFactory factory;
 
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
@@ -35,7 +36,6 @@ public class IssueController {
   public IdDto save(@RequestBody @Valid IssueDto dto) {
 
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
-
     IssueEntity savedEntity = service.save(entity);
 
     return BeanUtils.map(savedEntity, IdDto.class);
