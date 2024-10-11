@@ -125,15 +125,11 @@
       <tbody>
         {#each result.list as issue}
           <tr>
-            <td>
-              <a href={`/issues/${issue.id}`}>
-                {issue.id}
-              </a>
-            </td>
+            <td><a href={`/issues/${issue.id}`}>{issue.id}</a></td>
             <td>{issue.issueStatus.name}</td>
-            <td>{issue.subject}</td>
+            <td class="subject">{issue.subject}</td>
             <td>{DateUtils.date(issue.dueDate)}</td>
-            <td class="updatedAt">{DateUtils.datetime(issue.updatedAt)}</td>
+            <td>{DateUtils.datetime(issue.updatedAt)}</td>
           </tr>
         {/each}
       </tbody>
@@ -157,7 +153,8 @@
 {/if}
 
 <style>
-  table.list td.updatedAt {
+  table.list td:not(.subject) {
+    text-align: center;
     white-space: nowrap;
   }
 </style>
