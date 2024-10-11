@@ -1,10 +1,8 @@
 package dev.aulait.svqk.arch.search;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.aulait.svqk.arch.util.ReflectionUtils;
 import java.util.List;
 import java.util.stream.LongStream;
-
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -40,18 +38,5 @@ public class SearchResultDto<T> {
       return new long[] {};
     }
     return LongStream.rangeClosed(1, getLastPage()).toArray();
-  }
-
-  public static <T, S extends SearchResultDto<T>> S build(
-      SearchConditionVo condition, SearchResultVo<?> result, List<T> list, Class<S> type) {
-
-    S dto = ReflectionUtils.newInstance(type);
-
-    dto.setList(list);
-    dto.setCount(result.getCount());
-    dto.setStart(result.getCount() < 1 ? 0 : condition.getOffset() + 1);
-    dto.setLimit(condition.getPageSize());
-
-    return dto;
   }
 }

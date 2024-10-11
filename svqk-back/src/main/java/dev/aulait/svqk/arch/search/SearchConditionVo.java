@@ -2,20 +2,20 @@ package dev.aulait.svqk.arch.search;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.Builder;
+import lombok.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Value;
-
 @Value
-@Builder(access = AccessLevel.PRIVATE)
+@Builder
 public class SearchConditionVo {
 
-  @Builder.Default
-  private List<FieldConditionVo> fieldConditions = new ArrayList<>();
+  private Class<?> mainEntity;
+
+  @Builder.Default private List<JoinVo> joins = new ArrayList<>();
+
+  @Builder.Default private List<FieldConditionVo> fieldConditions = new ArrayList<>();
 
   private Pageable pageable;
 
@@ -30,9 +30,4 @@ public class SearchConditionVo {
   public Sort getSort() {
     return pageable.getSort();
   }
-
-  public static SearchConditionVo of(List<FieldConditionVo> fieldConditions, Pageable pageable) {
-    return SearchConditionVo.builder().fieldConditions(fieldConditions).pageable(pageable).build();
-  }
-
 }

@@ -2,32 +2,29 @@ package dev.aulait.svqk.interfaces.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ResourceBundle;
-
+import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
+import dev.aulait.svqk.arch.test.ValidationMessageUtils;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
-import io.quarkus.test.junit.QuarkusIntegrationTest;
-
-@QuarkusIntegrationTest
+@QuarkusIntegrationTest // <.>
 class IssueControllerIT {
 
-  IssueClient client = new IssueClient();
+  IssueClient client = new IssueClient(); // <.>
 
-  @Test
+  @Test // <.>
   void testCrud() {
-    IssueDto issue = new IssueDto();
-    issue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
+    IssueDto issue = IssueDataFactory.createRandomIssue(); // <.>
 
-    IssueStatusDto status = new IssueStatusDto();
-    status.setId("1");
-    issue.setIssueStatus(status);
+    // Create
+    int issueId = client.save(issue).getId(); // <.>
 
-    int issueId = client.save(issue).getId();
-
+    // Reference
     IssueDto createdIssue = client.get(issueId);
+    assertEquals(issue.getSubject(), createdIssue.getSubject()); // <.>
 
+    // Update
     createdIssue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
     client.save(createdIssue);
 
@@ -42,9 +39,7 @@ class IssueControllerIT {
 
     ConstraintViolationResponseDto error = client.createButValidationError(issue);
 
-    ResourceBundle rb = ResourceBundle.getBundle("org.hibernate.validator.ValidationMessages");
-    String errorMsg = rb.getString("jakarta.validation.constraints.NotBlank.message");
-
-    assertEquals(errorMsg, error.getViolations().get(0).getMessage());
+    assertEquals(
+        ValidationMessageUtils.getNotBlankMsg(), error.getViolations().get(0).getMessage());
   }
 }

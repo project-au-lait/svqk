@@ -1,0 +1,22 @@
+=== テスト自動化指針
+
+本システムでは、以下の3段階で自動テストを行います。
+
+* Unit Test
+* Integration Test
+* End to End Test
+
+それぞれのテストの手法とテスト対象を以下に定義します。
+
+.自動テストスコープ
+[plantuml]
+----
+include::test-scope.pu[]
+----
+
+* *Unit Test* +
+  他のコンポーネントに依存しないコンポーネントをJUnitで実行することでテストします。
+* *Integration Test* +
+  BackendとDBが連動した状態で、BackendのREST APIをJUnitから実行することでテストします。
+* *End to End Test* +
+  Frontend、Backend、DBが連動した状態で、FrontendをPlaywrightで操作することでテストします。

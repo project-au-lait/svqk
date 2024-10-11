@@ -1,0 +1,9 @@
+
+component TestProgram
+component Frontend
+component Backend
+database DB
+
+TestProgram -> Frontend: HTTP\n(via Playwright)
+Frontend -> Backend: HTTP
+Backend -> DB: JDBC

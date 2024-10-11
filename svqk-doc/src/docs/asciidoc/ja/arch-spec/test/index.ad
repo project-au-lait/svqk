@@ -1,14 +1,22 @@
 == テストアーキテクチャ
 
-=== テスト戦略
+include::test-automation-guidelines.ad[]
 
-=== E2Eテスト
+include::integration-test.ad[]
 
+=== End to End Test
 
-=== Integrationテスト
+End to End Testでは、システムがユースケースシナリオ通りに動作することを確認します。
+これはユーザーの操作をテストプログラムによって自動化する事で行います。
+End to End Testのアプリケーション構成を以下に示します。
 
+.End to End Testのアプリケーション構成
+[plantuml]
+----
+include::e2etest-application-structure.pu[]
+----
 
-=== Unitテスト
+上記は、アプリケーションアーキテクチャで定義したアプリケーション構成の内、ユーザーをテストプログラムに置き換えたものです。
 
-
+include::e2etest-component-structure.ad[]
 

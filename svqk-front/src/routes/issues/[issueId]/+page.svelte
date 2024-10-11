@@ -13,14 +13,11 @@
 
   export let data: PageData;
 
-  let { issue, issueStatuses, isNew } = data;
   $: ({ issue, issueStatuses, isNew } = data);
-
   $: {
     const subject = isNew ? $t('msg.newIssue') : issue.subject;
     pageStore.setTitle(subject);
   }
-
   $: action = isNew ? $t('msg.register') : $t('msg.update');
 
   const spec = {
@@ -35,13 +32,12 @@
     );
 
     if (response) {
-      // messageStore.show(`${action}しました。`);
-      messageStore.show($t('msg.saved'));
       if (isNew) {
         await goto(`/issues/${response.id}`);
       } else {
         await invalidateAll();
       }
+      messageStore.show($t('msg.saved'));
     }
   }
 </script>
@@ -68,6 +64,6 @@
     </div>
   </div>
   <div>
-    <button id="save" type="submit">{action}</button>
+    <input id="save" type="submit" name="action" value={action} />
   </div>
 </form>

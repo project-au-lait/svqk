@@ -27,5 +27,5 @@ group Transaction
   Controller <-- Service: entity
 end group
 
-Page <-- Controller: entity.id,\lentity.version
+Page <-- Controller: entity.id
 User <-- Page: message

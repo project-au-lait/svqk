@@ -1,0 +1,26 @@
+@startuml test-scope
+
+skinparam linetype ortho
+
+component "Utnit Test" as UnitTest <<JUtnit>>
+component "Integration Test" as IntegTest <<JUtnit>>
+component "End to End Test" as E2ETest <<Playwright>>
+
+component Frontend
+component Backend {
+  component Factory
+  component Logic
+  component Validator
+}
+
+database DB
+
+Frontend -> Backend: HTTP 
+Backend -> DB
+
+UnitTest -up-> Factory
+UnitTest -up-> Validator
+UnitTest -up-> Logic
+
+IntegTest -up-> Backend: HTTP
+E2ETest -up-> Frontend: HTTP

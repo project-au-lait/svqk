@@ -1,0 +1,29 @@
+
+skinparam linetype ortho
+
+rectangle TestProgram {
+  component test as TestRunner <<Playwright>>
+  component page as Driver <<Playwright>>
+
+  rectangle TestCode {
+    component Spec
+    component Facade
+    component PageObject
+    component Factory
+    component PageElement
+    component BasePageElement
+  }
+
+}
+
+rectangle Browser
+
+TestRunner -> Spec
+Spec -> Factory
+Spec --> Facade
+Spec --> PageObject
+Facade -> PageObject
+PageObject --> PageElement
+PageElement --|> BasePageElement
+BasePageElement -> Driver
+Driver --> Browser

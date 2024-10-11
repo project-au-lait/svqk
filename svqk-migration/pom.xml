@@ -26,6 +26,7 @@
   <properties>
     <flyway.configFiles>src/local/resources/flyway.conf</flyway.configFiles>
     <flyway.version>10.10.0</flyway.version>
+    <sonar.skip>true</sonar.skip>
   </properties>
 
   <!-- Build -->

@@ -3,13 +3,13 @@ package dev.aulait.svqk.interfaces.issue;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Data
+@Data // <.>
 public class IssueDto {
 
+  // <.>
   @Schema(required = true, readOnly = true)
   private int id;
 

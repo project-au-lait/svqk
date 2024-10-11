@@ -1,0 +1,206 @@
+:project_root: ../../../../../../../../
+==== 登録処理
+
+登録画面の登録時の処理シーケンスは以下の通りです。
+
+[cols="3,2",frame=none,grid=none]
+|===
+a|
+[plantuml]
+----
+include::input-page-save.pu[]
+----
+
+a|[.description]
+. ユーザーが登録操作を実行します。
+. PageがWeb APIを呼び出します。
+. ControlelrがPOSTされたdtoをentityに変換します。
+. ControllerがServiceを呼び出します。
+. ServiceがRepositoryを呼び出します。
+. Repositoryがentityの状態に応じてINSERTまたはUPDATEを実行します。
+. Repositoryがentityを返却します。
+. Serviceがentityを返却します。
+. Controllerがentityのidとversionプロパティを返却します。
+|===
+
+
+===== DB
+
+マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
+
+.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="15..23"]
+----
+
+<.> テーブルを作成するCREATE文を実装します。
+
+===== Backend
+
+====== Entity
+
+Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
+
+.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
+[source,yml]
+----
+packages:
+  ${project.groupId}.domain.issue:  # <.>
+    - issue
+----
+
+. packages属性にEntityの生成先パッケージとテーブル名を追加します。
+** "Entityの生成先パッケージ" : ["テーブル名"]
+
+jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
+
+.{project-artifactid}-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueEntity.java
+[source,java]
+----
+include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueEntity.java[]
+----
+
+====== Repository
+
+Repositoryのjavaファイルをドメインパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java[]
+----
+
+<.> JpaRepositoryを継承します。型パラメータにはEntityとEntityのIDの型を指定します。
+
+====== Service
+
+Serviceのjavaファイルをドメインパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
+[source,java]
+----
+package dev.aulait.svqk.domain.issue;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+@ApplicationScoped // <.>
+@RequiredArgsConstructor // <.>
+public class IssueService {
+
+  private final IssueRepository repository; // <.>
+
+  @Transactional
+  public IssueEntity save(IssueEntity entity) { // <.>
+    return repository.save(entity); // <.>
+  }
+}
+----
+
+<.> @ApplicationScopedをServiceクラスに設定します。
+<.> @RequiredArgsConstructorをServiceクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
+<.> Serviceが使用するRepositoryをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
+<.> EntityをDBに保存するメソッドを定義します。メソッドには@Transactionalを設定します。 
+<.> Repositoryを使用してEntityをDBに保存する処理を実装します。
+
+====== DTO
+
+DTOのjavaファイルをインターフェースパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java[]
+----
+
+<.> @Dataを設定します。これにより、フィールドのGetter、Setter等が実装しなくても使用可能になります。
+<.> 対応するEntityのプロパティの中で、外部に公開するものをDTOのフィールドとして定義します。
+
+
+====== Controller
+
+Controllerのjavaファイルをインターフェースパッケージ以下に作成します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
+[source,java]
+----
+package dev.aulait.svqk.interfaces.issue;
+
+import dev.aulait.svqk.arch.util.BeanUtils;
+import dev.aulait.svqk.arch.web.ApiPath;
+import dev.aulait.svqk.arch.web.IdDto;
+import dev.aulait.svqk.domain.issue.IssueEntity;
+import dev.aulait.svqk.domain.issue.IssueService;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+
+@Path(IssueController.ISSUES_PATH) // <.>
+@RequiredArgsConstructor // <.>
+public class IssueController {
+
+  private final IssueService service; // <.>
+
+  static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
+
+  @POST
+  public IdDto save(@RequestBody @Valid IssueDto dto) { // <.>
+
+    IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
+    IssueEntity savedEntity = service.save(entity);
+
+    return BeanUtils.map(savedEntity, IdDto.class);
+  }
+}
+----
+
+<.> @PathをControllerクラスに設定します。これにより、このControllerクラスがAPIのエンドポイントして認識されます。
+<.> @RequiredArgsConstructorをControllerクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
+<.> Controllerが使用するServiceをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にServiceのインスタンスがInjectされます。
+<.> @POSTをAPIのエンドポイントとなるメソッドに設定します。
+
+[NOTE]
+====
+Backendの実装が終わったらBackendサーバーを起動し、Swagger UIを使用して動作確認を行います。
+Backendサーバーの起動方法は<<#project-usage>>を、Swagger UIのアクセス先は<<#access-info>>をそれぞれ参照してください。
+====
+
+
+===== Frontend
+
+API Clientを生成し、Web APIの呼び出し処理を追加します。
+
+====== API Client
+
+VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
+生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
+
+====== Page
+
+.src/routes/issues/[issueId]/+page.svelte スクリプトセクション
+[source,ts]
+----
+  const form = FormValidator.createForm(spec, save); // <.>
+  
+  async function save() { // <.>
+    const response = await ApiHandler.handle<IdModel>(fetch, (api) =>  // <.>
+      api.issues.issuesCreate(issue)
+    );
+ 
+    if (response) {  // <.>
+      messageStore.show($t('msg.saved'));  // <.>
+    }
+  }
+----
+
+<.> createForm関数のcallbackを表す第2引数に登録処理を行う関数を指定します。
+<.> 登録処理を行う関数を定義します。
+<.> ApiHandler.handle関数を使用してWeb APIを呼び出します。
+<.> ApiHandler.handle関数の戻り値でエラー判定をします。
+<.> エラーでない場合にメッセージを表示します。

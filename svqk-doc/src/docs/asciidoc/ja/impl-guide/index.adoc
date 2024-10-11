@@ -36,4 +36,4 @@ include::setup/index.ad[]
 実装プロセスは処理ごとに分類されていて、開発者は自身の担当範囲と同じ分類のプロセスを参照することができます。
 
 
-include::process/input-page.ad[]
+include::process/input-page/index.ad[]

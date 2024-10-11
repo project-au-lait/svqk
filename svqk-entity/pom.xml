@@ -51,6 +51,7 @@
 
   <properties>
     <jeg.outputDir>${project.basedir}/src/main/java</jeg.outputDir>
+    <sonar.skip>true</sonar.skip>
   </properties>
 
   <build>

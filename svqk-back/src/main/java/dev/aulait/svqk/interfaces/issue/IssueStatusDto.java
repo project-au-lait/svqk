@@ -1,8 +1,7 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
 import lombok.Data;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data // <.>
 public class IssueStatusDto {
