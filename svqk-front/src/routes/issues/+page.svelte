@@ -19,6 +19,14 @@
 
   let condition = data.condition;
 
+  const resultHeaders = [
+    { label: '#', key: 'id' },
+    { label: $t('msg.status'), key: 'issueStatus' },
+    { label: $t('msg.subject'), key: 'subject' },
+    { label: $t('msg.dueDate'), key: 'dueDate' },
+    { label: $t('msg.updatedAt'), key: 'updatedAt' }
+  ];
+
   const form = FormValidator.createForm({}, search);
 
   async function search() {
@@ -85,41 +93,16 @@
     <table class="list">
       <thead>
         <tr>
-          <th>
-            <SortDirection sortOrders={condition.sortOrders} label="#" sortKey="id" {handleSort} />
-          </th>
-          <th>
-            <SortDirection
-              sortOrders={condition.sortOrders}
-              label={$t('msg.status')}
-              sortKey="issueStatus"
-              {handleSort}
-            />
-          </th>
-          <th>
-            <SortDirection
-              sortOrders={condition.sortOrders}
-              label={$t('msg.subject')}
-              sortKey="subject"
-              {handleSort}
-            />
-          </th>
-          <th>
-            <SortDirection
-              sortOrders={condition.sortOrders}
-              label={$t('msg.dueDate')}
-              sortKey="dueDate"
-              {handleSort}
-            />
-          </th>
-          <th>
-            <SortDirection
-              sortOrders={condition.sortOrders}
-              label={$t('msg.updatedAt')}
-              sortKey="updatedAt"
-              {handleSort}
-            />
-          </th>
+          {#each resultHeaders as rh}
+            <th>
+              <SortDirection
+                sortOrders={condition.sortOrders}
+                label={rh.label}
+                sortKey={rh.key}
+                {handleSort}
+              />
+            </th>
+          {/each}
         </tr>
       </thead>
       <tbody>
