@@ -10,15 +10,15 @@ import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+@ApplicationScoped // <.>
 public class IssueFactory {
 
-  public SearchConditionVo build(IssueSearchConditionDto cond) {
+  public SearchConditionVo build(IssueSearchConditionDto cond) { // <.>
     SearchConditionBuilder builder =
         new SearchConditionBuilder()
             .from(IssueEntity.class)
             .join("issueStatus")
-            .where("subject", LIKE, cond.getText());
+            .where("subject", LIKE, cond.getText()); // <.>
 
     if (!cond.isSubjectOnly()) {
       builder.where(OR, "description", LIKE, cond.getText());
@@ -30,6 +30,6 @@ public class IssueFactory {
         .where("issueStatus", IN, statuses)
         .where("dueDate", cond.getDueDate())
         .defaultOrderBy("id", false)
-        .build(cond);
+        .build(cond); // <.>
   }
 }

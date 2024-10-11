@@ -6,9 +6,10 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class IssueSearchConditionDto extends SearchConditionDto {
+@Data // <.>
+@EqualsAndHashCode(callSuper = false) // <.>
+public class IssueSearchConditionDto extends SearchConditionDto { // <.>
+  // <.>
   private String text;
   private List<IssueStatusDto> issueStatuses = new ArrayList<>();
   private String dueDate;
