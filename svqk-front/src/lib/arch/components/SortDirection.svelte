@@ -14,18 +14,4 @@
   }
 </script>
 
-<button type="button" on:click={onClick} class="sort-button">
-  {label}{sortMark}
-</button>
-
-<style>
-  .sort-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font: inherit;
-    color: inherit;
-    margin-bottom: 0;
-  }
-</style>
+<a href="#/" on:click={onClick}>{label}{sortMark}</a>
