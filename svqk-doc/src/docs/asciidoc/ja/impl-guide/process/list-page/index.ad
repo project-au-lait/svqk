@@ -1,11 +1,11 @@
-ifndef::imagesdir[:imagesdir: ./images]
+ifndef::imagesdir[:imagesdir: ../../images]
 === 一覧画面
 
 ここでは一覧画面の実装プロセスを説明します。
 説明ではリファレンス実装のチケット一覧画面を例に挙げます。
 
 .一覧画面の例　チケット一覧画面
-image::input-page.png[width=700]
+image::list-page.png[width=700]
 
 一覧画面には、検索条件を入力する項目と、検索を実行するボタン、検索結果を表示する表が配置されます。
 また、一覧画面では以下の2つの処理があります。

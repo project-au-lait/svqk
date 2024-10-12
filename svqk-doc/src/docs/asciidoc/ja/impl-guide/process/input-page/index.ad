@@ -1,4 +1,4 @@
-ifndef::imagesdir[:imagesdir: ./images]
+ifndef::imagesdir[:imagesdir: ../../images]
 === 登録画面
 
 ここでは登録画面の実装プロセスを説明します。
