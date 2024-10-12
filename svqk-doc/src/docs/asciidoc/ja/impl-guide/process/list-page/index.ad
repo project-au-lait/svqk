@@ -16,3 +16,5 @@ image::input-page.png[width=700]
 以降では、それぞれの処理に対する実装を説明します。
 
 include::init-process.ad[]
+
+include::search-process.ad[]

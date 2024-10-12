@@ -189,13 +189,16 @@ include::{project_root}/svqk-front/src/routes/issues/+page.ts[]
 
   const form = FormValidator.createForm({}, search); // <.>
 
-  async function search() { } // <.>
+  // <.>
+  async function search() { }
+  async function handleSort(field: string) { }
+
 ----
 
 <.> PageLoaderからの返却値を格納する変数を宣言します。この変数には、+page.tsのload関数の戻り値が格納されます。
 <.> 検索結果一覧のヘッダー項目の表示文字列とソートキーを定義します。
 <.> `FormValidator.createForm` 関数を使用し、formをsubmitするためのオブジェクトを生成します。
-<.> 画面内のイベントで関数を定義します。この時点では空の関数とします。
+<.> 画面内のイベントをハンドリングする関数を定義します。この時点では空の関数とします。
 
 
 .{project-artifactId}-front/src/routes/issues/+page.svelte マークアップセクション
@@ -242,11 +245,7 @@ include::{project_root}/svqk-front/src/routes/issues/+page.ts[]
      </tbody>
     </table>
 
-    <Pagination
-      bind:currentPage={condition.pageNumber}
-      lastPage={result.lastPage}
-      pageNums={result.pageNums}
-      handlePage={search}
+    <Pagination bind:currentPage={condition.pageNumber} {result} handlePage={search} />
     />  <.>
 
 {:else}

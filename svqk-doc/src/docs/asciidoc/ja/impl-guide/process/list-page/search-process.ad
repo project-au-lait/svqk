@@ -1,0 +1,64 @@
+:project_root: ../../../../../../../../
+==== 検索処理
+
+検索処理は、ユーザーの画面操作によって検索イベントが発生してから画面が表示されるまでに実行される処理です。
+一覧画面の検索処理では以下の処理が実行されます。
+
+* *検索* +
+  デフォルトの検索条件でBackendから検索結果を取得します。
+* *画面要素の描画*
+
+一覧画面の検索処理のシーケンスは以下の通りです。
+
+.画面初期表示時の処理シーケンス
+[cols="2,3",frame=none,grid=none]
+|===
+a|
+[plantuml]
+----
+include::search-process.pu[]
+----
+a|[.description]
+. ユーザーが画面操作を行います。
+. Pageが検索条件で検索Web APIを呼び出します。取得した結果はmodelとしてPageに返却します。検索Web APIは初期化処理と同じものです。左図では記載を省略しています。
+. Pageが取得したmodelを元に画面のHTMLを構築します。
+|===
+
+===== Frontend
+
+====== Page
+
+Pageのスクリプトセクションに、画面内のイベントをハンドリングする関数の内部を実装します。
+
+.{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
+[source,ts]
+----
+  import ApiHandler from '$lib/arch/api/ApiHandler';
+  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
+
+  export let data: PageData;
+  let { result, condition } = data;
+
+  async function search() {
+    const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
+      api.issues.issuesSearch(condition)
+    ); // <.>
+
+    if (r) { // <.>
+      result = r;
+    }
+  }
+
+  async function handleSort(field: string) {
+    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field); // <.>
+    condition = condition; // <.>
+    await search(); // <.>
+  }
+----
+
+<.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。
+<.> Web APIの呼び出し結果が正常に取得できた場合に、検索結果Objectを上書きます。
+<.> `SortOrderUtils.addSort` 関数を使用して、検索条件のソート順を変更します。
+<.> 変更後のソート順をDOMに反映するために、Reactiveな変数として宣言されたObjectへの代入を行います。
+** 参考: https://learn.svelte.dev/tutorial/updating-arrays-and-objects[Svelte Updating arrays and objects]
+<.> 変更後のソート順で検索処理を実行します。
