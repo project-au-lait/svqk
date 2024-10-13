@@ -11,7 +11,7 @@ public class IssueDto {
 
   // <.>
   @Schema(required = true, readOnly = true)
-  private int id;
+  private Integer id;
 
   @Schema(required = true)
   @NotBlank
@@ -28,7 +28,7 @@ public class IssueDto {
   private TrackerDto tracker;
 
   @Schema(required = true)
-  private long version;
+  private Long version;
 
   @Schema(required = true, readOnly = true)
   private LocalDateTime updatedAt;
