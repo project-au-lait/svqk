@@ -60,20 +60,24 @@
   </div>
   <div class="grid">
     <div>
-      <SelectBox
-        id="status"
-        label={$t('msg.status')}
-        options={issueStatuses}
-        bind:value={issue.issueStatus.id}
-      />
+      {#if issueStatuses.length}
+        <SelectBox
+          id="status"
+          label={$t('msg.status')}
+          options={issueStatuses}
+          bind:value={issue.issueStatus.id}
+        />
+      {/if}
     </div>
     <div>
-      <SelectBox
-        id="tracker"
-        label={$t('msg.tracker')}
-        options={trackers}
-        bind:value={issue.tracker.id}
-      />
+      {#if trackers.length}
+        <SelectBox
+          id="tracker"
+          label={$t('msg.tracker')}
+          options={trackers}
+          bind:value={issue.tracker.id}
+        />
+      {/if}
     </div>
     <div>
       <InputField id="dueDate" type="date" label={$t('msg.dueDate')} bind:value={issue.dueDate} />
