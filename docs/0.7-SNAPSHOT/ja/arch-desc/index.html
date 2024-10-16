@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<title>アーキテクチャ仕様書</title>
+<title>アーキテクチャ記述</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,11 +437,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>アーキテクチャ仕様書</h1>
+<h1>アーキテクチャ記述</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_アプリケーションアーキテクチャ">アプリケーションアーキテクチャ</a>
+<li><a href="#_アプリケーション">アプリケーション</a>
 <ul class="sectlevel2">
 <li><a href="#application-structure">アプリケーション構成</a></li>
 <li><a href="#component-structure">コンポーネント構成</a></li>
@@ -462,7 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_開発アーキテクチャ">開発アーキテクチャ</a>
+<li><a href="#_開発環境">開発環境</a>
 <ul class="sectlevel2">
 <li><a href="#_開発環境構成">開発環境構成</a></li>
 <li><a href="#_プロジェクト構成">プロジェクト構成</a></li>
@@ -487,7 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_テストアーキテクチャ">テストアーキテクチャ</a>
+<li><a href="#_テスト">テスト</a>
 <ul class="sectlevel2">
 <li><a href="#_テスト自動化指針">テスト自動化指針</a></li>
 <li><a href="#_integration_test">Integration Test</a>
@@ -520,8 +520,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本書の対象読者は、本システムの開発・保守における実装、自動テスト、CI・CD構築を担当する開発者です。また本書は、本システム、およびその開発・保守における、アプリケーション、開発・CI・CD環境、自動テストの側面に対する記載です。</p>
+</div>
+<div class="paragraph">
+<p>本書の目的は、開発者が各側面において作成する成果物、主にアプリケーションのソースコード、テストスクリプト、ビルドスクリプト、設定ファイルを作成する際の規則を定義することです。規則化の対象となるのは、ソースコードをファイルに記載する際の、記載内容の複数ファイルへの分割、ファイル内でのプログラミング言語の構文に則った構成要素への分割、ファイルの配置ディレクトリ、それらの命名等です。このソースコードの記載内容の分割において、同種の記載内容の集合を責務と呼び、同種の責務を割り当てられた集合をコンポーネントと呼びます。コンポーネントの構成、及びそれらの相互作用を可視化することで、開発者による規則の理解を助けることを目指します。</p>
+</div>
+</div>
+</div>
 <div class="sect1">
-<h2 id="_アプリケーションアーキテクチャ">アプリケーションアーキテクチャ</h2>
+<h2 id="_アプリケーション">アプリケーション</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="application-structure">アプリケーション構成</h3>
@@ -1122,7 +1132,7 @@ public interface HelloRepository extends JpaRepository&lt;HelloEntity, Integer&g
 </div>
 </div>
 <div class="sect1">
-<h2 id="_開発アーキテクチャ">開発アーキテクチャ</h2>
+<h2 id="_開発環境">開発環境</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_開発環境構成">開発環境構成</h3>
@@ -1874,7 +1884,7 @@ VSCodeのワークスペース設定ファイル(.code-workspace)に設定され
 </div>
 </div>
 <div class="sect1">
-<h2 id="_テストアーキテクチャ">テストアーキテクチャ</h2>
+<h2 id="_テスト">テスト</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_テスト自動化指針">テスト自動化指針</h3>
@@ -2118,7 +2128,7 @@ public class IssueDataFactory {
     status.setId("1");
     issue.setIssueStatus(status);
 
-    return issue;</code></pre>
+    TrackerDto tracker = new TrackerDto();</code></pre>
 </div>
 </div>
 <div class="colist arabic">

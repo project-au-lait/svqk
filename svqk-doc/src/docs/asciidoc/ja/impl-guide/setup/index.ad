@@ -92,7 +92,7 @@ mvnw install -T 1C -P setup,browse-e2etest
 
 [TIP]
 ====
-上記のセットアップコマンドの処理内容、及び実現方式はxref:../arch-spec/index.adoc#build-structure[ビルド構成]を参照してください。
+上記のセットアップコマンドの処理内容、及び実現方式はxref:../arch-desc/index.adoc#build-structure[ビルド構成]を参照してください。
 ====
 
 == 開発環境使用方法

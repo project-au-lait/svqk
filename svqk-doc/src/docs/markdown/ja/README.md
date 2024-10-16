@@ -17,10 +17,10 @@ SVQKは、SvelteKitとQuarkusでWebアプリケーションを開発するため
 - **Maven Archetype**
   - アセットはMaven Archetypeを含みます。
   - アセットを使用して新しくプロジェクトを開始する際は、このMaven Archetypeからプロジェクトを作成します。
-- **アーキテクチャ仕様書**
+- **アーキテクチャ記述**
   - リファレンス実装が準拠するアーキテクチャを規定した文書です。
 - **実装ガイド**
-  - アーキテクチャ仕様とリファレンス実装の内容の理解を助けるための文書です。
+  - アーキテクチャ記述とリファレンス実装の内容の理解を助けるための文書です。
 
 このリポジトリは、上記アセットを構成する資材一式を格納しています。
 
@@ -149,7 +149,7 @@ code my-artifactid.code-workspace
 ## ドキュメント
 
 - [実装ガイド](https://aulait.dev/svqk/0.6.2/en/impl-guide/)
-- [アーキテクチャ仕様書](https://aulait.dev/svqk/0.6.2/en/arch-spec/)
+- [アーキテクチャ記述](https://aulait.dev/svqk/0.6.2/en/arch-desc/)
 
 ## ライセンス
 

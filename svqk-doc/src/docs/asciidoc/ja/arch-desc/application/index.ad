@@ -1,0 +1,9 @@
+== アプリケーション
+
+include::application-structure.ad[]
+
+include::component-structure.ad[]
+
+include::frontend.ad[]
+
+include::backend.ad[]
