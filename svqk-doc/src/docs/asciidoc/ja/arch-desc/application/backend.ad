@@ -12,31 +12,31 @@ include::backend-dir-structure.txt[]
 
 ==== Controller
 
-Controllerは、Web APIのエンドポイントの定義を担うコンポーネントです。
-Controllerは、JAX-RSを使用して実装します。
+Controllerは、Web APIのエンドポイントとなるコンポーネントです。クライアントからHTTPリクエストを受け取り、それに対するHTTPレスポンスを返します。Validator、Factory、Serviceの実行順序と入出力を制御することで、Web API内部の処理フローを制御します。
+Controllerの実装には、Jakarta RESTを使用します。
 
 .Controllerの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloController.java[lines="1..21,25..29,37..38"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloController.java[lines="1..27,31..35,48..49"]
 ----
 
-<.> @PathをControllerクラスに設定します。これにより、このControllerクラスがAPIのエンドポイントしてQuarkusに認識されます。
-<.> @RequiredArgsConstructorをControllerクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
-<.> Controllerが使用するServiceをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にServiceのインスタンスがInjectされます。
-<.> Web APIのエンドポイントとなるメソッドを定義します。メソッドにはWeb APIのHTTP Methodを表すアノテーション(@GET、@POST等)を設定します。
+<.> `@Path` をControllerクラスに設定します。これにより、このControllerクラスがWeb APIのエンドポイントしてQuarkusに認識されます。
+<.> `@RequiredArgsConstructor` をControllerクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタがコンパイル時に自動生成されます。
+<.> Controllerが使用するコンポーネントをprivate finalフィールドとして定義します。このフィールドは、Quarkus起動時に該当するコンポーネントのインスタンスがInjectされます。
+<.> Web APIのエンドポイントとなるメソッドを定義します。メソッドにはWeb APIのHTTP Methodを表すアノテーション(`@GET`、`@POST` 等)を設定します。
 
 [NOTE]
 ====
-Controllerの実装で使用可能な機能の詳細はQuarkusのガイドを参照してください。
+Controllerの実装で使用可能なJakarta RESTの機能の詳細はQuarkusのガイドを参照してください。
 
 * https://quarkus.io/guides/rest[Writing REST Services with Quarkus REST]
 ====
 
 ==== Service
 
-Serviceは、トランザクション制御、トランザクション内の処理フロー制御を担うコンポーネントです。
-Serviceは、JTA、CDIを使用して実装します。
+Serviceは、トランザクション処理を担うコンポーネントです。Repository、Logicの実行順序と入出力を制御することでトランザクション処理のフローを制御します。
+Serviceの実装には、JTA、CDIを使用します。
 
 .Serviceの実装
 [source,java]
@@ -44,10 +44,10 @@ Serviceは、JTA、CDIを使用して実装します。
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/hello/HelloService.java[lines="1..14,16..20,22..23"]
 ----
 
-<.> @ApplicationScopedをServiceクラスに設定します。
-<.> @RequiredArgsConstructorをServiceクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
-<.> Serviceが使用するRepositoryをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
-<.> トランザクション処理ごとにメソッドを定義します。DBへの書き込みを行う処理のメソッドには@Transactinalを設定します。
+<.> `@ApplicationScoped` をServiceクラスに設定します。これにより、ServiceクラスのインスタンスがCDI Managed Beanとして使用可能になります。 
+<.> `@RequiredArgsConstructor` をServiceクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
+<.> Serviceが使用するコンポーネントをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時に該当するコンポーネントのインスタンスがInjectされます。
+<.> トランザクション処理ごとにメソッドを定義します。DBへの書き込みを行う処理のメソッドには `@Transactinal` を設定します。
 
 
 [NOTE]
@@ -61,7 +61,7 @@ Quarkusで使用可能なJTAの機能の詳細はQuarkusのドキュメントを
 ==== Repository
 
 Repositoryは、DBアクセス、O/Rマッピングを担うコンポーネントです。
-Repositoryは、JPA、Spring Data JPAを使用して実装します。
+Repositoryの実装には、JPA、Spring Data JPAを使用します。
 
 .Repositoryの実装
 [source,java]
@@ -69,7 +69,7 @@ Repositoryは、JPA、Spring Data JPAを使用して実装します。
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/hello/HelloRepository.java[]
 ----
 
-<.> JpaRepositoryを継承します。型パラメータにはEntityとEntityのIDの型を指定します。
+<.> `JpaRepository` を継承します。型パラメータにはEntityとEntityのIDの型を指定します。
 
 [NOTE]
 ====

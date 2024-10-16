@@ -7,6 +7,8 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Path(HelloController.HELLO_PATH) // <.>
@@ -15,11 +17,9 @@ public class HelloController {
 
   private final HelloService helloService; // <.>
 
-  @SuppressWarnings("java:S1075")
-  static final String HELLO_PATH = "/api/v1/hello";
+  static final String HELLO_PATH = ApiPath.ROOT + "/hello";
 
-  @SuppressWarnings("java:S1075")
-  static final String HELLO_GET_PATH = "/{id}";
+  static final String HELLO_GET_PATH = "{id}";
 
   @GET
   @Path(HELLO_GET_PATH)
@@ -40,5 +40,10 @@ public class HelloController {
     HelloEntity savedEntity = helloService.save(entity);
 
     return savedEntity.getId();
+  }
+
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  static class ApiPath {
+    static final String ROOT = "/api/v1";
   }
 }

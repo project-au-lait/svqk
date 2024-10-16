@@ -5,8 +5,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped // <.>
-@RequiredArgsConstructor
-public class HelloService { // <.>
+@RequiredArgsConstructor // <.>
+public class HelloService {
 
   private final HelloRepository helloRepository; // <.>
 

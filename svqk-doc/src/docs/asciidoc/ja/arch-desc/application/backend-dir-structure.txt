@@ -1,13 +1,13 @@
-{project-artifactId}-back
-└── src/main/java
-    └── {project-package}
-        ├── arch
-        │   └── (function)
-        ├── domain
-        │   └── (domain)
-        │       ├── *Service.java
-        │       └── *Repository.java
-        └── interfaces
-            └── (domain)
-                ├── *Controller.java
-                └── *Dto.java
+📁 {project-artifactId}-back
+└── 📁 src/main/java
+    └── 📁 {project-package}
+        ├── 📁 arch
+        │   └── 📁 (function)
+        ├── 📁 domain
+        │   └── 📁 (domain)
+        │       ├── 📄 *Service.java
+        │       └── 📄 *Repository.java
+        └── 📁 interfaces
+            └── 📁 (domain)
+                ├── 📄 *Controller.java
+                └── 📄 *Dto.java
