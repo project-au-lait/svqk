@@ -57,7 +57,6 @@ Quarkusで使用可能なJTAの機能の詳細はQuarkusのドキュメントを
 * https://quarkus.io/guides/transaction[Using transactions in Quarkus]
 ====
 
-
 ==== Repository
 
 Repositoryは、DBアクセス、O/Rマッピングを担うコンポーネントです。
@@ -79,3 +78,16 @@ Quarkusで使用可能なJPA、Spring Data JPAの機能の詳細はQuarkusのド
 * https://quarkus.io/guides/spring-data-jpa#supported-spring-data-jpa-functionalities[Quarkus Supported Spring Data JPA functionalities]
 ====
 
+==== DTO
+
+DTOは、Web APIのリクエスト及びレスポンスを表すオブジェクトです。
+
+.DTOの実装
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloDto.java[]
+----
+
+<.> `@Data` をDTOクラスに設定します。これにより、フィールドのGetter、Setter等が自動生成されます。
+<.> リクエスト及びレスポンスのプロパティとなるフィールドを定義します。
+** リクエスト及びレスポンスのJSONプロパティに必ず登場させるフィールドに対しては `required = true` を指定します。NOT NULLのカラムの値を格納するフィールド等がこれに該当します。** リクエストで指定された値をWeb APIの内部処理で使用しないフィールドに対しては `readOnly = true` を指定します。Primary Keyの値を格納するフィールド等がこれに該当します。

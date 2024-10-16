@@ -6,10 +6,9 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Data // <.>
+@Data
 public class IssueDto {
 
-  // <.>
   @Schema(required = true, readOnly = true)
   private Integer id;
 

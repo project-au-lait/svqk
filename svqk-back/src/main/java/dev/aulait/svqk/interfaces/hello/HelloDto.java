@@ -1,13 +1,14 @@
 package dev.aulait.svqk.interfaces.hello;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Data
+@Data // <.>
 @Builder
 public class HelloDto {
-  @NotNull
+  @Schema(required = true, readOnly = true) // <.>
   private Integer id;
+
   private String message;
 }

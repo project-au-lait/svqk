@@ -44,7 +44,7 @@ a|[.description]
 
 ===== Frontend
 
-登録画面の実装プロセスでは、初めにFrontendの体裁部分を実装します。
+登録画面の実装手順では、初めにFrontendの体裁部分を実装します。
 
 ====== Page
 
@@ -120,7 +120,7 @@ include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__ini
 
 ===== Backend
 
-BackendにDBから値を取得するWeb APIを実装します。
+Backendに画面で使用するマスターデータをDBから取得するWeb APIを実装します。
 
 ====== Entity
 
@@ -147,7 +147,7 @@ include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/I
 
 ====== Repository
 
-Repositoryのjavaファイルをドメインパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルをドメインパッケージ以下に作成します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
 [source,java]
@@ -155,11 +155,9 @@ Repositoryのjavaファイルをドメインパッケージ以下に作成しま
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java[]
 ----
 
-<.> `JpaRepository` を継承します。型パラメータにはEntityとEntityのIDの型を指定します。
-
 ====== Service
 
-Serviceのjavaファイルをドメインパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java
 [source,java]
@@ -167,14 +165,11 @@ Serviceのjavaファイルをドメインパッケージ以下に作成します
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java[]
 ----
 
-<.> `@ApplicationScoped` をServiceクラスに設定します。
-<.> `@RequiredArgsConstructor` をServiceクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
-<.> Serviceが使用するRepositoryをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
-<.> RepositoryからEntityを取得します。
+<.> Repositoryを使用し、画面で使用するマスターデータをDBから取得します。上記の例では `IssueStatusRepository` が継承する `JpaRepository` の機能を使用して `issue_status` テーブルの全レコードを取得しています。
 
 ====== DTO
 
-DTOのjavaファイルをインターフェースパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
 [source,java]
@@ -182,12 +177,9 @@ DTOのjavaファイルをインターフェースパッケージ以下に作成�
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java[]
 ----
 
-<.> `@Data` を設定します。これにより、フィールドのGetter、Setter等が実装しなくても使用可能になります。
-<.> 対応するEntityのプロパティの中で、外部に公開するものをDTOのフィールドとして定義します。
-
 ====== Controller
 
-Controllerのjavaファイルをインターフェースパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
 [source,java]
@@ -195,12 +187,8 @@ Controllerのjavaファイルをインターフェースパッケージ以下に
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
 ----
 
-<.> `@Path` をControllerクラスに設定します。これにより、このControllerクラスがAPIのエンドポイントして認識されます。
-<.> `@RequiredArgsConstructor` をControllerクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
-<.> Controllerが使用するServiceをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にServiceのインスタンスがInjectされます。
-<.> `@Get` をAPIのエンドポイントとなるメソッドに設定します。
-<.> ServiceからEntityを取得し、それをDTOに変換したものをレスポンスとして返却します。
-
+<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義し、`@Get` を設定します。
+<.> ServiceからEntityを取得し、それを `BeanUtils` を使用してDTOに変換したものをレスポンスとして返却します。
 
 [NOTE]
 ====

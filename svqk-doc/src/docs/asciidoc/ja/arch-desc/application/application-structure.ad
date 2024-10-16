@@ -1,7 +1,7 @@
 [[application-structure]]
 === アプリケーション構成
 
-SVQKはFrontendとBackendの2つのアプリケーションとDBで構成されます。
+本システムは、FrontendとBackendの2つのアプリケーションとDBで構成されます。
 
 .アプリケーション構成
 [plantuml]

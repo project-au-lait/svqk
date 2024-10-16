@@ -3,10 +3,9 @@ package dev.aulait.svqk.interfaces.issue;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Data // <.>
+@Data
 public class IssueStatusDto {
 
-  // <.>
   @Schema(required = true, readOnly = true)
   private String id;
 
