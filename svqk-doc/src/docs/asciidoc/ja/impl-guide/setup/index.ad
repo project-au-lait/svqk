@@ -75,20 +75,22 @@ brew install --cask visual-studio-code
 
 [source,sh]
 ----
-# プロジェクト資材の取得
+# <.>
 git clone https://github.com/project-au-lait/svqk.git
 cd svqk
 
-# 以下、開発環境のセットアップ
-
-## コマンドプロンプト(Windows)
+# <.>
 chcp 65001
 mvnw install -T 1C -P setup,browse-e2etest
 
-
-## ターミナル(macOS)
+# <.>
 ./mvnw install -T 1C -P setup,browse-e2etest
 ----
+
+<.> プロジェクト資材の取得
+<.> 開発環境のセットアップ (コマンドプロンプト(Windows)の場合) +
+  `chcp 65001` はコマンドプロンプトの文字コードをUTF-8に設定するコマンド
+<.> 開発環境のセットアップ (ターミナル(macOS)の場合)
 
 [TIP]
 ====
