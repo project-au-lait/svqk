@@ -9,16 +9,18 @@
 
 <label for={id}>{label}</label>
 
-{#if multiple}
-  <select {id} multiple {size} bind:value>
-    {#each options as option}
-      <option value={option}>{option.name}</option>
-    {/each}
-  </select>
-{:else}
-  <select {id} bind:value>
-    {#each options as option}
-      <option value={option.id}>{option.name}</option>
-    {/each}
-  </select>
+{#if options.length}
+  {#if multiple}
+    <select {id} multiple {size} bind:value>
+      {#each options as option}
+        <option value={option}>{option.name}</option>
+      {/each}
+    </select>
+  {:else}
+    <select {id} bind:value>
+      {#each options as option}
+        <option value={option.id}>{option.name}</option>
+      {/each}
+    </select>
+  {/if}
 {/if}
