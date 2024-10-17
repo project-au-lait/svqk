@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from '$app/navigation';
   import { pageStore } from '$lib/arch/global/PageStore';
   import IssueForm from '$lib/issue/IssueForm.svelte';
   import type { PageData } from './$types';
@@ -8,6 +9,10 @@
   $: ({ issue } = data);
 
   $: pageStore.setTitle(issue.subject);
+
+  const handleAfterSave = async () => {
+    await invalidateAll();
+  };
 </script>
 
-<IssueForm {issue} isNew={false} />
+<IssueForm {issue} {handleAfterSave} />

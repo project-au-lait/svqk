@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto, invalidateAll } from '$app/navigation';
   import type { IdModel, IssueModel, IssueStatusModel, TrackerModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
@@ -11,12 +10,12 @@
   import * as yup from 'yup';
 
   export let issue: IssueModel;
-  export let isNew: boolean;
+  export let handleAfterSave: (id?: number) => Promise<void>;
 
   let issueStatuses = [] as IssueStatusModel[];
   let trackers = [] as TrackerModel[];
 
-  $: action = isNew ? $t('msg.register') : $t('msg.update');
+  $: action = issue.id ? $t('msg.update') : $t('msg.register');
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
@@ -40,11 +39,7 @@
     );
 
     if (response) {
-      if (isNew) {
-        await goto(`/issues/${response.id}`);
-      } else {
-        await invalidateAll();
-      }
+      await handleAfterSave(response.id);
       messageStore.show($t('msg.saved'));
     }
   }
@@ -60,24 +55,20 @@
   </div>
   <div class="grid">
     <div>
-      {#if issueStatuses.length}
-        <SelectBox
-          id="status"
-          label={$t('msg.status')}
-          options={issueStatuses}
-          bind:value={issue.issueStatus.id}
-        />
-      {/if}
+      <SelectBox
+        id="status"
+        label={$t('msg.status')}
+        options={issueStatuses}
+        bind:value={issue.issueStatus.id}
+      />
     </div>
     <div>
-      {#if trackers.length}
-        <SelectBox
-          id="tracker"
-          label={$t('msg.tracker')}
-          options={trackers}
-          bind:value={issue.tracker.id}
-        />
-      {/if}
+      <SelectBox
+        id="tracker"
+        label={$t('msg.tracker')}
+        options={trackers}
+        bind:value={issue.tracker.id}
+      />
     </div>
     <div>
       <InputField id="dueDate" type="date" label={$t('msg.dueDate')} bind:value={issue.dueDate} />
