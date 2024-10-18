@@ -28,7 +28,9 @@ public class IssueController {
 
   static final String ISSUES_GET_PATH = "{issueId}";
 
-  public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {}
+  static final String ISSUES_SEARCH_PATH = "search";
+
+  public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {} // <.>
 
   @POST
   public IdDto save(@Valid IssueDto dto) { // <.>
@@ -49,8 +51,9 @@ public class IssueController {
   }
 
   @POST
-  @Path("/search")
-  public IssueSearchResultDto search(IssueSearchConditionDto dto) {
+  @Path(ISSUES_SEARCH_PATH)
+  public IssueSearchResultDto search(IssueSearchConditionDto dto) { // <.>
+    // <.>
     SearchConditionVo vo = factory.build(dto);
     SearchResultVo<IssueEntity> result = service.search(vo);
 

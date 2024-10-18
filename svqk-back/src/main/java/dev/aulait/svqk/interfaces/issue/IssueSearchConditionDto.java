@@ -6,8 +6,8 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data // <.>
-@EqualsAndHashCode(callSuper = false) // <.>
+@Data
+@EqualsAndHashCode(callSuper = true) // <.>
 public class IssueSearchConditionDto extends SearchConditionDto { // <.>
   // <.>
   private String text;

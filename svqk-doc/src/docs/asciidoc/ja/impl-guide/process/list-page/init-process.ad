@@ -38,37 +38,20 @@ a|[.description]
 
 ====== Service
 
-Serviceに検索を行うメソッドを追加します。
+xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-package dev.aulait.svqk.domain.issue;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-
-@ApplicationScoped
-@RequiredArgsConstructor
-public class IssueService {
-
-  private final IssueRepository repository;
-  private final EntityManager em; // <.>
-
-  public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
-    return SearchUtils.search(em, condition); // <.>
-  }
-}
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1,4..19,29..32"]
 ----
 
-<.> `SearchUtils` が使用する `EntityManager` をprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
 <.> 検索を行うメソッドを定義します。引数には検索条件Voを、戻り値には検索結果Voを指定します。
-<.> `SearchUtils` を使用して検索を実行し、結果を返却します。`SearchUtils` は、指定された検索条件Voを元に検索結果件数と検索結果を取得して返却します。
+<.> 検索処理を行う`SearchUtils.search` メソッドの呼び出しを実装します。
 
 ====== DTO
 
-検索条件を格納するDTOをinterfacesパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchConditionDto.java
 [source,java]
@@ -76,14 +59,13 @@ public class IssueService {
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchConditionDto.java[]
 ----
 
-<.> `@Data` を設定します。これにより、フィールドのGetter、Setter等が実装しなくても使用可能になります。
 <.> `@EqualsAndHashCode` を設定します。
 <.> 共通基底検索条件DTOを継承します。
-<.> 検索条件として仕様する項目をフィールドとして定義します。
+<.> 検索条件として使用する項目をフィールドとして定義します。
 
 ====== Factory
 
-検索条件のDTOからVoを構築するFactoryをinterfacesパッケージ以下に作成します。
+検索条件のDTOからVoを構築するFactoryのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
 [source,java]
@@ -98,56 +80,42 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue
 
 ====== Controller
 
-Controllerに検索を行うメソッドを追加します。
+xref:../arch-desc/index.adoc#_conttoller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-package dev.aulait.svqk.interfaces.issue;
-
-import dev.aulait.svqk.arch.search.SearchConditionVo;
-import dev.aulait.svqk.arch.search.SearchResultDto;
-import dev.aulait.svqk.arch.search.SearchResultFactory;
-import dev.aulait.svqk.arch.search.SearchResultVo;
-import dev.aulait.svqk.arch.web.ApiPath;
-import dev.aulait.svqk.domain.issue.IssueEntity;
-import dev.aulait.svqk.domain.issue.IssueService;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import lombok.RequiredArgsConstructor;
-
-@Path(IssueController.ISSUES_PATH)
-@RequiredArgsConstructor
-public class IssueController {
-
-  private final IssueService service;
-
-  private final IssueFactory factory; // <.>
-
-  static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
-
-  public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {} // <.>
-
-  @POST // <.>
-  @Path("/search") // <.>
-  public IssueSearchResultDto search(IssueSearchConditionDto dto) {  // <.>
-    SearchConditionVo vo = factory.build(dto);
-    SearchResultVo<IssueEntity> result = service.search(vo);
-
-    return SearchResultFactory.build(vo, result, IssueDto.class, IssueSearchResultDto.class);
-  }
-}
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..33,52..62"]
 ----
 
-<.> Controllerが使用するFactoryをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
-<.> 検索結果を格納するDTOを定義します。共通基底検索結果DTOを継承し、型パラメーターには検索結果1件の表すDTOを指定します。
-<.> `@POST` を検索メソッドに設定します。これにより検索メソッドがAPIのエンドポイントとなります。
-<.> `@Path` を検索メソッドに設定し、APIのパスを指定します。
-<.> 検索メソッドを定義します。引数には検索条件DTOを、戻り値には検索結果DTOを指定します。
+<.> 検索結果を格納するDTOの型を定義します。共通基底検索結果DTOを継承し、型パラメーターには検索結果1件の表すDTOを指定します。
+<.> 検索メソッドを定義します。引数には検索条件DTOを、戻り値には検索結果DTOを指定します。また、 `@POST` 、`@Path` を設定します。
+<.> メソッド内部に以下の処理を実装します。
+.. `IssueFactory` を使用して検索条件をDTOからVOへ変換
+.. Serviceを使用して検索を実行
+.. `SearchResultFactory` を使用して検索結果をVOからDTOに変換
+.. DTOをレスポンスとして返却
+
+include::../snippet/backend-verification.ad[]
 
 ===== Frontend
 
+include::../snippet/frontend-verification.ad[]
+
+====== API Client
+
+VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
+生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
+
+.{project-artifactId}-front/src/lib/arch/api/Api.ts
+[source,ts]
+----
+include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="37..63,320,402..418,450"]
+----
+
 ====== PageLoader
+
+xref:../arch-desc/index.adoc#_pageloader[アーキテクチャ記述] に従いPageLoaderのtsファイルを作成/更新します。
 
 .{project-artifactId}-front/src/routes/issues/+page.ts
 [source,ts]
@@ -155,51 +123,23 @@ public class IssueController {
 include::{project_root}/svqk-front/src/routes/issues/+page.ts[]
 ----
 
-<.> 検索条件Modelを定義します。
-<.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。
-<.> Web APIの呼び出し結果を返却します。
-
+<.> 検索条件を格納するModelを定義します。
+<.> `ApiHandler.handle` 関数を使用して検索Web APIの呼び出しを実装します。
 
 ====== Page
 
+xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
 
 .{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-  import type { PageData } from '../issues/$types';
-  import { pageStore } from '$lib/arch/global/PageStore';
-  import FormValidator from '$lib/arch/form/FormValidator';
-  import Pagination from '$lib/arch/search/Pagination.svelte';
-  import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import type { IssueSearchResultModel } from '$lib/arch/api/Api';
-  import ApiHandler from '$lib/arch/api/ApiHandler';
-  import { t } from '$lib/translations';
-  import DateUtils from '$lib/arch/util/DateUtils';
-  import SortDirection from '$lib/arch/components/SortDirection.svelte';
-
-  // <.>
-  export let data: PageData;
-  let { result, condition } = data;
-  const issueStatuses = data.issueStatuses;
-
-  const resultHeaders = [
-    { label: '#', key: 'id' },
-
-  ]; // <.>
-
-  const form = FormValidator.createForm({}, search); // <.>
-
-  // <.>
-  async function search() { }
-  async function handleSort(field: string) { }
-
+include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="2..21,27..32,42..45,49"]
 ----
 
-<.> PageLoaderからの返却値を格納する変数を宣言します。この変数には、+page.tsのload関数の戻り値が格納されます。
 <.> 検索結果一覧のヘッダー項目の表示文字列とソートキーを定義します。
-<.> `FormValidator.createForm` 関数を使用し、formをsubmitするためのオブジェクトを生成します。
-<.> 画面内のイベントをハンドリングする関数を定義します。この時点では空の関数とします。
-
+<.> `FormValidator.createForm` 関数を使用し、formをsubmitするためのオブジェクトを定義します。
+<.> 画面内の検索イベントをハンドリングする関数を定義します。この時点では空の関数とします。
+<.> 画面内のソートイベントをハンドリングする関数を定義します。この時点では空の関数とします。
 
 .{project-artifactId}-front/src/routes/issues/+page.svelte マークアップセクション
 [source,html]
@@ -254,9 +194,9 @@ include::{project_root}/svqk-front/src/routes/issues/+page.ts[]
 
 ----
 
-<.> 検索条件の入力項目を配置するためのformタグを配置します。
+<.> 検索条件の入力項目を配置するための `form` タグを配置します。 `form` タグにはスクリプトセクションで生成した `form` オブジェクトを設定します。
 <.> 検索条件の入力項目を配置します。
-<.> 検索結果が1件以上存在する場合に、結果一覧を表示します。
+<.> 検索結果が1件以上存在することを判定する `if` blockを配置します。`if` block内に検索結果一覧を配置します。
 <.> 検索結果一覧のヘッダーを配置します。
-<.> 検索結果ごとにtrタグを繰り返します。
+<.> 検索結果ごとに `tr` タグを繰り返して配置します。
 <.> ページネーション共通コンポーネントを配置します。

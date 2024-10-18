@@ -14,9 +14,9 @@
   pageStore.setTitle($t('msg.issue'));
 
   export let data: PageData;
-  let { result, condition } = data;
-  const issueStatuses = data.issueStatuses;
+  let { result, condition, issueStatuses } = data;
 
+  // <.>
   const resultHeaders = [
     { label: '#', key: 'id' },
     { label: $t('msg.tracker'), key: 'tracker' },
@@ -26,22 +26,26 @@
     { label: $t('msg.updatedAt'), key: 'updatedAt' }
   ];
 
-  const form = FormValidator.createForm({}, search);
+  const form = FormValidator.createForm({}, search); // <.>
 
+  // <.>
   async function search() {
+    // <.>
     const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
       api.issues.issuesSearch(condition)
     );
 
+    // <.>
     if (r) {
       result = r;
     }
   }
 
+  // <.>
   async function handleSort(field: string) {
-    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field);
-    condition = condition;
-    await search();
+    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field); // <.>
+    condition = condition; // <.>
+    await search(); // <.>
   }
 </script>
 
