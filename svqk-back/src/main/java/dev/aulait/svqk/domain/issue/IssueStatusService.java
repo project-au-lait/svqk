@@ -10,7 +10,7 @@ public class IssueStatusService {
 
   private final IssueStatusRepository statusRepository;
 
-  public List<IssueStatusEntity> findAll() {
+  public List<IssueStatusEntity> findAll() { // <.>
     return statusRepository.findAll(); // <.>
   }
 }

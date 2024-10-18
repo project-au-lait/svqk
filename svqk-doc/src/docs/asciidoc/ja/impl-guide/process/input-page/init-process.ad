@@ -45,55 +45,116 @@ a|[.description]
 ===== Frontend
 
 登録画面の実装手順では、初めにFrontendの体裁部分を実装します。
+また、入力フォームをUIComponentとして実装し、登録画面と更新画面で共通化します。
 
 ====== Page
 
-Pageに画面要素を配置し、バリデーションの定義を実装します。
-Pageのスクリプトセクションには、バリデーションの定義とマークアップセクションで必要な変数を宣言します。
+xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
 
-.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte スクリプトセクション
+.{project-artifactId}-front/src/routes/issues/new/+page.svelte スクリプトセクション
 [source,ts]
 ----
-  import InputField from '$lib/arch/form/InputField.svelte';
-  import * as yup from 'yup';
-  import FormValidator from '$lib/arch/form/FormValidator';
+  import { goto } from '$app/navigation';
+  import { pageStore } from '$lib/arch/global/PageStore';
+  import IssueForm from '$lib/domain/issue/IssueForm.svelte';
+  import { t } from '$lib/translations';
 
-  const issue = {
+  const issue = { // <.>
     subject: ''
-  }; // <.>
+    // ...
+  };
 
-  const spec = {
-    subject: yup.string().required()
-  }; // <.>
+  pageStore.setTitle($t('msg.newIssue')); // <.>
 
-  const form = FormValidator.createForm(spec, () => {}); // <.>
+  async function handleAfterSave(id?: number) { // <.>
+    await goto(`/issues/${id}`);
+  }
 ----
 
-<.> 入力項目の入力値を格納するオブジェクトを定義します。
-<.> `yup.object` 関数を使用し、バリデーションの仕様を定義します。仕様は、入力項目ごとのプロパティと、プロパティのバリデーションを定義したオブジェクトです。ここでは、 `subject` という名前のstring型の必須入力項目を定義しています。
-<.> `FormValidator.createForm` 関数を使用し、バリデーションをhtml要素に適用するためのオブジェクトを生成します。この時点では第2引数は仮実装で空の関数「() => {}」を指定します。
+<.> 入力項目の入力値を格納するオブジェクトを定義します。このオブジェクトのプロパティをマークアップセクションで入力項目にバインドすることで、入力値を格納できます。
+<.> `pageStore.setTitle` に画面名を設定します。これにより共通レイアウト側で指定した画面名が表示されます。
+<.> 
 
-Pageのマークアップセクションには画面要素を配置します。
+.{project-artifactId}-front/src/routes/issues/new/+page.svelte マークアップセクション
+[source,html]
+----
+<IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.register')} /> <.>
+----
 
-.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte マークアップセクション
+<.> 入力フォームのUIComponentを配置しプロパティを設定します。
+
+====== UIComponent
+
+UIComponentのsvelteファイルを作成/更新します。
+
+.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
+[source,ts]
+----
+  import FormValidator from '$lib/arch/form/FormValidator';
+  import InputField from '$lib/arch/form/InputField.svelte';
+  import { t } from '$lib/translations';
+  import * as yup from 'yup';
+
+  // <.>
+  export let issue: any;
+  export let handleAfterSave: (id?: number) => Promise<void>;
+  export let actionBtnLabel: string;
+
+  let issueStatuses = [] as any[];
+
+  // <.>
+  const spec = {
+    subject: yup.string().required().label($t('msg.label.issue.subject'))
+    // ...
+  };
+
+  const form = FormValidator.createForm(spec, save); // <.>
+
+  // <.>
+  async function save() {
+    console.log('saved')
+  }
+----
+
+<.> UIComponentが外部から受け取るプロパティを定義します。
+<.> `yup.string()` 等の `yup` が提供する関数を使用して入力フォームのバリデーションの仕様を定義します。
+    仕様は、入力項目ごとのプロパティと、プロパティのバリデーションを定義したオブジェクトとして定義します。
+    ここでは、 `subject` という名前のstring型の必須入力項目を定義しています。
+<.> `FormValidator.createForm` 関数を使用し、バリデーションをhtml要素に適用するためのオブジェクトを定義します。
+<.> バリデーションがエラー無しで終了した場合に呼び出される関数を定義します。この時点では動作確認用のログ出力のみを実装します。
+
+
+.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte マークアップセクション
 [source,html]
 ----
 <form use:form>  <.>
   <div>
     <InputField id="subject" label="Subject" bind:value={issue.subject} />  <.>
   </div>
-  
+
+  ...  
+
+    <div>
+      <SelectBox
+        id="status"
+        label={$t('msg.status')}
+        options={issueStatuses}
+        bind:value={issue.issueStatus.id}
+      />
+    </div>
+
+  ...  
 
   <div>
-    <input id="save" type="submit" name="action" value="Save" />
- <.>
+    <input id="save" type="submit" name="action" value={actionBtnLabel} /> <.>
   </div>
 </form>
 ----
 
-<.> formタグを配置します。formタグにはスクリプトセクションで生成したformオブジェクトを設定します。
-<.> divタグで1行分の領域を確保し、その中に入力項目を配置します。
-<.> 処理を実行するボタンを配置します。
+<.> 入力フォームとなる `form` タグを配置します。 `form` タグにはスクリプトセクションで生成した `form` オブジェクトを設定します。
+<.> 入力項目を配置します。上記の例では、チケットの題名を入力するためのテキストボックスを配置しています。
+<.> 登録処理の起点となる画面要素を配置します。画面要素は `input type="submit"` で実装します。
+
 
 [NOTE]
 ====
@@ -147,7 +208,7 @@ include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/I
 
 ====== Repository
 
-xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルをドメインパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
 [source,java]
@@ -165,11 +226,12 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServ
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java[]
 ----
 
-<.> Repositoryを使用し、画面で使用するマスターデータをDBから取得します。上記の例では `IssueStatusRepository` が継承する `JpaRepository` の機能を使用して `issue_status` テーブルの全レコードを取得しています。
+<.> マスターデータをDBから取得するメソッドを定義します。
+<.> マスターデータをDBから取得するRepositoryのメソッドの呼び出しを実装します。上記の `findAll` は `IssueStatusRepository` が継承する `JpaRepository` のメソッドで、 `issue_status` テーブルの全レコードをSELECTします。
 
 ====== DTO
 
-xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
+xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
 [source,java]
@@ -179,7 +241,7 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue
 
 ====== Controller
 
-xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
+xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
 [source,java]
@@ -187,8 +249,8 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いCont
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
 ----
 
-<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義し、`@Get` を設定します。
-<.> ServiceからEntityを取得し、それを `BeanUtils` を使用してDTOに変換したものをレスポンスとして返却します。
+<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@GET` を設定します。
+<.> ServiceからのEntityの取得、 `BeanUtils` を使用したDTOへの変換、レスポンスとしての返却を実装します。
 
 [NOTE]
 ====
@@ -205,69 +267,42 @@ API Clientを生成し、Web APIの呼び出し処理を追加します。
 VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
 生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
 
-====== PageLoader
-
-.{project-artifactId}-front/src/routes/issues/[issueId]/+page.ts
+.{project-artifactId}-front/src/lib/arch/api/Api.ts
 [source,ts]
 ----
-import type { IssueModel, IssueStatusModel } from '$lib/arch/api/Api';
-import ApiHandler from '$lib/arch/api/ApiHandler';
-import type { PageLoad } from './$types';
-
-export const load: PageLoad = async ({ fetch }) => {  // <.>
-
-  const issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) =>
-    api.issueStatuses.issueStatusesList()
-  ))!; // <.>
-
-  return {
-    issueStatuses // <.>
-  };
-};
+include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="64..70,320,368..383,450"]
 ----
 
-<.> load関数を定義します。+page.tsファイルに定義されたload関数は、SvelteKitの仕組みにより同ディレクトリ内の+page.svelteがアクセスされた際に呼び出されます。
-** 参考: https://kit.svelte.dev/docs/load[SvelteKit Loading data]
-<.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。
-<.> Web APIの呼び出し結果を返却します。
+====== UIComponent
 
+UIComponentのsvelteファイルを更新します。
 
-====== Page
-
-Pageの画面要素にPageLoaderからの返却値を設定します。
-
-.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte スクリプトセクション
+.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
 [source,ts]
 ----
-  import type { PageData } from './$types';
+  ...
+  import type { IssueStatusModel } from '$lib/arch/api/Api';
+  import ApiHandler from '$lib/arch/api/ApiHandler';
+  import { onMount } from 'svelte';
 
-  export let data: PageData;  // <.>
+  ...
 
-  const issueStatuses = data.issueStatuses;  // <.>
+  async function save() {
+    console.log('saved')
+  }
+
+  // <.>
+  onMount(async () => {
+    // <.>
+    issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) => 
+      api.issueStatuses.issueStatusesList()
+    ))!;
+
+  });
 ----
 
-<.> PageLoaderからの返却値を格納する変数を宣言します。この変数には、+page.tsのload関数の戻り値が格納されます。
-** 参考: https://kit.svelte.dev/docs/load[SvelteKit Loading data]
-<.> 返却値を変数に格納します。
-
-.{project-artifactId}-front/src/routes/issues/[issueId]/+page.svelte マークアップセクション
-[source,html]
-----
-<form use:form>
-
-    <div>
-      <SelectBox
-        id="status"
-        label="ステータス"
-        options={issueStatuses}  <.>
-        bind:value={issue.issueStatus.id}
-      />
-    </div>
-
-</form>
-----
-
-<.> PageLoaderからの返却値を画面要素に設定します。
+<.> `onMount` 関数の実行とcallback関数を実装します。このcallback関数は、UIComponentのDOMがマウントされた後に呼び出されます。
+<.> `ApiHandler.handle` 関数を使用してマスターデータを取得するWeb APIを呼び出します。
 
 [NOTE]
 ====

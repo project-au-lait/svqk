@@ -63,7 +63,7 @@ include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/I
 
 ====== Repository
 
-Repositoryのjavaファイルをドメインパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java
 [source,java]
@@ -71,43 +71,24 @@ Repositoryのjavaファイルをドメインパッケージ以下に作成しま
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java[]
 ----
 
-<.> JpaRepositoryを継承します。型パラメータにはEntityとEntityのIDの型を指定します。
-
 ====== Service
 
-Serviceのjavaファイルをドメインパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-package dev.aulait.svqk.domain.issue;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-
-@ApplicationScoped // <.>
-@RequiredArgsConstructor // <.>
-public class IssueService {
-
-  private final IssueRepository repository; // <.>
-
-  @Transactional
-  public IssueEntity save(IssueEntity entity) { // <.>
-    return repository.save(entity); // <.>
-  }
-}
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,8..24,32"]
 ----
 
-<.> @ApplicationScopedをServiceクラスに設定します。
-<.> @RequiredArgsConstructorをServiceクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
-<.> Serviceが使用するRepositoryをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にRepositoryのインスタンスがInjectされます。
-<.> EntityをDBに保存するメソッドを定義します。メソッドには@Transactionalを設定します。 
+<.> EntityをDBに保存するメソッドを定義します。メソッドには `@Transactional` を設定します。 
 <.> Repositoryを使用してEntityをDBに保存する処理を実装します。
+<.> EntityをDBに保存するRepositoryのメソッドの呼び出しを実装します。上記の `save` は `IssueRepository` が継承する `JpaRepository` のメソッドで、 指定されたEntityを`issue` テーブルにINSERTします。
+
 
 ====== DTO
 
-DTOのjavaファイルをインターフェースパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java
 [source,java]
@@ -115,62 +96,28 @@ DTOのjavaファイルをインターフェースパッケージ以下に作成�
 include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java[]
 ----
 
-<.> @Dataを設定します。これにより、フィールドのGetter、Setter等が実装しなくても使用可能になります。
-<.> 対応するEntityのプロパティの中で、外部に公開するものをDTOのフィールドとして定義します。
-
-
 ====== Controller
 
-Controllerのjavaファイルをインターフェースパッケージ以下に作成します。
+xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-package dev.aulait.svqk.interfaces.issue;
-
-import dev.aulait.svqk.arch.util.BeanUtils;
-import dev.aulait.svqk.arch.web.ApiPath;
-import dev.aulait.svqk.arch.web.IdDto;
-import dev.aulait.svqk.domain.issue.IssueEntity;
-import dev.aulait.svqk.domain.issue.IssueService;
-import jakarta.validation.Valid;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-
-@Path(IssueController.ISSUES_PATH) // <.>
-@RequiredArgsConstructor // <.>
-public class IssueController {
-
-  private final IssueService service; // <.>
-
-  static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
-
-  @POST
-  public IdDto save(@RequestBody @Valid IssueDto dto) { // <.>
-
-    IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
-    IssueEntity savedEntity = service.save(entity);
-
-    return BeanUtils.map(savedEntity, IdDto.class);
-  }
-}
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,7..28,33..41,59"]
 ----
 
-<.> @PathをControllerクラスに設定します。これにより、このControllerクラスがAPIのエンドポイントして認識されます。
-<.> @RequiredArgsConstructorをControllerクラスに設定します。これにより、private finalフィールドを引数に持つコンストラクタが実装しなくても使用可能になります。
-<.> Controllerが使用するServiceをprivate finalフィールドとして定義します。このフィールドはQuarkus起動時にServiceのインスタンスがInjectされます。
-<.> @POSTをAPIのエンドポイントとなるメソッドに設定します。
+<.> 画面の入力値を保存するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@POST` を設定します。
+<.> メソッド内部に以下の処理を実装します。
+.. `BeanUtils` を使用してDTOからEntityへ変換
+..  Serviceを使用してEntityをDBへ保存
+.. `BeanUtils` を使用して保存後のEntityを DTOに変換
+.. DTOをレスポンスとして返却
 
 [NOTE]
 ====
 Backendの実装が終わったらBackendサーバーを起動し、Swagger UIを使用して動作確認を行います。
 Backendサーバーの起動方法は<<#project-usage>>を、Swagger UIのアクセス先は<<#access-info>>をそれぞれ参照してください。
 ====
-
 
 ===== Frontend
 
@@ -181,26 +128,51 @@ API Clientを生成し、Web APIの呼び出し処理を追加します。
 VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
 生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
 
+====== UIComponent
+
+
+.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
+[source,ts]
+----
+  ...
+  import type { IssueModel, IssueStatusModel } from '$lib/arch/api/Api';
+  import ApiHandler from '$lib/arch/api/ApiHandler';
+  import { messageStore } from '$lib/arch/global/MessageStore';
+
+  export let issue: IssueModel; // <.>
+  export let handleAfterSave: (id?: number) => Promise<void>;
+
+  ...
+
+  async function save() {
+    // <.>
+    const response = await ApiHandler.handle<IdModel>(fetch, (api) =>
+      api.issues.issuesCreate(issue)
+    );
+
+    // <.>
+    if (response) {
+      await handleAfterSave(response.id);
+      messageStore.show($t('msg.saved'));
+    }
+  }
+----
+
+<.> 入力項目の入力値を格納するオブジェクトにModelの型を定義します。
+<.> `ApiHandler.handle` 関数を使用して画面の入力値を保存するWeb APIを呼び出します。
+<.> `ApiHandler.handle` 関数の戻り値でエラー判定をします。エラーでない場合にメッセージ以下の処理を行います。
+** UIComponent外部のcallback関数の実行
+** グローバルメッセージの表示
+
 ====== Page
 
 .src/routes/issues/[issueId]/+page.svelte スクリプトセクション
 [source,ts]
 ----
-  const form = FormValidator.createForm(spec, save); // <.>
-  
-  async function save() { // <.>
-    const response = await ApiHandler.handle<IdModel>(fetch, (api) =>  // <.>
-      api.issues.issuesCreate(issue)
-    );
- 
-    if (response) {  // <.>
-      messageStore.show($t('msg.saved'));  // <.>
-    }
-  }
+  import type { IssueModel, IssueStatusModel } from '$lib/arch/api/Api';
+
+  const issue = { issueStatus: {} as IssueStatusModel } as IssueModel; // <.>
 ----
 
-<.> createForm関数のcallbackを表す第2引数に登録処理を行う関数を指定します。
-<.> 登録処理を行う関数を定義します。
-<.> ApiHandler.handle関数を使用してWeb APIを呼び出します。
-<.> ApiHandler.handle関数の戻り値でエラー判定をします。
-<.> エラーでない場合にメッセージを表示します。
+<.> 入力項目の入力値を格納するオブジェクトにModelの型を定義します。
+    プロパティがオブジェクトの場合そのプロパティにもModelの型を定義します。

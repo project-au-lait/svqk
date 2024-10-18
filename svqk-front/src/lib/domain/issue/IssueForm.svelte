@@ -11,11 +11,10 @@
 
   export let issue: IssueModel;
   export let handleAfterSave: (id?: number) => Promise<void>;
+  export let actionBtnLabel: string;
 
   let issueStatuses = [] as IssueStatusModel[];
   let trackers = [] as TrackerModel[];
-
-  $: action = issue.id ? $t('msg.update') : $t('msg.register');
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
@@ -75,6 +74,6 @@
     </div>
   </div>
   <div>
-    <input id="save" type="submit" name="action" value={action} />
+    <input id="save" type="submit" name="action" value={actionBtnLabel} />
   </div>
 </form>

@@ -15,7 +15,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Path(IssueController.ISSUES_PATH)
 @RequiredArgsConstructor
@@ -27,14 +26,14 @@ public class IssueController {
 
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
 
-  @SuppressWarnings("java:S1075")
-  static final String ISSUES_GET_PATH = "/{issueId}";
+  static final String ISSUES_GET_PATH = "{issueId}";
 
   public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {}
 
   @POST
-  public IdDto save(@RequestBody @Valid IssueDto dto) {
+  public IdDto save(@Valid IssueDto dto) { // <.>
 
+    // <.>
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
     IssueEntity savedEntity = service.save(entity);
 

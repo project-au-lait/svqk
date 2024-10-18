@@ -1,18 +1,19 @@
 <script lang="ts">
   import { invalidateAll } from '$app/navigation';
   import { pageStore } from '$lib/arch/global/PageStore';
-  import IssueForm from '$lib/issue/IssueForm.svelte';
+  import IssueForm from '$lib/domain/issue/IssueForm.svelte';
   import type { PageData } from './$types';
+  import { t } from '$lib/translations';
 
   export let data: PageData;
 
-  $: ({ issue } = data);
+  $: issue = data.issue;
 
   $: pageStore.setTitle(issue.subject);
 
-  const handleAfterSave = async () => {
+  async function handleAfterSave(id?: number) {
     await invalidateAll();
-  };
+  }
 </script>
 
-<IssueForm {issue} {handleAfterSave} />
+<IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.update')} />

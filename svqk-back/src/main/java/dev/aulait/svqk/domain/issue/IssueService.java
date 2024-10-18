@@ -18,8 +18,8 @@ public class IssueService {
   private final EntityManager em;
 
   @Transactional
-  public IssueEntity save(IssueEntity entity) {
-    return repository.save(entity);
+  public IssueEntity save(IssueEntity entity) { // <.>
+    return repository.save(entity); // <.>
   }
 
   public IssueEntity find(int id) {
