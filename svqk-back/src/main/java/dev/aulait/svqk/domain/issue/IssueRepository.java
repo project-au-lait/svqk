@@ -11,7 +11,7 @@ public interface IssueRepository extends JpaRepository<IssueEntity, Integer> {
           "SELECT tracker, issueStatus, COUNT(issue)"
               + " FROM TrackerEntity tracker"
               + " CROSS JOIN IssueStatusEntity issueStatus"
-              + " LEFT OUTER JOIN IssueEntity issue"
+              + " LEFT JOIN IssueEntity issue"
               + " ON issue.tracker = tracker AND issue.issueStatus = issueStatus"
               + " GROUP BY tracker, issueStatus"
               + " ORDER BY tracker, issueStatus")
