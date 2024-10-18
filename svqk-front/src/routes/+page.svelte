@@ -7,7 +7,7 @@
 
   let { issueTracking } = data;
 
-  pageStore.setTitle('home');
+  pageStore.setTitle($t('msg.home'));
 </script>
 
 <article>
@@ -15,17 +15,17 @@
   <table class="striped">
     <thead>
       <tr>
-        <th scope="col" />
+        <th />
         {#each issueTracking[0].issueStatuses as is}
-          <th scope="col">{is.issueStatus.name}</th>
+          <th>{is.issueStatus.name}</th>
         {/each}
-        <th scope="col">{$t('msg.total')}</th>
+        <th>{$t('msg.total')}</th>
       </tr>
     </thead>
     <tbody>
       {#each issueTracking as it}
         <tr>
-          <th scope="row">{it.tracker.name}</th>
+          <th class="row">{it.tracker.name}</th>
           {#each it.issueStatuses as is}
             <td>{is.count}</td>
           {/each}
@@ -36,3 +36,10 @@
   </table>
   <footer><a href="/issues">{$t('msg.viewAllIssues')}</a></footer>
 </article>
+
+<style>
+  table th:not(.row),
+  td {
+    text-align: center;
+  }
+</style>
