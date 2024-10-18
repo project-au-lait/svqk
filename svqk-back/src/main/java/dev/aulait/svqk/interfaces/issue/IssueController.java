@@ -29,8 +29,7 @@ public class IssueController {
 
   static final String ISSUES_GET_PATH = "{issueId}";
 
-  @SuppressWarnings("java:S1075")
-  static final String ISSUES_TRACKING_GET_PATH = "/tracking";
+  static final String ISSUES_TRACKING_GET_PATH = "tracking";
 
   public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {}
 
