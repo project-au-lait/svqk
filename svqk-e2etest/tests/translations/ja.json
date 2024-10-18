@@ -18,5 +18,8 @@
   "tracker": "トラッカー",
   "update": "更新",
   "updatedAt": "更新日",
+  "issueTracking": "チケットトラッキング",
+  "viewAllIssues": "すべてのチケットを表示",
+  "total": "合計",
   "label": { "issue": { "subject": "題名" } }
 }

@@ -8,7 +8,13 @@ import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
+import dev.aulait.svqk.domain.issue.IssueTrackingIf;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @ApplicationScoped // <.>
 public class IssueFactory {
@@ -31,5 +37,25 @@ public class IssueFactory {
         .where("dueDate", cond.getDueDate())
         .defaultOrderBy("id", false)
         .build(cond); // <.>
+  }
+
+  public List<IssueTrackingDto> createTrackingResponse(List<IssueTrackingIf> src) {
+    List<IssueTrackingDto> result = new ArrayList<>();
+
+    Map<String, List<IssueTrackingIf>> grpByTracker =
+        src.stream()
+            .collect(
+                Collectors.groupingBy(
+                    it -> it.getTracker().getId(), TreeMap::new, Collectors.toList()));
+
+    grpByTracker.forEach(
+        (k, v) -> {
+          IssueTrackingDto dto = new IssueTrackingDto();
+          dto.setTracker(BeanUtils.map(v.get(0).getTracker(), TrackerDto.class));
+          dto.setIssueStatuses(BeanUtils.mapAll(v, IssueTrackingStatusDto.class));
+          result.add(dto);
+        });
+
+    return result;
   }
 }

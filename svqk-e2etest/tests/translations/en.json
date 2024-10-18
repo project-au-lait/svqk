@@ -18,5 +18,8 @@
   "tracker": "Tracker",
   "update": "Update",
   "updatedAt": "Update Date",
+  "issueTracking": "Issue tracking",
+  "viewAllIssues": "View all issues",
+  "total": "total",
   "label": { "issue": { "subject": "subject" } }
 }

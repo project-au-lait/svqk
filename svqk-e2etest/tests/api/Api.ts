@@ -68,6 +68,19 @@ export interface IssueStatusModel {
   version: number;
 }
 
+export interface IssueTrackingModel {
+  tracker: TrackerModel;
+  issueStatuses: IssueTrackingStatusModel[];
+  /** @format int32 */
+  total: number;
+}
+
+export interface IssueTrackingStatusModel {
+  issueStatus: IssueStatusModel;
+  /** @format int32 */
+  count: number;
+}
+
 /**
  * @format date
  * @example "2022-03-10T00:00:00.000Z"
@@ -412,6 +425,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesTrackingList
+     * @request GET:/api/v1/issues/tracking
+     */
+    issuesTrackingList: (params: RequestParams = {}) =>
+      this.request<IssueTrackingModel[], any>({
+        path: `/api/v1/issues/tracking`,
+        method: 'GET',
         format: 'json',
         ...params
       }),

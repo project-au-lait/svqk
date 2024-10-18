@@ -14,6 +14,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Path(IssueController.ISSUES_PATH)
@@ -27,6 +28,9 @@ public class IssueController {
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
 
   static final String ISSUES_GET_PATH = "{issueId}";
+
+  @SuppressWarnings("java:S1075")
+  static final String ISSUES_TRACKING_GET_PATH = "/tracking";
 
   public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {}
 
@@ -55,5 +59,11 @@ public class IssueController {
     SearchResultVo<IssueEntity> result = service.search(vo);
 
     return SearchResultFactory.build(vo, result, IssueDto.class, IssueSearchResultDto.class);
+  }
+
+  @GET
+  @Path(ISSUES_TRACKING_GET_PATH)
+  public List<IssueTrackingDto> getTracking() {
+    return factory.createTrackingResponse(service.getTracking());
   }
 }
