@@ -31,7 +31,7 @@ public class IssueService {
     return SearchUtils.search(em, condition);
   }
 
-  public List<IssueTrackingIf> getTracking() {
+  public List<IssueTracking> getTracking() {
     return repository.count4tracking();
   }
 }

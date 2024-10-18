@@ -8,7 +8,7 @@ import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
-import dev.aulait.svqk.domain.issue.IssueTrackingIf;
+import dev.aulait.svqk.domain.issue.IssueTracking;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +39,10 @@ public class IssueFactory {
         .build(cond); // <.>
   }
 
-  public List<IssueTrackingDto> createTrackingResponse(List<IssueTrackingIf> src) {
+  public List<IssueTrackingDto> createTrackingResponse(List<IssueTracking> src) {
     List<IssueTrackingDto> result = new ArrayList<>();
 
-    Map<String, List<IssueTrackingIf>> grpByTracker =
+    Map<String, List<IssueTracking>> grpByTracker =
         src.stream()
             .collect(
                 Collectors.groupingBy(
