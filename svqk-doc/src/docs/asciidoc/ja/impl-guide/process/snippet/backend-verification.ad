@@ -1,0 +1,5 @@
+[NOTE]
+====
+Backendの実装が終わったらBackendサーバーを起動し、Swagger UIを使用して動作確認を行います。
+Backendサーバーの起動方法は<<#project-usage>>を、Swagger UIのアクセス先は<<#access-info>>をそれぞれ参照してください。
+====

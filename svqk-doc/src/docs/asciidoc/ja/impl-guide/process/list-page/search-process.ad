@@ -26,34 +26,16 @@ a|[.description]
 
 ===== Frontend
 
+include::../snippet/frontend-verification.ad[]
+
 ====== Page
 
-Pageのスクリプトセクションに、画面内のイベントをハンドリングする関数の内部を実装します。
+xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
 
 .{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-  import ApiHandler from '$lib/arch/api/ApiHandler';
-  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
-
-  export let data: PageData;
-  let { result, condition } = data;
-
-  async function search() {
-    const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearch(condition)
-    ); // <.>
-
-    if (r) { // <.>
-      result = r;
-    }
-  }
-
-  async function handleSort(field: string) {
-    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field); // <.>
-    condition = condition; // <.>
-    await search(); // <.>
-  }
+include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="8..9,16..18,32..43,45..49"]
 ----
 
 <.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。

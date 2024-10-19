@@ -27,8 +27,8 @@ public class IssueService {
     return findByIdAsResource(repository, id);
   }
 
-  public SearchResultVo<IssueEntity> search(SearchConditionVo condition) {
-    return SearchUtils.search(em, condition);
+  public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
+    return SearchUtils.search(em, condition); // <.>
   }
 
   public List<IssueTracking> getTracking() {

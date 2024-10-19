@@ -28,5 +28,5 @@ export const load: PageLoad = async ({ fetch }) => {
     issueStatuses,
     trackers,
     result
-  }; // <.>
+  };
 };

@@ -47,6 +47,8 @@ a|[.description]
 登録画面の実装手順では、初めにFrontendの体裁部分を実装します。
 また、入力フォームをUIComponentとして実装し、登録画面と更新画面で共通化します。
 
+include::../snippet/frontend-verification.ad[]
+
 ====== Page
 
 xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
@@ -155,14 +157,6 @@ UIComponentのsvelteファイルを作成/更新します。
 <.> 入力項目を配置します。上記の例では、チケットの題名を入力するためのテキストボックスを配置しています。
 <.> 登録処理の起点となる画面要素を配置します。画面要素は `input type="submit"` で実装します。
 
-
-[NOTE]
-====
-Frontendの実装は、Frontendサーバーを起動した状態で行います。
-これにより、ブラウザで画面の体裁とバリデーションの挙動を確認しながら実装を進めることができます。
-Frontendサーバーの起動方法は<<#project-usage>>を参照してください。
-====
-
 ===== DB
 
 マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
@@ -252,11 +246,7 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue
 <.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@GET` を設定します。
 <.> ServiceからのEntityの取得、 `BeanUtils` を使用したDTOへの変換、レスポンスとしての返却を実装します。
 
-[NOTE]
-====
-Backendの実装が終わったらBackendサーバーを起動し、Swagger UIを使用して動作確認を行います。
-Backendサーバーの起動方法は<<#project-usage>>を、Swagger UIのアクセス先は<<#access-info>>をそれぞれ参照してください。
-====
+include::../snippet/backend-verification.ad[]
 
 ===== Frontend
 

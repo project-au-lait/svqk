@@ -78,11 +78,10 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServ
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,8..24,32"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,8..17,19..24,32"]
 ----
 
 <.> EntityをDBに保存するメソッドを定義します。メソッドには `@Transactional` を設定します。 
-<.> Repositoryを使用してEntityをDBに保存する処理を実装します。
 <.> EntityをDBに保存するRepositoryのメソッドの呼び出しを実装します。上記の `save` は `IssueRepository` が継承する `JpaRepository` のメソッドで、 指定されたEntityを`issue` テーブルにINSERTします。
 
 
@@ -103,7 +102,7 @@ xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いC
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,7..28,33..41,59"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,7..28,35..43,62"]
 ----
 
 <.> 画面の入力値を保存するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@POST` を設定します。
@@ -113,15 +112,13 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue
 .. `BeanUtils` を使用して保存後のEntityを DTOに変換
 .. DTOをレスポンスとして返却
 
-[NOTE]
-====
-Backendの実装が終わったらBackendサーバーを起動し、Swagger UIを使用して動作確認を行います。
-Backendサーバーの起動方法は<<#project-usage>>を、Swagger UIのアクセス先は<<#access-info>>をそれぞれ参照してください。
-====
+include::../snippet/backend-verification.ad[]
 
 ===== Frontend
 
 API Clientを生成し、Web APIの呼び出し処理を追加します。
+
+include::../snippet/frontend-verification.ad[]
 
 ====== API Client
 
