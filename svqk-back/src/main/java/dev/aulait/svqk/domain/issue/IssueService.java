@@ -8,6 +8,7 @@ import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -28,5 +29,9 @@ public class IssueService {
 
   public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
     return SearchUtils.search(em, condition); // <.>
+  }
+
+  public List<IssueTracking> getTracking() {
+    return repository.count4tracking();
   }
 }
