@@ -85,7 +85,7 @@ xref:../arch-desc/index.adoc#_conttoller[アーキテクチャ記述] に従いC
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..33,52..62"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..36,55..64,71"]
 ----
 
 <.> 検索結果を格納するDTOの型を定義します。共通基底検索結果DTOを継承し、型パラメーターには検索結果1件の表すDTOを指定します。

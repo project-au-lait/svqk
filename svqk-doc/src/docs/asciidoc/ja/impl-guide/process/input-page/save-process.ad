@@ -102,7 +102,7 @@ xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いC
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,7..28,35..43,62"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,7..28,37..46,71"]
 ----
 
 <.> 画面の入力値を保存するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@POST` を設定します。
