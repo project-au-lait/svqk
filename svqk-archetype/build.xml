@@ -100,11 +100,26 @@ Usage:
     <antcall target="adapt-resources" />
 
     <if>
+      <equals arg1="${archetype.type}" arg2="arch" />
+      <then>
+        <antcall target="add-top-page" />
+      </then>
+    </if>
+
+    <if>
       <equals arg1="${archetype.type}" arg2="skeleton" />
       <then>
         <antcall target="add-front-controller" />
       </then>
     </if>
+  </target>
+
+
+  <target name="add-top-page">
+    <copy
+      file="${archetype.prjdir}/svqk-archetype/src/archetype/+page.svelte.txt"
+      tofile="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-front/src/routes/+page.svelte"
+      overwrite="true" />
   </target>
 
 
