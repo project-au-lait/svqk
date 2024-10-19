@@ -93,7 +93,7 @@
 
 {#if result.list}
   <section>
-    <table class="list">
+    <table class="list striped">
       <thead>
         <tr>
           {#each resultHeaders as rh}
