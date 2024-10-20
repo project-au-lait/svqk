@@ -12,9 +12,14 @@ a|
 a|
 * link:0.6.1/en/index.html[English]
 * link:0.6.1/ja/index.html[日本語]
-
+git add .
 |0.6.2
 a|
 * link:0.6.2/en/index.html[English]
 * link:0.6.2/ja/index.html[日本語]
+
+|0.7
+a|
+* link:0.7/en/index.html[English]
+* link:0.7./mvnw -f svqk-doc -P gen-doc/ja/index.html[日本語]
 |===

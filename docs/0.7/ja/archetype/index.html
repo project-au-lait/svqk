@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<title>Document</title>
+<title>SVQK Maven Archetype</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,76 +435,199 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="book">
+<body class="book toc2 toc-left">
 <div id="header">
-<h1>Document</h1>
+<h1>SVQK Maven Archetype</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_概要">概要</a></li>
+<li><a href="#_アーキタイプ作成">アーキタイプ作成</a></li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
+<div class="paragraph">
+<p>ここでは、SVQK Maven Archetype(以下 svqk-archetype)の概要と作成する仕組みを説明します。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_概要">概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>svqk-archetypeは、Mavenアーキタイプであり、Mavenプロジェクトを作成する際の雛形として使用します。
+svqk-archetypeから作成したMavenプロジェクトは、SVQKが具備する以下の仕組みを具備します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ローカル開発環境</p>
+<div class="ulist">
+<ul>
+<li>
+<p>DBMSの自動セットアップ</p>
+</li>
+<li>
+<p>DBマイグレーション</p>
+</li>
+<li>
+<p>JPA Entityの自動生成</p>
+</li>
+<li>
+<p>API Client生成</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>ローカル実行環境</p>
+<div class="ulist">
+<ul>
+<li>
+<p>FrontendからBackendへのAPI Call</p>
+</li>
+<li>
+<p>BackendからDBMSへのDBアクセス</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>CI</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Unit Test</p>
+</li>
+<li>
+<p>Integration Test</p>
+</li>
+<li>
+<p>End to End Test</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_アーキタイプ作成">アーキタイプ作成</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>svqk-archetypeは、SVQKプロジェクトから以下のファイルを除外したものです。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>リファレンス実装固有のファイル<br>
+チケットのCRUD機能を実現する画面、処理を実装したファイル</p>
+</li>
+<li>
+<p>svqk-archetype-buildプロジェクト</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>svqk-archetypeを作成するための資材はsvqk-archetype-buildプロジェクトに格納されています。
+svqk-archetyp-buildプロジェクトの主要なファイル・ディレクトリは以下の通りです。</p>
+</div>
+<div class="listingblock">
+<div class="title">ディレクトリ構成</div>
+<div class="content">
+<pre>svqk
+└── svqk-archetype
+    ├── build.xml   1. Antビルドファイル
+    ├── src/archetype
+    │   └── pom.xml   2. アーキタイプ用POM
+    └── target
+        ├── archetype-work    3. archetype.workdir
+        │   ├── .mvn
+        │   ├── svqk-back
+        │   ├── svqk-cicd
+        │   ├── :
+        │   ├── pom.xml
+        │   └── target/generated-sources/archetype   4. archetype.gendir
+        └── archetype-test    5. archetype.testdir</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Antビルドファイル<br>
+svqk-archetypeの作成・テストの処理をAntタスクとして実装しています。</p>
+</li>
+<li>
+<p>アーキタイプ用POM<br>
+svqk-archetypeをMavenリポジトリに登録するための情報を定義したPOMです。</p>
+</li>
+<li>
+<p>archetype.workdir<br>
+アーキタイプに含めるファイルを集めるためのディレクトリです。</p>
+</li>
+<li>
+<p>archetype.gendir<br>
+maven-archetype-plugin:create-from-projectによって生成されるアーキタイプ資材を格納したディレクトリです。</p>
+</li>
+<li>
+<p>archetype.testdir<br>
+svqk-archetypeのテストに使用するディレクトリです。
+テストでは、svqk-archetypeから新規にプロジェクトを作成し、そのプロジェクトがCIテストをパスすることを確認します。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>svqk-archetypeを作成する処理はsvqk-archetype-build/build.xmlに実装されています。</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. svqk-archetype-build/build.xml内のタスク</caption>
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 14.2857%;">
+<col style="width: 42.8571%;">
+<col style="width: 42.8572%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-center valign-top">Version</th>
-<th class="tableblock halign-center valign-top">Link</th>
+<th class="tableblock halign-center valign-top">Antタスク名</th>
+<th class="tableblock halign-center valign-top">処理概要</th>
+<th class="tableblock halign-center valign-top">主要コマンド</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.6</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><a href="0.6/en/index.html">English</a></p>
-</li>
-<li>
-<p><a href="0.6/ja/index.html">日本語</a></p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">prepare</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SVQKプロジェクト内のsvqk-archetypeに含めるファイルをarchetype.workdirにコピーします。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ant Copy Task</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.6.1</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><a href="0.6.1/en/index.html">English</a></p>
-</li>
-<li>
-<p><a href="0.6.1/ja/index.html">日本語</a></p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">create</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">アーキタイプとなる資材をarchetype.gendir以下に生成します。
+アーキタイプ用POMをコピーします。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvnw archetype:create-from-project (at archetype.workdir)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.6.2</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><a href="0.6.2/en/index.html">English</a></p>
-</li>
-<li>
-<p><a href="0.6.2/ja/index.html">日本語</a></p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">install</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">svqk-archetypeをMavenローカルリポジトリにインストールします。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvnw install (at archetype.gendir)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.7</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><a href="0.7/en/index.html">English</a></p>
-</li>
-<li>
-<p><a href="0.7/ja/index.html">日本語</a></p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">generate-project</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">svqk-archetypeを用いて新規プロジェクトを作成します。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvnw archetype:generate (at archetype.testdir)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">generate-projectで作成したプロジェクトのCIテストを実行します。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvnw -f project-cicd -D ant.target=test (at archetype.testdir/project)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">deploy (TODO 実装)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">svqk-archetypeをMavenリモートリポジトリにデプロイします。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvnw deploy:deploy (at archetype.gendir)</p></td>
 </tr>
 </tbody>
 </table>
