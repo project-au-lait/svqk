@@ -14,7 +14,6 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Path(IssueController.ISSUES_PATH)
@@ -65,7 +64,7 @@ public class IssueController {
 
   @GET
   @Path(ISSUES_TRACKING_GET_PATH)
-  public List<IssueTrackingDto> getTracking() {
-    return factory.createTrackingResponse(service.getTracking());
+  public IssueTrackingDto getTracking() {
+    return factory.buildIssueTracking(service.getTracking());
   }
 }

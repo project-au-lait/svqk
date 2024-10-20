@@ -1,6 +1,6 @@
 package dev.aulait.svqk.domain.issue;
 
-public interface IssueTracking {
+public interface IssueTrackingRs {
 
   TrackerEntity getTracker();
 

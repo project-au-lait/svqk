@@ -61,6 +61,12 @@ export interface IssueSearchResultModel {
   pageNums: number[];
 }
 
+export interface IssueStatusCountModel {
+  issueStatus: IssueStatusModel;
+  /** @format int32 */
+  count: number;
+}
+
 export interface IssueStatusModel {
   id: string;
   name: string;
@@ -69,16 +75,10 @@ export interface IssueStatusModel {
 }
 
 export interface IssueTrackingModel {
-  tracker: TrackerModel;
-  issueStatuses: IssueTrackingStatusModel[];
-  /** @format int32 */
-  total: number;
-}
-
-export interface IssueTrackingStatusModel {
-  issueStatus: IssueStatusModel;
-  /** @format int32 */
-  count: number;
+  /** @uniqueItems true */
+  trackers: TrackerCountModel[];
+  /** @uniqueItems true */
+  issueStatuses: IssueStatusModel[];
 }
 
 /**
@@ -96,6 +96,13 @@ export type LocalDateTime = string;
 export interface SortOrderModel {
   asc?: boolean;
   field?: string;
+}
+
+export interface TrackerCountModel {
+  tracker: TrackerModel;
+  issueStatusMap: Record<string, IssueStatusCountModel>;
+  /** @format int32 */
+  total: number;
 }
 
 export interface TrackerModel {
@@ -437,7 +444,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/v1/issues/tracking
      */
     issuesTrackingList: (params: RequestParams = {}) =>
-      this.request<IssueTrackingModel[], any>({
+      this.request<IssueTrackingModel, any>({
         path: `/api/v1/issues/tracking`,
         method: 'GET',
         format: 'json',

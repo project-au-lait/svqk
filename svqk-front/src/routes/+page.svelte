@@ -16,20 +16,20 @@
     <thead>
       <tr>
         <th />
-        {#each issueTracking[0].issueStatuses as is}
-          <th>{is.issueStatus.name}</th>
+        {#each issueTracking.issueStatuses as issueStatus}
+          <th>{issueStatus.name}</th>
         {/each}
         <th>{$t('msg.total')}</th>
       </tr>
     </thead>
     <tbody>
-      {#each issueTracking as it}
+      {#each issueTracking.trackers as tracker}
         <tr>
-          <th class="row">{it.tracker.name}</th>
-          {#each it.issueStatuses as is}
-            <td>{is.count}</td>
+          <th class="row">{tracker.tracker.name}</th>
+          {#each issueTracking.issueStatuses as issueStatus}
+            <td>{tracker.issueStatusMap[issueStatus.id].count}</td>
           {/each}
-          <td>{it.total}</td>
+          <td>{tracker.total}</td>
         </tr>
       {/each}
     </tbody>

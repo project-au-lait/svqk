@@ -15,5 +15,5 @@ public interface IssueRepository extends JpaRepository<IssueEntity, Integer> {
               + " ON issue.tracker = tracker AND issue.issueStatus = issueStatus"
               + " GROUP BY tracker, issueStatus"
               + " ORDER BY tracker, issueStatus")
-  public List<IssueTracking> count4tracking();
+  public List<IssueTrackingRs> count4tracking();
 }
