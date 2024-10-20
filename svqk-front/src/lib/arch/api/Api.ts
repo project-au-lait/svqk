@@ -338,21 +338,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 0.7-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  front = {
-    /**
-     * No description
-     *
-     * @tags Front Controller
-     * @name FrontList
-     * @request GET:/api/v1/front
-     */
-    frontList: (params: RequestParams = {}) =>
-      this.request<LocalDate, any>({
-        path: `/api/v1/front`,
-        method: 'GET',
-        ...params
-      })
-  };
   hello = {
     /**
      * No description
