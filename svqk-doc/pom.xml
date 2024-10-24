@@ -67,6 +67,7 @@
             <source-highlighter>highlight.js</source-highlighter>
             <toc>left</toc>
             <tocLevels>5</tocLevels>
+            <stylesheet>${project.basedir}/src/docs/asciidoc/custom.css</stylesheet>
           </attributes>
           <doctype>book</doctype>
           <embedAssets>true</embedAssets>
