@@ -97,6 +97,15 @@ Usage:
       file="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml"
       token="svqk.code-workspace" value="__artifactId__.code-workspace" />
 
+    <replaceregexp flags="g">
+      <regexp
+        pattern="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)" />
+      <substitution expression="\1*.ts\3" />
+      <fileset dir="${archetype.gendir}">
+        <include name="**/archetype-metadata.xml" />
+      </fileset>
+    </replaceregexp>
+
     <antcall target="adapt-resources" />
 
     <if>
