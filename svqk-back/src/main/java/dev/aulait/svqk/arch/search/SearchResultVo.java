@@ -8,7 +8,8 @@ import lombok.Value;
 @Value
 @Builder
 public class SearchResultVo<T> {
-  @Builder.Default
-  private List<T> list = new ArrayList<>();
+  @Builder.Default private List<T> list = new ArrayList<>();
   private long count;
+  private int pageSize;
+  private int offset;
 }

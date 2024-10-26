@@ -41,7 +41,11 @@ public class SearchUtils {
     @SuppressWarnings("unchecked")
     List<T> result = searchQuery.getResultList();
 
-    return SearchResultVo.<T>builder().count(count).list(result).build();
+    return SearchResultVo.<T>builder()
+        .count(count)
+        .list(result)
+        .pageSize(condition.getPageSize())
+        .build();
   }
 
   private static void setQueryParams(Query query, Map<String, Object> params) {
