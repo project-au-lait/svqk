@@ -65,7 +65,7 @@ public class SearchQueryBuilder {
   }
 
   String buildJoin(List<JoinVo> joins) {
-    return joins.stream().map(this::buildJoin).collect(Collectors.joining(" "));
+    return joins.stream().map(this::buildJoin).collect(Collectors.joining());
   }
 
   String buildJoin(JoinVo join) {
