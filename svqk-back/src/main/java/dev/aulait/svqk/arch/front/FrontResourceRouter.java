@@ -1,10 +1,9 @@
 package dev.aulait.svqk.arch.front;
 
-import java.net.URL;
-
 import io.vertx.ext.web.Router;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
+import java.net.URL;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -18,7 +17,7 @@ public class FrontResourceRouter {
       return;
     }
 
-    log.info("Front SPA is installed. (Entry file: )", index);
+    log.info("Front SPA is installed. (Entry file: {})", index);
 
     router.get("/").handler(rc -> rc.reroute("/webjars/front/"));
     router.get("/favicon.png").handler(rc -> rc.reroute("/webjars/front/favicon.png"));

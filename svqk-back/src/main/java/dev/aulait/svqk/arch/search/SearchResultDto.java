@@ -1,9 +1,11 @@
 package dev.aulait.svqk.arch.search;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import java.util.stream.LongStream;
 import lombok.Data;
+import lombok.Getter;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
@@ -17,26 +19,26 @@ public class SearchResultDto<T> {
   private long count;
 
   @Schema(required = true)
-  private int limit;
+  private int pageSize;
+
+  @JsonIgnore private int offset;
 
   @Schema(required = true)
-  private int start;
+  @Getter(lazy = true)
+  private final int start = count < 1 ? 0 : offset + 1;
 
   @Schema(required = true)
-  public long getEnd() {
-    return Math.min(getStart() + limit - 1, count);
-  }
+  @Getter(lazy = true)
+  private final long end = Math.min(getStart() + pageSize - 1, count);
 
   @Schema(required = true)
-  public int getLastPage() {
-    return (int) Math.max(Math.ceil((double) count / limit), 0);
-  }
+  @Getter(lazy = true)
+  private final int lastPage = (int) Math.max(Math.ceil((double) count / pageSize), 0);
 
   @Schema(required = true)
-  public long[] getPageNums() {
-    if (list == null || list.isEmpty()) {
-      return new long[] {};
-    }
-    return LongStream.rangeClosed(1, getLastPage()).toArray();
-  }
+  @Getter(lazy = true)
+  private final long[] pageNums =
+      (list == null || list.isEmpty())
+          ? new long[] {}
+          : LongStream.rangeClosed(1, getLastPage()).toArray();
 }

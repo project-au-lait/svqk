@@ -26,6 +26,7 @@ public class IssueFactory {
         new SearchConditionBuilder()
             .from(IssueEntity.class)
             .join("issueStatus")
+            .join("tracker")
             .where("subject", LIKE, cond.getText()); // <.>
 
     if (!cond.isSubjectOnly()) {
