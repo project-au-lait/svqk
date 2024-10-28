@@ -93,9 +93,15 @@ Usage:
     <replace file="${archetype.gendir}/pom.xml" token="[project-version]" value="${project.version}" />
     <replace file="${archetype.gendir}/pom.xml" token="[archetype-type]" value="${archetype.type}" />
 
+    <property name="archetype.metadata.file"
+      value="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml" />
     <replace
-      file="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml"
+      file="${archetype.metadata.file}"
       token="svqk.code-workspace" value="__artifactId__.code-workspace" />
+    <replaceregexp flags="g"
+      file="${archetype.metadata.file}"
+      match="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
+      replace="\1*.ts\3" />
 
     <antcall target="adapt-resources" />
 
