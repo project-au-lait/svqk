@@ -31,7 +31,7 @@ SVQKを使用してアプリケーションを開発するには、以下のソ�
 - Docker Desktop
 - JDK v21
 - Maven
-- Node.js v20
+- Node.js v22
 - pnpm
 - Git
 - Visual Studio Code

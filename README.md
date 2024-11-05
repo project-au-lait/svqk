@@ -31,7 +31,7 @@ To develop applications using SVQK, you need the following software:
 - Docker Desktop
 - JDK v21
 - Maven
-- Node.js v20
+- Node.js v22
 - pnpm
 - Git
 - Visual Studio Code
