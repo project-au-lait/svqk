@@ -21,5 +21,10 @@ a|
 |0.7
 a|
 * link:0.7/en/index.html[English]
-* link:0.7./mvnw -f svqk-doc -P gen-doc/ja/index.html[日本語]
+* link:0.7/ja/index.html[日本語]
+
+|0.7.1
+a|
+* link:0.7.1/en/index.html[English]
+* link:0.7.1/ja/index.html[日本語]
 |===
