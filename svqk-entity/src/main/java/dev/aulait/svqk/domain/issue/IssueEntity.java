@@ -32,10 +32,10 @@ public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
   private String description;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "status_id")
-  private IssueStatusEntity issueStatus;
-
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "tracker_id")
   private TrackerEntity tracker;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "status_id")
+  private IssueStatusEntity issueStatus;
 }
