@@ -60,7 +60,7 @@ chcp 65001
 mvn archetype:generate ^
     -DarchetypeGroupId=dev.aulait.svqk ^
     -DarchetypeArtifactId=svqk-archetype-refimpl ^
-    -DarchetypeVersion=0.7 ^
+    -DarchetypeVersion=0.7.1 ^
     -DgroupId=my.group.id ^
     -DartifactId=my-artifactid ^
     -Dversion=1.0-SNAPSHOT
@@ -78,7 +78,7 @@ code my-artifactid.code-workspace
 mvn archetype:generate  \
     -DarchetypeGroupId=dev.aulait.svqk \
     -DarchetypeArtifactId=svqk-archetype-refimpl \
-    -DarchetypeVersion=0.7 \
+    -DarchetypeVersion=0.7.1 \
     -DgroupId=my.group.id \
     -DartifactId=my-artifactid \
     -Dversion=1.0-SNAPSHOT
@@ -148,8 +148,8 @@ The above ` mvn archetype:generate ` command generates a project with the follow
 
 ## Document
 
-- [Implementation Guide](https://aulait.dev/svqk/0.7/en/impl-guide/)
-- [Archetecture Description](https://aulait.dev/svqk/0.7/en/arch-desc/)
+- [Implementation Guide](https://aulait.dev/svqk/0.7.1/en/impl-guide/)
+- [Archetecture Description](https://aulait.dev/svqk/0.7.1/en/arch-desc/)
 
 ## License
 
