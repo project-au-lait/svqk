@@ -5,7 +5,10 @@
   import IssueForm from '$lib/domain/issue/IssueForm.svelte';
   import { t } from '$lib/translations';
 
-  const issue = { issueStatus: {} as IssueStatusModel, tracker: {} as TrackerModel } as IssueModel;
+  let issue = $state({
+    issueStatus: {} as IssueStatusModel,
+    tracker: {} as TrackerModel
+  } as IssueModel);
 
   pageStore.setTitle($t('msg.newIssue'));
 
@@ -14,4 +17,4 @@
   }
 </script>
 
-<IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.register')} />
+<IssueForm bind:issue {handleAfterSave} actionBtnLabel={$t('msg.register')} />
