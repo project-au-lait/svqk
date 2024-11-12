@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { PageData } from '../issues/$types';
-  import { pageStore } from '$lib/arch/global/PageStore';
   import FormValidator from '$lib/arch/form/FormValidator';
   import Pagination from '$lib/arch/search/Pagination.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
@@ -11,8 +10,6 @@
   import DateUtils from '$lib/arch/util/DateUtils';
   import SortDirection from '$lib/arch/components/SortDirection.svelte';
   import { issueStatuses } from '$lib/domain/issue/IssueMasterStore';
-
-  pageStore.setTitle($t('msg.issue'));
 
   let { data }: { data: PageData } = $props();
   let { result, condition } = $state(data);
