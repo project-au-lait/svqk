@@ -13,11 +13,7 @@
 
   pageStore.setTitle($t('msg.issue'));
 
-  interface Props {
-    data: PageData;
-  }
-
-  let { data }: Props = $props();
+  let { data }: { data: PageData } = $props();
   let { result, condition, issueStatuses } = $state(data);
 
   // <.>

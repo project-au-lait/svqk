@@ -3,12 +3,7 @@
   import type { PageData } from './$types';
   import { t } from '$lib/translations';
 
-  interface Props {
-    data: PageData;
-  }
-
-  let { data }: Props = $props();
-
+  let { data }: { data: PageData } = $props();
   let { issueTracking } = data;
 
   pageStore.setTitle($t('msg.home'));
