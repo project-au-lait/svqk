@@ -4,6 +4,11 @@
   import '@picocss/pico/css/pico.colors.min.css';
   import { pageStore } from '$lib/arch/global/PageStore';
   import { t } from '$lib/translations';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 </script>
 
 <nav class="container">
@@ -30,10 +35,10 @@
   {#if $messageStore.display}
     <article class="message">
       <span id="globalMessage"> {$messageStore.text}</span>
-      <button class="close" on:click={() => messageStore.hide()}></button>
+      <button class="close" onclick={() => messageStore.hide()}></button>
     </article>
   {/if}
-  <slot />
+  {@render children?.()}
 </main>
 
 <style lang="less">

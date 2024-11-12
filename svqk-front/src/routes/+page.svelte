@@ -3,7 +3,11 @@
   import type { PageData } from './$types';
   import { t } from '$lib/translations';
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   let { issueTracking } = data;
 
@@ -15,7 +19,7 @@
   <table class="striped">
     <thead>
       <tr>
-        <th />
+        <th></th>
         {#each issueTracking.issueStatuses as issueStatus}
           <th>{issueStatus.name}</th>
         {/each}

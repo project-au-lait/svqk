@@ -1,10 +1,21 @@
 <script lang="ts">
-  export let id: string;
-  export let label: string;
-  export let value: any;
-  export let options: { id: any; name: string }[];
-  export let multiple = false;
-  export let size = 3;
+  interface Props {
+    id: string;
+    label: string;
+    value: any;
+    options: { id: any; name: string }[];
+    multiple?: boolean;
+    size?: number;
+  }
+
+  let {
+    id,
+    label,
+    value = $bindable(),
+    options,
+    multiple = false,
+    size = 3
+  }: Props = $props();
 </script>
 
 <label for={id}>{label}</label>

@@ -13,8 +13,12 @@
 
   pageStore.setTitle($t('msg.issue'));
 
-  export let data: PageData;
-  let { result, condition, issueStatuses } = data;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+  let { result, condition, issueStatuses } = $state(data);
 
   // <.>
   const resultHeaders = [

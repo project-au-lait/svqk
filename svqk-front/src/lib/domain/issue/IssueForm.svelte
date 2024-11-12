@@ -9,12 +9,16 @@
   import { onMount } from 'svelte';
   import * as yup from 'yup';
 
-  export let issue: IssueModel;
-  export let handleAfterSave: (id?: number) => Promise<void>;
-  export let actionBtnLabel: string;
+  interface Props {
+    issue: IssueModel;
+    handleAfterSave: (id?: number) => Promise<void>;
+    actionBtnLabel: string;
+  }
 
-  let issueStatuses = [] as IssueStatusModel[];
-  let trackers = [] as TrackerModel[];
+  let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
+
+  let issueStatuses = $state([] as IssueStatusModel[]);
+  let trackers = $state([] as TrackerModel[]);
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))

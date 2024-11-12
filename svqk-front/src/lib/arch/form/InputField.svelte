@@ -1,10 +1,19 @@
 <script lang="ts">
   import { ValidationMessage } from '@felte/reporter-svelte';
 
-  export let id: string;
-  export let label: string;
-  export let type = 'text';
-  export let value: any;
+  interface Props {
+    id: string;
+    label: string;
+    type?: string;
+    value: any;
+  }
+
+  let {
+    id,
+    label,
+    type = 'text',
+    value = $bindable()
+  }: Props = $props();
 
   function setType(node: HTMLInputElement) {
     node.type = type;
@@ -12,7 +21,9 @@
 </script>
 
 <label for={id}>{label}</label>
-<ValidationMessage for={id} let:messages={message}>
-  <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
-  <small id="invalid-{id}">{message || ''}</small>
+<ValidationMessage for={id} >
+  {#snippet children({ messages: message })}
+    <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
+    <small id="invalid-{id}">{message || ''}</small>
+  {/snippet}
 </ValidationMessage>
