@@ -10,11 +10,12 @@
   import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
   import SortDirection from '$lib/arch/components/SortDirection.svelte';
+  import { issueStatuses } from '$lib/domain/issue/IssueMasterStore';
 
   pageStore.setTitle($t('msg.issue'));
 
   let { data }: { data: PageData } = $props();
-  let { result, condition, issueStatuses } = $state(data);
+  let { result, condition } = $state(data);
 
   // <.>
   const resultHeaders = [
@@ -71,7 +72,7 @@
           <SelectBox
             id="status"
             label={$t('msg.multipleStatuses')}
-            options={issueStatuses}
+            options={$issueStatuses}
             multiple={true}
             bind:value={condition.issueStatuses}
           />

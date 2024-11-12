@@ -6,8 +6,8 @@
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
   import { t } from '$lib/translations';
-  import { onMount } from 'svelte';
   import * as yup from 'yup';
+  import { issueStatuses, trackers } from './IssueMasterStore';
 
   interface Props {
     issue: IssueModel;
@@ -17,24 +17,11 @@
 
   let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
 
-  let issueStatuses = $state([] as IssueStatusModel[]);
-  let trackers = $state([] as TrackerModel[]);
-
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
   };
 
   const form = FormValidator.createForm(spec, save);
-
-  onMount(async () => {
-    issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) =>
-      api.issueStatuses.issueStatusesList()
-    ))!;
-
-    trackers = (await ApiHandler.handle<TrackerModel[]>(fetch, (api) =>
-      api.tracker.trackerList()
-    ))!;
-  });
 
   async function save() {
     const response = await ApiHandler.handle<IdModel>(fetch, (api) =>
@@ -61,7 +48,7 @@
       <SelectBox
         id="status"
         label={$t('msg.status')}
-        options={issueStatuses}
+        options={$issueStatuses}
         bind:value={issue.issueStatus.id}
       />
     </div>
@@ -69,7 +56,7 @@
       <SelectBox
         id="tracker"
         label={$t('msg.tracker')}
-        options={trackers}
+        options={$trackers}
         bind:value={issue.tracker.id}
       />
     </div>
