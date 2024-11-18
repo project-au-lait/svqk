@@ -145,6 +145,7 @@
         <excludes>
           <exclude>.env</exclude>
         </excludes>
+        <filtering>true</filtering>
       </resource>
       <resource>
         <directory>src/main/resources</directory>
@@ -230,26 +231,6 @@
               <sources>
                 <source>src/integration-test/java</source>
               </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>${properties-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <useDefaultValues>true</useDefaultValues>
-              <files>
-                <file>${project.basedir}/.env</file>
-              </files>
             </configuration>
           </execution>
         </executions>
