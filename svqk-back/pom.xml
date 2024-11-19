@@ -237,21 +237,40 @@
               <goal>read-project-properties</goal>
             </goals>
             <configuration>
+              <quiet>true</quiet>
               <files>
-                <file>${project.basedir}/src/main/resources/env.properties</file>
+                <file>${project.build.outputDirectory}/env.properties</file>
               </files>
             </configuration>
           </execution>
           <execution>
-            <id>compile</id>
-            <phase>compile</phase>
+            <id>set-properties</id>
             <goals>
-              <goal>read-project-properties</goal>
+              <goal>set-system-properties</goal>
             </goals>
             <configuration>
-              <files>
-                <file>${project.build.outputDirectory}/env.properties</file>
-              </files>
+              <properties>
+                <property>
+                  <name>BACK_PORT</name>
+                  <value>${BACK_PORT}</value>
+                </property>
+                <property>
+                  <name>DB_JDBC_URL</name>
+                  <value>${DB_JDBC_URL}</value>
+                </property>
+                <property>
+                  <name>DB_PASSWORD</name>
+                  <value>${DB_PASSWORD}</value>
+                </property>
+                <property>
+                  <name>DB_USER</name>
+                  <value>${DB_USER}</value>
+                </property>
+                <property>
+                  <name>PROJECT_GROUP_ID</name>
+                  <value>${PROJECT_GROUP_ID}</value>
+                </property>
+              </properties>
             </configuration>
           </execution>
         </executions>
