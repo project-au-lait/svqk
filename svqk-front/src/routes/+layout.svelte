@@ -2,8 +2,8 @@
   import { messageStore } from '$lib/arch/global/MessageStore';
   import '@picocss/pico/css/pico.min.css';
   import '@picocss/pico/css/pico.colors.min.css';
-  import { pageStore } from '$lib/arch/global/PageStore';
   import { t } from '$lib/translations';
+  import { page } from '$app/stores';
   interface Props {
     children?: import('svelte').Snippet;
   }
@@ -30,7 +30,7 @@
 </nav>
 
 <main class="container">
-  <h1>{$pageStore.title}</h1>
+  <h1>{$page.data.title}</h1>
 
   {#if $messageStore.display}
     <article class="message">

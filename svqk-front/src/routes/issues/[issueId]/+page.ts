@@ -7,5 +7,8 @@ export const load: PageLoad = async ({ fetch, params }) => {
     api.issues.issuesDetail(Number(params.issueId))
   ))!;
 
-  return { issue };
+  return {
+    title: issue.subject,
+    issue
+  };
 };

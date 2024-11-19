@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { pageStore } from '$lib/arch/global/PageStore';
   import type { PageData } from './$types';
   import { t } from '$lib/translations';
 
   let { data }: { data: PageData } = $props();
   let { issueTracking } = data;
-
-  pageStore.setTitle($t('msg.home'));
 </script>
 
 <article>
