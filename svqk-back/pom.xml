@@ -142,7 +142,18 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>.env</exclude>
+        </excludes>
         <filtering>true</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>.env</include>
+        </includes>
+        <filtering>true</filtering>
+        <targetPath>${project.basedir}</targetPath>
       </resource>
     </resources>
 
@@ -220,57 +231,6 @@
               <sources>
                 <source>src/integration-test/java</source>
               </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>${properties-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>initialize</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <quiet>true</quiet>
-              <files>
-                <file>${project.build.outputDirectory}/env.properties</file>
-              </files>
-            </configuration>
-          </execution>
-          <execution>
-            <id>set-properties</id>
-            <goals>
-              <goal>set-system-properties</goal>
-            </goals>
-            <configuration>
-              <properties>
-                <property>
-                  <name>BACK_PORT</name>
-                  <value>${BACK_PORT}</value>
-                </property>
-                <property>
-                  <name>DB_JDBC_URL</name>
-                  <value>${DB_JDBC_URL}</value>
-                </property>
-                <property>
-                  <name>DB_PASSWORD</name>
-                  <value>${DB_PASSWORD}</value>
-                </property>
-                <property>
-                  <name>DB_USER</name>
-                  <value>${DB_USER}</value>
-                </property>
-                <property>
-                  <name>PROJECT_GROUP_ID</name>
-                  <value>${PROJECT_GROUP_ID}</value>
-                </property>
-              </properties>
             </configuration>
           </execution>
         </executions>
