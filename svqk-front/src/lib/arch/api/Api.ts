@@ -9,6 +9,14 @@
  * ---------------------------------------------------------------
  */
 
+export interface AtomicReferenceObject {
+  value?: any;
+  plain?: any;
+  opaque?: any;
+  acquire?: any;
+  release?: any;
+}
+
 export interface HelloModel {
   /** @format int32 */
   id: number;
@@ -27,6 +35,7 @@ export interface IssueModel {
   subject: string;
   description?: string;
   dueDate?: LocalDate;
+  journals: JournalModel[];
   issueStatus: IssueStatusModel;
   tracker: TrackerModel;
   /** @format int64 */
@@ -51,14 +60,11 @@ export interface IssueSearchResultModel {
   /** @format int64 */
   count: number;
   /** @format int32 */
-  limit: number;
-  /** @format int32 */
-  start: number;
-  /** @format int64 */
-  end: number;
-  /** @format int32 */
-  lastPage: number;
-  pageNums: number[];
+  pageSize: number;
+  start: AtomicReferenceObject;
+  end: AtomicReferenceObject;
+  lastPage: AtomicReferenceObject;
+  pageNums: AtomicReferenceObject;
 }
 
 export interface IssueStatusCountModel {
@@ -79,6 +85,16 @@ export interface IssueTrackingModel {
   trackers: TrackerCountModel[];
   /** @uniqueItems true */
   issueStatuses: IssueStatusModel[];
+}
+
+export interface JournalModel {
+  /** @format int32 */
+  id: number;
+  /** @format int32 */
+  issueId: number;
+  notes?: string;
+  /** @format int64 */
+  version: number;
 }
 
 /**
@@ -335,7 +351,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title svqk-back API
- * @version 0.7-SNAPSHOT
+ * @version 0.8-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   hello = {

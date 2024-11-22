@@ -3,6 +3,7 @@ package dev.aulait.svqk.interfaces.issue;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -19,6 +20,9 @@ public class IssueDto {
   private String description;
 
   private LocalDate dueDate;
+
+  @Schema(required = true)
+  private List<JournalDto> journals;
 
   @Schema(required = true)
   private IssueStatusDto issueStatus;

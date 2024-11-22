@@ -2,6 +2,7 @@ packages:
   ${project.groupId}.domain.issue:
     - issue
     - issue_status
+    - journal
     - tracker
   ${project.groupId}.domain.hello:
     - hello
@@ -9,6 +10,7 @@ baseClassDefs:
   - tables:
       - "issue"
       - "issue_status"
+      - "journal"
       - "tracker"
     baseClass: ${project.groupId}.arch.jpa.BaseEntity
 annotationDefs:
