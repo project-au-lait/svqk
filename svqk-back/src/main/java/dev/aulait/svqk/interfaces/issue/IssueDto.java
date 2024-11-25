@@ -22,9 +22,6 @@ public class IssueDto {
   private LocalDate dueDate;
 
   @Schema(required = true)
-  private List<JournalDto> journals;
-
-  @Schema(required = true)
   private IssueStatusDto issueStatus;
 
   @Schema(required = true)
@@ -35,4 +32,9 @@ public class IssueDto {
 
   @Schema(required = true, readOnly = true)
   private LocalDateTime updatedAt;
+
+  @Schema(required = true, readOnly = true)
+  private List<JournalDto> journals;
+
+  private JournalDto newJournal;
 }

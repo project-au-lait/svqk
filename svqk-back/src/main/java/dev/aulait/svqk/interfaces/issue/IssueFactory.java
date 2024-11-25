@@ -9,6 +9,7 @@ import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import dev.aulait.svqk.domain.issue.IssueTrackingRs;
+import dev.aulait.svqk.domain.issue.JournalEntity;
 import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.IssueStatusCountDto;
 import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.TrackerCountDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -62,6 +63,13 @@ public class IssueFactory {
     IssueTrackingDto dto = new IssueTrackingDto();
     dto.getTrackers().addAll(trackerMap.values().stream().toList());
     dto.getIssueStatuses().addAll(issueStatuses);
+
+    return dto;
+  }
+
+  public IssueDto buildIssueDto(IssueEntity issueEntity, List<JournalEntity> journals) {
+    IssueDto dto = BeanUtils.map(issueEntity, IssueDto.class);
+    dto.setJournals(BeanUtils.mapAll(journals, JournalDto.class));
 
     return dto;
   }

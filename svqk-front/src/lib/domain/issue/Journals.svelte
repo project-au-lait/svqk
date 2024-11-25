@@ -14,9 +14,9 @@
 
 {#if journals.length}
   <h3>{$t('msg.history')}</h3>
-  {#each journals.sort() as journal}
+  {#each journals as journal, i}
     <article>
-      <header>#{journal.id}</header>
+      <header>#{i + 1}</header>
       <p>{journal.notes}</p>
     </article>
   {/each}

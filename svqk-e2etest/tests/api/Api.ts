@@ -35,12 +35,13 @@ export interface IssueModel {
   subject: string;
   description?: string;
   dueDate?: LocalDate;
-  journals: JournalModel[];
   issueStatus: IssueStatusModel;
   tracker: TrackerModel;
   /** @format int64 */
   version: number;
   updatedAt: LocalDateTime;
+  journals: JournalModel[];
+  newJournal?: JournalModel;
 }
 
 export interface IssueSearchConditionModel {

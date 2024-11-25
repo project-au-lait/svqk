@@ -14,6 +14,6 @@ public class JournalDto {
 
   private String notes;
 
-  @Schema(required = true, readOnly = true)
+  @Schema(required = true)
   private long version;
 }

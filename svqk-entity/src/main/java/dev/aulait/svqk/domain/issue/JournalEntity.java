@@ -1,8 +1,8 @@
 package dev.aulait.svqk.domain.issue;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,13 @@ import lombok.Setter;
 public class JournalEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
     implements java.io.Serializable {
 
-  @EmbeddedId private JournalEntityId id;
+  @Id
+  @Column(name = "id")
+  @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+  private Integer id;
+
+  @Column(name = "issue_id")
+  private Integer issueId;
 
   @Column(name = "notes")
   private String notes;

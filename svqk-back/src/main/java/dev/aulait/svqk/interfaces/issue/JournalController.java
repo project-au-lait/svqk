@@ -13,5 +13,5 @@ public class JournalController {
 
   static final String JOUNAL_PATH = ApiPath.ROOT + "/jounal";
 
-  // TODO save
+  // TODO update method
 }

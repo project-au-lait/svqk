@@ -38,16 +38,8 @@ CREATE TABLE issue (
 
 
 CREATE TABLE journal (
-  id SERIAL,
-  issue_id INT NOT NULL REFERENCES issue,
+  id SERIAL PRIMARY KEY,
+  issue_id INT NOT NULL,
   notes TEXT,
-  --${commonColumns},
-  CONSTRAINT journal_pk PRIMARY KEY (id, issue_id)
+  --${commonColumns}
 );
-
--- TODO for test sql
-INSERT INTO issue (id, subject, status_id, tracker_id)
-VALUES (1, 'test', '1', '1');
-
-INSERT INTO journal (id, issue_id, notes)
-VALUES (1, 1,'test1'), (2, 1,'test2');

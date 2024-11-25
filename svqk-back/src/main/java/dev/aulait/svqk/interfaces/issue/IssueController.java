@@ -8,11 +8,14 @@ import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.arch.web.IdDto;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
+import dev.aulait.svqk.domain.issue.JournalEntity;
+import dev.aulait.svqk.domain.issue.JournalService;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Path(IssueController.ISSUES_PATH)
@@ -22,6 +25,8 @@ public class IssueController {
   private final IssueService service;
 
   private final IssueFactory factory;
+
+  private final JournalService journalService;
 
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
 
@@ -38,7 +43,9 @@ public class IssueController {
 
     // <.>
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
-    IssueEntity savedEntity = service.save(entity);
+    JournalEntity newJournal = BeanUtils.map(dto.getNewJournal(), JournalEntity.class);
+
+    IssueEntity savedEntity = service.save(entity, newJournal);
 
     return BeanUtils.map(savedEntity, IdDto.class);
   }
@@ -47,8 +54,9 @@ public class IssueController {
   @Path(ISSUES_GET_PATH)
   public IssueDto get(@PathParam("issueId") int id) {
     IssueEntity entity = service.find(id);
+    List<JournalEntity> journals = journalService.findByIssueId(id);
 
-    return BeanUtils.map(entity, IssueDto.class);
+    return factory.buildIssueDto(entity, journals);
   }
 
   @POST
