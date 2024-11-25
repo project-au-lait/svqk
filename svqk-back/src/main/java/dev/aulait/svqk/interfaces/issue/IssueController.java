@@ -28,6 +28,8 @@ public class IssueController {
 
   private final JournalService journalService;
 
+  private final JournalFactory journalFactory;
+
   static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
 
   static final String ISSUES_GET_PATH = "{issueId}";
@@ -43,7 +45,7 @@ public class IssueController {
 
     // <.>
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
-    JournalEntity newJournal = BeanUtils.map(dto.getNewJournal(), JournalEntity.class);
+    JournalEntity newJournal = journalFactory.buildNewJournal(dto.getId(), dto.getNewJournal());
 
     IssueEntity savedEntity = service.save(entity, newJournal);
 

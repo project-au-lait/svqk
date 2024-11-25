@@ -9,9 +9,10 @@ public class JournalDto {
   @Schema(required = true, readOnly = true)
   private Integer id;
 
-  @Schema(required = true)
+  @Schema(required = true, readOnly = true)
   private Integer issueId;
 
+  @Schema(required = true)
   private String notes;
 
   @Schema(required = true)

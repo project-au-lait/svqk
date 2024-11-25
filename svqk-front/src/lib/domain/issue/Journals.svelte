@@ -17,7 +17,7 @@
   {#each journals as journal, i}
     <article id={'note-' + (i + 1)}>
       <header><a href={'#note-' + (i + 1)}>#{i + 1}</a></header>
-      <div>{@html marked(journal.notes ?? '')}</div>
+      <div>{@html marked(journal.notes)}</div>
     </article>
   {/each}
 {/if}

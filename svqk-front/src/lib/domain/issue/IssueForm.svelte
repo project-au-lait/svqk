@@ -17,8 +17,6 @@
 
   let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
 
-  let newJournal = $state({ issueId: issue.id } as JournalModel);
-
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
   };
@@ -26,13 +24,9 @@
   const form = FormValidator.createForm(spec, save);
 
   async function save() {
-    issue.newJournal = newJournal;
-
     const response = await ApiHandler.handle<IdModel>(fetch, (api) =>
       api.issues.issuesCreate(issue)
     );
-
-    newJournal.notes = '';
 
     if (response) {
       await handleAfterSave(response.id);
@@ -73,7 +67,7 @@
   {#if issue.id}
     <div>
       <label for="notes">{$t('msg.notes')}</label>
-      <textarea id="notes" bind:value={newJournal.notes}></textarea>
+      <textarea id="notes" bind:value={issue.newJournal.notes}></textarea>
     </div>
   {/if}
   <div>

@@ -36,5 +36,6 @@ public class IssueDto {
   @Schema(required = true, readOnly = true)
   private List<JournalDto> journals;
 
-  private JournalDto newJournal;
+  @Schema(required = true)
+  private JournalDto newJournal = new JournalDto();
 }

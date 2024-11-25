@@ -41,7 +41,7 @@ export interface IssueModel {
   version: number;
   updatedAt: LocalDateTime;
   journals: JournalModel[];
-  newJournal?: JournalModel;
+  newJournal: JournalModel;
 }
 
 export interface IssueSearchConditionModel {
@@ -93,7 +93,7 @@ export interface JournalModel {
   id: number;
   /** @format int32 */
   issueId: number;
-  notes?: string;
+  notes: string;
   /** @format int64 */
   version: number;
 }

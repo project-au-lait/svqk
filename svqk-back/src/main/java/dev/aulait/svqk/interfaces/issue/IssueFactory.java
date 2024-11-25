@@ -67,8 +67,8 @@ public class IssueFactory {
     return dto;
   }
 
-  public IssueDto buildIssueDto(IssueEntity issueEntity, List<JournalEntity> journals) {
-    IssueDto dto = BeanUtils.map(issueEntity, IssueDto.class);
+  public IssueDto buildIssueDto(IssueEntity entity, List<JournalEntity> journals) {
+    IssueDto dto = BeanUtils.map(entity, IssueDto.class);
     dto.setJournals(BeanUtils.mapAll(journals, JournalDto.class));
 
     return dto;
