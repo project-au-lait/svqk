@@ -5,30 +5,37 @@ import static dev.aulait.svqk.arch.jpa.JpaRepositoryHandler.findByIdAsResource;
 import dev.aulait.svqk.arch.jpa.SearchUtils;
 import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
-import dev.aulait.svqk.arch.util.ObjectStringUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class IssueService {
 
   private final IssueRepository repository;
-  private final JournalRepository journalRepository;
   private final EntityManager em;
 
-  @Transactional
-  public IssueEntity save(IssueEntity entity, JournalEntity journal) { // <.>
-    IssueEntity savedEntity = repository.save(entity); // <.>
+  private final JournalService journalService;
 
-    if (ObjectStringUtils.isNotEmpty(journal.getNotes())) {
-      journalRepository.save(journal);
+  @Transactional
+  public IssueEntity save(IssueEntity entity) { // <.>
+    return repository.save(entity); // <.>
+  }
+
+  @Transactional
+  public IssueEntity update(IssueEntity issue, JournalEntity journal) {
+    IssueEntity updatedEntity = repository.save(issue);
+
+    // After the implementation of JournalDetail, empty notes will be allowed.
+    if (StringUtils.isNotEmpty(journal.getNotes())) {
+      journalService.save(journal);
     }
 
-    return savedEntity;
+    return updatedEntity;
   }
 
   public IssueEntity find(int id) {

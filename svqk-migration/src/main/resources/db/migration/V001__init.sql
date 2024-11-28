@@ -38,8 +38,9 @@ CREATE TABLE issue (
 
 
 CREATE TABLE journal (
-  id SERIAL PRIMARY KEY,
-  issue_id INT NOT NULL,
+  issue_id INT NOT NULL REFERENCES issue,
+  seq_no INT NOT NULL,
   notes TEXT,
-  --${commonColumns}
+  --${commonColumns},
+  CONSTRAINT journal_pk PRIMARY KEY (issue_id, seq_no)
 );

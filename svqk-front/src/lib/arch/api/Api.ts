@@ -40,8 +40,8 @@ export interface IssueModel {
   /** @format int64 */
   version: number;
   updatedAt: LocalDateTime;
+  /** @uniqueItems true */
   journals: JournalModel[];
-  newJournal: JournalModel;
 }
 
 export interface IssueSearchConditionModel {
@@ -88,12 +88,17 @@ export interface IssueTrackingModel {
   issueStatuses: IssueStatusModel[];
 }
 
+export interface IssueUpdateModel {
+  issue: IssueModel;
+  journal: JournalModel;
+}
+
 export interface JournalModel {
   /** @format int32 */
-  id: number;
-  /** @format int32 */
   issueId: number;
-  notes: string;
+  /** @format int32 */
+  seqNo: number;
+  notes?: string;
   /** @format int64 */
   version: number;
 }
@@ -404,6 +409,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       })
   };
   issues = {
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesUpdate
+     * @request PUT:/api/v1/issues
+     */
+    issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
+      this.request<IdModel, any>({
+        path: `/api/v1/issues`,
+        method: 'PUT',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
     /**
      * No description
      *

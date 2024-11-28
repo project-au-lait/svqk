@@ -1,9 +1,14 @@
 package dev.aulait.svqk.domain.issue;
 
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface JournalRepository extends JpaRepository<JournalEntity, Integer> {
+public interface JournalRepository extends JpaRepository<JournalEntity, JournalEntityId> {
 
-  public List<JournalEntity> findByIssueIdOrderByCreatedAt(int issueId);
+  @Query(
+      value =
+          "SELECT COALESCE(MAX(journal.id.seqNo), 0) + 1"
+              + " FROM JournalEntity journal"
+              + " WHERE journal.id.issueId = :issueId")
+  public Integer nextSeqNoByIssueId(Integer issueId);
 }

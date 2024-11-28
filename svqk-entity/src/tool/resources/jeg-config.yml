@@ -21,8 +21,6 @@ annotationDefs:
 annotatedCols:
   issue.id:
     - GenerationType.IDENTITY
-  journal.id:
-    - GenerationType.IDENTITY
 excludedColmuns:
   - version
   - created_by

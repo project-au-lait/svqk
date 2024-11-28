@@ -16,6 +16,7 @@
   }
 
   let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
+  let journal = $state({issueId: issue.id} as JournalModel);
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
@@ -25,10 +26,11 @@
 
   async function save() {
     const response = await ApiHandler.handle<IdModel>(fetch, (api) =>
-      api.issues.issuesCreate(issue)
+      issue.id ? api.issues.issuesUpdate({ issue, journal }) : api.issues.issuesCreate(issue)
     );
 
     if (response) {
+      journal.notes = '';
       await handleAfterSave(response.id);
       messageStore.show($t('msg.saved'));
     }
@@ -67,7 +69,7 @@
   {#if issue.id}
     <div>
       <label for="notes">{$t('msg.notes')}</label>
-      <textarea id="notes" bind:value={issue.newJournal.notes}></textarea>
+      <textarea id="notes" bind:value={journal.notes}></textarea>
     </div>
   {/if}
   <div>
