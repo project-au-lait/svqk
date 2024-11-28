@@ -10,7 +10,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -29,11 +28,7 @@ public class IssueService {
   @Transactional
   public IssueEntity update(IssueEntity issue, JournalEntity journal) {
     IssueEntity updatedEntity = repository.save(issue);
-
-    // After the implementation of JournalDetail, empty notes will be allowed.
-    if (StringUtils.isNotEmpty(journal.getNotes())) {
-      journalService.save(journal);
-    }
+    journalService.save(journal);
 
     return updatedEntity;
   }
