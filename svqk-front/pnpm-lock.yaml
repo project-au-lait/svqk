@@ -45,6 +45,9 @@ importers:
       '@types/eslint':
         specifier: ^8.56.7
         version: 8.56.9
+      '@types/marked':
+        specifier: ^6.0.0
+        version: 6.0.0
       cpx:
         specifier: ^1.5.0
         version: 1.5.0
@@ -69,6 +72,9 @@ importers:
       less:
         specifier: ^4.2.0
         version: 4.2.0
+      marked:
+        specifier: ^15.0.2
+        version: 15.0.2
       prettier:
         specifier: ^3.1.1
         version: 3.2.5
@@ -502,6 +508,10 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/marked@6.0.0':
+    resolution: {integrity: sha512-jmjpa4BwUsmhxcfsgUit/7A9KbrC48Q0q8KvnY107ogcjGgTFDlIL3RpihNpx2Mu1hM4mdFQjoVc4O6JoGKHsA==}
+    deprecated: This is a stub types definition. marked provides its own type definitions, so you do not need this installed.
 
   '@types/node@20.14.9':
     resolution: {integrity: sha512-06OCtnTXtWOZBJlRApleWndH4JsRVs1pDCc8dLSQp+7PpUpX3ePdHyeNSFTeSe7FtKyQkrlPvHwJOW3SLd8Oyg==}
@@ -1460,6 +1470,11 @@ packages:
   map-visit@1.0.0:
     resolution: {integrity: sha512-4y7uGv8bd2WdM9vpQsiQNo41Ln1NvhvDRuVt0k2JZQ+ezN2uaQes7lZeZ+QQUHOLQAtDaBJ+7wCbi+ab/KFs+w==}
     engines: {node: '>=0.10.0'}
+
+  marked@15.0.2:
+    resolution: {integrity: sha512-85RUkoYKIVB21PbMKrnD6aCl9ws+XKEyhJNMbLn206NyD3jbBo7Ec7Wi4Jrsn4dV1a2ng7K/jfkmIN0DNoS41w==}
+    engines: {node: '>= 18'}
+    hasBin: true
 
   math-random@1.0.4:
     resolution: {integrity: sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==}
@@ -2520,6 +2535,10 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/marked@6.0.0':
+    dependencies:
+      marked: 15.0.2
+
   '@types/node@20.14.9':
     dependencies:
       undici-types: 5.26.5
@@ -3528,6 +3547,8 @@ snapshots:
   map-visit@1.0.0:
     dependencies:
       object-visit: 1.0.1
+
+  marked@15.0.2: {}
 
   math-random@1.0.4: {}
 

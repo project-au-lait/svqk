@@ -9,6 +9,14 @@
  * ---------------------------------------------------------------
  */
 
+export interface AtomicReferenceObject {
+  value?: any;
+  plain?: any;
+  opaque?: any;
+  acquire?: any;
+  release?: any;
+}
+
 export interface HelloModel {
   /** @format int32 */
   id: number;
@@ -32,6 +40,8 @@ export interface IssueModel {
   /** @format int64 */
   version: number;
   updatedAt: LocalDateTime;
+  /** @uniqueItems true */
+  journals: JournalModel[];
 }
 
 export interface IssueSearchConditionModel {
@@ -51,14 +61,11 @@ export interface IssueSearchResultModel {
   /** @format int64 */
   count: number;
   /** @format int32 */
-  limit: number;
-  /** @format int32 */
-  start: number;
-  /** @format int64 */
-  end: number;
-  /** @format int32 */
-  lastPage: number;
-  pageNums: number[];
+  pageSize: number;
+  start: AtomicReferenceObject;
+  end: AtomicReferenceObject;
+  lastPage: AtomicReferenceObject;
+  pageNums: AtomicReferenceObject;
 }
 
 export interface IssueStatusCountModel {
@@ -79,6 +86,21 @@ export interface IssueTrackingModel {
   trackers: TrackerCountModel[];
   /** @uniqueItems true */
   issueStatuses: IssueStatusModel[];
+}
+
+export interface IssueUpdateModel {
+  issue: IssueModel;
+  journal: JournalModel;
+}
+
+export interface JournalModel {
+  /** @format int32 */
+  issueId: number;
+  /** @format int32 */
+  seqNo: number;
+  notes?: string;
+  /** @format int64 */
+  version: number;
 }
 
 /**
@@ -335,7 +357,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title svqk-back API
- * @version 0.7-SNAPSHOT
+ * @version 0.8-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   hello = {
@@ -387,6 +409,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       })
   };
   issues = {
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesUpdate
+     * @request PUT:/api/v1/issues
+     */
+    issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
+      this.request<IdModel, any>({
+        path: `/api/v1/issues`,
+        method: 'PUT',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params
+      }),
+
     /**
      * No description
      *

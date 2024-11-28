@@ -18,9 +18,19 @@ public class IssueService {
   private final IssueRepository repository;
   private final EntityManager em;
 
+  private final JournalService journalService;
+
   @Transactional
   public IssueEntity save(IssueEntity entity) { // <.>
     return repository.save(entity); // <.>
+  }
+
+  @Transactional
+  public IssueEntity update(IssueEntity issue, JournalEntity journal) {
+    IssueEntity updatedEntity = repository.save(issue);
+    journalService.save(journal);
+
+    return updatedEntity;
   }
 
   public IssueEntity find(int id) {
