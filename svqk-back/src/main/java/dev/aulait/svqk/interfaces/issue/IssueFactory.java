@@ -5,10 +5,13 @@ import static dev.aulait.svqk.arch.search.OperatorCd.*;
 
 import dev.aulait.svqk.arch.search.SearchConditionBuilder;
 import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
+import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import dev.aulait.svqk.domain.issue.IssueTrackingRs;
+import dev.aulait.svqk.interfaces.issue.IssueController.IssueSearchResultDto;
 import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.IssueStatusCountDto;
 import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.TrackerCountDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,6 +23,9 @@ import java.util.Set;
 
 @ApplicationScoped // <.>
 public class IssueFactory {
+
+  private MappingConfig<IssueEntity, IssueDto> searchResultConfig =
+      BeanUtils.buildConfig(IssueEntity.class, IssueDto.class).skip(IssueDto::setJournals).build();
 
   public SearchConditionVo build(IssueSearchConditionDto cond) { // <.>
     SearchConditionBuilder builder =
@@ -64,5 +70,9 @@ public class IssueFactory {
     dto.getIssueStatuses().addAll(issueStatuses);
 
     return dto;
+  }
+
+  public IssueSearchResultDto build(SearchResultVo<IssueEntity> vo) {
+    return BeanUtils.map(searchResultConfig, vo, IssueSearchResultDto.class);
   }
 }

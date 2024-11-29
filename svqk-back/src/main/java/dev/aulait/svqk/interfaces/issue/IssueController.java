@@ -70,7 +70,7 @@ public class IssueController {
     SearchConditionVo vo = factory.build(dto);
     SearchResultVo<IssueEntity> result = service.search(vo);
 
-    return BeanUtils.map(result, IssueSearchResultDto.class);
+    return factory.build(result);
   }
 
   @GET
