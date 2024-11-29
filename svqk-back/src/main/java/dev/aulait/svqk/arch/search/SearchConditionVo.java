@@ -20,11 +20,16 @@ public class SearchConditionVo {
 
   private Pageable pageable;
 
+  private int pageNumsRange;
+
   @Getter(lazy = true)
   private final int offset = (int) pageable.getOffset();
 
   @Getter(lazy = true)
   private final int pageSize = pageable.getPageSize();
+
+  @Getter(lazy = true)
+  private final int pageNumber = pageable.getPageNumber() + 1;
 
   @Getter(lazy = true)
   private final Sort sort = pageable.getSort();

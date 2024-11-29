@@ -11,5 +11,7 @@ public class SearchResultVo<T> {
   @Builder.Default private List<T> list = new ArrayList<>();
   private long count;
   private int pageSize;
+  private int pageNumber;
+  private int pageNumsRange;
   private int offset;
 }

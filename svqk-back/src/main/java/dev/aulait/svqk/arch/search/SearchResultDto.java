@@ -21,6 +21,10 @@ public class SearchResultDto<T> {
   @Schema(required = true)
   private int pageSize;
 
+  @JsonIgnore private int pageNumber;
+
+  @JsonIgnore private int pageNumsRange;
+
   @JsonIgnore private int offset;
 
   @Schema(required = true)
@@ -40,5 +44,8 @@ public class SearchResultDto<T> {
   private final long[] pageNums =
       (list == null || list.isEmpty())
           ? new long[] {}
-          : LongStream.rangeClosed(1, getLastPage()).toArray();
+          : LongStream.rangeClosed(
+                  Math.max(pageNumber - pageNumsRange, 1),
+                  Math.min(pageNumber + pageNumsRange, getLastPage()))
+              .toArray();
 }

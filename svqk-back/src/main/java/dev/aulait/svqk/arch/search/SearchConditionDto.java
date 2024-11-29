@@ -8,5 +8,6 @@ import lombok.Data;
 public class SearchConditionDto {
   private int pageNumber;
   private int pageSize;
+  private int pageNumsRange;
   private List<SortOrderDto> sortOrders = new ArrayList<>();
 }

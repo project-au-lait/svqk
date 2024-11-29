@@ -45,6 +45,9 @@ public class SearchUtils {
         .count(count)
         .list(result)
         .pageSize(condition.getPageSize())
+        .pageNumber(condition.getPageNumber())
+        .pageNumsRange(condition.getPageNumsRange())
+        .offset(condition.getOffset())
         .build();
   }
 

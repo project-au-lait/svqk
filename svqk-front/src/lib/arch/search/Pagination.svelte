@@ -8,20 +8,10 @@
       pageNums: number[];
     };
     currentPage?: number;
-    dispPageRange?: number;
     handlePage: (page: number) => Promise<void>;
   }
 
-  let {
-    result,
-    currentPage = $bindable(1),
-    dispPageRange = $bindable(2),
-    handlePage
-  }: Props = $props();
-
-  let dispPageNums: number[] = $derived(
-    result.pageNums.slice(Math.max(currentPage - dispPageRange - 1, 0), currentPage + dispPageRange)
-  );
+  let { result, currentPage = $bindable(1), handlePage }: Props = $props();
 
   async function gotoPage(page: number) {
     currentPage = page;
@@ -41,17 +31,17 @@
       &lt;
     </button>
 
-    {#if (dispPageNums.slice(0, 1).pop() ?? 0) > 1}
+    {#if (result.pageNums.slice(0, 1).pop() ?? 0) > 1}
       <button class="outline" disabled>...</button>
     {/if}
 
-    {#each dispPageNums as page}
+    {#each result.pageNums as page}
       <button class:outline={page != currentPage} onclick={() => gotoPage(page)}>
         {page}
       </button>
     {/each}
 
-    {#if (dispPageNums.slice(-1).pop() ?? result.lastPage) < result.lastPage}
+    {#if (result.pageNums.slice(-1).pop() ?? result.lastPage) < result.lastPage}
       <button class="outline" disabled>...</button>
     {/if}
 
