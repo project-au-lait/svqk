@@ -49,6 +49,8 @@ export interface IssueSearchConditionModel {
   pageNumber?: number;
   /** @format int32 */
   pageSize?: number;
+  /** @format int32 */
+  pageNumsRange?: number;
   sortOrders?: SortOrderModel[];
   text?: string;
   issueStatuses?: IssueStatusModel[];

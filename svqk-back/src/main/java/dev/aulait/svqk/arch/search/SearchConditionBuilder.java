@@ -89,6 +89,7 @@ public class SearchConditionBuilder {
         .joins(joins)
         .fieldConditions(fields)
         .pageable(buildPageable(condition))
+        .pageNumsRange(Math.max(condition.getPageNumsRange(), 2))
         .build();
   }
 
