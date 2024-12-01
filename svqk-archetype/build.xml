@@ -109,6 +109,7 @@ Usage:
       <equals arg1="${archetype.type}" arg2="arch" />
       <then>
         <antcall target="add-top-page" />
+        <antcall target="remove-domain-code" />
       </then>
     </if>
 
@@ -126,6 +127,14 @@ Usage:
       file="${archetype.prjdir}/svqk-archetype/src/archetype/+page.svelte.txt"
       tofile="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-front/src/routes/+page.svelte"
       overwrite="true" />
+  </target>
+
+
+  <target name="remove-domain-code">
+    <replaceregexp flags="g"
+      file="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-front/src/routes/+layout.ts"
+      match=".*Issue.*"
+      replace="" />
   </target>
 
 
@@ -156,7 +165,7 @@ Usage:
     <mkdir dir="${archetype.testdir}" />
 
     <exec executable="${mvnw}" dir="${archetype.testdir}" failonerror="true">
-      <arg line="org.apache.maven.plugins:maven-archetype-plugin:3.2.0:generate -B" />
+      <arg line="archetype:generate -B" />
       <arg line="-DarchetypeCatalog=local" />
       <arg line="-DarchetypeGroupId=dev.aulait.svqk" />
       <arg line="-DarchetypeArtifactId=svqk-archetype-${archetype.type}" />
