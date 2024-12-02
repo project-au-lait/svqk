@@ -1,12 +1,21 @@
+<script module lang="ts">
+  export interface RlColDef<T> {
+    label: string;
+    sortKey: string;
+    data: (t: T) => string | number;
+  }
+</script>
+
 <script lang="ts" generics="T">
-  import type { SortOrderModel } from '$lib/arch/api/Api';
+  import type { IssueModel, SortOrderModel } from '$lib/arch/api/Api';
   import { t } from '$lib/translations';
   import { type Snippet } from 'svelte';
   import Pagination from './Pagination.svelte';
+  import SortDirection from '../components/SortDirection.svelte';
 
   interface Props {
     list: T[];
-    columns: Snippet<[T, string, SortOrderModel[]?, ((s: string) => void)?]>;
+    colDefs: RlColDef<T>[];
     sortOrders?: SortOrderModel[];
     handleSort: (field: string) => void;
     currentPage?: number;
@@ -22,7 +31,7 @@
 
   let {
     list,
-    columns,
+    colDefs,
     sortOrders,
     handleSort,
     currentPage = $bindable(),
@@ -36,13 +45,18 @@
     <table class="list striped">
       <thead>
         <tr>
-          {@render columns({} as T, 'header', sortOrders, handleSort)}
+          {#each colDefs as colDef}
+            {@const { label, sortKey } = colDef}
+            <th><SortDirection {label} {sortKey} {sortOrders} {handleSort} /></th>
+          {/each}
         </tr>
       </thead>
       <tbody>
         {#each list as item}
           <tr>
-            {@render columns(item, 'data')}
+            {#each colDefs as colDef}
+              <td>{@html colDef.data(item)}</td>
+            {/each}
           </tr>
         {/each}
       </tbody>
@@ -55,3 +69,11 @@
 {:else}
   {$t('msg.noData')}
 {/if}
+
+<style>
+  th,
+  td:not(.align-left) {
+    text-align: center;
+    white-space: nowrap;
+  }
+</style>

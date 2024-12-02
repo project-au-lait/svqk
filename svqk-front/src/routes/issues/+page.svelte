@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { IssueSearchResultModel } from '$lib/arch/api/Api';
+  import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import ResultList from '$lib/arch/search/ResultList.svelte';
+  import ResultList, { type RlColDef } from '$lib/arch/search/ResultList.svelte';
   import RlColumn from '$lib/arch/search/RlColumn.svelte';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import DateUtils from '$lib/arch/util/DateUtils';
@@ -35,6 +35,33 @@
     condition = condition; // <.>
     await search(); // <.>
   }
+
+  const colDefs: RlColDef<IssueModel>[] = [
+    {
+      label: '#',
+      sortKey: 'id',
+      data: (issue) => {
+        const el = document.createElement('a');
+        el.text = issue.id.toString();
+        el.href = `/issues/${issue.id}`;
+
+        return el.outerHTML;
+      }
+    },
+    { label: $t('msg.tracker'), sortKey: 'tracker', data: (issue) => issue.tracker.name },
+    { label: $t('msg.status'), sortKey: 'issueStatus', data: (issue) => issue.issueStatus.name },
+    { label: $t('msg.subject'), sortKey: 'subject', data: (issue) => issue.subject },
+    {
+      label: $t('msg.dueDate'),
+      sortKey: 'dueDate',
+      data: (issue) => DateUtils.date(issue.dueDate)
+    },
+    {
+      label: $t('msg.updatedAt'),
+      sortKey: 'updatedAt',
+      data: (issue) => DateUtils.datetime(issue.updatedAt)
+    }
+  ];
 </script>
 
 <section>
@@ -82,36 +109,11 @@
 <section>
   <ResultList
     list={result.list}
+    {colDefs}
     sortOrders={condition.sortOrders}
     {handleSort}
     bind:currentPage={condition.pageNumber}
     handlePage={search}
     {result}
-  >
-    {#snippet columns(issue, mode, sortOrders, handleSort)}
-      <RlColumn label="#" key="id" {sortOrders} {handleSort} {mode}>
-        <a href={`/issues/${issue.id}`}>{issue.id}</a>
-      </RlColumn>
-
-      <RlColumn label={$t('msg.tracker')} key="tracker" {sortOrders} {handleSort} {mode}>
-        {issue.tracker.name}
-      </RlColumn>
-
-      <RlColumn label={$t('msg.status')} key="issueStatus" {sortOrders} {handleSort} {mode}
-        >{issue.issueStatus.name}
-      </RlColumn>
-
-      <RlColumn label={$t('msg.subject')} key="subject" {sortOrders} {handleSort} {mode}
-        >{issue.subject}
-      </RlColumn>
-
-      <RlColumn label={$t('msg.dueDate')} key="dueDate" {sortOrders} {handleSort} {mode}>
-        {DateUtils.date(issue.dueDate)}
-      </RlColumn>
-
-      <RlColumn label={$t('msg.updatedAt')} key="updatedAt" {sortOrders} {handleSort} {mode}>
-        {DateUtils.datetime(issue.updatedAt)}
-      </RlColumn>
-    {/snippet}
-  </ResultList>
+  />
 </section>
