@@ -34,7 +34,7 @@ public class IssueService {
   }
 
   public IssueEntity find(int id) {
-    return findByIdAsResource(repository, id);
+    return repository.findIssueWithDetailsById(id);
   }
 
   public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
