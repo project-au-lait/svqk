@@ -1,15 +1,17 @@
 package dev.aulait.svqk.domain.issue;
 
-import static dev.aulait.svqk.arch.jpa.JpaRepositoryHandler.findByIdAsResource;
-
 import dev.aulait.svqk.arch.jpa.SearchUtils;
 import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -34,10 +36,6 @@ public class IssueService {
     return updatedEntity;
   }
 
-  public IssueEntity find(int id) {
-    return findByIdAsResource(repository, id);
-  }
-
   public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
     return SearchUtils.search(em, condition); // <.>
   }
@@ -47,13 +45,12 @@ public class IssueService {
   }
 
   public IssueEntity findIssueWithDetails(int id) {
-    String jpql = "SELECT issue FROM IssueEntity issue "
-        + "LEFT JOIN FETCH issue.issueStatus "
-        + "LEFT JOIN FETCH issue.tracker "
-        + "LEFT JOIN FETCH issue.journals "
-        + "WHERE issue.id = :id";
-    TypedQuery<IssueEntity> query = em.createQuery(jpql, IssueEntity.class);
-    query.setParameter("id", id);
-    return query.getSingleResult();
+    EntityGraph<IssueEntity> graph = em.createEntityGraph(IssueEntity.class);
+    graph.addAttributeNodes("issueStatus", "tracker", "journals");
+
+    Map<String, Object> hints = new HashMap<>();
+    hints.put("javax.persistence.fetchgraph", graph);
+
+    return em.find(IssueEntity.class, id, hints);
   }
 }
