@@ -1,7 +1,7 @@
 import { multiInject } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
-import { TYPES } from '$lib/arch/di/types';
-import { MasterStoreBase } from '$lib/arch/MasterStoreBase';
+import { TYPES } from '$lib/arch/di/Types';
+import { MasterStoreBase } from '$lib/arch/master/MasterStoreBase';
 
 type Fetch = typeof fetch;
 
