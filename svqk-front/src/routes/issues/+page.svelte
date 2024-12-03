@@ -93,13 +93,13 @@
     {columns}
     sortOrders={condition.sortOrders}
     {handleSort}
+    {result}
     bind:currentPage={condition.pageNumber}
     handlePage={search}
-    {result}
   />
 </section>
 
 <!-- for ResultList issueId Column -->
 {#snippet issueIdAnchor(issue: IssueModel)}
-  <a href={`/issue/${issue.id}`}>{issue.id}</a>
+  <a href={`/issues/${issue.id}`}>{issue.id}</a>
 {/snippet}

@@ -31,22 +31,16 @@
   import type { SortOrderModel } from '$lib/arch/api/Api';
   import { t } from '$lib/translations';
   import SortDirection from '../components/SortDirection.svelte';
-  import Pagination from './Pagination.svelte';
+  import Pagination, { type PaginationResult } from './Pagination.svelte';
 
   interface Props {
     list: T[];
     columns: ResultListColumn<T>[];
     sortOrders?: SortOrderModel[];
     handleSort: (field: string) => void;
+    result: PaginationResult;
     currentPage?: number;
     handlePage: (page: number) => Promise<void>;
-    result: {
-      start: number;
-      end: number;
-      count: number;
-      lastPage: number;
-      pageNums: number[];
-    };
   }
 
   let {
@@ -54,9 +48,9 @@
     columns,
     sortOrders,
     handleSort,
+    result,
     currentPage = $bindable(),
-    handlePage,
-    result
+    handlePage
   }: Props = $props();
 </script>
 
@@ -67,7 +61,9 @@
         <tr>
           {#each columns as col}
             {@const { label, sortKey } = col}
-            <th><SortDirection {label} {sortKey} {sortOrders} {handleSort} /></th>
+            <th>
+              <SortDirection {label} {sortKey} {sortOrders} {handleSort} />
+            </th>
           {/each}
         </tr>
       </thead>
@@ -91,7 +87,7 @@
   </section>
 
   <section>
-    <Pagination {result} {currentPage} {handlePage} />
+    <Pagination {result} bind:currentPage={currentPage} {handlePage} />
   </section>
 {:else}
   {$t('msg.noData')}

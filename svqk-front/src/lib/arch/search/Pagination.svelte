@@ -1,12 +1,16 @@
+<script lang="ts" module>
+  export interface PaginationResult {
+    start: number;
+    end: number;
+    count: number;
+    lastPage: number;
+    pageNums: number[];
+  }
+</script>
+
 <script lang="ts">
   interface Props {
-    result: {
-      start: number;
-      end: number;
-      count: number;
-      lastPage: number;
-      pageNums: number[];
-    };
+    result: PaginationResult;
     currentPage?: number;
     handlePage: (page: number) => Promise<void>;
   }
