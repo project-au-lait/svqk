@@ -3,8 +3,7 @@
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import ResultList, { type RlColDef } from '$lib/arch/search/ResultList.svelte';
-  import RlColumn from '$lib/arch/search/RlColumn.svelte';
+  import ResultList, { ColumnsBuilder } from '$lib/arch/search/ResultList.svelte';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueMasterStore';
@@ -36,32 +35,14 @@
     await search(); // <.>
   }
 
-  const colDefs: RlColDef<IssueModel>[] = [
-    {
-      label: '#',
-      sortKey: 'id',
-      data: (issue) => {
-        const el = document.createElement('a');
-        el.text = issue.id.toString();
-        el.href = `/issues/${issue.id}`;
-
-        return el.outerHTML;
-      }
-    },
-    { label: $t('msg.tracker'), sortKey: 'tracker', data: (issue) => issue.tracker.name },
-    { label: $t('msg.status'), sortKey: 'issueStatus', data: (issue) => issue.issueStatus.name },
-    { label: $t('msg.subject'), sortKey: 'subject', data: (issue) => issue.subject },
-    {
-      label: $t('msg.dueDate'),
-      sortKey: 'dueDate',
-      data: (issue) => DateUtils.date(issue.dueDate)
-    },
-    {
-      label: $t('msg.updatedAt'),
-      sortKey: 'updatedAt',
-      data: (issue) => DateUtils.datetime(issue.updatedAt)
-    }
-  ];
+  const columns = new ColumnsBuilder<IssueModel>()
+    .addColumn('#', 'id', () => issueIdAnchor)
+    .addColumn($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
+    .addColumn($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
+    .addColumn($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
+    .addColumn($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
+    .addColumn($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
+    .getColumns();
 </script>
 
 <section>
@@ -109,7 +90,7 @@
 <section>
   <ResultList
     list={result.list}
-    {colDefs}
+    {columns}
     sortOrders={condition.sortOrders}
     {handleSort}
     bind:currentPage={condition.pageNumber}
@@ -117,3 +98,8 @@
     {result}
   />
 </section>
+
+<!-- for ResultList issueId Column -->
+{#snippet issueIdAnchor(issue: IssueModel)}
+  <a href={`/issue/${issue.id}`}>{issue.id}</a>
+{/snippet}

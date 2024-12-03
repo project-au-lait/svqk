@@ -1,21 +1,41 @@
-<script module lang="ts">
-  export interface RlColDef<T> {
+<script lang="ts" module>
+  import type { Snippet } from 'svelte';
+
+  export interface ResultListColumn<T> {
     label: string;
     sortKey: string;
-    data: (t: T) => string | number;
+    getData: (t: T) => string | Snippet<[T]>;
+    tdClass?: string[];
+  }
+
+  export class ColumnsBuilder<T> {
+    private columns: ResultListColumn<T>[] = [];
+
+    getColumns() {
+      return this.columns;
+    }
+
+    addColumn(
+      label: string,
+      sortKey: string,
+      getData: (t: T) => string | Snippet<[T]>,
+      tdClass?: string[]
+    ) {
+      this.columns.push({ label, sortKey, getData, tdClass });
+      return this;
+    }
   }
 </script>
 
 <script lang="ts" generics="T">
-  import type { IssueModel, SortOrderModel } from '$lib/arch/api/Api';
+  import type { SortOrderModel } from '$lib/arch/api/Api';
   import { t } from '$lib/translations';
-  import { type Snippet } from 'svelte';
-  import Pagination from './Pagination.svelte';
   import SortDirection from '../components/SortDirection.svelte';
+  import Pagination from './Pagination.svelte';
 
   interface Props {
     list: T[];
-    colDefs: RlColDef<T>[];
+    columns: ResultListColumn<T>[];
     sortOrders?: SortOrderModel[];
     handleSort: (field: string) => void;
     currentPage?: number;
@@ -31,7 +51,7 @@
 
   let {
     list,
-    colDefs,
+    columns,
     sortOrders,
     handleSort,
     currentPage = $bindable(),
@@ -45,8 +65,8 @@
     <table class="list striped">
       <thead>
         <tr>
-          {#each colDefs as colDef}
-            {@const { label, sortKey } = colDef}
+          {#each columns as col}
+            {@const { label, sortKey } = col}
             <th><SortDirection {label} {sortKey} {sortOrders} {handleSort} /></th>
           {/each}
         </tr>
@@ -54,8 +74,15 @@
       <tbody>
         {#each list as item}
           <tr>
-            {#each colDefs as colDef}
-              <td>{@html colDef.data(item)}</td>
+            {#each columns as col}
+              {@const data = col.getData(item)}
+              <td class={col.tdClass?.join(' ')}>
+                {#if typeof data === 'string'}
+                  {@html data}
+                {:else}
+                  {@render data(item)}
+                {/if}
+              </td>
             {/each}
           </tr>
         {/each}
