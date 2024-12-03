@@ -7,6 +7,7 @@ import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,16 @@ public class IssueService {
 
   public List<IssueTrackingRs> getTracking() {
     return repository.count4tracking();
+  }
+
+  public IssueEntity findIssueWithDetails(int id) {
+    String jpql = "SELECT issue FROM IssueEntity issue "
+        + "LEFT JOIN FETCH issue.issueStatus "
+        + "LEFT JOIN FETCH issue.tracker "
+        + "LEFT JOIN FETCH issue.journals "
+        + "WHERE issue.id = :id";
+    TypedQuery<IssueEntity> query = em.createQuery(jpql, IssueEntity.class);
+    query.setParameter("id", id);
+    return query.getSingleResult();
   }
 }
