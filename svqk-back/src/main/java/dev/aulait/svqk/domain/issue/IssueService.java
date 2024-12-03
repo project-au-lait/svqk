@@ -45,12 +45,12 @@ public class IssueService {
   }
 
   public IssueEntity findIssueWithDetails(int id) {
-    EntityGraph<IssueEntity> graph = em.createEntityGraph(IssueEntity.class);
-    graph.addAttributeNodes("issueStatus", "tracker", "journals");
+    EntityGraph<IssueEntity> entityGraph = em.createEntityGraph(IssueEntity.class);
+    entityGraph.addAttributeNodes("issueStatus", "tracker", "journals");
 
-    Map<String, Object> hints = new HashMap<>();
-    hints.put("javax.persistence.fetchgraph", graph);
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.fetchgraph", entityGraph);
 
-    return em.find(IssueEntity.class, id, hints);
+    return em.find(IssueEntity.class, id, properties);
   }
 }
