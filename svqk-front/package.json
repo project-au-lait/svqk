@@ -47,6 +47,9 @@
     "@picocss/pico": "^2.0.6",
     "dayjs": "^1.11.13",
     "felte": "^1.2.14",
+    "inversify": "^6.1.5",
+    "inversify-binding-decorators": "^4.0.0",
+    "reflect-metadata": "^0.2.2",
     "yup": "^1.4.0",
     "yup-locale-ja": "^1.0.0"
   }
