@@ -1,28 +1,17 @@
 <script lang="ts">
-  import type { PageData } from '../issues/$types';
-  import FormValidator from '$lib/arch/form/FormValidator';
-  import Pagination from '$lib/arch/search/Pagination.svelte';
-  import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import type { IssueSearchResultModel } from '$lib/arch/api/Api';
+  import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
+  import FormValidator from '$lib/arch/form/FormValidator';
+  import SelectBox from '$lib/arch/form/SelectBox.svelte';
+  import ResultList, { ColumnsBuilder } from '$lib/arch/search/ResultList.svelte';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
-  import { t } from '$lib/translations';
   import DateUtils from '$lib/arch/util/DateUtils';
-  import SortDirection from '$lib/arch/components/SortDirection.svelte';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
+  import { t } from '$lib/translations';
+  import type { PageData } from '../issues/$types';
 
   let { data }: { data: PageData } = $props();
   let { result, condition } = $state(data);
-
-  // <.>
-  const resultHeaders = [
-    { label: '#', key: 'id' },
-    { label: $t('msg.tracker'), key: 'tracker' },
-    { label: $t('msg.status'), key: 'issueStatus' },
-    { label: $t('msg.subject'), key: 'subject' },
-    { label: $t('msg.dueDate'), key: 'dueDate' },
-    { label: $t('msg.updatedAt'), key: 'updatedAt' }
-  ];
 
   const form = FormValidator.createForm({}, search); // <.>
 
@@ -45,6 +34,15 @@
     condition = condition; // <.>
     await search(); // <.>
   }
+
+  const columns = new ColumnsBuilder<IssueModel>()
+    .addColumn('#', 'id', () => issueIdAnchor)
+    .addColumn($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
+    .addColumn($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
+    .addColumn($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
+    .addColumn($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
+    .addColumn($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
+    .getColumns();
 </script>
 
 <section>
@@ -89,48 +87,19 @@
   <a id="newIssue" href="/issues/new"> {$t('msg.newIssue')} </a>
 </section>
 
-{#if result.list}
-  <section>
-    <table class="list striped">
-      <thead>
-        <tr>
-          {#each resultHeaders as rh}
-            <th>
-              <SortDirection
-                sortOrders={condition.sortOrders}
-                label={rh.label}
-                sortKey={rh.key}
-                {handleSort}
-              />
-            </th>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        {#each result.list as issue}
-          <tr>
-            <td><a href={`/issues/${issue.id}`}>{issue.id}</a></td>
-            <td>{issue.tracker.name}</td>
-            <td>{issue.issueStatus.name}</td>
-            <td class="subject">{issue.subject}</td>
-            <td>{DateUtils.date(issue.dueDate)}</td>
-            <td>{DateUtils.datetime(issue.updatedAt)}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  </section>
+<section>
+  <ResultList
+    list={result.list}
+    {columns}
+    sortOrders={condition.sortOrders}
+    {handleSort}
+    {result}
+    bind:currentPage={condition.pageNumber}
+    handlePage={search}
+  />
+</section>
 
-  <section>
-    <Pagination bind:currentPage={condition.pageNumber} {result} handlePage={search} />
-  </section>
-{:else}
-  {$t('msg.noData')}
-{/if}
-
-<style>
-  table.list td:not(.subject) {
-    text-align: center;
-    white-space: nowrap;
-  }
-</style>
+<!-- for ResultList issueId Column -->
+{#snippet issueIdAnchor(issue: IssueModel)}
+  <a href={`/issues/${issue.id}`}>{issue.id}</a>
+{/snippet}
