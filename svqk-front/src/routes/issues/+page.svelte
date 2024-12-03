@@ -6,7 +6,7 @@
   import ResultList, { ColumnsBuilder } from '$lib/arch/search/ResultList.svelte';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import DateUtils from '$lib/arch/util/DateUtils';
-  import { issueStatuses } from '$lib/domain/issue/IssueMasterStore';
+  import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
   import type { PageData } from '../issues/$types';
 
