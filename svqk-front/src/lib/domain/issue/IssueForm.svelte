@@ -7,7 +7,8 @@
   import { messageStore } from '$lib/arch/global/MessageStore';
   import { t } from '$lib/translations';
   import * as yup from 'yup';
-  import { issueStatuses, trackers } from './IssueMasterStore';
+  import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
+  import { trackers } from '$lib/domain/issue/TrackerMasterStore';
 
   interface Props {
     issue: IssueModel;
@@ -16,7 +17,7 @@
   }
 
   let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
-  let journal = $state({issueId: issue.id} as JournalModel);
+  let journal = $state({ issueId: issue.id } as JournalModel);
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
