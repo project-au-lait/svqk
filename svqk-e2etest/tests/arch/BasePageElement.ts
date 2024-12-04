@@ -58,6 +58,7 @@ export default abstract class BasePageElement {
   }
 
   protected async expectText(selector: string, value: string) {
+    await this.page.waitForSelector(selector);
     await this.run(
       Action.EXPECT_TEXT,
       selector,
