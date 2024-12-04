@@ -1,7 +1,7 @@
 import type { LayoutLoad } from './$types';
 import { TYPES } from '$lib/arch/di/Types';
 import { DIContainer } from '$lib/arch/di/Container';
-import type { LoadExecutor } from '$lib/arch/LoadExecutor';
+import { LoadExecutor } from '$lib/arch/master/LoadExecutor';
 import { loadTranslations } from '$lib/translations';
 
 export const ssr = false;
