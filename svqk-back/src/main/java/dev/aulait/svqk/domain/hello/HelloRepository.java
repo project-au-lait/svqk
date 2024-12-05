@@ -1,6 +1,5 @@
-package dev.aulait.svqk.domain.hello;
+package dev.aulait.svqk.interfaces.hello;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HelloRepository extends JpaRepository<HelloEntity, Integer> { // <.>
-}
+public class HelloRepository extends JpaRepository<HelloEntity, Integer> { }

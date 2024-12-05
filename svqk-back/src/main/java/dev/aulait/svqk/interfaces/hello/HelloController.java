@@ -11,11 +11,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Path(HelloController.HELLO_PATH) // <.>
-@RequiredArgsConstructor // <.>
+@Path(HelloController.HELLO_PATH)
+@RequiredArgsConstructor
 public class HelloController {
 
-  private final HelloService helloService; // <.>
+  private final HelloService helloService;
 
   static final String HELLO_PATH = ApiPath.ROOT + "/hello";
 
@@ -23,7 +23,7 @@ public class HelloController {
 
   @GET
   @Path(HELLO_GET_PATH)
-  public HelloDto get(@PathParam("id") int id) { // <4>
+  public HelloDto get(@PathParam("id") int id) {
 
     HelloEntity entity = helloService.find(id);
 
@@ -31,7 +31,7 @@ public class HelloController {
   }
 
   @POST
-  public int save(@Valid HelloDto dto) { // <4>
+  public int save(@Valid HelloDto dto) {
 
     HelloEntity entity = new HelloEntity();
     entity.setId(dto.getId());

@@ -1,81 +1,49 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.SearchConditionVo;
-import dev.aulait.svqk.arch.search.SearchResultDto;
-import dev.aulait.svqk.arch.search.SearchResultVo;
-import dev.aulait.svqk.arch.util.BeanUtils;
-import dev.aulait.svqk.arch.web.ApiPath;
-import dev.aulait.svqk.arch.web.IdDto;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
-import dev.aulait.svqk.domain.issue.JournalEntity;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Path(IssueController.ISSUES_PATH)
+@Path(IssueController.ISSUE_PATH)
 @RequiredArgsConstructor
 public class IssueController {
 
-  private final IssueService service;
+  private final IssueService issueService;
 
-  private final IssueFactory factory;
+  static final String ISSUE_PATH = ApiPath.ROOT + "/issue";
 
-  static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
-
-  static final String ISSUES_GET_PATH = "{issueId}";
-
-  static final String ISSUES_TRACKING_GET_PATH = "tracking";
-
-  static final String ISSUES_SEARCH_PATH = "search";
-
-  public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {} // <.>
-
-  @POST
-  public IdDto save(@Valid IssueDto dto) { // <.>
-
-    // <.>
-    IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
-    IssueEntity savedEntity = service.save(entity);
-
-    return BeanUtils.map(savedEntity, IdDto.class);
-  }
-
-  @PUT
-  public IdDto update(@Valid IssueUpdateDto dto) {
-    IssueEntity issue = BeanUtils.map(dto.getIssue(), IssueEntity.class);
-    JournalEntity journal = BeanUtils.map(dto.getJournal(), JournalEntity.class);
-
-    IssueEntity updatedIssue = service.update(issue, journal);
-
-    return BeanUtils.map(updatedIssue, IdDto.class);
-  }
+  static final String ISSUE_GET_PATH = "{id}";
 
   @GET
-  @Path(ISSUES_GET_PATH)
-  public IssueDto get(@PathParam("issueId") int id) {
-    IssueEntity entity = service.find(id);
+  @Path(ISSUE_GET_PATH)
+  public IssueDto get(@PathParam("id") int id) {
 
-    return BeanUtils.map(entity, IssueDto.class);
+    IssueEntity entity = issueService.find(id);
+
+    return IssueDto.builder().id(entity.getId()).message(entity.getMessage()).build();
   }
 
   @POST
-  @Path(ISSUES_SEARCH_PATH)
-  public IssueSearchResultDto search(IssueSearchConditionDto dto) { // <.>
-    // <.>
-    SearchConditionVo vo = factory.build(dto);
-    SearchResultVo<IssueEntity> result = service.search(vo);
+  public int save(@Valid IssueDto dto) {
 
-    return factory.build(result);
+    IssueEntity entity = new IssueEntity();
+    entity.setId(dto.getId());
+    entity.setMessage(dto.getMessage());
+
+    IssueEntity savedEntity = issueService.save(entity);
+
+    return savedEntity.getId();
   }
 
-  @GET
-  @Path(ISSUES_TRACKING_GET_PATH)
-  public IssueTrackingDto getTracking() {
-    return factory.buildIssueTracking(service.getTracking());
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  static class ApiPath {
+    static final String ROOT = "/api/v1";
   }
 }

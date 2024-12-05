@@ -1,16 +1,23 @@
 package dev.aulait.svqk.domain.issue;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class IssueStatusService {
 
-  private final IssueStatusRepository statusRepository;
+  private final IssueStatusRepository issueStatusRepository;
 
-  public List<IssueStatusEntity> findAll() { // <.>
-    return statusRepository.findAll(); // <.>
+  public IssueStatusEntity find(int id) {
+
+    return issueStatusRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+  }
+
+  @Transactional
+  public IssueStatusEntity save(IssueStatusEntity entity) {
+
+    return issueStatusRepository.save(entity);
   }
 }

@@ -1,16 +1,23 @@
 package dev.aulait.svqk.domain.issue;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class TrackerService {
 
-  private final TrackerRepository repository;
+  private final TrackerRepository trackerRepository;
 
-  public List<TrackerEntity> findAll() {
-    return repository.findAll();
+  public TrackerEntity find(int id) {
+
+    return trackerRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+  }
+
+  @Transactional
+  public TrackerEntity save(TrackerEntity entity) {
+
+    return trackerRepository.save(entity);
   }
 }

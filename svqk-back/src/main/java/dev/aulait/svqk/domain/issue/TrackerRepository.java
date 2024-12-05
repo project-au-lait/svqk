@@ -1,5 +1,5 @@
-package dev.aulait.svqk.domain.issue;
+package dev.aulait.svqk.interfaces.issue;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TrackerRepository extends JpaRepository<TrackerEntity, Integer> {}
+public class TrackerRepository extends JpaRepository<TrackerEntity, Integer> { }
