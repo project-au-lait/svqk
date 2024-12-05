@@ -1,0 +1,130 @@
+[
+  {
+    "packageName": "dev.aulait.svqk.domain.hello",
+    "className": "HelloEntity",
+    "fields": [
+      {
+        "fieldName": "id",
+        "javaType": "Integer",
+        "multiple": false,
+        "dbType": "int4",
+        "dbTypeSize": 10,
+        "id": true,
+        "required": true
+      },
+      {
+        "fieldName": "message",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "varchar",
+        "dbTypeSize": 255,
+        "id": false,
+        "required": true
+      }
+    ]
+  },
+  {
+    "packageName": "dev.aulait.svqk.domain.issue",
+    "className": "IssueEntity",
+    "fields": [
+      {
+        "fieldName": "id",
+        "javaType": "Integer",
+        "multiple": false,
+        "dbType": "serial",
+        "dbTypeSize": 10,
+        "id": true,
+        "required": true
+      },
+      {
+        "fieldName": "subject",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "varchar",
+        "dbTypeSize": 128,
+        "id": false,
+        "required": true
+      },
+      {
+        "fieldName": "dueDate",
+        "javaType": "java.time.LocalDate",
+        "multiple": false,
+        "dbType": "date",
+        "dbTypeSize": 13,
+        "id": false,
+        "required": false
+      },
+      {
+        "fieldName": "description",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "varchar",
+        "dbTypeSize": 8192,
+        "id": false,
+        "required": false
+      },
+      {
+        "fieldName": "tracker",
+        "javaType": "dev.aulait.svqk.domain.issue.TrackerEntity",
+        "multiple": false,
+        "id": false,
+        "required": false
+      },
+      {
+        "fieldName": "issueStatus",
+        "javaType": "dev.aulait.svqk.domain.issue.IssueStatusEntity",
+        "multiple": false,
+        "id": false,
+        "required": false
+      }
+    ]
+  },
+  {
+    "packageName": "dev.aulait.svqk.domain.issue",
+    "className": "IssueStatusEntity",
+    "fields": [
+      {
+        "fieldName": "id",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "bpchar",
+        "dbTypeSize": 1,
+        "id": true,
+        "required": true
+      },
+      {
+        "fieldName": "name",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "varchar",
+        "dbTypeSize": 128,
+        "id": false,
+        "required": true
+      }
+    ]
+  },
+  {
+    "packageName": "dev.aulait.svqk.domain.issue",
+    "className": "TrackerEntity",
+    "fields": [
+      {
+        "fieldName": "id",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "bpchar",
+        "dbTypeSize": 1,
+        "id": true,
+        "required": true
+      },
+      {
+        "fieldName": "name",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "varchar",
+        "dbTypeSize": 128,
+        "id": false,
+        "required": true
+      }
+    ]
+  }
+]
