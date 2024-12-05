@@ -46,11 +46,11 @@ class MyGenerator extends Generator {
             };
         };
         
-        const outputJavaFile = (layer: string, destPkgPath: string, data: TemplateData) => {
+        const outputJavaFile = (layer: string, destPkgPath: string, tmplData: TemplateData) => {
             this.fs.copyTpl(
                 this.templatePath(`java/${layer}.java`),
-                this.destinationPath(`${destPkgPath}/${data.entNamePascal}${layer}.java`),
-                data
+                this.destinationPath(`${destPkgPath}/${tmplData.entNamePascal}${layer}.java`),
+                tmplData
             );
         }
 
@@ -59,20 +59,20 @@ class MyGenerator extends Generator {
         const generateDestPkgPath = (destRootPath: string, pkgName: string): string => `${destRootPath}/${pkgName.replace(/\./g, '/')}`;
         
         this.metadataList.forEach(({ packageName, className, fields } ) => {
-            const cf = generateConfiguration(packageName, className, fields);
+            const tmplData = generateConfiguration(packageName, className, fields);
             
             // Generate files for domain package
             ['Repository', 'Service'].forEach(layer => {
-                const destPkgPath = generateDestPkgPath(this.destRootPath, cf.domainPkgName);
-                outputJavaFile(layer, destPkgPath, cf);
+                const destPkgPath = generateDestPkgPath(this.destRootPath, tmplData.domainPkgName);
+                outputJavaFile(layer, destPkgPath, tmplData);
             });
             
             // Generate files for interfaces package
             const destPkgPath = generateDestPkgPath(
                 this.destRootPath,
-                cf.interfacesPkgName
+                tmplData.interfacesPkgName
             );
-            outputJavaFile('Controller', destPkgPath, cf);
+            outputJavaFile('Controller', destPkgPath, tmplData);
         });
     }
     
