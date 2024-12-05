@@ -1,5 +1,6 @@
-package dev.aulait.svqk.interfaces.issue;
+package dev.aulait.svqk.domain.issue;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public class IssueStatusRepository extends JpaRepository<IssueStatusEntity, Integer> { }
+interface IssueStatusRepository extends JpaRepository<IssueStatusEntity, Integer> {
+}

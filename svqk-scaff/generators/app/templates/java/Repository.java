@@ -1,5 +1,6 @@
-package <%= interfacesPkgName %>;
+package <%= domainPkgName %>;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public class <%= entNamePascal %>Repository extends JpaRepository<<%= entNamePascal %>Entity, Integer> { }
+interface <%= entNamePascal %>Repository extends JpaRepository<<%= entNamePascal %>Entity, Integer> {
+}
