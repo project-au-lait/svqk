@@ -1,4 +1,4 @@
-package <%= pkgName %>;
+package <%= domainPkgName %>;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;

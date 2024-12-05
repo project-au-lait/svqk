@@ -1,7 +1,7 @@
-package <%= pkgName %>;
+package <%= interfacesPkgName %>;
 
-import <%= pkgName %>.<%= entNamePascal %>Entity;
-import <%= pkgName %>.<%= entNamePascal %>Service;
+import <%= domainPkgName %>.<%= entNamePascal %>Entity;
+import <%= domainPkgName %>.<%= entNamePascal %>Service;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
