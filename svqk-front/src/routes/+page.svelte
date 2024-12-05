@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { t } from '$lib/translations';
+  import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
+  import { trackers } from '$lib/domain/issue/TrackerMasterStore';
 
   let { data }: { data: PageData } = $props();
   let { issueTracking } = data;
@@ -12,20 +14,20 @@
     <thead>
       <tr>
         <th></th>
-        {#each issueTracking.issueStatuses as issueStatus}
+        {#each $issueStatuses as issueStatus}
           <th>{issueStatus.name}</th>
         {/each}
         <th>{$t('msg.total')}</th>
       </tr>
     </thead>
     <tbody>
-      {#each issueTracking.trackers as tracker}
+      {#each $trackers as tracker}
         <tr>
-          <th class="row">{tracker.tracker.name}</th>
-          {#each issueTracking.issueStatuses as issueStatus}
-            <td>{tracker.issueStatusMap[issueStatus.id].count}</td>
+          <th class="row">{tracker.name}</th>
+          {#each $issueStatuses as issueStatus}
+            <td>{issueTracking.trackerStatusCountMap[tracker.id][issueStatus.id]}</td>
           {/each}
-          <td>{tracker.total}</td>
+          <td>{issueTracking.trackerCountMap[tracker.id]}</td>
         </tr>
       {/each}
     </tbody>

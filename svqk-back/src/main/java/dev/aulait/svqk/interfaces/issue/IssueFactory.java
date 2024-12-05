@@ -12,14 +12,8 @@ import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import dev.aulait.svqk.domain.issue.IssueTrackingRs;
 import dev.aulait.svqk.interfaces.issue.IssueController.IssueSearchResultDto;
-import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.IssueStatusCountDto;
-import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.TrackerCountDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @ApplicationScoped // <.>
 public class IssueFactory {
@@ -49,25 +43,16 @@ public class IssueFactory {
   }
 
   public IssueTrackingDto buildIssueTracking(List<IssueTrackingRs> issueTrackings) {
-    // key: trackerId
-    Map<String, TrackerCountDto> trackerMap = new HashMap<>();
-    Set<IssueStatusDto> issueStatuses = new HashSet<>();
+    IssueTrackingDto dto = new IssueTrackingDto();
 
     for (IssueTrackingRs issueTracking : issueTrackings) {
-      TrackerCountDto trackerCount =
-          trackerMap.computeIfAbsent(
-              issueTracking.getTracker().getId(),
-              key -> BeanUtils.map(issueTracking, TrackerCountDto.class));
+      dto.add(
+          issueTracking.getTracker().getId(),
+          issueTracking.getIssueStatus().getId(),
+          issueTracking.getCount());
 
-      IssueStatusCountDto status = BeanUtils.map(issueTracking, IssueStatusCountDto.class);
-      trackerCount.getIssueStatusMap().put(status.getIssueStatus().getId(), status);
-
-      issueStatuses.add(status.getIssueStatus());
+      dto.add(issueTracking.getTracker().getId(), issueTracking.getCount());
     }
-
-    IssueTrackingDto dto = new IssueTrackingDto();
-    dto.getTrackers().addAll(trackerMap.values().stream().toList());
-    dto.getIssueStatuses().addAll(issueStatuses);
 
     return dto;
   }

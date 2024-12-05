@@ -70,12 +70,6 @@ export interface IssueSearchResultModel {
   pageNums: AtomicReferenceObject;
 }
 
-export interface IssueStatusCountModel {
-  issueStatus: IssueStatusModel;
-  /** @format int32 */
-  count: number;
-}
-
 export interface IssueStatusModel {
   id: string;
   name: string;
@@ -84,10 +78,8 @@ export interface IssueStatusModel {
 }
 
 export interface IssueTrackingModel {
-  /** @uniqueItems true */
-  trackers: TrackerCountModel[];
-  /** @uniqueItems true */
-  issueStatuses: IssueStatusModel[];
+  trackerStatusCountMap: Record<string, Record<string, number>>;
+  trackerCountMap: Record<string, number>;
 }
 
 export interface IssueUpdateModel {
@@ -120,13 +112,6 @@ export type LocalDateTime = string;
 export interface SortOrderModel {
   asc?: boolean;
   field?: string;
-}
-
-export interface TrackerCountModel {
-  tracker: TrackerModel;
-  issueStatusMap: Record<string, IssueStatusCountModel>;
-  /** @format int32 */
-  total: number;
 }
 
 export interface TrackerModel {
