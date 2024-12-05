@@ -1,21 +1,17 @@
 {
   "name": "generator-java-project",
-  "version": "0.0.0",
-  "description": "A generator for Java project",
-  "homepage": "",
-  "author": {
-    "name": "takashi.kato",
-    "email": "takashi.kato@monocrea.co.jp",
-    "url": ""
-  },
+  "version": "1.0.0",
+  "description": "Scaffold for SVQK project",
   "files": [
     "generators"
   ],
-  "main": "generators/index.js",
+  "main": "generators/app/index.js",
   "keywords": [
-    "",
     "yeoman-generator"
   ],
+  "dependencies": {
+    "yeoman-generator": "^3.1.1"
+  },
   "devDependencies": {
     "yeoman-test": "^1.7.0",
     "yeoman-assert": "^3.1.1",
@@ -27,18 +23,10 @@
     "eslint-config-prettier": "^6.6.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-config-xo": "^0.27.2",
-    "jest": "^26.1.0"
-  },
-  "engines": {
-    "npm": ">= 4.0.0"
-  },
-  "dependencies": {
-    "yeoman-generator": "^3.1.1",
-    "chalk": "^2.1.0",
-    "yosay": "^2.0.2"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "jest": "^26.1.0",
+    "@types/yeoman-generator": "^5.2.11",
+    "typescript": "^4.9.5",
+    "ts-node": "^10.9.1"
   },
   "lint-staged": {
     "*.js": [
@@ -72,9 +60,8 @@
     ]
   },
   "scripts": {
-    "pretest": "eslint .",
-    "test": "jest"
-  },
-  "repository": "tkskato/generator-java-project",
-  "license": "Apache-2.0"
+    "build": "tsc",
+    "prepare": "pnpm run build",
+    "start": "pnpm run prepare && pnpm yo java-project"
+  }
 }
