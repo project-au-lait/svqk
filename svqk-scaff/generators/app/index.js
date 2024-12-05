@@ -41,7 +41,7 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    const outputJavaFile = (pkgName, entNamePascal, layer) => {
+    const outputJavaFile = (pkgName, entNamePascal, entIdType, layer) => {
       const destRootPath = this.config.get(ENV_KEY_DEST_ROOT_PATH);
       const destPkgPath = `${destRootPath}/${pkgName.replaceAll(".", "/")}`;
       const ejsData = {
@@ -50,7 +50,7 @@ module.exports = class extends Generator {
         entNameCamel:
           entNamePascal.charAt(0).toLowerCase() + entNamePascal.slice(1),
         entNameAllCaps: entNamePascal.toUpperCase(),
-        entIdType: "" // TODO
+        entIdType: entIdType
       };
 
       this.fs.copyTpl(
@@ -62,26 +62,24 @@ module.exports = class extends Generator {
 
     const extractEntName = entClassName => entClassName.replace("Entity", "");
 
-    // TODO
-    // const getEntityIdType = metadata => {};
-
     const convPkgNameToInterfaces = pkgName =>
       pkgName.replace(".domain.", ".interfaces.");
 
     this.metadataList.forEach(metadata => {
-      const { packageName, className } = metadata;
+      const { packageName, className, fields } = metadata;
 
       const entNamePascal = extractEntName(className);
+      const entIdType = fields.find(field => field.id)?.javaType;
 
       // For domain package
       LAYERS_IN_DOMAIN_PKG.forEach(layer =>
-        outputJavaFile(packageName, entNamePascal, layer)
+        outputJavaFile(packageName, entNamePascal, entIdType, layer)
       );
 
       // For interfaces package
       LAYERS_IN_INTERFACES_PKG.forEach(layer => {
         const interfacesPkgName = convPkgNameToInterfaces(packageName);
-        outputJavaFile(interfacesPkgName, entNamePascal, layer);
+        outputJavaFile(interfacesPkgName, entNamePascal, entIdType, layer);
       });
     });
   }
