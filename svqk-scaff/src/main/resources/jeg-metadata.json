@@ -64,6 +64,13 @@
         "required": false
       },
       {
+        "fieldName": "journals",
+        "javaType": "dev.aulait.svqk.domain.issue.JournalEntity",
+        "multiple": true,
+        "id": false,
+        "required": false
+      },
+      {
         "fieldName": "tracker",
         "javaType": "dev.aulait.svqk.domain.issue.TrackerEntity",
         "multiple": false,
@@ -105,6 +112,28 @@
   },
   {
     "packageName": "dev.aulait.svqk.domain.issue",
+    "className": "JournalEntity",
+    "fields": [
+      {
+        "fieldName": "id",
+        "javaType": "JournalEntityId",
+        "multiple": false,
+        "id": true,
+        "required": false
+      },
+      {
+        "fieldName": "notes",
+        "javaType": "String",
+        "multiple": false,
+        "dbType": "text",
+        "dbTypeSize": 2147483647,
+        "id": false,
+        "required": false
+      }
+    ]
+  },
+  {
+    "packageName": "dev.aulait.svqk.domain.issue",
     "className": "TrackerEntity",
     "fields": [
       {
@@ -122,6 +151,30 @@
         "multiple": false,
         "dbType": "varchar",
         "dbTypeSize": 128,
+        "id": false,
+        "required": true
+      }
+    ]
+  },
+  {
+    "packageName": "dev.aulait.svqk.domain.issue",
+    "className": "JournalEntityId",
+    "fields": [
+      {
+        "fieldName": "issueId",
+        "javaType": "Integer",
+        "multiple": false,
+        "dbType": "int4",
+        "dbTypeSize": 10,
+        "id": false,
+        "required": true
+      },
+      {
+        "fieldName": "seqNo",
+        "javaType": "Integer",
+        "multiple": false,
+        "dbType": "int4",
+        "dbTypeSize": 10,
         "id": false,
         "required": true
       }

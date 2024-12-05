@@ -27,6 +27,8 @@ const ENV_KEY_DEST_ROOT_PATH = "destRootPath";
 
 module.exports = class extends Generator {
   initializing() {
+    this.jegMetadataFilePath = this.config.get("jegMetadataFilePath");
+
     try {
       this.metadataList = this.fs.readJSON(this.templatePath(JEG_META_FPATH), {
         readonly: true
