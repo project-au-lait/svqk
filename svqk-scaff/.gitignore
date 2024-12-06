@@ -1,0 +1,4 @@
+.DS_Store
+node_modules/
+generators/app/index.d.ts
+generators/app/index.js
