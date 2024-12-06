@@ -1,14 +1,17 @@
 package dev.aulait.svqk.domain.issue;
 
-import static dev.aulait.svqk.arch.jpa.JpaRepositoryHandler.findByIdAsResource;
-
 import dev.aulait.svqk.arch.jpa.SearchUtils;
 import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -33,15 +36,21 @@ public class IssueService {
     return updatedEntity;
   }
 
-  public IssueEntity find(int id) {
-    return findByIdAsResource(repository, id);
-  }
-
   public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
     return SearchUtils.search(em, condition); // <.>
   }
 
   public List<IssueTrackingRs> getTracking() {
     return repository.count4tracking();
+  }
+
+  public IssueEntity findIssueWithDetails(int id) {
+    EntityGraph<IssueEntity> entityGraph = em.createEntityGraph(IssueEntity.class);
+    entityGraph.addAttributeNodes("issueStatus", "tracker", "journals");
+
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.fetchgraph", entityGraph);
+
+    return em.find(IssueEntity.class, id, properties);
   }
 }
