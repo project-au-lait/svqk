@@ -98,7 +98,7 @@
   <ListTable {list} {columns} sort={{ sortOrders, handleSort }} page={{ pageCtrl, handlePage }} />
 </section>
 
-<!-- for ResultList issueId Column -->
+<!-- for ListTable issueId Column -->
 {#snippet issueIdAnchor(issue: IssueModel)}
   <a href={`/issues/${issue.id}`}>{issue.id}</a>
 {/snippet}
