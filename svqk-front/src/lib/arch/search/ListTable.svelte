@@ -28,30 +28,27 @@
 </script>
 
 <script lang="ts" generics="T">
-  import type { SortOrderModel } from '$lib/arch/api/Api';
+  import type { ComponentProps } from 'svelte';
+
   import { t } from '$lib/translations';
   import SortDirection from '../components/SortDirection.svelte';
-  import Pagination, { type PaginationResult } from './Pagination.svelte';
+  import Pagination from './Pagination.svelte';
+  import type { SortOrderModel } from '../api/Api';
 
   interface Props {
     list: T[];
     columns: ResultListColumn<T>[];
-    sortOrders?: SortOrderModel[];
-    handleSort: (field: string) => void;
-    result: PaginationResult;
-    currentPage?: number;
-    handlePage: (page: number) => Promise<void>;
+    sort: {
+      sortOrders?: SortOrderModel[];
+      handleSort: (field: string) => void;
+    };
+    page: ComponentProps<typeof Pagination>;
   }
 
-  let {
-    list,
-    columns,
-    sortOrders,
-    handleSort,
-    result,
-    currentPage = $bindable(),
-    handlePage
-  }: Props = $props();
+  let { list, columns, sort, page }: Props = $props();
+
+  let { sortOrders, handleSort } = $derived(sort);
+  let { pageCtrl, handlePage } = $derived(page);
 </script>
 
 {#if list.length}
@@ -87,7 +84,7 @@
   </section>
 
   <section>
-    <Pagination {result} bind:currentPage={currentPage} {handlePage} />
+    <Pagination {pageCtrl} {handlePage} />
   </section>
 {:else}
   {$t('msg.noData')}

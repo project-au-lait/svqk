@@ -13,6 +13,9 @@
   let { data }: { data: PageData } = $props();
   let { result, condition } = $state(data);
 
+  let { sortOrders } = $derived(condition);
+  let { list, pageCtrl } = $derived(result);
+
   const form = FormValidator.createForm({}, search); // <.>
 
   // <.>
@@ -30,9 +33,13 @@
 
   // <.>
   async function handleSort(field: string) {
-    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field); // <.>
-    condition = condition; // <.>
+    condition.sortOrders = SortOrderUtils.addSort(sortOrders, field); // <.>
     await search(); // <.>
+  }
+
+  async function handlePage(page: number) {
+    condition.pageNumber = page;
+    await search();
   }
 
   const columns = new ColumnsBuilder<IssueModel>()
@@ -88,15 +95,7 @@
 </section>
 
 <section>
-  <ListTable
-    list={result.list}
-    {columns}
-    sortOrders={condition.sortOrders}
-    {handleSort}
-    {result}
-    bind:currentPage={condition.pageNumber}
-    handlePage={search}
-  />
+  <ListTable {list} {columns} sort={{ sortOrders, handleSort }} page={{ pageCtrl, handlePage }} />
 </section>
 
 <!-- for ResultList issueId Column -->
