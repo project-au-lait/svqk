@@ -1,0 +1,64 @@
+{
+  "name": "generator-svqk-scaff",
+  "version": "1.0.0",
+  "description": "Scaffold for SVQK project",
+  "files": [
+    "generators"
+  ],
+  "main": "generators/app/index.js",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "pnpm run build",
+    "start": "pnpm run prepare && pnpm yo svqk-scaff"
+  },
+  "dependencies": {
+    "yeoman-generator": "^3.1.1"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.7",
+    "eslint": "^9.0.0",
+    "prettier": "^1.19.1",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.3",
+    "eslint-config-prettier": "^6.6.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-config-xo": "^0.27.2",
+    "@types/yeoman-generator": "^5.2.11",
+    "typescript": "^4.9.5",
+    "ts-node": "^10.9.1"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "xo",
+      "prettier"
+    ],
+    "env": {
+      "jest": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    },
+    "plugins": [
+      "prettier"
+    ]
+  }
+}
