@@ -11,11 +11,11 @@
   export class ColumnsBuilder<T> {
     private columns: ResultListColumn<T>[] = [];
 
-    getColumns() {
+    build() {
       return this.columns;
     }
 
-    addColumn(
+    add(
       label: string,
       sortKey: string,
       getData: (t: T) => string | Snippet<[T]>,

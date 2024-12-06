@@ -3,7 +3,7 @@
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import ResultList, { ColumnsBuilder } from '$lib/arch/search/ResultList.svelte';
+  import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
@@ -36,13 +36,13 @@
   }
 
   const columns = new ColumnsBuilder<IssueModel>()
-    .addColumn('#', 'id', () => issueIdAnchor)
-    .addColumn($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
-    .addColumn($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
-    .addColumn($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
-    .addColumn($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
-    .addColumn($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
-    .getColumns();
+    .add('#', 'id', () => issueIdAnchor)
+    .add($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
+    .add($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
+    .add($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
+    .add($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
+    .add($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
+    .build();
 </script>
 
 <section>
@@ -88,7 +88,7 @@
 </section>
 
 <section>
-  <ResultList
+  <ListTable
     list={result.list}
     {columns}
     sortOrders={condition.sortOrders}
