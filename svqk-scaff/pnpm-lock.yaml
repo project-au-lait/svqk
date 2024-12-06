@@ -12,14 +12,20 @@ importers:
         specifier: ^3.1.1
         version: 3.2.0(encoding@0.1.13)
     devDependencies:
+      '@eslint/js':
+        specifier: ^9.16.0
+        version: 9.16.0
       '@types/yeoman-generator':
         specifier: ^5.2.11
         version: 5.2.14
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.17.0
+        version: 8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0)(typescript@4.9.5))(eslint@9.16.0)(typescript@4.9.5)
       coveralls:
         specifier: ^3.0.7
         version: 3.1.1
       eslint:
-        specifier: ^9.0.0
+        specifier: ^9.16.0
         version: 9.16.0
       eslint-config-prettier:
         specifier: ^6.6.0
@@ -29,10 +35,13 @@ importers:
         version: 0.27.2(eslint@9.16.0)
       eslint-plugin-prettier:
         specifier: ^3.1.1
-        version: 3.4.1(eslint-config-prettier@6.15.0(eslint@9.16.0))(eslint@9.16.0)(prettier@1.19.1)
+        version: 3.4.1(eslint-config-prettier@6.15.0(eslint@9.16.0))(eslint@9.16.0)(prettier@3.4.2)
       generator-svqk-scaff:
         specifier: 'link:'
         version: 'link:'
+      globals:
+        specifier: ^15.13.0
+        version: 15.13.0
       husky:
         specifier: ^3.0.9
         version: 3.1.0
@@ -43,17 +52,20 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1
       prettier:
-        specifier: ^1.19.1
-        version: 1.19.1
+        specifier: ^3.1.1
+        version: 3.4.2
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@types/node@22.10.1)(typescript@4.9.5)
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
+      typescript-eslint:
+        specifier: ^8.17.0
+        version: 8.17.0(eslint@9.16.0)(typescript@4.9.5)
       yo:
         specifier: ^5.0.0
-        version: 5.0.0(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1))(mem-fs@4.1.1)
+        version: 5.0.0(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1))(mem-fs@4.1.1)
 
 packages:
 
@@ -395,6 +407,68 @@ packages:
 
   '@types/yeoman-generator@5.2.14':
     resolution: {integrity: sha512-eIYBqQyURXiAaoU6jvJqMI+tNSG4s7EXtcHucLCgb8EV2vqz4x1WPr91MT0MiWHV8+9dDRrMkc1VZ6LduexuyA==}
+
+  '@typescript-eslint/eslint-plugin@8.17.0':
+    resolution: {integrity: sha512-HU1KAdW3Tt8zQkdvNoIijfWDMvdSweFYm4hWh+KwhPstv+sCmWb89hCIP8msFm9N1R/ooh9honpSuvqKWlYy3w==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      '@typescript-eslint/parser': ^8.0.0 || ^8.0.0-alpha.0
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@typescript-eslint/parser@8.17.0':
+    resolution: {integrity: sha512-Drp39TXuUlD49F7ilHHCG7TTg8IkA+hxCuULdmzWYICxGXvDXmDmWEjJYZQYgf6l/TFfYNE167m7isnc3xlIEg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@typescript-eslint/scope-manager@8.17.0':
+    resolution: {integrity: sha512-/ewp4XjvnxaREtqsZjF4Mfn078RD/9GmiEAtTeLQ7yFdKnqwTOgRMSvFz4et9U5RiJQ15WTGXPLj89zGusvxBg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@typescript-eslint/type-utils@8.17.0':
+    resolution: {integrity: sha512-q38llWJYPd63rRnJ6wY/ZQqIzPrBCkPdpIsaCfkR3Q4t3p6sb422zougfad4TFW9+ElIFLVDzWGiGAfbb/v2qw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@typescript-eslint/types@8.17.0':
+    resolution: {integrity: sha512-gY2TVzeve3z6crqh2Ic7Cr+CAv6pfb0Egee7J5UAVWCpVvDI/F71wNfolIim4FE6hT15EbpZFVUj9j5i38jYXA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@typescript-eslint/typescript-estree@8.17.0':
+    resolution: {integrity: sha512-JqkOopc1nRKZpX+opvKqnM3XUlM7LpFMD0lYxTqOTKQfCWAmxw45e3qlOCsEqEB2yuacujivudOFpCnqkBDNMw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@typescript-eslint/utils@8.17.0':
+    resolution: {integrity: sha512-bQC8BnEkxqG8HBGKwG9wXlZqg37RKSMY7v/X8VEWD8JG2JuTHuNK0VFvMPMUKQcbk6B+tf05k+4AShAEtCtJ/w==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@typescript-eslint/visitor-keys@8.17.0':
+    resolution: {integrity: sha512-1Hm7THLpO6ww5QU6H/Qp+AusUUl+z/CAm3cNZZ0jQvon9yicgO7Rwd+/WWRpMKLYV6p2UvdbR27c86rzCPpreg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@yeoman/adapter@1.6.0':
     resolution: {integrity: sha512-oJw/i6zUDdfsT5VOPuANDDEWs5NhlMq5+rmyZIVdgBTXalbCw6nUfJQOblO2Fnq+Ov6CxlyzDBTWQvL5cEjA+g==}
@@ -1687,6 +1761,10 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
+  globals@15.13.0:
+    resolution: {integrity: sha512-49TewVEz0UxZjr1WYYsWpPrhyC/B/pA8Bq0fUmet2n+eR7yn0IvNzNaoBwnK6mdkzcN+se7Ez9zUgULTz2QH4g==}
+    engines: {node: '>=18'}
+
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
@@ -1736,6 +1814,9 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  graphemer@1.4.0:
+    resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
   grouped-queue@1.1.0:
     resolution: {integrity: sha512-rZOFKfCqLhsu5VqjBjEWiwrYqJR07KxIkH4mLZlNlGDfntbb4FbMyGFP14TlvRPrU9S3Hnn/sgxbC5ZeN0no3Q==}
@@ -3121,9 +3202,9 @@ packages:
     resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
     engines: {node: '>=6.0.0'}
 
-  prettier@1.19.1:
-    resolution: {integrity: sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==}
-    engines: {node: '>=4'}
+  prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+    engines: {node: '>=14'}
     hasBin: true
 
   pretty-bytes@5.6.0:
@@ -3834,6 +3915,12 @@ packages:
     resolution: {integrity: sha512-MTBWv3jhVjTU7XR3IQHllbiJs8sc75a80OEhB6or/q7pLTWgQ0bMGQXXYQSrSuXe6WiKWDZ5txXY5P59a/coVA==}
     engines: {node: '>=4'}
 
+  ts-api-utils@1.4.3:
+    resolution: {integrity: sha512-i3eMG77UTMD0hZhgRS562pv83RC6ukSAC2GMNWc+9dieh/+jDM5u5YG+NHX6VNDRHQcHwmsTHctP9LhbC3WxVw==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      typescript: '>=4.2.0'
+
   ts-node@10.9.2:
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
@@ -3906,6 +3993,16 @@ packages:
 
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
+
+  typescript-eslint@8.17.0:
+    resolution: {integrity: sha512-409VXvFd/f1br1DCbuKNFqQpXICoTB+V51afcwG1pn1a3Cp92MqAUges3YjwEdQ0cMUoCIodjVDAYzyD8h3SYA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
@@ -4611,6 +4708,88 @@ snapshots:
       '@types/yeoman-environment': 2.10.11
       rxjs: 6.6.7
 
+  '@typescript-eslint/eslint-plugin@8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0)(typescript@4.9.5))(eslint@9.16.0)(typescript@4.9.5)':
+    dependencies:
+      '@eslint-community/regexpp': 4.12.1
+      '@typescript-eslint/parser': 8.17.0(eslint@9.16.0)(typescript@4.9.5)
+      '@typescript-eslint/scope-manager': 8.17.0
+      '@typescript-eslint/type-utils': 8.17.0(eslint@9.16.0)(typescript@4.9.5)
+      '@typescript-eslint/utils': 8.17.0(eslint@9.16.0)(typescript@4.9.5)
+      '@typescript-eslint/visitor-keys': 8.17.0
+      eslint: 9.16.0
+      graphemer: 1.4.0
+      ignore: 5.3.2
+      natural-compare: 1.4.0
+      ts-api-utils: 1.4.3(typescript@4.9.5)
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/parser@8.17.0(eslint@9.16.0)(typescript@4.9.5)':
+    dependencies:
+      '@typescript-eslint/scope-manager': 8.17.0
+      '@typescript-eslint/types': 8.17.0
+      '@typescript-eslint/typescript-estree': 8.17.0(typescript@4.9.5)
+      '@typescript-eslint/visitor-keys': 8.17.0
+      debug: 4.3.7
+      eslint: 9.16.0
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/scope-manager@8.17.0':
+    dependencies:
+      '@typescript-eslint/types': 8.17.0
+      '@typescript-eslint/visitor-keys': 8.17.0
+
+  '@typescript-eslint/type-utils@8.17.0(eslint@9.16.0)(typescript@4.9.5)':
+    dependencies:
+      '@typescript-eslint/typescript-estree': 8.17.0(typescript@4.9.5)
+      '@typescript-eslint/utils': 8.17.0(eslint@9.16.0)(typescript@4.9.5)
+      debug: 4.3.7
+      eslint: 9.16.0
+      ts-api-utils: 1.4.3(typescript@4.9.5)
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/types@8.17.0': {}
+
+  '@typescript-eslint/typescript-estree@8.17.0(typescript@4.9.5)':
+    dependencies:
+      '@typescript-eslint/types': 8.17.0
+      '@typescript-eslint/visitor-keys': 8.17.0
+      debug: 4.3.7
+      fast-glob: 3.3.2
+      is-glob: 4.0.3
+      minimatch: 9.0.5
+      semver: 7.6.3
+      ts-api-utils: 1.4.3(typescript@4.9.5)
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/utils@8.17.0(eslint@9.16.0)(typescript@4.9.5)':
+    dependencies:
+      '@eslint-community/eslint-utils': 4.4.1(eslint@9.16.0)
+      '@typescript-eslint/scope-manager': 8.17.0
+      '@typescript-eslint/types': 8.17.0
+      '@typescript-eslint/typescript-estree': 8.17.0(typescript@4.9.5)
+      eslint: 9.16.0
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/visitor-keys@8.17.0':
+    dependencies:
+      '@typescript-eslint/types': 8.17.0
+      eslint-visitor-keys: 4.2.0
+
   '@yeoman/adapter@1.6.0':
     dependencies:
       '@types/inquirer': 9.0.7
@@ -4621,11 +4800,11 @@ snapshots:
       p-queue: 8.0.1
       text-table: 0.2.0
 
-  '@yeoman/conflicter@2.3.2(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1))(mem-fs@4.1.1)':
+  '@yeoman/conflicter@2.3.2(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1))(mem-fs@4.1.1)':
     dependencies:
       '@types/node': 22.10.1
       '@yeoman/transform': 1.2.0
-      '@yeoman/types': 1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1)
+      '@yeoman/types': 1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1)
       binary-extensions: 2.3.0
       cli-table: 0.3.11
       dateformat: 5.0.3
@@ -4647,13 +4826,13 @@ snapshots:
       minimatch: 9.0.5
       readable-stream: 4.5.2
 
-  '@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1)':
+  '@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1)':
     dependencies:
       '@types/node': 22.10.1
       '@yeoman/adapter': 1.6.0
     optionalDependencies:
       mem-fs: 4.1.1
-      mem-fs-editor: 7.1.0
+      mem-fs-editor: 11.1.3(mem-fs@4.1.1)
 
   JSONStream@1.3.5:
     dependencies:
@@ -5451,10 +5630,10 @@ snapshots:
     dependencies:
       eslint: 9.16.0
 
-  eslint-plugin-prettier@3.4.1(eslint-config-prettier@6.15.0(eslint@9.16.0))(eslint@9.16.0)(prettier@1.19.1):
+  eslint-plugin-prettier@3.4.1(eslint-config-prettier@6.15.0(eslint@9.16.0))(eslint@9.16.0)(prettier@3.4.2):
     dependencies:
       eslint: 9.16.0
-      prettier: 1.19.1
+      prettier: 3.4.2
       prettier-linter-helpers: 1.0.0
     optionalDependencies:
       eslint-config-prettier: 6.15.0(eslint@9.16.0)
@@ -5953,6 +6132,8 @@ snapshots:
 
   globals@14.0.0: {}
 
+  globals@15.13.0: {}
+
   globalthis@1.0.4:
     dependencies:
       define-properties: 1.2.1
@@ -6082,6 +6263,8 @@ snapshots:
   graceful-fs@4.2.10: {}
 
   graceful-fs@4.2.11: {}
+
+  graphemer@1.4.0: {}
 
   grouped-queue@1.1.0:
     dependencies:
@@ -7544,7 +7727,7 @@ snapshots:
     dependencies:
       fast-diff: 1.3.0
 
-  prettier@1.19.1: {}
+  prettier@3.4.2: {}
 
   pretty-bytes@5.6.0: {}
 
@@ -8275,6 +8458,10 @@ snapshots:
 
   trim-newlines@2.0.0: {}
 
+  ts-api-utils@1.4.3(typescript@4.9.5):
+    dependencies:
+      typescript: 4.9.5
+
   ts-node@10.9.2(@types/node@22.10.1)(typescript@4.9.5):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
@@ -8341,6 +8528,17 @@ snapshots:
       is-typedarray: 1.0.0
 
   typedarray@0.0.6: {}
+
+  typescript-eslint@8.17.0(eslint@9.16.0)(typescript@4.9.5):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.17.0(@typescript-eslint/parser@8.17.0(eslint@9.16.0)(typescript@4.9.5))(eslint@9.16.0)(typescript@4.9.5)
+      '@typescript-eslint/parser': 8.17.0(eslint@9.16.0)(typescript@4.9.5)
+      '@typescript-eslint/utils': 8.17.0(eslint@9.16.0)(typescript@4.9.5)
+      eslint: 9.16.0
+    optionalDependencies:
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - supports-color
 
   typescript@4.9.5: {}
 
@@ -8612,13 +8810,13 @@ snapshots:
       - encoding
       - supports-color
 
-  yeoman-environment@4.4.3(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1))(mem-fs@4.1.1):
+  yeoman-environment@4.4.3(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1))(mem-fs@4.1.1):
     dependencies:
       '@yeoman/adapter': 1.6.0
-      '@yeoman/conflicter': 2.3.2(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1))(mem-fs@4.1.1)
+      '@yeoman/conflicter': 2.3.2(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1))(mem-fs@4.1.1)
       '@yeoman/namespace': 1.0.1
       '@yeoman/transform': 1.2.0
-      '@yeoman/types': 1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1)
+      '@yeoman/types': 1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1)
       arrify: 3.0.0
       chalk: 5.3.0
       commander: 11.1.0
@@ -8707,7 +8905,7 @@ snapshots:
 
   yn@3.1.1: {}
 
-  yo@5.0.0(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1))(mem-fs@4.1.1):
+  yo@5.0.0(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1))(mem-fs@4.1.1):
     dependencies:
       async: 3.2.6
       chalk: 4.1.2
@@ -8737,7 +8935,7 @@ snapshots:
       user-home: 2.0.0
       yeoman-character: 1.1.0
       yeoman-doctor: 5.0.0
-      yeoman-environment: 4.4.3(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@7.1.0)(mem-fs@4.1.1))(mem-fs@4.1.1)
+      yeoman-environment: 4.4.3(@types/node@22.10.1)(@yeoman/types@1.5.0(@types/node@22.10.1)(@yeoman/adapter@1.6.0)(mem-fs-editor@11.1.3(mem-fs@4.1.1))(mem-fs@4.1.1))(mem-fs@4.1.1)
       yosay: 2.0.2
     transitivePeerDependencies:
       - '@types/node'
