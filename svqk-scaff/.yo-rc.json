@@ -1,0 +1,6 @@
+{
+  "generator-svqk-scaff": {
+    "metadataFilePath": "src/main/resources/jeg-metadata.json",
+    "destRootPath": "../svqk-back/src/main/java"
+  }
+}
