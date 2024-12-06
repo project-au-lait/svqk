@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageControlModel } from '../api/Api';
+  import type { PageControlModel } from '$lib/arch/api/Api';
 
   interface Props {
     pageCtrl: PageControlModel;

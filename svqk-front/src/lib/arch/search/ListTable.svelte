@@ -28,11 +28,11 @@
 </script>
 
 <script lang="ts" generics="T">
-  import type { ComponentProps } from 'svelte';
+  import type { SortOrderModel } from '$lib/arch/api/Api';
+  import SortDirection from '$lib/arch/components/SortDirection.svelte';
+  import Pagination from '$lib/arch/search/Pagination.svelte';
   import { t } from '$lib/translations';
-  import type { SortOrderModel } from '../api/Api';
-  import SortDirection from '../components/SortDirection.svelte';
-  import Pagination from './Pagination.svelte';
+  import type { ComponentProps } from 'svelte';
 
   interface Props {
     list: T[];
