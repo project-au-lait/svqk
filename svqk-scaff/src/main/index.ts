@@ -73,7 +73,21 @@ class SvqkCodeGenerator extends Generator {
       pkgNm: string
     ): string => `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
 
+    if (this.args.length == 0) {
+      const entities = this.metadataList
+        .map((metadata) => metadata.className)
+        .join(", ");
+      this.log(
+        `Please specify entity name(s) with space separated choosing from ${entities}.`
+      );
+      return;
+    }
+
     this.metadataList.forEach(({ packageName, className, fields }) => {
+      if (!this.args.includes(className)) {
+        return;
+      }
+
       const tmplData = generateTemplateData(packageName, className, fields);
 
       // Generate files for domain package
