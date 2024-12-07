@@ -132,7 +132,7 @@
     <delete file="${propsfile}" />
     <propertyfile file="${propsfile}">
       <entry key="excludePatterns" value="${excludePatterns}" />
-      <entry key="archetype.filteredExtensions" value="java,json,code-workspace" />
+      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml" />
       <!-- This value is to avoid the possibility of incorrectly replacing the version string in
       package.json files. -->
       <entry key="version" value="string that cannot be matched" />
