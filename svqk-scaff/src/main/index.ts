@@ -48,6 +48,7 @@ class SvqkCodeGenerator extends Generator {
           entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
         entityNmAllCaps: entityNmPascal.toUpperCase(),
         entityIdType: fields.find((field) => field.id)?.javaType ?? "",
+        fields,
       };
     };
 
@@ -100,11 +101,13 @@ class SvqkCodeGenerator extends Generator {
       });
 
       // Generate files for interfaces package
-      const destPkgPath = generateDestPackagePath(
-        this.destRootPath,
-        tmplData.interfacesPkgNm
-      );
-      outputJavaFile("Controller", destPkgPath, tmplData);
+      ["Dto", "Controller"].forEach((layer) => {
+        const destPkgPath = generateDestPackagePath(
+          this.destRootPath,
+          tmplData.interfacesPkgNm
+        );
+        outputJavaFile(layer, destPkgPath, tmplData);
+      });
     });
   }
 
