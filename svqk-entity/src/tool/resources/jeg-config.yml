@@ -6,6 +6,8 @@ packages:
     - tracker
   ${project.groupId}.domain.hello:
     - hello
+  ${project.groupId}.domain.news:
+    - news
 baseClassDefs:
   - tables:
       - "issue"
