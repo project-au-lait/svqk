@@ -27,15 +27,20 @@ public class <%= entityNmPascal %>Controller {
 
     <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(id);
 
-    return <%= entityNmPascal %>Dto.builder().id(entity.getId()).message(entity.getMessage()).build();
+    return <%= entityNmPascal %>Dto.builder()
+    <% fields.forEach(function(field) { %>
+      .<%= field.fieldName %>(entity.get<%= field.fieldName.charAt(0).toUpperCase() + field.fieldName.slice(1) %>())
+    <% }); %>.build();
+
   }
 
   @POST
   public int save(@Valid <%= entityNmPascal %>Dto dto) {
 
-    <%= entityNmPascal %>Entity entity = new <%= entityNmPascal %>Entity();
-    entity.setId(dto.getId());
-    entity.setMessage(dto.getMessage());
+    <%= entityNmPascal %>Entity entity = <%= entityNmPascal %>Entity.builder()
+    <% fields.forEach(function(field) { %>
+      .<%= field.fieldName %>(dto.get<%= field.fieldName.charAt(0).toUpperCase() + field.fieldName.slice(1) %>())
+    <% }); %>.build();
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
