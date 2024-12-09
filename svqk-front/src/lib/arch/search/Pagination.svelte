@@ -3,14 +3,14 @@
 
   interface Props {
     pageCtrl: PageControlModel;
-    handlePage: (page: number) => Promise<void>;
+    search: (cond?: object) => void;
   }
 
-  let { pageCtrl, handlePage }: Props = $props();
+  let { pageCtrl, search }: Props = $props();
   let { count, start, end, pageNumber, pageNums, lastPage } = $derived(pageCtrl);
 
-  async function gotoPage(page: number) {
-    await handlePage(page);
+  function gotoPage(page: number) {
+    search({pageNumber: page});
   }
 </script>
 

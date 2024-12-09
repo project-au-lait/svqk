@@ -19,7 +19,9 @@
   const form = FormValidator.createForm({}, search); // <.>
 
   // <.>
-  async function search() {
+  async function search(cond?: object) {
+    condition = { ...condition, ...cond };
+
     // <.>
     const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
       api.issues.issuesSearch(condition)
@@ -29,17 +31,6 @@
     if (r) {
       result = r;
     }
-  }
-
-  // <.>
-  async function handleSort(field: string) {
-    condition.sortOrders = SortOrderUtils.addSort(sortOrders, field); // <.>
-    await search(); // <.>
-  }
-
-  async function handlePage(page: number) {
-    condition.pageNumber = page;
-    await search();
   }
 
   const columns = new ColumnsBuilder<IssueModel>()
@@ -95,7 +86,7 @@
 </section>
 
 <section>
-  <ListTable {list} {columns} sort={{ sortOrders, handleSort }} page={{ pageCtrl, handlePage }} />
+  <ListTable {list} {columns} {sortOrders} {pageCtrl} {search} />
 </section>
 
 <!-- for ListTable issueId Column -->

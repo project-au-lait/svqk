@@ -6,20 +6,15 @@
     sortOrders?: SortOrderModel[];
     label: string;
     sortKey: string;
-    handleSort: (field: string) => void;
+    search: (cond?: object) => void;
   }
 
-  let {
-    sortOrders = [],
-    label,
-    sortKey,
-    handleSort
-  }: Props = $props();
+  let { sortOrders = [], label, sortKey, search }: Props = $props();
 
   let sortMark = $derived(SortOrderUtils.getSortMark(sortOrders, sortKey));
 
   function onClick() {
-    handleSort(sortKey);
+    search({ sortOrders: SortOrderUtils.addSort(sortOrders, sortKey) });
   }
 </script>
 
@@ -27,6 +22,6 @@
 
 <style>
   a {
-    text-decoration: none
+    text-decoration: none;
   }
 </style>
