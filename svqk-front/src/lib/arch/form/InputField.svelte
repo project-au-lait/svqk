@@ -23,5 +23,5 @@
 <label for={id}>{label}</label>
 <ValidationMessage for={id} let:messages={message}>
   <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
-  <small id="invalid-{id}">{message}</small>
+  <small id="invalid-{id}">{message || ''}</small>
 </ValidationMessage>
