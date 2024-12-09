@@ -1,6 +1,5 @@
 package dev.aulait.svqk.domain.issue;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,11 +10,17 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "issue")
 public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
@@ -35,6 +40,7 @@ public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
   @Column(name = "description")
   private String description;
 
+  @Builder.Default
   @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "issue_id", insertable = false, updatable = false)
   private Set<JournalEntity> journals = new HashSet<>();
