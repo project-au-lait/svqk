@@ -58,7 +58,7 @@ public class IssueController {
   @GET
   @Path(ISSUES_GET_PATH)
   public IssueDto get(@PathParam("issueId") int id) {
-    IssueEntity entity = service.findIssueWithDetails(id);
+    IssueEntity entity = service.find(id);
 
     return BeanUtils.map(entity, IssueDto.class);
   }
