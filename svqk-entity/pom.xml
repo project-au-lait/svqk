@@ -85,4 +85,15 @@
       </plugin>
     </plugins>
   </build>
+
+
+  <profiles>
+    <profile>
+      <id>gen-entity</id>
+
+      <build>
+        <defaultGoal>process-resources jpa-entity-generator:reverse clean install</defaultGoal>
+      </build>
+    </profile>
+  </profiles>
 </project>

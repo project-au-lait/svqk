@@ -51,6 +51,11 @@
       <arg line="-f ${project}-cicd -D ant.target=test" />
     </exec>
 
+    <antcall target="test-scaffolding">
+      <param name="scaff.testdir" value="${projectdir}" />
+      <param name="scaff.testprj" value="${project}" />
+    </antcall>
+
     <exec executable="docker" dir="${projectdir}/${project}-container">
       <arg line="compose down" />
     </exec>
@@ -100,6 +105,29 @@
     </exec>
 
     <antcall target="adjust-archetype-resources" />
+  </target>
+
+
+  <target name="test-scaffolding">
+    <property name="scaff.testdir" value="${archetype.prjdir}" />
+    <property name="scaff.testprj" value="svqk" />
+
+    <property name="jdk-opts"
+      value="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" />
+
+    <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
+      <env key="MAVEN_OPTS" value="${jdk-opts}" />
+      <arg line="-f ${scaff.testprj}-entity -P gen-entity" />
+    </exec>
+
+    <exec executable="pnpm" dir="${scaff.testdir}/${scaff.testprj}-scaff"
+      failonerror="true">
+      <arg line="start NewsEntity" />
+    </exec>
+
+    <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
+      <arg line="-f ${scaff.testprj}-back compile" />
+    </exec>
   </target>
 
 
