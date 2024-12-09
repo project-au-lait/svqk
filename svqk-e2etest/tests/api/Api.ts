@@ -9,14 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-export interface AtomicReferenceObject {
-  value?: any;
-  plain?: any;
-  opaque?: any;
-  acquire?: any;
-  release?: any;
-}
-
 export interface HelloModel {
   /** @format int32 */
   id: number;
@@ -60,14 +52,7 @@ export interface IssueSearchConditionModel {
 
 export interface IssueSearchResultModel {
   list: IssueModel[];
-  /** @format int64 */
-  count: number;
-  /** @format int32 */
-  pageSize: number;
-  start: AtomicReferenceObject;
-  end: AtomicReferenceObject;
-  lastPage: AtomicReferenceObject;
-  pageNums: AtomicReferenceObject;
+  pageCtrl: PageControlModel;
 }
 
 export interface IssueStatusModel {
@@ -108,6 +93,22 @@ export type LocalDate = string;
  * @example "2022-03-10T12:15:50.000Z"
  */
 export type LocalDateTime = string;
+
+export interface PageControlModel {
+  /** @format int64 */
+  count: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int32 */
+  pageNumber: number;
+  /** @format int32 */
+  start: number;
+  /** @format int32 */
+  end: number;
+  /** @format int32 */
+  lastPage: number;
+  pageNums: number[];
+}
 
 export interface SortOrderModel {
   asc?: boolean;

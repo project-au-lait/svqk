@@ -11,11 +11,11 @@
   export class ColumnsBuilder<T> {
     private columns: ResultListColumn<T>[] = [];
 
-    getColumns() {
+    build() {
       return this.columns;
     }
 
-    addColumn(
+    add(
       label: string,
       sortKey: string,
       getData: (t: T) => string | Snippet<[T]>,
@@ -28,30 +28,20 @@
 </script>
 
 <script lang="ts" generics="T">
-  import type { SortOrderModel } from '$lib/arch/api/Api';
+  import type { PageControlModel, SortOrderModel } from '$lib/arch/api/Api';
+  import SortDirection from '$lib/arch/components/SortDirection.svelte';
+  import Pagination from '$lib/arch/search/Pagination.svelte';
   import { t } from '$lib/translations';
-  import SortDirection from '../components/SortDirection.svelte';
-  import Pagination, { type PaginationResult } from './Pagination.svelte';
 
   interface Props {
     list: T[];
     columns: ResultListColumn<T>[];
     sortOrders?: SortOrderModel[];
-    handleSort: (field: string) => void;
-    result: PaginationResult;
-    currentPage?: number;
-    handlePage: (page: number) => Promise<void>;
+    pageCtrl: PageControlModel;
+    search: (cond?: object) => void;
   }
 
-  let {
-    list,
-    columns,
-    sortOrders,
-    handleSort,
-    result,
-    currentPage = $bindable(),
-    handlePage
-  }: Props = $props();
+  let { list, columns, sortOrders, pageCtrl, search }: Props = $props();
 </script>
 
 {#if list.length}
@@ -62,7 +52,7 @@
           {#each columns as col}
             {@const { label, sortKey } = col}
             <th>
-              <SortDirection {label} {sortKey} {sortOrders} {handleSort} />
+              <SortDirection {label} {sortKey} {sortOrders} {search} />
             </th>
           {/each}
         </tr>
@@ -87,7 +77,7 @@
   </section>
 
   <section>
-    <Pagination {result} bind:currentPage={currentPage} {handlePage} />
+    <Pagination {pageCtrl} {search} />
   </section>
 {:else}
   {$t('msg.noData')}

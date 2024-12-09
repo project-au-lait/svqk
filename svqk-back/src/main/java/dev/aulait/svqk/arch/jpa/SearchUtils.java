@@ -1,5 +1,6 @@
 package dev.aulait.svqk.arch.jpa;
 
+import dev.aulait.svqk.arch.search.PageControlVo;
 import dev.aulait.svqk.arch.search.SearchConditionVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.persistence.EntityManager;
@@ -27,7 +28,9 @@ public class SearchUtils {
     long count = (Long) countQuery.getSingleResult();
 
     if (count == 0) {
-      return SearchResultVo.<T>builder().count(count).build();
+      return SearchResultVo.<T>builder()
+          .pageCtrl(PageControlVo.builder().count(count).build())
+          .build();
     }
 
     String searchQueryStr = builder.getSearchQuery();
@@ -42,12 +45,15 @@ public class SearchUtils {
     List<T> result = searchQuery.getResultList();
 
     return SearchResultVo.<T>builder()
-        .count(count)
         .list(result)
-        .pageSize(condition.getPageSize())
-        .pageNumber(condition.getPageNumber())
-        .pageNumsRange(condition.getPageNumsRange())
-        .offset(condition.getOffset())
+        .pageCtrl(
+            PageControlVo.builder()
+                .count(count)
+                .pageSize(condition.getPageSize())
+                .pageNumber(condition.getPageNumber())
+                .pageNumsRange(condition.getPageNumsRange())
+                .offset(condition.getOffset())
+                .build())
         .build();
   }
 
