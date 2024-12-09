@@ -6,13 +6,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>svqk-migration</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
       <groupId>jakarta.persistence</groupId>
       <artifactId>jakarta.persistence-api</artifactId>
       <version>3.1.0</version>
@@ -88,6 +81,23 @@
 
 
   <profiles>
+    <profile>
+      <id>setup</id>
+
+      <dependencies>
+        <!--
+          This dependency is required to set the build order of the backend project
+          to following the migration project
+        -->
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>svqk-migration</artifactId>
+          <version>${project.version}</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
     <profile>
       <id>gen-entity</id>
 
