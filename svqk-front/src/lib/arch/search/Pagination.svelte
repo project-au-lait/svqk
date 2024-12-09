@@ -10,7 +10,7 @@
   let { count, start, end, pageNumber, pageNums, lastPage } = $derived(pageCtrl);
 
   function gotoPage(page: number) {
-    search({pageNumber: page});
+    search({ pageNumber: page });
   }
 </script>
 
