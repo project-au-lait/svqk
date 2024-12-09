@@ -112,14 +112,6 @@
     <property name="scaff.testdir" value="${archetype.prjdir}" />
     <property name="scaff.testprj" value="svqk" />
 
-    <property name="jdk-opts"
-      value="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" />
-
-    <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
-      <env key="MAVEN_OPTS" value="${jdk-opts}" />
-      <arg line="-f ${scaff.testprj}-entity -P gen-entity" />
-    </exec>
-
     <exec executable="pnpm" dir="${scaff.testdir}/${scaff.testprj}-scaff"
       failonerror="true">
       <arg line="start NewsEntity" />
