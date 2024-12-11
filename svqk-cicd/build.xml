@@ -24,7 +24,7 @@
 
     <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
       <env key="MAVEN_OPTS" value="${jdk-opts}" />
-      <arg line="-T 1C clean verify -P setup,gen-enttiy${analyze.profile}" />
+      <arg line="-T 1C clean verify -P setup,gen-entity${analyze.profile}" />
       <arg line="-D db.port=${db.port.random} -D back.port=${back.port.random}" />
       <arg line="-D org.slf4j.simpleLogger.showThreadName=true" />
     </exec>

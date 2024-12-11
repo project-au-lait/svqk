@@ -63,7 +63,8 @@
           <version>0.10-SNAPSHOT</version>
           <configuration>
             <configFilePath>${project.build.outputDirectory}/jeg-config.yml</configFilePath>
-            <metadataOutputDir>${project.parent.basedir}/svqk-scaff/src/main/resources</metadataOutputDir>
+            <metadataOutputDir>
+              ${project.parent.basedir}/${project.parent.artifactId}-scaff/src/main/resources</metadataOutputDir>
             <jdbcUrl>${db.jdbc.url}</jdbcUrl>
             <jdbcUsername>${db.username}</jdbcUsername>
             <jdbcPassword>${db.password}</jdbcPassword>

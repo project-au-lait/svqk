@@ -114,7 +114,7 @@
 
     <exec executable="pnpm" dir="${scaff.testdir}/${scaff.testprj}-scaff"
       failonerror="true">
-      <arg line="start NewsEntity" />
+      <arg line="start WorldEntity" />
     </exec>
 
     <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
