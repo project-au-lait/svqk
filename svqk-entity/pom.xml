@@ -112,6 +112,12 @@
     <profile>
       <id>gen-entity</id>
 
+      <activation>
+        <file>
+          <exists>.gen-entity</exists>
+        </file>
+      </activation>
+
       <build>
         <defaultGoal>process-resources jpa-entity-generator:reverse clean install</defaultGoal>
 
