@@ -33,47 +33,6 @@ class SvqkCodeGenerator extends Generator {
   }
 
   writing() {
-    const generateTemplateData = (
-      domainPkgNm: string,
-      classNm: string,
-      fields: Field[]
-    ): TemplateData => {
-      const entityNmPascal = extractEntityName(classNm);
-
-      return {
-        domainPkgNm: domainPkgNm,
-        interfacesPkgNm: domainPkgNm.replace(".domain.", ".interfaces."),
-        entityNmPascal: entityNmPascal,
-        entityNmCamel:
-          entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
-        entityNmAllCaps: entityNmPascal.toUpperCase(),
-        entityIdType: fields.find((field) => field.id)?.javaType ?? "",
-        fields,
-      };
-    };
-
-    const outputJavaFile = (
-      layer: string,
-      destPkgPath: string,
-      tmplData: TemplateData
-    ) => {
-      this.fs.copyTpl(
-        this.templatePath(`java/${layer}.java`),
-        this.destinationPath(
-          `${destPkgPath}/${tmplData.entityNmPascal}${layer}.java`
-        ),
-        tmplData
-      );
-    };
-
-    const extractEntityName = (entityClassNm: string): string =>
-      entityClassNm.replace("Entity", "");
-
-    const generateDestPackagePath = (
-      destRootPath: string,
-      pkgNm: string
-    ): string => `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
-
     if (this.args.length == 0) {
       const entities = this.metadataList
         .map((metadata) => metadata.className)
@@ -89,30 +48,75 @@ class SvqkCodeGenerator extends Generator {
         return;
       }
 
-      const tmplData = generateTemplateData(packageName, className, fields);
+      const tmplData = this._generate_template_data(
+        packageName,
+        className,
+        fields
+      );
 
       // Generate files for domain package
       ["Repository", "Service"].forEach((layer) => {
-        const destPkgPath = generateDestPackagePath(
+        const destPkgPath = this._generate_dest_package_path(
           this.destRootPath,
           tmplData.domainPkgNm
         );
-        outputJavaFile(layer, destPkgPath, tmplData);
+        this._output_java_file(layer, destPkgPath, tmplData);
       });
 
       // Generate files for interfaces package
       ["Dto", "Controller"].forEach((layer) => {
-        const destPkgPath = generateDestPackagePath(
+        const destPkgPath = this._generate_dest_package_path(
           this.destRootPath,
           tmplData.interfacesPkgNm
         );
-        outputJavaFile(layer, destPkgPath, tmplData);
+        this._output_java_file(layer, destPkgPath, tmplData);
       });
     });
   }
 
   end() {
     this.log("Completed.");
+  }
+
+  _generate_template_data(
+    domainPkgNm: string,
+    classNm: string,
+    fields: Field[]
+  ): TemplateData {
+    const entityNmPascal = this._extract_entity_name(classNm);
+
+    return {
+      domainPkgNm: domainPkgNm,
+      interfacesPkgNm: domainPkgNm.replace(".domain.", ".interfaces."),
+      entityNmPascal: entityNmPascal,
+      entityNmCamel:
+        entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
+      entityNmAllCaps: entityNmPascal.toUpperCase(),
+      entityIdType: fields.find((field) => field.id)?.javaType ?? "",
+      fields,
+    };
+  }
+
+  _output_java_file(
+    layer: string,
+    destPkgPath: string,
+    tmplData: TemplateData
+  ) {
+    this.fs.copyTpl(
+      this.templatePath(`java/${layer}.java`),
+      this.destinationPath(
+        `${destPkgPath}/${tmplData.entityNmPascal}${layer}.java`
+      ),
+      tmplData
+    );
+  }
+
+  _extract_entity_name(entityClassNm: string): string {
+    return entityClassNm.replace("Entity", "");
+  }
+
+  _generate_dest_package_path(destRootPath: string, pkgNm: string): string {
+    return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
   }
 }
 
