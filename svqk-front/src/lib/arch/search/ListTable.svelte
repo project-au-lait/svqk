@@ -34,8 +34,8 @@
 
 <script lang="ts" generics="T, U extends ListTableCondition">
   import type { PageControlModel, SortOrderModel } from '$lib/arch/api/Api';
-  import SortDirection from '$lib/arch/search/SortDirection.svelte';
   import Pagination from '$lib/arch/search/Pagination.svelte';
+  import SortDirection from '$lib/arch/search/SortDirection.svelte';
   import { t } from '$lib/translations';
 
   interface Props {
