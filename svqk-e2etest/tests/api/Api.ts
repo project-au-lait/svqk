@@ -100,8 +100,6 @@ export interface PageControlModel {
   /** @format int32 */
   pageSize: number;
   /** @format int32 */
-  pageNumber: number;
-  /** @format int32 */
   start: number;
   /** @format int32 */
   end: number;

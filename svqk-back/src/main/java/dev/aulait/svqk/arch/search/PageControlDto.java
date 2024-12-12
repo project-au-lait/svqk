@@ -18,8 +18,7 @@ public class PageControlDto {
   @Schema(required = true)
   private int pageSize;
 
-  @Schema(required = true)
-  private int pageNumber;
+  @JsonIgnore private int pageNumber;
 
   @JsonIgnore private int pageNumsRange;
 

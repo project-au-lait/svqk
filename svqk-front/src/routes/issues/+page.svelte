@@ -4,7 +4,6 @@
   import FormValidator from '$lib/arch/form/FormValidator';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
-  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
@@ -13,15 +12,10 @@
   let { data }: { data: PageData } = $props();
   let { result, condition } = $state(data);
 
-  let { sortOrders } = $derived(condition);
-  let { list, pageCtrl } = $derived(result);
-
   const form = FormValidator.createForm({}, search); // <.>
 
   // <.>
-  async function search(cond?: object) {
-    condition = { ...condition, ...cond };
-
+  async function search() {
     // <.>
     const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
       api.issues.issuesSearch(condition)
@@ -86,7 +80,7 @@
 </section>
 
 <section>
-  <ListTable {list} {columns} {sortOrders} {pageCtrl} {search} />
+  <ListTable {result} {columns} bind:condition {search} />
 </section>
 
 <!-- for ListTable issueId Column -->

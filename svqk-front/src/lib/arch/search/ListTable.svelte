@@ -1,15 +1,20 @@
 <script lang="ts" module>
   import type { Snippet } from 'svelte';
 
-  export interface ResultListColumn<T> {
+  export interface ListTableCondition {
+    sortOrders?: SortOrderModel[];
+    pageNumber?: number;
+  }
+
+  export interface ListTableColumn<T> {
     label: string;
     sortKey: string;
-    getData: (t: T) => string | Snippet<[T]>;
+    tdBody: (t: T) => string | Snippet<[T]>;
     tdClass?: string[];
   }
 
   export class ColumnsBuilder<T> {
-    private columns: ResultListColumn<T>[] = [];
+    private columns: ListTableColumn<T>[] = [];
 
     build() {
       return this.columns;
@@ -18,33 +23,35 @@
     add(
       label: string,
       sortKey: string,
-      getData: (t: T) => string | Snippet<[T]>,
+      tdBody: (t: T) => string | Snippet<[T]>,
       tdClass?: string[]
     ) {
-      this.columns.push({ label, sortKey, getData, tdClass });
+      this.columns.push({ label, sortKey, tdBody, tdClass });
       return this;
     }
   }
 </script>
 
-<script lang="ts" generics="T">
+<script lang="ts" generics="T, U extends ListTableCondition">
   import type { PageControlModel, SortOrderModel } from '$lib/arch/api/Api';
-  import SortDirection from '$lib/arch/components/SortDirection.svelte';
+  import SortDirection from '$lib/arch/search/SortDirection.svelte';
   import Pagination from '$lib/arch/search/Pagination.svelte';
   import { t } from '$lib/translations';
 
   interface Props {
-    list: T[];
-    columns: ResultListColumn<T>[];
-    sortOrders?: SortOrderModel[];
-    pageCtrl: PageControlModel;
-    search: (cond?: object) => void;
+    result: {
+      list: T[];
+      pageCtrl: PageControlModel;
+    };
+    columns: ListTableColumn<T>[];
+    condition: U;
+    search: () => void;
   }
 
-  let { list, columns, sortOrders, pageCtrl, search }: Props = $props();
+  let { result, columns, condition = $bindable(), search }: Props = $props();
 </script>
 
-{#if list.length}
+{#if result.list.length}
   <section>
     <table class="list striped">
       <thead>
@@ -52,16 +59,16 @@
           {#each columns as col}
             {@const { label, sortKey } = col}
             <th>
-              <SortDirection {label} {sortKey} {sortOrders} {search} />
+              <SortDirection {label} {sortKey} bind:sortOrders={condition.sortOrders} {search} />
             </th>
           {/each}
         </tr>
       </thead>
       <tbody>
-        {#each list as item}
+        {#each result.list as item}
           <tr>
             {#each columns as col}
-              {@const data = col.getData(item)}
+              {@const data = col.tdBody(item)}
               <td class={col.tdClass?.join(' ')}>
                 {#if typeof data === 'string'}
                   {@html data}
@@ -77,7 +84,7 @@
   </section>
 
   <section>
-    <Pagination {pageCtrl} {search} />
+    <Pagination pageCtrl={result.pageCtrl} bind:pageNumber={condition.pageNumber} {search} />
   </section>
 {:else}
   {$t('msg.noData')}

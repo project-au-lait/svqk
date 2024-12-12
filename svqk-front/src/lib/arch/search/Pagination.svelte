@@ -3,14 +3,16 @@
 
   interface Props {
     pageCtrl: PageControlModel;
-    search: (cond?: object) => void;
+    pageNumber?: number;
+    search: () => void;
   }
 
-  let { pageCtrl, search }: Props = $props();
-  let { count, start, end, pageNumber, pageNums, lastPage } = $derived(pageCtrl);
+  let { pageCtrl, pageNumber = $bindable(1), search }: Props = $props();
+  let { count, start, end, pageNums, lastPage } = $derived(pageCtrl);
 
   function gotoPage(page: number) {
-    search({ pageNumber: page });
+    pageNumber = page;
+    search();
   }
 </script>
 

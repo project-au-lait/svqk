@@ -1,20 +1,21 @@
 <script lang="ts">
-  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
   import type { SortOrderModel } from '$lib/arch/api/Api';
+  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
 
   interface Props {
-    sortOrders?: SortOrderModel[];
     label: string;
     sortKey: string;
-    search: (cond?: object) => void;
+    sortOrders?: SortOrderModel[];
+    search: () => void;
   }
 
-  let { sortOrders = [], label, sortKey, search }: Props = $props();
+  let { label, sortKey, sortOrders = $bindable(), search }: Props = $props();
 
   let sortMark = $derived(SortOrderUtils.getSortMark(sortOrders, sortKey));
 
   function onClick() {
-    search({ sortOrders: SortOrderUtils.addSort(sortOrders, sortKey) });
+    sortOrders = SortOrderUtils.addSort(sortOrders, sortKey);
+    search();
   }
 </script>
 
