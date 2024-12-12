@@ -1,11 +1,6 @@
 <script lang="ts" module>
   import type { Snippet } from 'svelte';
 
-  export interface ListTableCondition {
-    sortOrders?: SortOrderModel[];
-    pageNumber?: number;
-  }
-
   export interface ListTableColumn<T> {
     label: string;
     sortKey: string;
@@ -32,7 +27,7 @@
   }
 </script>
 
-<script lang="ts" generics="T, U extends ListTableCondition">
+<script lang="ts" generics="T">
   import type { PageControlModel, SortOrderModel } from '$lib/arch/api/Api';
   import Pagination from '$lib/arch/search/Pagination.svelte';
   import SortDirection from '$lib/arch/search/SortDirection.svelte';
@@ -44,7 +39,10 @@
       pageCtrl: PageControlModel;
     };
     columns: ListTableColumn<T>[];
-    condition: U;
+    condition: {
+      sortOrders?: SortOrderModel[];
+      pageNumber?: number;
+    };
     search: () => void;
   }
 
