@@ -13,6 +13,7 @@
 
   <property name="archetype.prjdir" value="${basedir}/../" />
   <property name="archetype.gendir" value="${basedir}/../target/generated-sources/archetype" />
+  <property name="archetype.testdir" value="${project.build.directory}/test" />
 
   <condition property="mvnw" value="${archetype.prjdir}/mvnw.cmd" else="${archetype.prjdir}/mvnw">
     <os family="windows" />
@@ -75,11 +76,9 @@
    -->
   <target name="generate-project" depends="install">
 
-    <property name="archetype.testdir" value="${project.build.directory}/test" />
     <property name="project" value="tsvqk" />
     <property name="projectdir" value="${archetype.testdir}/${project}" />
 
-    <delete dir="${archetype.testdir}" />
     <mkdir dir="${archetype.testdir}" />
 
     <exec executable="${mvnw}" dir="${archetype.testdir}" failonerror="true">
@@ -107,7 +106,7 @@
   <!-- 
     This target creates the archetype from the project.
    -->
-  <target name="create" depends="create-archetype-props">
+  <target name="create" depends="pre-clean, create-archetype-props">
     <exec executable="${mvnw}" dir="${archetype.prjdir}" failonerror="true">
       <arg line="-N clean archetype:create-from-project" />
     </exec>
@@ -270,6 +269,18 @@
         </replaceregexp>
       </then>
     </if>
+  </target>
+
+
+  <target name="pre-clean">
+    <delete includeemptydirs="true" removeNotFollowedSymlinks="true">
+      <fileset dir="${archetype.testdir}" followsymlinks="false" erroronmissingdir="false"
+        defaultexcludes="no" />
+      <fileset dir="${archetype.prjdir}" followsymlinks="false" erroronmissingdir="false"
+        defaultexcludes="no">
+        <include name="**/node_modules/**" />
+      </fileset>
+    </delete>
   </target>
 
 </project>
