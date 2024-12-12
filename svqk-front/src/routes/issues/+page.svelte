@@ -3,8 +3,7 @@
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import ResultList, { ColumnsBuilder } from '$lib/arch/search/ResultList.svelte';
-  import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
+  import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
@@ -28,21 +27,14 @@
     }
   }
 
-  // <.>
-  async function handleSort(field: string) {
-    condition.sortOrders = SortOrderUtils.addSort(condition.sortOrders, field); // <.>
-    condition = condition; // <.>
-    await search(); // <.>
-  }
-
   const columns = new ColumnsBuilder<IssueModel>()
-    .addColumn('#', 'id', () => issueIdAnchor)
-    .addColumn($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
-    .addColumn($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
-    .addColumn($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
-    .addColumn($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
-    .addColumn($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
-    .getColumns();
+    .add('#', 'id', () => issueIdAnchor)
+    .add($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
+    .add($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
+    .add($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
+    .add($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
+    .add($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
+    .build();
 </script>
 
 <section>
@@ -88,18 +80,10 @@
 </section>
 
 <section>
-  <ResultList
-    list={result.list}
-    {columns}
-    sortOrders={condition.sortOrders}
-    {handleSort}
-    {result}
-    bind:currentPage={condition.pageNumber}
-    handlePage={search}
-  />
+  <ListTable {result} {columns} bind:condition {search} />
 </section>
 
-<!-- for ResultList issueId Column -->
+<!-- for ListTable issueId Column -->
 {#snippet issueIdAnchor(issue: IssueModel)}
   <a href={`/issues/${issue.id}`}>{issue.id}</a>
 {/snippet}

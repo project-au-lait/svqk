@@ -1,60 +1,55 @@
 <script lang="ts" module>
   import type { Snippet } from 'svelte';
 
-  export interface ResultListColumn<T> {
+  export interface ListTableColumn<T> {
     label: string;
     sortKey: string;
-    getData: (t: T) => string | Snippet<[T]>;
+    tdBody: (t: T) => string | Snippet<[T]>;
     tdClass?: string[];
   }
 
   export class ColumnsBuilder<T> {
-    private columns: ResultListColumn<T>[] = [];
+    private columns: ListTableColumn<T>[] = [];
 
-    getColumns() {
+    build() {
       return this.columns;
     }
 
-    addColumn(
+    add(
       label: string,
       sortKey: string,
-      getData: (t: T) => string | Snippet<[T]>,
+      tdBody: (t: T) => string | Snippet<[T]>,
       tdClass?: string[]
     ) {
-      this.columns.push({ label, sortKey, getData, tdClass });
+      this.columns.push({ label, sortKey, tdBody, tdClass });
       return this;
     }
   }
 </script>
 
 <script lang="ts" generics="T">
-  import type { SortOrderModel } from '$lib/arch/api/Api';
+  import type { PageControlModel, SortOrderModel } from '$lib/arch/api/Api';
+  import Pagination from '$lib/arch/search/Pagination.svelte';
+  import SortDirection from '$lib/arch/search/SortDirection.svelte';
   import { t } from '$lib/translations';
-  import SortDirection from '../components/SortDirection.svelte';
-  import Pagination, { type PaginationResult } from './Pagination.svelte';
 
   interface Props {
-    list: T[];
-    columns: ResultListColumn<T>[];
-    sortOrders?: SortOrderModel[];
-    handleSort: (field: string) => void;
-    result: PaginationResult;
-    currentPage?: number;
-    handlePage: (page: number) => Promise<void>;
+    result: {
+      list: T[];
+      pageCtrl: PageControlModel;
+    };
+    columns: ListTableColumn<T>[];
+    condition: {
+      sortOrders?: SortOrderModel[];
+      pageNumber?: number;
+    };
+    search: () => void;
   }
 
-  let {
-    list,
-    columns,
-    sortOrders,
-    handleSort,
-    result,
-    currentPage = $bindable(),
-    handlePage
-  }: Props = $props();
+  let { result, columns, condition = $bindable(), search }: Props = $props();
 </script>
 
-{#if list.length}
+{#if result.list.length}
   <section>
     <table class="list striped">
       <thead>
@@ -62,16 +57,16 @@
           {#each columns as col}
             {@const { label, sortKey } = col}
             <th>
-              <SortDirection {label} {sortKey} {sortOrders} {handleSort} />
+              <SortDirection {label} {sortKey} bind:sortOrders={condition.sortOrders} {search} />
             </th>
           {/each}
         </tr>
       </thead>
       <tbody>
-        {#each list as item}
+        {#each result.list as item}
           <tr>
             {#each columns as col}
-              {@const data = col.getData(item)}
+              {@const data = col.tdBody(item)}
               <td class={col.tdClass?.join(' ')}>
                 {#if typeof data === 'string'}
                   {@html data}
@@ -87,7 +82,7 @@
   </section>
 
   <section>
-    <Pagination {result} bind:currentPage={currentPage} {handlePage} />
+    <Pagination pageCtrl={result.pageCtrl} bind:pageNumber={condition.pageNumber} {search} />
   </section>
 {:else}
   {$t('msg.noData')}
