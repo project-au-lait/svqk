@@ -44,13 +44,3 @@ CREATE TABLE journal (
   --${commonColumns},
   CONSTRAINT journal_pk PRIMARY KEY (issue_id, seq_no)
 );
-
-
-CREATE TABLE news (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(60) NOT NULL,
-  summary VARCHAR(255),
-  description TEXT,
-  comment_count INT NOT NULL DEFAULT 0,
-  --${commonColumns}
-);

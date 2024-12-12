@@ -18,13 +18,10 @@
       <arg line="build-helper:reserve-network-port" />
     </exec>
 
-    <property name="jdk-opts"
-      value="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" />
     <property file="${port.file}" />
 
     <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-      <env key="MAVEN_OPTS" value="${jdk-opts}" />
-      <arg line="-T 1C clean verify -P setup,gen-enttiy${analyze.profile}" />
+      <arg line="-T 1C clean verify -P setup${analyze.profile}" />
       <arg line="-D db.port=${db.port.random} -D back.port=${back.port.random}" />
       <arg line="-D org.slf4j.simpleLogger.showThreadName=true" />
     </exec>
