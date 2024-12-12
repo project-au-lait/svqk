@@ -1,5 +1,5 @@
 import Generator from "yeoman-generator";
-import { Metadata, Field, TemplateData } from "main/index.d";
+import { Metadata, Field, TemplateData } from "./types.js";
 
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
 const YO_RC_KEY_DEST_ROOT_PATH = "destRootPath";
@@ -19,7 +19,8 @@ class SvqkCodeGenerator extends Generator {
   async initializing() {
     try {
       this.metadataList = await import(
-        `${this.destinationRoot()}/${this.metadataFilePath}`
+        `${this.destinationRoot()}/${this.metadataFilePath}`,
+        { with: { type: "json" } }
       ).then((module) => module.default);
 
       if (!this.metadataList || this.metadataList.length === 0) {
@@ -28,7 +29,7 @@ class SvqkCodeGenerator extends Generator {
         );
       }
     } catch (error) {
-      this.log(`Failed to read ${this.metadataFilePath}.`, error);
+      this.log(`Failed to read ${this.metadataFilePath}. ${error}`);
     }
   }
 

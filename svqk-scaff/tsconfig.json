@@ -3,7 +3,7 @@
     "paths": {
       "*": ["./src/*"]
     },
-    "module": "CommonJS",
+    "module": "Node16",
     "target": "ES2022",
     "outDir": "./generators/app",
     "skipLibCheck": true,
