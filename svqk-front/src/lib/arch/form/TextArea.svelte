@@ -4,19 +4,16 @@
   interface Props {
     id: string;
     label: string;
-    type?: string;
     value: any;
   }
 
-  let { id, label, type = 'text', value = $bindable() }: Props = $props();
-
-  function setType(node: HTMLInputElement) {
-    node.type = type;
-  }
+  let { id, label, value = $bindable() }: Props = $props();
 </script>
 
 <label for={id}>{label}</label>
 <ValidationMessage for={id} let:messages>
-  <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
+  <div>
+    <textarea {id} name={id} bind:value aria-describedby="invalid-{id}"></textarea>
+  </div>
   <small id="invalid-{id}">{messages || ''}</small>
 </ValidationMessage>
