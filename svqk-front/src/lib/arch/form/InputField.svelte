@@ -16,9 +16,7 @@
 </script>
 
 <label for={id}>{label}</label>
-<ValidationMessage for={id}>
-  {#snippet children({ messages: message }: { messages: string[] | null })}
-    <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
-    <small id="invalid-{id}">{message || ''}</small>
-  {/snippet}
+<ValidationMessage for={id} let:messages>
+  <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
+  <small id="invalid-{id}">{messages || ''}</small>
 </ValidationMessage>

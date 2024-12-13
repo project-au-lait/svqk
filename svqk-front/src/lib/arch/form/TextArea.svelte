@@ -11,11 +11,9 @@
 </script>
 
 <label for={id}>{label}</label>
-<ValidationMessage for={id}>
-  {#snippet children({ messages: message }: { messages: string[] | null })}
-    <div>
-      <textarea {id} name={id} bind:value aria-describedby="invalid-{id}"></textarea>
-    </div>
-    <small id="invalid-{id}">{message || ''}</small>
-  {/snippet}
+<ValidationMessage for={id} let:messages>
+  <div>
+    <textarea {id} name={id} bind:value aria-describedby="invalid-{id}"></textarea>
+  </div>
+  <small id="invalid-{id}">{messages || ''}</small>
 </ValidationMessage>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
-  import CheckBoxField from '$lib/arch/form/CheckBoxField.svelte';
+  import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
@@ -51,7 +51,7 @@
       <div class="grid">
         <div>
           <label for="option">{$t('msg.option')}</label>
-          <CheckBoxField
+          <CheckBox
             id="subject-only"
             label={$t('msg.searchBySubjectOnly')}
             bind:checked={condition.subjectOnly}

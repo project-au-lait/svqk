@@ -4,7 +4,7 @@
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
-  import TextAreaField from '$lib/arch/form/TextAreaField.svelte';
+  import TextArea from '$lib/arch/form/TextArea.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { trackers } from '$lib/domain/issue/TrackerMasterStore';
@@ -44,7 +44,7 @@
     <InputField id="subject" label={$t('msg.subject')} bind:value={issue.subject} />
   </div>
   <div>
-    <TextAreaField id="description" label={$t('msg.description')} bind:value={issue.description} />
+    <TextArea id="description" label={$t('msg.description')} bind:value={issue.description} />
   </div>
   <div class="grid">
     <div>
@@ -69,7 +69,7 @@
   </div>
   {#if issue.id}
     <div>
-      <TextAreaField id="notes" label={$t('msg.notes')} bind:value={journal.notes} />
+      <TextArea id="notes" label={$t('msg.notes')} bind:value={journal.notes} />
     </div>
   {/if}
   <div>
