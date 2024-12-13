@@ -4,11 +4,12 @@
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
+  import TextAreaField from '$lib/arch/form/TextAreaField.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
-  import { t } from '$lib/translations';
-  import * as yup from 'yup';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { trackers } from '$lib/domain/issue/TrackerMasterStore';
+  import { t } from '$lib/translations';
+  import * as yup from 'yup';
 
   interface Props {
     issue: IssueModel;
@@ -43,8 +44,7 @@
     <InputField id="subject" label={$t('msg.subject')} bind:value={issue.subject} />
   </div>
   <div>
-    <label for="description">{$t('msg.description')}</label>
-    <textarea id="description" style="width:100%" bind:value={issue.description}></textarea>
+    <TextAreaField id="description" label={$t('msg.description')} bind:value={issue.description} />
   </div>
   <div class="grid">
     <div>
@@ -69,8 +69,7 @@
   </div>
   {#if issue.id}
     <div>
-      <label for="notes">{$t('msg.notes')}</label>
-      <textarea id="notes" bind:value={journal.notes}></textarea>
+      <TextAreaField id="notes" label={$t('msg.notes')} bind:value={journal.notes} />
     </div>
   {/if}
   <div>

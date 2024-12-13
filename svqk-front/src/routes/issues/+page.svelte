@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
+  import CheckBoxField from '$lib/arch/form/CheckBoxField.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
+  import InputField from '$lib/arch/form/InputField.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import DateUtils from '$lib/arch/util/DateUtils';
@@ -49,10 +51,11 @@
       <div class="grid">
         <div>
           <label for="option">{$t('msg.option')}</label>
-          <label>
-            <input type="checkbox" bind:checked={condition.subjectOnly} />
-            {$t('msg.searchBySubjectOnly')}
-          </label>
+          <CheckBoxField
+            id="subject-only"
+            label={$t('msg.searchBySubjectOnly')}
+            bind:checked={condition.subjectOnly}
+          />
         </div>
 
         <div>
@@ -66,9 +69,12 @@
         </div>
 
         <div>
-          <!-- TODO validation of range of date -->
-          <label for="dueDate">{$t('msg.dueDate')}</label>
-          <input type="date" bind:value={condition.dueDate} />
+          <InputField
+            id="due-date"
+            label={$t('msg.dueDate')}
+            type="date"
+            bind:value={condition.dueDate}
+          />
         </div>
       </div>
     </details>

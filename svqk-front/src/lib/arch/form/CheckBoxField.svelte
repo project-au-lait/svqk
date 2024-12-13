@@ -4,21 +4,16 @@
   interface Props {
     id: string;
     label: string;
-    type?: string;
-    value: any;
+    checked?: boolean;
   }
 
-  let { id, label, type = 'text', value = $bindable() }: Props = $props();
-
-  function setType(node: HTMLInputElement) {
-    node.type = type;
-  }
+  let { id, label, checked = $bindable() }: Props = $props();
 </script>
 
-<label for={id}>{label}</label>
 <ValidationMessage for={id}>
   {#snippet children({ messages: message }: { messages: string[] | null })}
-    <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
+    <input {id} name={id} type="checkbox" bind:checked aria-describedby="invalid-{id}" />
+    <label for={id}>{label}</label>
     <small id="invalid-{id}">{message || ''}</small>
   {/snippet}
 </ValidationMessage>
