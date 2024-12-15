@@ -7,14 +7,15 @@ import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
 
 public class IssueClient {
 
-  public IssueDto save(IssueDto issue) { // <.>
-    return given() // <.>
-        .body(issue)
-        .post(ISSUES_PATH)
-        .then()
-        .statusCode(200)
-        .extract()
-        .as(IssueDto.class);
+  public Integer create(IssueDto issue) { // <.>
+    return Integer.parseInt(
+        given() // <.>
+            .body(issue)
+            .post(ISSUES_PATH)
+            .then()
+            .statusCode(200)
+            .extract()
+            .asString());
   }
 
   public ConstraintViolationResponseDto createButValidationError(IssueDto issue) {
@@ -34,5 +35,16 @@ public class IssueClient {
         .statusCode(200)
         .extract()
         .as(IssueDto.class);
+  }
+
+  public Integer update(IssueUpdateDto issue) { // <.>
+    return Integer.parseInt(
+        given() // <.>
+            .body(issue)
+            .put(ISSUES_PATH)
+            .then()
+            .statusCode(200)
+            .extract()
+            .asString());
   }
 }

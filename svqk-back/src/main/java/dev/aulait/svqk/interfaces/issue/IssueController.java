@@ -5,7 +5,6 @@ import dev.aulait.svqk.arch.search.SearchResultDto;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.web.ApiPath;
-import dev.aulait.svqk.arch.web.IdDto;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
 import dev.aulait.svqk.domain.issue.JournalEntity;
@@ -36,23 +35,23 @@ public class IssueController {
   public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {} // <.>
 
   @POST
-  public IdDto save(@Valid IssueDto dto) { // <.>
+  public int create(@Valid IssueDto dto) { // <.>
 
     // <.>
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
     IssueEntity savedEntity = service.save(entity);
 
-    return BeanUtils.map(savedEntity, IdDto.class);
+    return savedEntity.getId();
   }
 
   @PUT
-  public IdDto update(@Valid IssueUpdateDto dto) {
+  public int update(@Valid IssueUpdateDto dto) {
     IssueEntity issue = BeanUtils.map(dto.getIssue(), IssueEntity.class);
     JournalEntity journal = BeanUtils.map(dto.getJournal(), JournalEntity.class);
 
     IssueEntity updatedIssue = service.update(issue, journal);
 
-    return BeanUtils.map(updatedIssue, IdDto.class);
+    return updatedIssue.getId();
   }
 
   @GET

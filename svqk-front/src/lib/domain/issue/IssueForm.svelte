@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IdModel, IssueModel, JournalModel } from '$lib/arch/api/Api';
+  import type { IssueModel, JournalModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
@@ -27,13 +27,13 @@
   const form = FormValidator.createForm(spec, save);
 
   async function save() {
-    const response = await ApiHandler.handle<IdModel>(fetch, (api) =>
+    const response = await ApiHandler.handle<number>(fetch, (api) =>
       issue.id ? api.issues.issuesUpdate({ issue, journal }) : api.issues.issuesCreate(issue)
     );
 
     if (response) {
       journal.notes = '';
-      await handleAfterSave(response.id);
+      await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
     }
   }

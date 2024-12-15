@@ -25,7 +25,7 @@ export default class ApiHandler {
     const response = await handler(api);
 
     if (response.ok) {
-      return response.data;
+      return response.data || (response.text() as D);
     } else {
       // TODO error handling
       messageStore.show(response.statusText);

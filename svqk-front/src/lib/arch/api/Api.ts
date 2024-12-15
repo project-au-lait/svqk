@@ -15,11 +15,6 @@ export interface HelloModel {
   message?: string;
 }
 
-export interface IdModel {
-  /** @format int32 */
-  id?: number;
-}
-
 export interface IssueModel {
   /** @format int32 */
   id: number;
@@ -235,8 +230,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-            ? JSON.stringify(property)
-            : `${property}`
+              ? JSON.stringify(property)
+              : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -312,7 +307,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response as HttpResponse<T, E>;
+      const r = response.clone() as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
 
@@ -403,12 +398,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/v1/issues
      */
     issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
-      this.request<IdModel, any>({
+      this.request<number, any>({
         path: `/api/v1/issues`,
         method: 'PUT',
         body: data,
         type: ContentType.Json,
-        format: 'json',
         ...params
       }),
 
@@ -420,12 +414,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/v1/issues
      */
     issuesCreate: (data: IssueModel, params: RequestParams = {}) =>
-      this.request<IdModel, any>({
+      this.request<number, any>({
         path: `/api/v1/issues`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
-        format: 'json',
         ...params
       }),
 
