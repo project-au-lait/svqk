@@ -1,5 +1,5 @@
 import Generator from "yeoman-generator";
-import { Metadata, Field, TemplateData } from "./types.js";
+import { Metadata, TemplateData } from "./types.js";
 
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
 const YO_RC_KEY_DEST_ROOT_PATH = "destRootPath";
@@ -47,34 +47,15 @@ class SvqkCodeGenerator extends Generator {
       return;
     }
 
-    this.metadataList.forEach(({ packageName, className, fields }) => {
-      if (!this.args.includes(className)) {
+    this.metadataList.forEach((metaData) => {
+      if (
+        !this.args.includes(metaData.className) &&
+        !this.args.includes(this._extract_entity_name(metaData.className))
+      ) {
         return;
       }
 
-      const tmplData = this._generate_template_data(
-        packageName,
-        className,
-        fields
-      );
-
-      // Generate files for domain package
-      ["Repository", "Service"].forEach((component) => {
-        const destPkgPath = this._generate_dest_package_path(
-          this.destRootPath,
-          tmplData.domainPkgNm
-        );
-        this._output_java_file(component, destPkgPath, tmplData);
-      });
-
-      // Generate files for interfaces package
-      ["Dto", "Controller"].forEach((component) => {
-        const destPkgPath = this._generate_dest_package_path(
-          this.destRootPath,
-          tmplData.interfacesPkgNm
-        );
-        this._output_java_file(component, destPkgPath, tmplData);
-      });
+      this._generate_backend(metaData);
     });
   }
 
@@ -82,22 +63,18 @@ class SvqkCodeGenerator extends Generator {
     this.log("Completed.");
   }
 
-  _generate_template_data(
-    domainPkgNm: string,
-    classNm: string,
-    fields: Field[]
-  ): TemplateData {
-    const entityNmPascal = this._extract_entity_name(classNm);
+  _generate_template_data(metadata: Metadata): TemplateData {
+    const entityNmPascal = this._extract_entity_name(metadata.className);
 
     return {
-      domainPkgNm: domainPkgNm,
-      interfacesPkgNm: domainPkgNm.replace(".domain.", ".interfaces."),
+      domainPkgNm: metadata.packageName,
+      interfacesPkgNm: metadata.packageName.replace(".domain.", ".interfaces."),
       entityNmPascal: entityNmPascal,
       entityNmCamel:
         entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
-      entityIdType: fields.find((field) => field.id)?.javaType ?? "",
-      fields,
+      entityIdType: metadata.fields.find((field) => field.id)?.javaType ?? "",
+      fields: metadata.fields,
     };
   }
 
@@ -121,6 +98,28 @@ class SvqkCodeGenerator extends Generator {
 
   _generate_dest_package_path(destRootPath: string, pkgNm: string): string {
     return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
+  }
+
+  _generate_backend(metadata: Metadata) {
+    const tmplData = this._generate_template_data(metadata);
+
+    // Generate files for domain package
+    ["Repository", "Service"].forEach((component) => {
+      const destPkgPath = this._generate_dest_package_path(
+        this.destRootPath,
+        tmplData.domainPkgNm
+      );
+      this._output_java_file(component, destPkgPath, tmplData);
+    });
+
+    // Generate files for interfaces package
+    ["Dto", "Controller"].forEach((component) => {
+      const destPkgPath = this._generate_dest_package_path(
+        this.destRootPath,
+        tmplData.interfacesPkgNm
+      );
+      this._output_java_file(component, destPkgPath, tmplData);
+    });
   }
 }
 
