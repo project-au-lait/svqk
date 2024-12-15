@@ -3,16 +3,19 @@ import { Metadata, Field, TemplateData } from "./types.js";
 
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
 const YO_RC_KEY_DEST_ROOT_PATH = "destRootPath";
+const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
 
 class SvqkCodeGenerator extends Generator {
   metadataFilePath: string;
   destRootPath: string;
+  templateType: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: Record<string, unknown>) {
     super(args, opts);
     this.metadataFilePath = this.config.get(YO_RC_KEY_METADATA_FPATH);
     this.destRootPath = this.config.get(YO_RC_KEY_DEST_ROOT_PATH);
+    this.templateType = this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
     this.metadataList = [];
   }
 
@@ -56,21 +59,21 @@ class SvqkCodeGenerator extends Generator {
       );
 
       // Generate files for domain package
-      ["Repository", "Service"].forEach((layer) => {
+      ["Repository", "Service"].forEach((component) => {
         const destPkgPath = this._generate_dest_package_path(
           this.destRootPath,
           tmplData.domainPkgNm
         );
-        this._output_java_file(layer, destPkgPath, tmplData);
+        this._output_java_file(component, destPkgPath, tmplData);
       });
 
       // Generate files for interfaces package
-      ["Dto", "Controller"].forEach((layer) => {
+      ["Dto", "Controller"].forEach((component) => {
         const destPkgPath = this._generate_dest_package_path(
           this.destRootPath,
           tmplData.interfacesPkgNm
         );
-        this._output_java_file(layer, destPkgPath, tmplData);
+        this._output_java_file(component, destPkgPath, tmplData);
       });
     });
   }
@@ -99,14 +102,14 @@ class SvqkCodeGenerator extends Generator {
   }
 
   _output_java_file(
-    layer: string,
+    component: string,
     destPkgPath: string,
     tmplData: TemplateData
   ) {
     this.fs.copyTpl(
-      this.templatePath(`java/${layer}.java`),
+      this.templatePath(`${this.templateType}/java/${component}.java`),
       this.destinationPath(
-        `${destPkgPath}/${tmplData.entityNmPascal}${layer}.java`
+        `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`
       ),
       tmplData
     );
