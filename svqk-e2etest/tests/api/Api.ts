@@ -54,7 +54,7 @@ export interface IssueSearchConditionModel {
   sortOrders?: SortOrderModel[];
   text?: string;
   issueStatuses?: IssueStatusModel[];
-  dueDate?: string;
+  dueDate?: LocalDate;
   subjectOnly?: boolean;
 }
 
