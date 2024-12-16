@@ -11,17 +11,17 @@ class IssueFactoryTests {
 
   @Test
   void testBuild() {
-    IssueSearchConditionDto cond = new IssueSearchConditionDto();
+    IssueSearchCriteriaDto criteria = new IssueSearchCriteriaDto();
 
-    cond.setText("text");
-    cond.setSubjectOnly(true);
+    criteria.setText("text");
+    criteria.setSubjectOnly(true);
 
     SearchQueryBuilder builder = new SearchQueryBuilder();
-    builder.buildQuery(factory.build(cond));
+    builder.buildQuery(factory.build(criteria));
 
     assertEquals(
-        "SELECT issue FROM IssueEntity issue JOIN FETCH issue.issueStatus issueStatus JOIN FETCH"
-            + " issue.tracker tracker WHERE issue.subject LIKE :subject ORDER BY issue.id DESC",
+        "SELECT i FROM IssueEntity i JOIN FETCH i.issueStatus s JOIN FETCH"
+            + " i.tracker t WHERE i.subject LIKE :i.subject ORDER BY i.id DESC",
         builder.getSearchQuery());
   }
 }

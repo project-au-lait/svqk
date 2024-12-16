@@ -1,7 +1,7 @@
 package dev.aulait.svqk.arch.jpa;
 
 import dev.aulait.svqk.arch.search.PageControlVo;
-import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -15,10 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SearchUtils {
 
-  public static <T> SearchResultVo<T> search(EntityManager em, SearchConditionVo condition) {
+  public static <T> SearchResultVo<T> search(EntityManager em, SearchCriteriaVo criteria) {
 
     SearchQueryBuilder builder = new SearchQueryBuilder();
-    builder.buildQuery(condition);
+    builder.buildQuery(criteria);
 
     String countQueryStr = builder.getCountQuery();
     log.debug("Count query: {}", countQueryStr);
@@ -38,8 +38,8 @@ public class SearchUtils {
 
     Query searchQuery = em.createQuery(searchQueryStr);
     setQueryParams(searchQuery, builder.getQueryParams());
-    searchQuery.setMaxResults(condition.getPageSize());
-    searchQuery.setFirstResult(condition.getOffset());
+    searchQuery.setMaxResults(criteria.getPageSize());
+    searchQuery.setFirstResult(criteria.getOffset());
 
     @SuppressWarnings("unchecked")
     List<T> result = searchQuery.getResultList();
@@ -49,10 +49,10 @@ public class SearchUtils {
         .pageCtrl(
             PageControlVo.builder()
                 .count(count)
-                .pageSize(condition.getPageSize())
-                .pageNumber(condition.getPageNumber())
-                .pageNumsRange(condition.getPageNumsRange())
-                .offset(condition.getOffset())
+                .pageSize(criteria.getPageSize())
+                .pageNumber(criteria.getPageNumber())
+                .pageNumsRange(criteria.getPageNumsRange())
+                .offset(criteria.getOffset())
                 .build())
         .build();
   }

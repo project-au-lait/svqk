@@ -10,13 +10,11 @@ import org.springframework.data.domain.Sort;
 
 @Value
 @Builder
-public class SearchConditionVo {
+public class SearchCriteriaVo {
 
-  private Class<?> mainEntity;
+  private String select;
 
-  @Builder.Default private List<JoinVo> joins = new ArrayList<>();
-
-  @Builder.Default private List<FieldConditionVo> fieldConditions = new ArrayList<>();
+  @Builder.Default private List<FieldCriteriaVo> fieldCriteria = new ArrayList<>();
 
   private Pageable pageable;
 

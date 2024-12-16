@@ -1,6 +1,6 @@
 package dev.aulait.svqk.arch.search;
 
-public enum ConjunctionCd {
+public enum LogicalOperatorCd {
   AND,
   OR
 }

@@ -2,10 +2,10 @@ package dev.aulait.svqk.arch.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.aulait.svqk.arch.search.FieldConditionVo;
-import dev.aulait.svqk.arch.search.OperatorCd;
-import dev.aulait.svqk.arch.search.SearchConditionBuilder;
-import dev.aulait.svqk.arch.search.SearchConditionDto;
+import dev.aulait.svqk.arch.search.ArithmeticOperatorCd;
+import dev.aulait.svqk.arch.search.FieldCriteriaVo;
+import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
+import dev.aulait.svqk.arch.search.SearchCriteriaDto;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
@@ -22,34 +22,34 @@ class SearchQueryBuilderTests {
   class BuildWhereTests {
     @Test
     void testSingleField() {
-      List<FieldConditionVo> conditions = List.of(FieldConditionVo.of("field", "1"));
+      List<FieldCriteriaVo> criteria = List.of(FieldCriteriaVo.of("field", "1"));
 
-      String where = builder.buildWhere(conditions);
+      String where = builder.buildWhere(criteria);
 
-      assertEquals("null.field = :field", where);
+      assertEquals("field = :field", where);
       assertEquals("1", builder.getQueryParams().get("field"));
     }
 
     @Test
     void testMultipleField() {
-      List<FieldConditionVo> conditions =
-          List.of(FieldConditionVo.of("field1", "1"), FieldConditionVo.of("field2", "2"));
+      List<FieldCriteriaVo> criteria =
+          List.of(FieldCriteriaVo.of("field1", "1"), FieldCriteriaVo.of("field2", "2"));
 
-      String where = builder.buildWhere(conditions);
+      String where = builder.buildWhere(criteria);
 
-      assertEquals("null.field1 = :field1 AND null.field2 = :field2", where);
+      assertEquals("field1 = :field1 AND field2 = :field2", where);
       assertEquals("1", builder.getQueryParams().get("field1"));
       assertEquals("2", builder.getQueryParams().get("field2"));
     }
 
     @Test
     void testIn() {
-      List<FieldConditionVo> conditions =
-          List.of(FieldConditionVo.of("field", OperatorCd.IN, List.of("1", "2")));
+      List<FieldCriteriaVo> criteria =
+          List.of(FieldCriteriaVo.of("field", ArithmeticOperatorCd.IN, List.of("1", "2")));
 
-      String where = builder.buildWhere(conditions);
+      String where = builder.buildWhere(criteria);
 
-      assertEquals("null.field IN :field", where);
+      assertEquals("field IN :field", where);
       assertEquals(List.of("1", "2"), builder.getQueryParams().get("field"));
     }
   }
@@ -57,37 +57,35 @@ class SearchQueryBuilderTests {
   @Test
   void testOrderBy() {
     Sort sort = Sort.by(Direction.ASC, "field");
-    String orderBy = builder.buildOrderBy("e", sort);
+    String orderBy = builder.buildOrderBy(sort);
 
-    assertEquals(" ORDER BY e.field ASC", orderBy);
+    assertEquals(" ORDER BY field ASC", orderBy);
   }
 
   @Nested
-  class WithSearchConcitionTests {
+  class WithSearchCriteriaTests {
     @Test
-    void testJoin() {
-      SearchConditionBuilder cBuilder = new SearchConditionBuilder();
+    void test() {
+      SearchCriteriaBuilder cBuilder = new SearchCriteriaBuilder();
       cBuilder
-          .from(TestEntity.class)
-          .join("joinEntity")
-          .where("field", "a")
-          .where("joinEntity", "joinEntityField", "b");
+          .select("SELECT t FROM TestEntity t")
+          .select("JOIN FETCH t.join j")
+          .where("t.field", "a")
+          .where("j.field", "b");
 
-      SearchConditionDto cond = new SearchConditionDto();
+      SearchCriteriaDto criteria = new SearchCriteriaDto();
 
-      builder.buildQuery(cBuilder.build(cond));
+      builder.buildQuery(cBuilder.build(criteria));
 
       assertEquals(
-          "SELECT COUNT(test) FROM TestEntity test JOIN test.joinEntity joinEntity"
-              + " WHERE test.field = :field AND joinEntity.joinEntityField = :joinEntityField",
+          "SELECT COUNT(t) FROM TestEntity t JOIN t.join j"
+              + " WHERE t.field = :t.field AND j.field = :j.field",
           builder.getCountQuery());
 
       assertEquals(
-          "SELECT test FROM TestEntity test JOIN FETCH test.joinEntity joinEntity"
-              + " WHERE test.field = :field AND joinEntity.joinEntityField = :joinEntityField",
+          "SELECT t FROM TestEntity t JOIN FETCH t.join j"
+              + " WHERE t.field = :t.field AND j.field = :j.field",
           builder.getSearchQuery());
     }
   }
-
-  class TestEntity {}
 }

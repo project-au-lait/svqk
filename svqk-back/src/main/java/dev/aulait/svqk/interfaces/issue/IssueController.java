@@ -1,6 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultDto;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
@@ -64,9 +64,9 @@ public class IssueController {
 
   @POST
   @Path(ISSUES_SEARCH_PATH)
-  public IssueSearchResultDto search(IssueSearchConditionDto dto) { // <.>
+  public IssueSearchResultDto search(IssueSearchCriteriaDto dto) { // <.>
     // <.>
-    SearchConditionVo vo = factory.build(dto);
+    SearchCriteriaVo vo = factory.build(dto);
     SearchResultVo<IssueEntity> result = service.search(vo);
 
     return factory.build(result);

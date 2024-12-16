@@ -1,7 +1,7 @@
 package dev.aulait.svqk.domain.issue;
 
 import dev.aulait.svqk.arch.jpa.SearchUtils;
-import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -31,8 +31,8 @@ public class IssueService {
     return updatedEntity;
   }
 
-  public SearchResultVo<IssueEntity> search(SearchConditionVo condition) { // <.>
-    return SearchUtils.search(em, condition); // <.>
+  public SearchResultVo<IssueEntity> search(SearchCriteriaVo criteria) { // <.>
+    return SearchUtils.search(em, criteria); // <.>
   }
 
   public List<IssueTrackingRs> getTracking() {
