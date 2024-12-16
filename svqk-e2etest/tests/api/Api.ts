@@ -31,7 +31,7 @@ export interface IssueModel {
   journals: JournalModel[];
 }
 
-export interface IssueSearchConditionModel {
+export interface IssueSearchCriteriaModel {
   /** @format int32 */
   pageNumber?: number;
   /** @format int32 */
@@ -230,8 +230,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-              ? JSON.stringify(property)
-              : `${property}`
+            ? JSON.stringify(property)
+            : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -307,7 +307,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
+      const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
 
@@ -341,145 +341,145 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 0.8-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  hello = {
-    /**
-     * No description
-     *
-     * @tags Hello Controller
-     * @name HelloCreate
-     * @request POST:/api/v1/hello
-     */
-    helloCreate: (data: HelloModel, params: RequestParams = {}) =>
-      this.request<number, any>({
-        path: `/api/v1/hello`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        ...params
-      }),
+  /**
+   * No description
+   *
+   * @tags Hello Controller
+   * @name HelloCreate
+   * @request POST:/api/hello
+   */
+  helloCreate = (data: HelloModel, params: RequestParams = {}) =>
+    this.request<number, any>({
+      path: `/api/hello`,
+      method: 'POST',
+      body: data,
+      type: ContentType.Json,
+      ...params
+    });
 
+  /**
+   * No description
+   *
+   * @tags Issue Status Controller
+   * @name IssueStatusesList
+   * @request GET:/api/issue-statuses
+   */
+  issueStatusesList = (params: RequestParams = {}) =>
+    this.request<IssueStatusModel[], any>({
+      path: `/api/issue-statuses`,
+      method: 'GET',
+      format: 'json',
+      ...params
+    });
+
+  /**
+   * No description
+   *
+   * @tags Issue Controller
+   * @name IssuesUpdate
+   * @request PUT:/api/issues
+   */
+  issuesUpdate = (data: IssueUpdateModel, params: RequestParams = {}) =>
+    this.request<number, any>({
+      path: `/api/issues`,
+      method: 'PUT',
+      body: data,
+      type: ContentType.Json,
+      ...params
+    });
+
+  /**
+   * No description
+   *
+   * @tags Issue Controller
+   * @name IssuesCreate
+   * @request POST:/api/issues
+   */
+  issuesCreate = (data: IssueModel, params: RequestParams = {}) =>
+    this.request<number, any>({
+      path: `/api/issues`,
+      method: 'POST',
+      body: data,
+      type: ContentType.Json,
+      ...params
+    });
+
+  /**
+   * No description
+   *
+   * @tags Tracker Controller
+   * @name TrackerList
+   * @request GET:/api/tracker
+   */
+  trackerList = (params: RequestParams = {}) =>
+    this.request<TrackerModel[], any>({
+      path: `/api/tracker`,
+      method: 'GET',
+      format: 'json',
+      ...params
+    });
+
+  id = {
     /**
      * No description
      *
      * @tags Hello Controller
      * @name HelloDetail
-     * @request GET:/api/v1/hello/{id}
+     * @request GET:/api/hello/{id}
      */
     helloDetail: (id: number, params: RequestParams = {}) =>
       this.request<HelloModel, any>({
-        path: `/api/v1/hello/${id}`,
+        path: `/api/hello/${id}`,
         method: 'GET',
         format: 'json',
         ...params
       })
   };
-  issueStatuses = {
-    /**
-     * No description
-     *
-     * @tags Issue Status Controller
-     * @name IssueStatusesList
-     * @request GET:/api/v1/issue-statuses
-     */
-    issueStatusesList: (params: RequestParams = {}) =>
-      this.request<IssueStatusModel[], any>({
-        path: `/api/v1/issue-statuses`,
-        method: 'GET',
-        format: 'json',
-        ...params
-      })
-  };
-  issues = {
+  search = {
     /**
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesUpdate
-     * @request PUT:/api/v1/issues
+     * @name IssuesSearchCreate
+     * @request POST:/api/issues/search
      */
-    issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
-      this.request<number, any>({
-        path: `/api/v1/issues`,
-        method: 'PUT',
-        body: data,
-        type: ContentType.Json,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Issue Controller
-     * @name IssuesCreate
-     * @request POST:/api/v1/issues
-     */
-    issuesCreate: (data: IssueModel, params: RequestParams = {}) =>
-      this.request<number, any>({
-        path: `/api/v1/issues`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Issue Controller
-     * @name IssuesSearch
-     * @request POST:/api/v1/issues/search
-     */
-    issuesSearch: (data: IssueSearchConditionModel, params: RequestParams = {}) =>
+    issuesSearchCreate: (data: IssueSearchCriteriaModel, params: RequestParams = {}) =>
       this.request<IssueSearchResultModel, any>({
-        path: `/api/v1/issues/search`,
+        path: `/api/issues/search`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
         format: 'json',
         ...params
-      }),
-
+      })
+  };
+  tracking = {
     /**
      * No description
      *
      * @tags Issue Controller
      * @name IssuesTrackingList
-     * @request GET:/api/v1/issues/tracking
+     * @request GET:/api/issues/tracking
      */
     issuesTrackingList: (params: RequestParams = {}) =>
       this.request<IssueTrackingModel, any>({
-        path: `/api/v1/issues/tracking`,
-        method: 'GET',
-        format: 'json',
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Issue Controller
-     * @name IssuesDetail
-     * @request GET:/api/v1/issues/{issueId}
-     */
-    issuesDetail: (issueId: number, params: RequestParams = {}) =>
-      this.request<IssueModel, any>({
-        path: `/api/v1/issues/${issueId}`,
+        path: `/api/issues/tracking`,
         method: 'GET',
         format: 'json',
         ...params
       })
   };
-  tracker = {
+  issueId = {
     /**
      * No description
      *
-     * @tags Tracker Controller
-     * @name TrackerList
-     * @request GET:/api/v1/tracker
+     * @tags Issue Controller
+     * @name IssuesDetail
+     * @request GET:/api/issues/{issueId}
      */
-    trackerList: (params: RequestParams = {}) =>
-      this.request<TrackerModel[], any>({
-        path: `/api/v1/tracker`,
+    issuesDetail: (issueId: number, params: RequestParams = {}) =>
+      this.request<IssueModel, any>({
+        path: `/api/issues/${issueId}`,
         method: 'GET',
         format: 'json',
         ...params

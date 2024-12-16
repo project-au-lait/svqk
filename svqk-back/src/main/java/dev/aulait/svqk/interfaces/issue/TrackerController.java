@@ -1,7 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
 import dev.aulait.svqk.arch.util.BeanUtils;
-import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.domain.issue.TrackerService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,7 +13,7 @@ public class TrackerController {
 
   private final TrackerService service;
 
-  static final String TRACKERS_PATH = ApiPath.ROOT + "/tracker";
+  static final String TRACKERS_PATH = "/tracker";
 
   @GET
   public List<TrackerDto> getAllTrackers() {

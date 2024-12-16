@@ -30,7 +30,7 @@ public class TestConfig {
     Optional<String> testHost = config.getOptionalValue("quarkus.http.test-host", String.class);
     Optional<Integer> testPort = config.getOptionalValue("quarkus.http.test-port", Integer.class);
 
-    baseUrl = "http://" + testHost.orElse("localhost") + ":" + testPort.orElse(8080);
+    baseUrl = "http://" + testHost.orElse("localhost") + ":" + testPort.orElse(8080) + "/api";
 
     log.info("Config: {}", this);
   }

@@ -4,7 +4,6 @@ import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultDto;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
-import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
 import dev.aulait.svqk.domain.issue.JournalEntity;
@@ -24,7 +23,7 @@ public class IssueController {
 
   private final IssueFactory factory;
 
-  static final String ISSUES_PATH = ApiPath.ROOT + "/issues";
+  static final String ISSUES_PATH = "/issues";
 
   static final String ISSUES_GET_PATH = "{issueId}";
 

@@ -5,7 +5,7 @@ import { t } from '$lib/translations';
 
 export const load: PageLoad = async ({ fetch }) => {
   const issueTracking = (await ApiHandler.handle<IssueTrackingModel>(fetch, (api) =>
-    api.issues.issuesTrackingList()
+    api.tracking.issuesTrackingList()
   ))!;
 
   return {
