@@ -1,10 +1,17 @@
 package dev.aulait.svqk.domain.issue;
 
+import static dev.aulait.svqk.arch.jpa.JpaUtils.findWithFetch;
+
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface IssueRepository extends JpaRepository<IssueEntity, Integer> {
+
+  default IssueEntity findByIdWithDetails(Integer id, EntityManager em) {
+    return findWithFetch(em, IssueEntity.class, id);
+  }
 
   @Query(
       value =

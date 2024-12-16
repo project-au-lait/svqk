@@ -18,7 +18,7 @@ class IssueControllerIT {
     IssueDto issue = IssueDataFactory.createRandomIssue(); // <.>
 
     // Create
-    int issueId = client.save(issue).getId(); // <.>
+    int issueId = client.create(issue); // <.>
 
     // Reference
     IssueDto createdIssue = client.get(issueId);
@@ -26,7 +26,7 @@ class IssueControllerIT {
 
     // Update
     createdIssue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
-    client.save(createdIssue);
+    client.update(IssueUpdateDto.builder().issue(createdIssue).journal(new JournalDto()).build());
 
     IssueDto updatedIssue = client.get(issueId);
 

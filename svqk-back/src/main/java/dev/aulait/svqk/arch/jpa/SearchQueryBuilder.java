@@ -1,11 +1,9 @@
 package dev.aulait.svqk.arch.jpa;
 
-import dev.aulait.svqk.arch.search.FieldConditionVo;
-import dev.aulait.svqk.arch.search.JoinVo;
-import dev.aulait.svqk.arch.search.OperatorCd;
-import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.ArithmeticOperatorCd;
+import dev.aulait.svqk.arch.search.FieldCriteriaVo;
+import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,110 +19,71 @@ public class SearchQueryBuilder {
 
   @Getter private String searchQuery;
 
-  private String mainEntityAlias;
-
-  public void buildQuery(SearchConditionVo condition) {
+  public void buildQuery(SearchCriteriaVo criteria) {
     StringBuilder search = new StringBuilder();
-    String mainEntity = condition.getMainEntity().getSimpleName();
-    mainEntityAlias = mainEntity.replace("Entity", "").toLowerCase();
-
-    search
-        .append("SELECT ")
-        .append(mainEntityAlias)
-        .append(" FROM ")
-        .append(mainEntity)
-        .append(" ")
-        .append(mainEntityAlias);
-
-    String join = buildJoin(condition.getJoins());
-    search.append(join);
-
-    String where = buildWhere(condition.getFieldConditions());
-    if (where.length() > 0) {
-      search.append(" WHERE ").append(where);
-    }
-
-    search.append(buildOrderBy(mainEntityAlias, condition.getSort()));
-
-    searchQuery = search.toString();
-
     StringBuilder count = new StringBuilder();
-    count
-        .append("SELECT COUNT(")
-        .append(mainEntityAlias)
-        .append(") FROM ")
-        .append(mainEntity)
-        .append(" ")
-        .append(mainEntityAlias)
-        .append(join.replace("FETCH ", ""));
-    if (where.length() > 0) {
+
+    String select = criteria.getSelect();
+    search.append(select);
+    count.append(toCountQuery(select));
+
+    String where = buildWhere(criteria.getFieldCriteria());
+    if (StringUtils.isNotEmpty(where)) {
+      search.append(" WHERE ").append(where);
       count.append(" WHERE ").append(where);
     }
 
+    search.append(buildOrderBy(criteria.getSort()));
+
+    searchQuery = search.toString();
     countQuery = count.toString();
   }
 
-  String buildJoin(List<JoinVo> joins) {
-    return joins.stream().map(this::buildJoin).collect(Collectors.joining());
+  String toCountQuery(String searchQuery) {
+    return searchQuery
+        .replaceFirst("SELECT ", "SELECT COUNT(")
+        .replaceFirst(" FROM", ") FROM")
+        .replaceAll("FETCH ", "");
   }
 
-  String buildJoin(JoinVo join) {
-    StringBuilder sb = new StringBuilder();
-    String fieldOwner = StringUtils.defaultIfEmpty(join.getFieldOwner(), mainEntityAlias);
-    String fetch = join.isFetch() ? "FETCH " : "";
-
-    sb.append(" JOIN ")
-        .append(fetch)
-        .append(fieldOwner)
-        .append(".")
-        .append(join.getField())
-        .append(" ")
-        .append(join.getAlias());
-
-    return sb.toString();
-  }
-
-  String buildWhere(List<FieldConditionVo> fieldConditions) {
+  String buildWhere(List<FieldCriteriaVo> fieldCriteria) {
     StringBuilder sb = new StringBuilder();
 
-    Iterator<FieldConditionVo> itr =
-        fieldConditions.stream().filter(FieldConditionVo::hasValue).iterator();
+    for (FieldCriteriaVo fieldCriterion : fieldCriteria) {
 
-    while (itr.hasNext()) {
-      FieldConditionVo fieldCondition = itr.next();
-
-      if (sb.length() > 0) {
-        sb.append(" " + fieldCondition.getConjunction() + " ");
+      if (!fieldCriterion.hasValue()) {
+        continue;
       }
 
-      String field = fieldCondition.getField();
-      String fieldOwner =
-          StringUtils.defaultIfEmpty(fieldCondition.getEntityAlias(), mainEntityAlias);
+      if (sb.length() > 0) {
+        sb.append(" " + fieldCriterion.getLogicalOperator() + " ");
+      }
 
-      sb.append(fieldOwner + "." + field + " ");
+      String field = fieldCriterion.getField();
+      sb.append(field + " ");
 
-      OperatorCd operator = fieldCondition.getOperator();
+      ArithmeticOperatorCd operator = fieldCriterion.getArithmeticOperator();
 
       sb.append(operator.getValue() + " :" + field);
 
       queryParams.put(
           field,
-          operator == OperatorCd.LIKE
-              ? "%" + fieldCondition.getValue() + "%"
-              : fieldCondition.getValue());
+          operator == ArithmeticOperatorCd.LIKE
+              ? "%" + fieldCriterion.getValue() + "%"
+              : fieldCriterion.getValue());
     }
 
     return sb.toString();
   }
 
-  String buildOrderBy(String shortName, Sort sort) {
+  String buildOrderBy(Sort sort) {
     if (sort.isEmpty()) {
       return "";
     }
 
     return " ORDER BY "
         + sort.get()
-            .map(order -> shortName + "." + order.getProperty() + " " + order.getDirection())
+            .map(order -> order.getProperty() + " " + order.getDirection())
             .collect(Collectors.joining(","));
   }
 }

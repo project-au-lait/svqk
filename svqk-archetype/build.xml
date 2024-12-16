@@ -1,20 +1,28 @@
 <!-- 
-Usage:
+  This build file defines the targets used to create, test, and deploy the archetype.
 
-./mvnw -f svqk-archetype -D ant.target=test -D archetype.type=refimpl
+  Usage:
+  ./mvnw -f svqk-archetype -D ant.target=TARGET -D archetype.type=(skeleton|refimpl|arch)
+
+  Example:
+  ./mvnw -f svqk-archetype -D ant.target=test -D archetype.type=refimpl
 -->
 <project xmlns:if="ant:if" xmlns:unless="ant:unless" name="svqk-archetype" basedir="."
   default="install">
   <taskdef resource="net/sf/antcontrib/antlib.xml" />
 
   <property name="archetype.prjdir" value="${basedir}/../" />
+  <property name="archetype.gendir" value="${basedir}/../target/generated-sources/archetype" />
+  <property name="archetype.testdir" value="${project.build.directory}/test" />
+
   <condition property="mvnw" value="${archetype.prjdir}/mvnw.cmd" else="${archetype.prjdir}/mvnw">
     <os family="windows" />
   </condition>
-  <property name="archetype.workdir" value="${basedir}/target/archetype-work" />
-  <property name="archetype.gendir" value="${basedir}/../target/generated-sources/archetype" />
 
 
+  <!-- 
+    This target deploys the archetype to the Maven Central Repository or GitHub Packages.
+   -->
   <target name="deploy" depends="test">
     <condition property="maven-central" value=",maven-central" else="">
       <not>
@@ -28,6 +36,66 @@ Usage:
   </target>
 
 
+  <!-- 
+    This target tests the archetype by generating a project from it and running the tests in The
+  generated project.
+    The tests are run using ${project}-cicd/build.xml in the generated project.
+   -->
+  <target name="test" depends="generate-project">
+    <condition property="mvnw.local" value="${projectdir}/mvnw.cmd" else="${projectdir}/mvnw">
+      <os family="windows" />
+    </condition>
+
+    <chmod perm="u+x" file="${projectdir}/mvnw" />
+
+    <property name="jdk-opts"
+      value="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" />
+    <property name="gen-entity-file" value="${projectdir}/${project}-entity/.gen-entity" />
+    <echo message="gen-entity" file="${gen-entity-file}" />
+
+    <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
+      <env key="MAVEN_OPTS" value="${jdk-opts}" />
+      <arg line="-f ${project}-cicd -D ant.target=test" />
+    </exec>
+
+    <delete file="${gen-entity-file}" />
+
+    <antcall target="test-scaffolding">
+      <param name="scaff.testdir" value="${projectdir}" />
+      <param name="scaff.testprj" value="${project}" />
+    </antcall>
+
+    <exec executable="docker" dir="${projectdir}/${project}-container">
+      <arg line="compose down" />
+    </exec>
+  </target>
+
+
+  <!-- 
+    This target generates a project from the archetype using the archetype:generate goal.
+   -->
+  <target name="generate-project" depends="install">
+
+    <property name="project" value="tsvqk" />
+    <property name="projectdir" value="${archetype.testdir}/${project}" />
+
+    <mkdir dir="${archetype.testdir}" />
+
+    <exec executable="${mvnw}" dir="${archetype.testdir}" failonerror="true">
+      <arg line="archetype:generate -B" />
+      <arg line="-DarchetypeCatalog=local" />
+      <arg line="-DarchetypeGroupId=dev.aulait.svqk" />
+      <arg line="-DarchetypeArtifactId=svqk-archetype-${archetype.type}" />
+      <arg line="-DarchetypeVersion=${project.version}" />
+      <arg line="-DgroupId=a.b.c" />
+      <arg line="-DartifactId=${project}" />
+    </exec>
+  </target>
+
+
+  <!-- 
+    This target installs the archetype in the local repository.
+   -->
   <target name="install" depends="create">
     <exec executable="${mvnw}" dir="${archetype.gendir}" failonerror="true">
       <arg line="clean install" />
@@ -35,31 +103,45 @@ Usage:
   </target>
 
 
-  <target name="adapt-resources">
-    <if>
-      <or>
-        <equals arg1="${archetype.type}" arg2="arch" />
-        <equals arg1="${archetype.type}" arg2="skeleton" />
-      </or>
-      <then>
-        <condition property="rm.prop.skeleton" value="|baseClassDefs" else="">
-          <equals arg1="${archetype.type}" arg2="skeleton" />
-        </condition>
+  <!-- 
+    This target creates the archetype from the project.
+   -->
+  <target name="create" depends="pre-clean, create-archetype-props">
+    <exec executable="${mvnw}" dir="${archetype.prjdir}" failonerror="true">
+      <arg line="-N clean archetype:create-from-project" />
+    </exec>
 
-        <replaceregexp flags="g">
-          <regexp
-            pattern="( *).*(annotatedCols|annotationDefs|issue${rm.prop.skeleton}).*:.*\n(\1  .*\n)*" />
-          <substitution expression="" />
-          <fileset dir="${archetype.gendir}">
-            <include name="**/jeg-config.yml" />
-          </fileset>
-        </replaceregexp>
-      </then>
-    </if>
+    <antcall target="adjust-archetype-resources" />
   </target>
 
 
-  <target name="create">
+  <target name="test-scaffolding">
+    <property name="scaff.testdir" value="${archetype.prjdir}" />
+    <property name="scaff.testprj" value="svqk" />
+
+    <exec executable="pnpm" dir="${scaff.testdir}/${scaff.testprj}-scaff"
+      failonerror="true">
+      <arg line="start WorldEntity" />
+    </exec>
+
+    <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
+      <arg line="-pl ${scaff.testprj}-back -am compile" />
+    </exec>
+  </target>
+
+
+  <!-- 
+    This target creates the archetype.properties file that is used by the
+  archetype:create-from-project.
+
+    The archetype.properties file is created from the exclude.properties file that is located in the
+  ${basedir}/src/archetype directory.
+    And the output file is located in the ${archetype.prjdir} directory.
+    
+    For more information on the properties that can be set in the archetype.properties file, see:
+  https://maven.apache.org/archetype/maven-archetype-plugin/create-from-project-mojo.html#propertyFile
+   -->
+  <target name="create-archetype-props">
     <property file="${basedir}/src/archetype/exclude.properties" />
 
     <condition property="excludePatterns" value="${exclude.refimpl}">
@@ -77,33 +159,20 @@ Usage:
     <delete file="${propsfile}" />
     <propertyfile file="${propsfile}">
       <entry key="excludePatterns" value="${excludePatterns}" />
-      <entry key="archetype.filteredExtensions" value="java,json,code-workspace" />
+      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml" />
       <!-- This value is to avoid the possibility of incorrectly replacing the version string in
       package.json files. -->
       <entry key="version" value="string that cannot be matched" />
     </propertyfile>
+  </target>
 
-    <exec executable="${mvnw}" dir="${archetype.prjdir}" failonerror="true">
-      <arg line="-N clean archetype:create-from-project" />
-    </exec>
 
-    <copy file="${basedir}/src/archetype/pom.xml" tofile="${archetype.gendir}/pom.xml"
-      overwrite="true" />
-
-    <replace file="${archetype.gendir}/pom.xml" token="[project-version]" value="${project.version}" />
-    <replace file="${archetype.gendir}/pom.xml" token="[archetype-type]" value="${archetype.type}" />
-
-    <property name="archetype.metadata.file"
-      value="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml" />
-    <replace
-      file="${archetype.metadata.file}"
-      token="svqk.code-workspace" value="__artifactId__.code-workspace" />
-    <replaceregexp flags="g"
-      file="${archetype.metadata.file}"
-      match="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
-      replace="\1*.ts\3" />
-
-    <antcall target="adapt-resources" />
+  <!-- 
+    This target adjusts the resources in the archetype.
+   -->
+  <target name="adjust-archetype-resources">
+    <antcall target="add-pom" />
+    <antcall target="adjust-archetype-metadata" />
 
     <if>
       <equals arg1="${archetype.type}" arg2="arch" />
@@ -119,6 +188,30 @@ Usage:
         <antcall target="add-front-controller" />
       </then>
     </if>
+
+    <antcall target="adjust-jeg-config" />
+  </target>
+
+
+  <target name="add-pom">
+    <copy file="${basedir}/src/archetype/pom.xml" tofile="${archetype.gendir}/pom.xml"
+      overwrite="true" />
+
+    <replace file="${archetype.gendir}/pom.xml" token="[project-version]" value="${project.version}" />
+    <replace file="${archetype.gendir}/pom.xml" token="[archetype-type]" value="${archetype.type}" />
+  </target>
+
+
+  <target name="adjust-archetype-metadata">
+    <property name="archetype.metadata.file"
+      value="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml" />
+    <replace
+      file="${archetype.metadata.file}"
+      token="svqk.code-workspace" value="__artifactId__.code-workspace" />
+    <replaceregexp flags="g"
+      file="${archetype.metadata.file}"
+      match="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
+      replace="\1*.ts\3" />
   </target>
 
 
@@ -155,42 +248,39 @@ Usage:
   </target>
 
 
-  <target name="generate-project" depends="install">
+  <target name="adjust-jeg-config">
+    <if>
+      <or>
+        <equals arg1="${archetype.type}" arg2="arch" />
+        <equals arg1="${archetype.type}" arg2="skeleton" />
+      </or>
+      <then>
+        <condition property="rm.prop.skeleton" value="|baseClassDefs" else="">
+          <equals arg1="${archetype.type}" arg2="skeleton" />
+        </condition>
 
-    <property name="archetype.testdir" value="${project.build.directory}/test" />
-    <property name="project" value="tsvqk" />
-    <property name="projectdir" value="${archetype.testdir}/${project}" />
-
-    <delete dir="${archetype.testdir}" />
-    <mkdir dir="${archetype.testdir}" />
-
-    <exec executable="${mvnw}" dir="${archetype.testdir}" failonerror="true">
-      <arg line="archetype:generate -B" />
-      <arg line="-DarchetypeCatalog=local" />
-      <arg line="-DarchetypeGroupId=dev.aulait.svqk" />
-      <arg line="-DarchetypeArtifactId=svqk-archetype-${archetype.type}" />
-      <arg line="-DarchetypeVersion=${project.version}" />
-      <arg line="-DgroupId=a.b.c" />
-      <arg line="-DartifactId=${project}" />
-    </exec>
+        <replaceregexp flags="g">
+          <regexp
+            pattern="( *).*(annotatedCols|annotationDefs|issue${rm.prop.skeleton}).*:.*\n(\1  .*\n)*" />
+          <substitution expression="" />
+          <fileset dir="${archetype.gendir}">
+            <include name="**/jeg-config.yml" />
+          </fileset>
+        </replaceregexp>
+      </then>
+    </if>
   </target>
 
 
-  <target name="test" depends="generate-project">
-    <condition property="mvnw.local" value="${projectdir}/mvnw.cmd" else="${projectdir}/mvnw">
-      <os family="windows" />
-    </condition>
-
-    <chmod perm="u+x" file="${projectdir}/mvnw" />
-
-    <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
-      <arg line="-f ${project}-cicd -D ant.target=test" />
-    </exec>
-
-    <exec executable="docker" dir="${projectdir}/${project}-container">
-      <arg line="compose down" />
-    </exec>
-
+  <target name="pre-clean">
+    <delete includeemptydirs="true" removeNotFollowedSymlinks="true">
+      <fileset dir="${archetype.testdir}" followsymlinks="false" erroronmissingdir="false"
+        defaultexcludes="no" />
+      <fileset dir="${archetype.prjdir}" followsymlinks="false" erroronmissingdir="false"
+        defaultexcludes="no">
+        <include name="**/node_modules/**" />
+      </fileset>
+    </delete>
   </target>
 
 </project>

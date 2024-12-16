@@ -8,12 +8,7 @@
     value: any;
   }
 
-  let {
-    id,
-    label,
-    type = 'text',
-    value = $bindable()
-  }: Props = $props();
+  let { id, label, type = 'text', value = $bindable() }: Props = $props();
 
   function setType(node: HTMLInputElement) {
     node.type = type;
@@ -21,9 +16,7 @@
 </script>
 
 <label for={id}>{label}</label>
-<ValidationMessage for={id} >
-  {#snippet children({ messages: message })}
-    <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
-    <small id="invalid-{id}">{message || ''}</small>
-  {/snippet}
+<ValidationMessage for={id} let:messages>
+  <input {id} name={id} use:setType bind:value aria-describedby="invalid-{id}" />
+  <small id="invalid-{id}">{messages || ''}</small>
 </ValidationMessage>

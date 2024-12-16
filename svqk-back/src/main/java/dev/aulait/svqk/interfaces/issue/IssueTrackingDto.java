@@ -1,47 +1,28 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import java.util.SortedMap;
-import java.util.SortedSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import lombok.Data;
-import lombok.Getter;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
 public class IssueTrackingDto {
 
+  // {key: trackerId, value: {key: statusId, value: count}}
   @Schema(required = true)
-  private SortedSet<TrackerCountDto> trackers = new TreeSet<>();
+  private Map<String, Map<String, Long>> trackerStatusCountMap = new HashMap<>();
 
+  // {key: trackerId, value: sum of count}
   @Schema(required = true)
-  private SortedSet<IssueStatusDto> issueStatuses = new TreeSet<>();
+  private Map<String, Long> trackerCountMap = new HashMap<>();
 
-  @Data
-  public static class TrackerCountDto implements Comparable<TrackerCountDto> {
-    @Schema(required = true)
-    private TrackerDto tracker;
-
-    @Schema(required = true)
-    private SortedMap<String, IssueStatusCountDto> issueStatusMap = new TreeMap<>();
-
-    @Getter(lazy = true)
-    @Schema(required = true, implementation = Integer.class)
-    private final int total =
-        issueStatusMap.values().stream().mapToInt(IssueStatusCountDto::getCount).sum();
-
-    @Override
-    public int compareTo(TrackerCountDto o) {
-      return tracker.getId().compareTo(o.getTracker().getId());
-    }
+  public void add(String trackerId, String statusId, long count) {
+    trackerStatusCountMap.computeIfAbsent(trackerId, k -> new TreeMap<>()).put(statusId, count);
   }
 
-  @Data
-  public static class IssueStatusCountDto {
-    @Schema(required = true)
-    private IssueStatusDto issueStatus;
-
-    @Schema(required = true)
-    private int count;
+  public void add(String trackerId, long count) {
+    long sum = trackerCountMap.computeIfAbsent(trackerId, k -> 0L) + count;
+    trackerCountMap.put(trackerId, sum);
   }
 }

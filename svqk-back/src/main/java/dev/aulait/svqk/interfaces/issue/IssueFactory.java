@@ -1,10 +1,10 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import static dev.aulait.svqk.arch.search.ConjunctionCd.*;
-import static dev.aulait.svqk.arch.search.OperatorCd.*;
+import static dev.aulait.svqk.arch.search.ArithmeticOperatorCd.*;
+import static dev.aulait.svqk.arch.search.LogicalOperatorCd.*;
 
-import dev.aulait.svqk.arch.search.SearchConditionBuilder;
-import dev.aulait.svqk.arch.search.SearchConditionVo;
+import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
+import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
@@ -12,14 +12,8 @@ import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import dev.aulait.svqk.domain.issue.IssueTrackingRs;
 import dev.aulait.svqk.interfaces.issue.IssueController.IssueSearchResultDto;
-import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.IssueStatusCountDto;
-import dev.aulait.svqk.interfaces.issue.IssueTrackingDto.TrackerCountDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @ApplicationScoped // <.>
 public class IssueFactory {
@@ -27,47 +21,38 @@ public class IssueFactory {
   private MappingConfig<IssueEntity, IssueDto> searchResultConfig =
       BeanUtils.buildConfig(IssueEntity.class, IssueDto.class).skip(IssueDto::setJournals).build();
 
-  public SearchConditionVo build(IssueSearchConditionDto cond) { // <.>
-    SearchConditionBuilder builder =
-        new SearchConditionBuilder()
-            .from(IssueEntity.class)
-            .join("issueStatus")
-            .join("tracker")
-            .where("subject", LIKE, cond.getText()); // <.>
+  public SearchCriteriaVo build(IssueSearchCriteriaDto criteria) { // <.>
+    SearchCriteriaBuilder builder =
+        new SearchCriteriaBuilder()
+            .select("SELECT i FROM IssueEntity i")
+            .select("JOIN FETCH i.issueStatus s")
+            .select("JOIN FETCH i.tracker t")
+            .where("i.subject", LIKE, criteria.getText()); // <.>
 
-    if (!cond.isSubjectOnly()) {
-      builder.where(OR, "description", LIKE, cond.getText());
+    if (!criteria.isSubjectOnly()) {
+      builder.where(OR, "i.description", LIKE, criteria.getText());
     }
 
-    var statuses = BeanUtils.mapAll(cond.getIssueStatuses(), IssueStatusEntity.class);
+    var statuses = BeanUtils.mapAll(criteria.getIssueStatuses(), IssueStatusEntity.class);
 
     return builder
-        .where("issueStatus", IN, statuses)
-        .where("dueDate", cond.getDueDate())
-        .defaultOrderBy("id", false)
-        .build(cond); // <.>
+        .where("i.issueStatus", IN, statuses)
+        .where("i.dueDate", criteria.getDueDate())
+        .defaultOrderBy("i.id", false)
+        .build(criteria); // <.>
   }
 
   public IssueTrackingDto buildIssueTracking(List<IssueTrackingRs> issueTrackings) {
-    // key: trackerId
-    Map<String, TrackerCountDto> trackerMap = new HashMap<>();
-    Set<IssueStatusDto> issueStatuses = new HashSet<>();
+    IssueTrackingDto dto = new IssueTrackingDto();
 
     for (IssueTrackingRs issueTracking : issueTrackings) {
-      TrackerCountDto trackerCount =
-          trackerMap.computeIfAbsent(
-              issueTracking.getTracker().getId(),
-              key -> BeanUtils.map(issueTracking, TrackerCountDto.class));
+      dto.add(
+          issueTracking.getTracker().getId(),
+          issueTracking.getIssueStatus().getId(),
+          issueTracking.getCount());
 
-      IssueStatusCountDto status = BeanUtils.map(issueTracking, IssueStatusCountDto.class);
-      trackerCount.getIssueStatusMap().put(status.getIssueStatus().getId(), status);
-
-      issueStatuses.add(status.getIssueStatus());
+      dto.add(issueTracking.getTracker().getId(), issueTracking.getCount());
     }
-
-    IssueTrackingDto dto = new IssueTrackingDto();
-    dto.getTrackers().addAll(trackerMap.values().stream().toList());
-    dto.getIssueStatuses().addAll(issueStatuses);
 
     return dto;
   }

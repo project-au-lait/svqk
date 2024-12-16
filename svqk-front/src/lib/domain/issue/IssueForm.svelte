@@ -1,13 +1,15 @@
 <script lang="ts">
-  import type { IdModel, IssueModel, JournalModel } from '$lib/arch/api/Api';
+  import type { IssueModel, JournalModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
+  import TextArea from '$lib/arch/form/TextArea.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
+  import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
+  import { trackers } from '$lib/domain/issue/TrackerMasterStore';
   import { t } from '$lib/translations';
   import * as yup from 'yup';
-  import { issueStatuses, trackers } from './IssueMasterStore';
 
   interface Props {
     issue: IssueModel;
@@ -16,7 +18,7 @@
   }
 
   let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
-  let journal = $state({issueId: issue.id} as JournalModel);
+  let journal = $state({ issueId: issue.id } as JournalModel);
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
@@ -25,13 +27,13 @@
   const form = FormValidator.createForm(spec, save);
 
   async function save() {
-    const response = await ApiHandler.handle<IdModel>(fetch, (api) =>
+    const response = await ApiHandler.handle<number>(fetch, (api) =>
       issue.id ? api.issues.issuesUpdate({ issue, journal }) : api.issues.issuesCreate(issue)
     );
 
     if (response) {
       journal.notes = '';
-      await handleAfterSave(response.id);
+      await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
     }
   }
@@ -42,8 +44,7 @@
     <InputField id="subject" label={$t('msg.subject')} bind:value={issue.subject} />
   </div>
   <div>
-    <label for="description">{$t('msg.description')}</label>
-    <textarea id="description" style="width:100%" bind:value={issue.description}></textarea>
+    <TextArea id="description" label={$t('msg.description')} bind:value={issue.description} />
   </div>
   <div class="grid">
     <div>
@@ -68,8 +69,7 @@
   </div>
   {#if issue.id}
     <div>
-      <label for="notes">{$t('msg.notes')}</label>
-      <textarea id="notes" bind:value={journal.notes}></textarea>
+      <TextArea id="notes" label={$t('msg.notes')} bind:value={journal.notes} />
     </div>
   {/if}
   <div>

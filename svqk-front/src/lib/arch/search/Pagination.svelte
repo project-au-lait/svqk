@@ -1,63 +1,56 @@
 <script lang="ts">
+  import type { PageControlModel } from '$lib/arch/api/Api';
+
   interface Props {
-    result: {
-      start: number;
-      end: number;
-      count: number;
-      lastPage: number;
-      pageNums: number[];
-    };
-    currentPage?: number;
-    handlePage: (page: number) => Promise<void>;
+    pageCtrl: PageControlModel;
+    pageNumber?: number;
+    search: () => void;
   }
 
-  let { result, currentPage = $bindable(1), handlePage }: Props = $props();
+  let { pageCtrl, pageNumber = $bindable(1), search }: Props = $props();
+  let { count, start, end, pageNums, lastPage } = $derived(pageCtrl);
 
-  async function gotoPage(page: number) {
-    currentPage = page;
-    await handlePage(page);
+  function gotoPage(page: number) {
+    pageNumber = page;
+    search();
   }
 </script>
 
 <div style="display: flex; justify-content: end;">
-  <span>( {result.start}-{Math.max(0, result.end)} / {result.count} )</span>
+  <span>( {start}-{Math.max(0, end)} / {count} )</span>
 </div>
 
-{#if result.lastPage > 1}
+{#if lastPage > 1}
   <div class="page" role="group">
-    <button class="outline" disabled={currentPage <= 1} onclick={() => gotoPage(1)}> « </button>
+    <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(1)}> « </button>
 
-    <button class="outline" disabled={currentPage <= 1} onclick={() => gotoPage(currentPage - 1)}>
+    <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(pageNumber - 1)}>
       &lt;
     </button>
 
-    {#if (result.pageNums.slice(0, 1).pop() ?? 0) > 1}
+    {#if (pageNums.slice(0, 1).pop() ?? 0) > 1}
       <button class="outline" disabled>...</button>
     {/if}
 
-    {#each result.pageNums as page}
-      <button class:outline={page != currentPage} onclick={() => gotoPage(page)}>
+    {#each pageNums as page}
+      <button class:outline={page != pageNumber} onclick={() => gotoPage(page)}>
         {page}
       </button>
     {/each}
 
-    {#if (result.pageNums.slice(-1).pop() ?? result.lastPage) < result.lastPage}
+    {#if (pageNums.slice(-1).pop() ?? lastPage) < lastPage}
       <button class="outline" disabled>...</button>
     {/if}
 
     <button
       class="outline"
-      disabled={currentPage >= result.lastPage}
-      onclick={() => gotoPage(currentPage + 1)}
+      disabled={pageNumber >= lastPage}
+      onclick={() => gotoPage(pageNumber + 1)}
     >
       &gt;
     </button>
 
-    <button
-      class="outline"
-      disabled={currentPage >= result.lastPage}
-      onclick={() => gotoPage(result.lastPage)}
-    >
+    <button class="outline" disabled={pageNumber >= lastPage} onclick={() => gotoPage(lastPage)}>
       »
     </button>
   </div>

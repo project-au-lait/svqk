@@ -18,6 +18,7 @@
     <module>svqk-entity</module>
     <module>svqk-front</module>
     <module>svqk-migration</module>
+    <module>svqk-scaff</module>
   </modules>
 
   <properties>

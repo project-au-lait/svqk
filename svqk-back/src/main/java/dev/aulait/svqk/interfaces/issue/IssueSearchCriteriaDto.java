@@ -1,6 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.SearchConditionDto;
+import dev.aulait.svqk.arch.search.SearchCriteriaDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true) // <.>
-public class IssueSearchConditionDto extends SearchConditionDto { // <.>
+public class IssueSearchCriteriaDto extends SearchCriteriaDto { // <.>
   // <.>
   private String text;
   private List<IssueStatusDto> issueStatuses = new ArrayList<>();

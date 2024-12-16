@@ -9,23 +9,10 @@
  * ---------------------------------------------------------------
  */
 
-export interface AtomicReferenceObject {
-  value?: any;
-  plain?: any;
-  opaque?: any;
-  acquire?: any;
-  release?: any;
-}
-
 export interface HelloModel {
   /** @format int32 */
   id: number;
   message?: string;
-}
-
-export interface IdModel {
-  /** @format int32 */
-  id?: number;
 }
 
 export interface IssueModel {
@@ -60,20 +47,7 @@ export interface IssueSearchConditionModel {
 
 export interface IssueSearchResultModel {
   list: IssueModel[];
-  /** @format int64 */
-  count: number;
-  /** @format int32 */
-  pageSize: number;
-  start: AtomicReferenceObject;
-  end: AtomicReferenceObject;
-  lastPage: AtomicReferenceObject;
-  pageNums: AtomicReferenceObject;
-}
-
-export interface IssueStatusCountModel {
-  issueStatus: IssueStatusModel;
-  /** @format int32 */
-  count: number;
+  pageCtrl: PageControlModel;
 }
 
 export interface IssueStatusModel {
@@ -84,10 +58,8 @@ export interface IssueStatusModel {
 }
 
 export interface IssueTrackingModel {
-  /** @uniqueItems true */
-  trackers: TrackerCountModel[];
-  /** @uniqueItems true */
-  issueStatuses: IssueStatusModel[];
+  trackerStatusCountMap: Record<string, Record<string, number>>;
+  trackerCountMap: Record<string, number>;
 }
 
 export interface IssueUpdateModel {
@@ -117,16 +89,23 @@ export type LocalDate = string;
  */
 export type LocalDateTime = string;
 
+export interface PageControlModel {
+  /** @format int64 */
+  count: number;
+  /** @format int32 */
+  pageSize: number;
+  /** @format int32 */
+  start: number;
+  /** @format int32 */
+  end: number;
+  /** @format int32 */
+  lastPage: number;
+  pageNums: number[];
+}
+
 export interface SortOrderModel {
   asc?: boolean;
   field?: string;
-}
-
-export interface TrackerCountModel {
-  tracker: TrackerModel;
-  issueStatusMap: Record<string, IssueStatusCountModel>;
-  /** @format int32 */
-  total: number;
 }
 
 export interface TrackerModel {
@@ -251,8 +230,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-            ? JSON.stringify(property)
-            : `${property}`
+              ? JSON.stringify(property)
+              : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -328,7 +307,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response as HttpResponse<T, E>;
+      const r = response.clone() as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
 
@@ -419,12 +398,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/v1/issues
      */
     issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
-      this.request<IdModel, any>({
+      this.request<number, any>({
         path: `/api/v1/issues`,
         method: 'PUT',
         body: data,
         type: ContentType.Json,
-        format: 'json',
         ...params
       }),
 
@@ -436,12 +414,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/v1/issues
      */
     issuesCreate: (data: IssueModel, params: RequestParams = {}) =>
-      this.request<IdModel, any>({
+      this.request<number, any>({
         path: `/api/v1/issues`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
-        format: 'json',
         ...params
       }),
 

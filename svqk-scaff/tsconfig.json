@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "*": ["./src/*"]
+    },
+    "module": "Node16",
+    "target": "ES2022",
+    "outDir": "./generators/app",
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
+}

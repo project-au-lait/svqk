@@ -6,23 +6,11 @@ CREATE TABLE issue_status (
 );
 
 
-INSERT INTO issue_status (id, name) -- <.>
-VALUES('1', 'New'),
-  ('2', 'In Progress'),
-  ('3', 'Closed');
-
-
 CREATE TABLE tracker (
   id CHAR(1) PRIMARY KEY,
   name VARCHAR(128) NOT NULL,
   --${commonColumns}  -- <.>
 );
-
-
-INSERT INTO tracker (id, name)
-VALUES ('1', 'Feature'),
-  ('2', 'Bug'),
-  ('3', 'Support');
 
 
 -- <.>

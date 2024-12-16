@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class SearchConditionDto {
+public class SearchCriteriaDto {
   private int pageNumber;
   private int pageSize;
   private int pageNumsRange;

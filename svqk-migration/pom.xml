@@ -14,6 +14,18 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>dev.aulait.cl</groupId>
+      <artifactId>csv-loader-flyway</artifactId>
+      <version>0.8</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>${flyway.version}</version>
+    </dependency>
   </dependencies>
 
   <parent>
