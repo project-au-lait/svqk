@@ -240,9 +240,9 @@
         <replacetokens begintoken="" endtoken="">
           <token key="${project.groupId}" value="${package}" />
         </replacetokens>
-        <linecontains negate="true">
-          <contains value="FrontController" />
-        </linecontains>
+        <LineContainsRegExp negate="true">
+          <regexp pattern=".*(FRONT_PATH|ConfigProperty|restPath)" />
+        </LineContainsRegExp>
       </filterchain>
     </copy>
   </target>

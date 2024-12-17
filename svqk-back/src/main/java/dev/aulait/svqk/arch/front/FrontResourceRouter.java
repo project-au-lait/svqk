@@ -1,5 +1,7 @@
 package dev.aulait.svqk.arch.front;
 
+import static dev.aulait.svqk.arch.front.FrontController.FRONT_PATH;
+
 import io.vertx.ext.web.Router;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
@@ -26,9 +28,7 @@ public class FrontResourceRouter {
 
     router.get("/").handler(rc -> rc.reroute("/webjars/front/"));
     router.get("/favicon.png").handler(rc -> rc.reroute("/webjars/front/favicon.png"));
-    router
-        .get("/_app/env.js")
-        .handler(rc -> rc.reroute(restPath.orElse("") + "/" + FrontController.FRONT_PATH));
+    router.get("/_app/env.js").handler(rc -> rc.reroute(restPath.orElse("") + "/" + FRONT_PATH));
     router.get("/_app/*").handler(rc -> rc.reroute("/webjars/front" + rc.normalizedPath()));
     router.route().last().handler(rc -> rc.reroute("/webjars/front/"));
   }
