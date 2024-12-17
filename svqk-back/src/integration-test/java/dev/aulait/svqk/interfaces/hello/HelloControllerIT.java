@@ -18,15 +18,20 @@ class HelloControllerIT {
   void test() {
     Config config = ConfigProvider.getConfig();
     int testPort = config.getValue("quarkus.http.test-port", Integer.class);
+    String restPath = config.getOptionalValue("quarkus.rest.path", String.class).orElse("");
 
-    RequestSpecification request = given()
-        .baseUri("http://localhost:" + testPort)
-        .contentType("application/json; charset=UTF-8");
+    RequestSpecification request =
+        given()
+            .baseUri("http://localhost:" + testPort)
+            .contentType("application/json; charset=UTF-8");
 
-    HelloDto hello = HelloDto.builder().id(new Random().nextInt()).message(RandomStringUtils.randomAscii(6)).build();
+    HelloDto hello =
+        HelloDto.builder()
+            .id(new Random().nextInt())
+            .message(RandomStringUtils.randomAscii(6))
+            .build();
 
-    String id = request.body(hello).post("/api/hello").then().extract().asString();
-    request.get("/api/hello/" + id).then().body("message", is(hello.getMessage()));
+    String id = request.body(hello).post(restPath + "/hello").then().extract().asString();
+    request.get(restPath + "/hello/" + id).then().body("message", is(hello.getMessage()));
   }
-
 }

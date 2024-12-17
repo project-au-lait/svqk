@@ -29,8 +29,14 @@ public class TestConfig {
 
     Optional<String> testHost = config.getOptionalValue("quarkus.http.test-host", String.class);
     Optional<Integer> testPort = config.getOptionalValue("quarkus.http.test-port", Integer.class);
+    Optional<String> restPath = config.getOptionalValue("quarkus.rest.path", String.class);
 
-    baseUrl = "http://" + testHost.orElse("localhost") + ":" + testPort.orElse(8080) + "/api";
+    baseUrl =
+        "http://"
+            + testHost.orElse("localhost")
+            + ":"
+            + testPort.orElse(8080)
+            + restPath.orElse("");
 
     log.info("Config: {}", this);
   }
