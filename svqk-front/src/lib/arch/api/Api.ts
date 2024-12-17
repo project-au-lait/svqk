@@ -440,10 +440,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesSearchCreate
+     * @name IssuesSearch
      * @request POST:/api/issues/search
      */
-    issuesSearchCreate: (data: IssueSearchCriteriaModel, params: RequestParams = {}) =>
+    issuesSearch: (data: IssueSearchCriteriaModel, params: RequestParams = {}) =>
       this.request<IssueSearchResultModel, any>({
         path: `/api/issues/search`,
         method: 'POST',

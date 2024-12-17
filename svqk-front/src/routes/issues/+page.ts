@@ -8,8 +8,8 @@ export const load: PageLoad = async ({ fetch }) => {
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.search.issuesSearchCreate(condition)
-    )) || ({} as IssueSearchCriteriaModel); // <.>
+      api.search.issuesSearch(condition)
+    )) || ({} as IssueSearchResultModel);
 
   return {
     title: t.get('msg.issue'),
