@@ -21,7 +21,7 @@ class IssueFactoryTests {
 
     assertEquals(
         "SELECT i FROM IssueEntity i JOIN FETCH i.issueStatus s JOIN FETCH"
-            + " i.tracker t WHERE i.subject LIKE :i.subject ORDER BY i.id DESC",
+            + " i.tracker t WHERE i.subject LIKE :subject ORDER BY i.id DESC",
         builder.getSearchQuery());
   }
 }
