@@ -13,7 +13,7 @@ public class IssueStatusController {
 
   private final IssueStatusService service;
 
-  static final String ISSUE_STATUSES_PATH = "/issue-statuses";
+  static final String ISSUE_STATUSES_PATH = "issue-statuses";
 
   @GET
   public List<IssueStatusDto> get() { // <.>

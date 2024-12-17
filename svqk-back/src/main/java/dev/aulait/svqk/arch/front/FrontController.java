@@ -12,7 +12,7 @@ public class FrontController {
 
   private final FrontConfigDto config;
 
-  public static final String FRONT_PATH = "/front";
+  public static final String FRONT_PATH = "front";
 
   @GET
   @Produces("text/javascript")

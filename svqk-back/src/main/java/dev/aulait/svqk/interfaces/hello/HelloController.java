@@ -15,7 +15,7 @@ public class HelloController {
 
   private final HelloService helloService; // <.>
 
-  static final String HELLO_PATH = "/hello";
+  static final String HELLO_PATH = "hello";
 
   static final String HELLO_GET_PATH = "{id}";
 

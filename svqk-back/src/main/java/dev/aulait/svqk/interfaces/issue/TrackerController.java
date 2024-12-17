@@ -13,7 +13,7 @@ public class TrackerController {
 
   private final TrackerService service;
 
-  static final String TRACKERS_PATH = "/tracker";
+  static final String TRACKERS_PATH = "tracker";
 
   @GET
   public List<TrackerDto> getAllTrackers() {

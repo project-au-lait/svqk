@@ -23,7 +23,7 @@ public class IssueController {
 
   private final IssueFactory factory;
 
-  static final String ISSUES_PATH = "/issues";
+  static final String ISSUES_PATH = "issues";
 
   static final String ISSUES_GET_PATH = "{issueId}";
 

@@ -17,7 +17,7 @@ public class <%= entityNmPascal %>Controller {
 
   private final <%= entityNmPascal %>Service <%= entityNmCamel %>Service;
 
-  static final String <%= entityNmAllCaps %>_PATH = "/<%= entityNmCamel %>";
+  static final String <%= entityNmAllCaps %>_PATH = "<%= entityNmCamel %>";
 
   static final String <%= entityNmAllCaps %>_GET_PATH = "{id}";
 
