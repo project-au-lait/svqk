@@ -64,10 +64,11 @@ public class SearchQueryBuilder {
 
       ArithmeticOperatorCd operator = fieldCriterion.getArithmeticOperator();
 
-      sb.append(operator.getValue() + " :" + field);
+      String paramName = extractParamName(field);
+      sb.append(operator.getValue() + " :" + paramName);
 
       queryParams.put(
-          field,
+          paramName,
           operator == ArithmeticOperatorCd.LIKE
               ? "%" + fieldCriterion.getValue() + "%"
               : fieldCriterion.getValue());
@@ -85,5 +86,12 @@ public class SearchQueryBuilder {
         + sort.get()
             .map(order -> order.getProperty() + " " + order.getDirection())
             .collect(Collectors.joining(","));
+  }
+
+  private String extractParamName(String field) {
+    if (field.contains(".")) {
+        return field.substring(field.indexOf('.') + 1);
+    }
+    return field;
   }
 }
