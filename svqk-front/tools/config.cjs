@@ -1,20 +1,9 @@
 exports.hooks = {
   onFormatRouteName: (routeInfo, templateRouteName) => {
-    const nextCharOfVersion = templateRouteName.match(/^v\d(.)/);
+    let newTemplateRouteName = templateRouteName.replace(/SearchCreate$/, 'Search');
 
-    if (nextCharOfVersion) {
-      let newTemplateRouteName = templateRouteName.replace(
-        /^v\d./,
-        nextCharOfVersion[1].toLowerCase()
-      );
-
-      newTemplateRouteName = newTemplateRouteName.replace(/SearchCreate$/, 'Search');
-
-      console.log(`     Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`);
-      return newTemplateRouteName;
-    }
-
-    return templateRouteName;
+    console.log(`     Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`);
+    return newTemplateRouteName;
   },
   onFormatTypeName: (typeName, rawTypeName, schemaType) => {
     if (schemaType === 'type-name' && typeName.endsWith('Dto')) {

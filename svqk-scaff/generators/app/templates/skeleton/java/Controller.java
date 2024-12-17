@@ -17,7 +17,7 @@ public class <%= entityNmPascal %>Controller {
 
   private final <%= entityNmPascal %>Service <%= entityNmCamel %>Service;
 
-  static final String <%= entityNmAllCaps %>_PATH = ApiPath.ROOT + "/<%= entityNmCamel %>";
+  static final String <%= entityNmAllCaps %>_PATH = "<%= entityNmCamel %>";
 
   static final String <%= entityNmAllCaps %>_GET_PATH = "{id}";
 
@@ -45,10 +45,5 @@ public class <%= entityNmPascal %>Controller {
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
     return savedEntity.getId();
-  }
-
-  @NoArgsConstructor(access = AccessLevel.PRIVATE)
-  static class ApiPath {
-    static final String ROOT = "/api/v1";
   }
 }

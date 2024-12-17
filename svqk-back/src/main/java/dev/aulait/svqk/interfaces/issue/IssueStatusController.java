@@ -1,7 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
 import dev.aulait.svqk.arch.util.BeanUtils;
-import dev.aulait.svqk.arch.web.ApiPath;
 import dev.aulait.svqk.domain.issue.IssueStatusService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,7 +13,7 @@ public class IssueStatusController {
 
   private final IssueStatusService service;
 
-  static final String ISSUE_STATUSES_PATH = ApiPath.ROOT + "/issue-statuses";
+  static final String ISSUE_STATUSES_PATH = "issue-statuses";
 
   @GET
   public List<IssueStatusDto> get() { // <.>
