@@ -36,8 +36,8 @@ public class IssueFactory {
     var statuses = BeanUtils.mapAll(criteria.getIssueStatuses(), IssueStatusEntity.class);
 
     return builder
-        .where("i.issueStatus", IN, statuses)
-        .where("i.dueDate", criteria.getDueDate())
+        .where("issueStatus", IN, statuses)
+        .where("dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
         .build(criteria); // <.>
   }
