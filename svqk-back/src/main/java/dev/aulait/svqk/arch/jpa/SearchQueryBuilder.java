@@ -62,12 +62,14 @@ public class SearchQueryBuilder {
       String field = fieldCriterion.getField();
       sb.append(field + " ");
 
+      String paramName = replaceDotsWithUnderscore(field);
+
       ArithmeticOperatorCd operator = fieldCriterion.getArithmeticOperator();
 
-      sb.append(operator.getValue() + " :" + field);
+      sb.append(operator.getValue() + " :" + paramName);
 
       queryParams.put(
-          field,
+          paramName,
           operator == ArithmeticOperatorCd.LIKE
               ? "%" + fieldCriterion.getValue() + "%"
               : fieldCriterion.getValue());
@@ -85,5 +87,9 @@ public class SearchQueryBuilder {
         + sort.get()
             .map(order -> order.getProperty() + " " + order.getDirection())
             .collect(Collectors.joining(","));
+  }
+
+  private String replaceDotsWithUnderscore(String field) {
+    return field.replace(".", "_");
   }
 }

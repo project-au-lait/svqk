@@ -79,12 +79,12 @@ class SearchQueryBuilderTests {
 
       assertEquals(
           "SELECT COUNT(t) FROM TestEntity t JOIN t.join j"
-              + " WHERE t.field = :t.field AND j.field = :j.field",
+              + " WHERE t.field = :t_field AND j.field = :j_field",
           builder.getCountQuery());
 
       assertEquals(
           "SELECT t FROM TestEntity t JOIN FETCH t.join j"
-              + " WHERE t.field = :t.field AND j.field = :j.field",
+              + " WHERE t.field = :t_field AND j.field = :j_field",
           builder.getSearchQuery());
     }
   }
