@@ -91,7 +91,7 @@ public class BeanUtils {
   public static <S, D> MappingConfig<S, D> buildConfig(Class<S> srcType, Class<D> dstType) {
     MappingConfig<S, D> config = new MappingConfig<>();
     config.mapper = buildDefaultMapper();
-    config.typeMap = config.mapper.createTypeMap(srcType, dstType);
+    config.typeMap = config.mapper.emptyTypeMap(srcType, dstType);
     return config;
   }
 
