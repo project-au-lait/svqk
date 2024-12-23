@@ -64,10 +64,10 @@ public class SearchQueryBuilder {
 
       ArithmeticOperatorCd operator = fieldCriterion.getArithmeticOperator();
 
-      sb.append(operator.getValue() + " :" + field);
+      sb.append(operator.getValue() + " :" + field.replace(".", "_"));
 
       queryParams.put(
-          field,
+          field.replace(".", "_"),
           operator == ArithmeticOperatorCd.LIKE
               ? "%" + fieldCriterion.getValue() + "%"
               : fieldCriterion.getValue());
