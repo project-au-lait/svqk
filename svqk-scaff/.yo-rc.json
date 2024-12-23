@@ -1,7 +1,9 @@
 {
   "generator-svqk-scaff": {
     "metadataFilePath": "src/main/resources/jeg-metadata.json",
-    "destRootPath": "../svqk-back/src/main/java",
+    "destProjectPath": "../svqk-back",
+    "destMainPath": "src/main/java",
+    "destITPath": "src/integration-test/java",
     "templateType": "skeleton"
   }
 }
