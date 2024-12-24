@@ -12,7 +12,7 @@ import org.eclipse.microprofile.config.ConfigProvider;
 
 public class <%= entityNmPascal %>Client {
 
-  public <%= entityNmPascal %>Dto get(Integer id) {
+  public <%= entityNmPascal %>Dto get(int id) {
     return given()
         .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, id)
         .then()
@@ -21,7 +21,7 @@ public class <%= entityNmPascal %>Client {
         .as(<%= entityNmPascal %>Dto.class);
   }
 
-  public Integer save(<%= entityNmPascal %>Dto dto) {
+  public int save(<%= entityNmPascal %>Dto dto) {
     return Integer.parseInt(
         given()
             .body(dto)

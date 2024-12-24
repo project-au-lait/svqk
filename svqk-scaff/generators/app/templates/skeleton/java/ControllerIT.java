@@ -6,6 +6,15 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
+/**
+ * This integration test is automatically generated.
+ * 
+ * The test generated is a sample that only checks the id.
+ * Tests will fail depending on the entity configuration.
+ * (E.g. required fields other than id are present, etc.
+ * 
+ * Change the content of the test if necessary.
+ */
 @QuarkusIntegrationTest
 class <%= entityNmPascal %>ControllerIT {
 
@@ -13,19 +22,15 @@ class <%= entityNmPascal %>ControllerIT {
 
   @Test
   void testCrud() {
-    Integer id = new Random().nextInt();
-
+    int id = new Random().nextInt();
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>Dto.builder().id(id).build();
 
     // Create
-    Integer createdId = client.save(dto);
+    int createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
-    <%= entityNmPascal %>Dto createdDto = client.get(id);
-    assertEquals(id, createdDto.getId());
-
-    // Update
-    // delete
+    <%= entityNmPascal %>Dto refDto = client.get(id);
+    assertEquals(id, refDto.getId());
   }
 }
