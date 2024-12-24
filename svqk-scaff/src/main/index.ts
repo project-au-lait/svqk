@@ -2,19 +2,25 @@ import Generator from "yeoman-generator";
 import { Metadata, TemplateData } from "./types.js";
 
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
-const YO_RC_KEY_DEST_ROOT_PATH = "destRootPath";
+const YO_RC_KEY_DEST_PROJECT_PATH = "destProjectPath";
+const YO_RC_KEY_DEST_MAIN_PATH = "destMainPath";
+const YO_RC_KEY_DEST_IT_PATH = "destITPath";
 const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
 
 class SvqkCodeGenerator extends Generator {
   metadataFilePath: string;
-  destRootPath: string;
+  destProjectPath: string;
+  destMainPath: string;
+  destITPath: string;
   templateType: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: Record<string, unknown>) {
     super(args, opts);
     this.metadataFilePath = this.config.get(YO_RC_KEY_METADATA_FPATH);
-    this.destRootPath = this.config.get(YO_RC_KEY_DEST_ROOT_PATH);
+    this.destProjectPath = this.config.get(YO_RC_KEY_DEST_PROJECT_PATH);
+    this.destMainPath = this.config.get(YO_RC_KEY_DEST_MAIN_PATH);
+    this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
     this.templateType = this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
     this.metadataList = [];
   }
@@ -97,7 +103,7 @@ class SvqkCodeGenerator extends Generator {
   }
 
   _generate_dest_package_path(destRootPath: string, pkgNm: string): string {
-    return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
+    return `${this.destProjectPath}/${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
   }
 
   _generate_backend(metadata: Metadata) {
@@ -106,7 +112,7 @@ class SvqkCodeGenerator extends Generator {
     // Generate files for domain package
     ["Repository", "Service"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(
-        this.destRootPath,
+        this.destMainPath,
         tmplData.domainPkgNm
       );
       this._output_java_file(component, destPkgPath, tmplData);
@@ -115,7 +121,16 @@ class SvqkCodeGenerator extends Generator {
     // Generate files for interfaces package
     ["Dto", "Controller"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(
-        this.destRootPath,
+        this.destMainPath,
+        tmplData.interfacesPkgNm
+      );
+      this._output_java_file(component, destPkgPath, tmplData);
+    });
+
+    // Generate files for integration test
+    ["Client", "ControllerIT"].forEach((component) => {
+      const destPkgPath = this._generate_dest_package_path(
+        this.destITPath,
         tmplData.interfacesPkgNm
       );
       this._output_java_file(component, destPkgPath, tmplData);
