@@ -25,7 +25,7 @@ public class IssueController {
 
   static final String ISSUES_PATH = "issues";
 
-  static final String ISSUES_GET_PATH = "{issueId}";
+  static final String ISSUES_GET_PATH = "{issues}";
 
   static final String ISSUES_TRACKING_GET_PATH = "tracking";
 
@@ -55,7 +55,7 @@ public class IssueController {
 
   @GET
   @Path(ISSUES_GET_PATH)
-  public IssueDto get(@PathParam("issueId") int id) {
+  public IssueDto get(@PathParam("issues") int id) {
     IssueEntity entity = service.find(id);
 
     return BeanUtils.map(entity, IssueDto.class);

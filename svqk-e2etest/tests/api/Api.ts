@@ -230,8 +230,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-            ? JSON.stringify(property)
-            : `${property}`
+              ? JSON.stringify(property)
+              : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -307,7 +307,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response as HttpResponse<T, E>;
+      const r = response.clone() as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
 
@@ -469,17 +469,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params
       })
   };
-  issueId = {
+  issues = {
     /**
      * No description
      *
      * @tags Issue Controller
      * @name IssuesDetail
-     * @request GET:/api/issues/{issueId}
+     * @request GET:/api/issues/{issues}
      */
-    issuesDetail: (issueId: number, params: RequestParams = {}) =>
+    issuesDetail: (issues: number, params: RequestParams = {}) =>
       this.request<IssueModel, any>({
-        path: `/api/issues/${issueId}`,
+        path: `/api/issues/${issues}`,
         method: 'GET',
         format: 'json',
         ...params
