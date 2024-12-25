@@ -73,6 +73,6 @@
     </div>
   {/if}
   <div>
-    <input id="save" type="submit" name="action" value={actionBtnLabel} />
+    <button id="save" type="submit">{actionBtnLabel}</button>
   </div>
 </form>
