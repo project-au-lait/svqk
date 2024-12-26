@@ -20,7 +20,7 @@
   async function search() {
     // <.>
     const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.search.issuesSearch(condition)
+      api.issues.issuesSearch(condition)
     );
 
     // <.>
