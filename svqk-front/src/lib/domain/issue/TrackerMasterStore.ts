@@ -11,7 +11,7 @@ export let trackers = readable([] as TrackerModel[]);
 @provide(TYPES.MasterStore)
 export class TrackerMasterStore extends MasterStoreBase<TrackerModel[]> {
   constructor() {
-    super((api) => api.trackerList());
+    super((api) => api.tracker.trackerList());
   }
 
   override async load(fetch: Fetch) {
