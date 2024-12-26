@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "gen-api-client": "dotenv cross-env-shell 'swagger-typescript-api -p $PUBLIC_BACKEND_URL/q/openapi -o src/lib/arch/api --disable-throw-on-error --custom-config tools/config.cjs --module-name-index 2' && pnpm copy-api",
+    "gen-api-client": "dotenv cross-env-shell 'swagger-typescript-api -p $PUBLIC_BACKEND_URL/q/openapi -o src/lib/arch/api --disable-throw-on-error --custom-config tools/config.cjs --module-name-index 1' && pnpm copy-api",
     "copy-api": "cpx src/lib/arch/api/Api.ts ../svqk-e2etest/tests/api",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
