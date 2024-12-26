@@ -21,6 +21,7 @@ type TemplateData = {
   entityNmCamel: string;
   entityNmAllCaps: string;
   entityIdType: string;
+  idFieldName: string;
   fields: Field[];
 };
 
