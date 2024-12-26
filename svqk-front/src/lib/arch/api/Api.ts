@@ -230,8 +230,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-            ? JSON.stringify(property)
-            : `${property}`
+              ? JSON.stringify(property)
+              : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -307,7 +307,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response as HttpResponse<T, E>;
+      const r = response.clone() as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
 
@@ -341,85 +341,23 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 0.8-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  /**
-   * No description
-   *
-   * @tags Hello Controller
-   * @name HelloCreate
-   * @request POST:/api/hello
-   */
-  helloCreate = (data: HelloModel, params: RequestParams = {}) =>
-    this.request<number, any>({
-      path: `/api/hello`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params
-    });
+  hello = {
+    /**
+     * No description
+     *
+     * @tags Hello Controller
+     * @name HelloCreate
+     * @request POST:/api/hello
+     */
+    helloCreate: (data: HelloModel, params: RequestParams = {}) =>
+      this.request<number, any>({
+        path: `/api/hello`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params
+      }),
 
-  /**
-   * No description
-   *
-   * @tags Issue Status Controller
-   * @name IssueStatusesList
-   * @request GET:/api/issue-statuses
-   */
-  issueStatusesList = (params: RequestParams = {}) =>
-    this.request<IssueStatusModel[], any>({
-      path: `/api/issue-statuses`,
-      method: 'GET',
-      format: 'json',
-      ...params
-    });
-
-  /**
-   * No description
-   *
-   * @tags Issue Controller
-   * @name IssuesUpdate
-   * @request PUT:/api/issues
-   */
-  issuesUpdate = (data: IssueUpdateModel, params: RequestParams = {}) =>
-    this.request<number, any>({
-      path: `/api/issues`,
-      method: 'PUT',
-      body: data,
-      type: ContentType.Json,
-      ...params
-    });
-
-  /**
-   * No description
-   *
-   * @tags Issue Controller
-   * @name IssuesCreate
-   * @request POST:/api/issues
-   */
-  issuesCreate = (data: IssueModel, params: RequestParams = {}) =>
-    this.request<number, any>({
-      path: `/api/issues`,
-      method: 'POST',
-      body: data,
-      type: ContentType.Json,
-      ...params
-    });
-
-  /**
-   * No description
-   *
-   * @tags Tracker Controller
-   * @name TrackerList
-   * @request GET:/api/tracker
-   */
-  trackerList = (params: RequestParams = {}) =>
-    this.request<TrackerModel[], any>({
-      path: `/api/tracker`,
-      method: 'GET',
-      format: 'json',
-      ...params
-    });
-
-  id = {
     /**
      * No description
      *
@@ -435,7 +373,55 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params
       })
   };
-  search = {
+  issueStatuses = {
+    /**
+     * No description
+     *
+     * @tags Issue Status Controller
+     * @name IssueStatusesList
+     * @request GET:/api/issue-statuses
+     */
+    issueStatusesList: (params: RequestParams = {}) =>
+      this.request<IssueStatusModel[], any>({
+        path: `/api/issue-statuses`,
+        method: 'GET',
+        format: 'json',
+        ...params
+      })
+  };
+  issues = {
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesUpdate
+     * @request PUT:/api/issues
+     */
+    issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
+      this.request<number, any>({
+        path: `/api/issues`,
+        method: 'PUT',
+        body: data,
+        type: ContentType.Json,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesCreate
+     * @request POST:/api/issues
+     */
+    issuesCreate: (data: IssueModel, params: RequestParams = {}) =>
+      this.request<number, any>({
+        path: `/api/issues`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params
+      }),
+
     /**
      * No description
      *
@@ -451,9 +437,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         type: ContentType.Json,
         format: 'json',
         ...params
-      })
-  };
-  tracking = {
+      }),
+
     /**
      * No description
      *
@@ -467,9 +452,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'GET',
         format: 'json',
         ...params
-      })
-  };
-  issueId = {
+      }),
+
     /**
      * No description
      *
@@ -480,6 +464,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     issuesDetail: (issueId: number, params: RequestParams = {}) =>
       this.request<IssueModel, any>({
         path: `/api/issues/${issueId}`,
+        method: 'GET',
+        format: 'json',
+        ...params
+      })
+  };
+  tracker = {
+    /**
+     * No description
+     *
+     * @tags Tracker Controller
+     * @name TrackerList
+     * @request GET:/api/tracker
+     */
+    trackerList: (params: RequestParams = {}) =>
+      this.request<TrackerModel[], any>({
+        path: `/api/tracker`,
         method: 'GET',
         format: 'json',
         ...params
