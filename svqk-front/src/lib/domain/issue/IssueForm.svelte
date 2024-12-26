@@ -28,7 +28,7 @@
 
   async function save() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
-      issue.id ? api.issuesUpdate({ issue, journal }) : api.issuesCreate(issue)
+      issue.id ? api.issues.issuesUpdate({ issue, journal }) : api.issues.issuesCreate(issue)
     );
 
     if (response) {
