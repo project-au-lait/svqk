@@ -80,12 +80,24 @@ public class SearchQueryBuilder {
 
   String buildOrderBy(Sort sort) {
     if (sort.isEmpty()) {
-      return "";
+        return "";
     }
 
     return " ORDER BY "
         + sort.get()
-            .map(order -> order.getProperty() + " " + order.getDirection())
+            .map(order -> {
+                String property = order.getProperty();
+
+                if ("id".equals(property)) {
+                    property = "i.id";
+                }
+
+                if("updatedAt".equals(property)) {
+                    property = "i.updatedAt";
+                }
+
+                return property + " " + order.getDirection();
+            })
             .collect(Collectors.joining(","));
   }
 
