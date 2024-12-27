@@ -80,7 +80,7 @@ public class SearchQueryBuilder {
 
   String buildOrderBy(Sort sort) {
     if (sort.isEmpty()) {
-        return "";
+      return "";
     }
 
     return " ORDER BY "
