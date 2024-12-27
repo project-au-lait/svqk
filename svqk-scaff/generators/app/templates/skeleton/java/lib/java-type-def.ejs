@@ -1,0 +1,16 @@
+<%
+javaTypeDefs = [
+  {
+    type: "Integer",
+    valueCode: "new Random().nextInt()",
+    imports: ["java.util.Random"],
+  },
+  {
+    type: "String",
+    valueCode: "RandomStringUtils.randomAscii(6)",
+    imports: ["org.apache.commons.lang3.RandomStringUtils"],
+  },
+];
+
+findTypeDef = (type) => javaTypeDefs.find((typeDef) => typeDef.type === type);
+%>
