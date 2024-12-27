@@ -1,0 +1,31 @@
+<%
+// toCamel = (pascalStr) => pascalStr.charAt(0).toLowerCase() + pascalStr.slice(1);
+toPascal = (camelStr) => camelStr.charAt(0).toUpperCase() + camelStr.slice(1);
+
+getIdField = (fields) => fields.find((field) => field.id);
+getIdFieldNm = (fields) => getIdField(fields)?.fieldName ?? "";
+
+dtoSet = [
+  {
+    type: "Integer",
+    code: "new Random().nextInt()",
+    import: ["java.util.Random"],
+  },
+  {
+    type: "String",
+    code: "RandomStringUtils.randomAscii(6)",
+    import: ["org.apache.commons.lang3.RandomStringUtils"],
+  },
+];
+
+getSet = (type) => dtoSet.find((d) => d.type === type);
+getCode = (field) => getSet(field.javaType)?.code ?? "";
+getImports = (fields) => {
+  uniqTypes = [...new Set(fields.map((f) => f.javaType))];
+  return uniqTypes.reduce(
+    (accumulator, type) =>
+      accumulator.concat(getSet(type)?.import ?? []),
+    []
+  );
+};
+%>

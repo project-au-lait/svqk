@@ -1,11 +1,14 @@
+<%_ include('lib/tool'); -%>
+
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
-import java.util.Random;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+<%_ getImports(fields).forEach(function(_import) { -%>
+import <%= _import %>;
+<%_ }); -%>
 
 /**
  * This integration test is automatically generated.
@@ -24,15 +27,12 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>Dto.builder()
-    <% fields.forEach(function(field) { %>
-      <% if (field.javaType === 'Integer') { %>
-        .<%= field.fieldName %>(new Random().nextInt())
-      <% } else if (field.javaType === 'String') {%>
-        .<%= field.fieldName %>(RandomStringUtils.randomAscii(6))
-      <% } %>
-    <% }); %>.build();
+    <%_ fields.forEach(function(field) { -%>
+        .<%= field.fieldName %>(<%= getCode(field) %>)
+    <%_ }); -%>
+        .build();
 
-    int id = dto.get<%= idFieldName.charAt(0).toUpperCase() + idFieldName.slice(1) %>();
+    int id = dto.get<%= toPascal(getIdFieldNm(fields)) %>();
 
     // Create
     int createdId = client.save(dto);
@@ -40,6 +40,6 @@ class <%= entityNmPascal %>ControllerIT {
 
     // Reference
     <%= entityNmPascal %>Dto refDto = client.get(id);
-    assertEquals(id, refDto.get<%= idFieldName.charAt(0).toUpperCase() + idFieldName.slice(1) %>());
+    assertEquals(id, refDto.get<%= toPascal(getIdFieldNm(fields)) %>());
   }
 }
