@@ -12,3 +12,5 @@
 include::input-page/index.ad[]
 
 include::list-page/index.ad[]
+
+include::master-load/index.ad[]

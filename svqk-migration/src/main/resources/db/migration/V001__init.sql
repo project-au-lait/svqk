@@ -9,7 +9,7 @@ CREATE TABLE issue_status (
 CREATE TABLE tracker (
   id CHAR(1) PRIMARY KEY,
   name VARCHAR(128) NOT NULL,
-  --${commonColumns}  -- <.>
+  --${commonColumns}
 );
 
 

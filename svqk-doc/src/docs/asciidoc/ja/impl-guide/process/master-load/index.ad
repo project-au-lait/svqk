@@ -1,0 +1,209 @@
+:project_root: ../../../../../../../../
+[[master-load]]
+=== マスターデータロード
+
+ここではマスターデータロードの実装手順を説明します。
+説明ではリファレンス実装のチケットステータスを例に挙げます。
+
+* *マスターデータの取得* +
+  画面で使用するマスターデータをBackendから取得します。
+* *マスターデータの保持* +
+  Backendから取得したマスターデータをstoreとして保持します。
+
+マスターデータロード処理のシーケンスは以下の通りです。
+
+.マスターデータロードの処理シーケンス
+[cols="3,2",frame=none,grid=none]
+|===
+a|
+[plantuml]
+----
+include::master-load.pu[]
+----
+
+a|[.description]
+. ユーザーがFrontendにアクセスすると、初回アクセス時にLayoutLoaderのload functionが呼び出されます。
+. LoadExecutorがMasterStoreのload処理を実行します。
+. MasterStoreが画面で使用するコード値等を取得するWeb APIを呼び出します。
+. ControllerがServiceを呼び出します。
+. ServiceがRepositoryを呼び出します。
+. RepositoryがDBに対しSELECTを実行します。
+. ControllerがServiceから取得したentityをdtoに変換します。
+. MasterStoreが取得した結果をstoreとして保持します。
+|===
+
+
+ここで、LayoutLoaderはSvelteKitの https://svelte.dev/docs/kit/routing#layout-layout.js[layout.ts] を指し、リファレンス実装ではsrc/route以下に配置されています。また、LoadExecutorはarchが提供する共通機能で、リファレンス実装ではsrc/lib/arch/masterに配置されています。
+
+
+以降では、上記の処理シーケンスの各要素を以下の順に実装します。
+
+. DB: マスターテーブルを作成とマスターデータのロードを行うマイグレーションスクリプトの実装
+. Backend: マスターデータを取得するWeb APIの実装
+. Frontend: Web API Clientの生成と組み込み
+
+==== DB
+
+===== Migration Script - DDL
+
+マイグレーションスクリプト(SQL)にテーブルを作成するCREATE文を実装します。
+
+.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="1..6"]
+----
+
+<.> テーブルを作成するCREATE文を実装します。
+<.> 作成対象のテーブルに共通カラム(作成者、作成日、など)を追加します。
+
+
+===== Migration Script - Data
+
+マイグレーションスクリプト(Java)を実装します。
+
+.{project-artifactid}-migration/src/main/java/db/migration/V002__AddRecords.java
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/java/db/migration/V002__AddRecords.java[]
+----
+
+マイグレーションに使用するテーブルリストファイルを配置します。
+
+.{project-artifactid}-migration/src/main/resources/db/migration/V002__AddRecords/table-list.txt
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/resources/db/migration/V002__AddRecords/table-list.txt[lines=1..1]
+----
+
+マスターデータのファイル(csv)を配置します。
+
+.{project-artifactid}-migration/src/main/resources/db/migration/V002__AddRecords/issue_status.csv
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/resources/db/migration/V002__AddRecords/issue_status.csv[]
+----
+
+マイグレーションスクリプトを実装したら、VSCode Task: `migration` を実行します。
+
+==== Backend
+
+Backendに画面で使用するマスターデータをDBから取得するWeb APIを実装します。
+
+===== Entity
+
+Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
+
+.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
+[source,yml]
+----
+packages:
+  ${project.groupId}.domain.issue:  # <.>
+    - issue_status
+----
+
+<.> packages属性にEntityの生成先パッケージとテーブル名を追加します。
+** "Entityの生成先パッケージ" : ["テーブル名"]
+
+jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
+
+.{project-artifactid}-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java
+[source,java]
+----
+include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java[]
+----
+
+===== Repository
+
+xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルを作成/更新します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java[]
+----
+
+===== Service
+
+xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java[]
+----
+
+<.> マスターデータをDBから取得するメソッドを定義します。
+<.> マスターデータをDBから取得するRepositoryのメソッドの呼び出しを実装します。上記の `findAll` は `IssueStatusRepository` が継承する `JpaRepository` のメソッドで、 `issue_status` テーブルの全レコードをSELECTします。
+
+===== DTO
+
+xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java[]
+----
+
+===== Controller
+
+xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
+
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
+[source,java]
+----
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
+----
+
+<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@GET` を設定します。
+<.> ServiceからのEntityの取得、 `BeanUtils` を使用したDTOへの変換、レスポンスとしての返却を実装します。
+
+include::../snippet/backend-verification.ad[]
+
+==== Frontend
+
+API Clientを生成し、MasterStoreとWeb APIの呼び出し処理を実装します。
+
+===== API Client
+
+VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
+生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
+
+.{project-artifactId}-front/src/lib/arch/api/Api.ts
+[source,ts]
+----
+include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="53..59,343,376..391,488"]
+----
+
+===== MasterStore
+
+.{project-artifactid}-front/src/lib/domain/issue/IssueStatusMasterStore.ts
+[source,ts]
+----
+include::{project_root}/svqk-front/src/lib/domain/issue/IssueStatusMasterStore.ts[]
+----
+
+<.> マスターデータを表すModelの配列をReadable Storeとして宣言し、exportします。これにより、マスターデータがSvelteのStoreとして使用可能になります。
+<.> @provideをMasterStoreに設定します。これにより、MasterStoreがDIコンテナ経由で使用可能になります。また、MasterStoreはMasterStoreBaseを継承して実装します。これにより、マスターデータのロード処理がユーザーの初回アクセス時に実行されるようになります。
+<.> Web API Clientの呼び出しを実装します。
+<.> Readable Storeにデータをセットする処理を実装します。
+
+
+.{project-artifactid}-front/src/hooks.ts
+[source,ts]
+----
+include::{project_root}/svqk-front/src/hooks.ts[lines=2]
+----
+
+<.> MasterStoreのimportを実装します。
+
+画面等でマスターデータを使用する際には、以下のようにMasterStoreを使用します。
+
+.MasterStoreの使用
+[source,ts]
+----
+  import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
+
+  $issueStatuses // IssueStatusModel[]
+----

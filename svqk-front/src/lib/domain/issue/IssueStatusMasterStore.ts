@@ -6,14 +6,15 @@ import type { IssueStatusModel } from '$lib/arch/api/Api';
 
 type Fetch = typeof fetch;
 
-export let issueStatuses = readable([] as IssueStatusModel[]);
+export let issueStatuses = readable([] as IssueStatusModel[]); // <.>
 
-@provide(TYPES.MasterStore)
+@provide(TYPES.MasterStore) // <.>
 export class IssueStatusMasterStore extends MasterStoreBase<IssueStatusModel[]> {
   constructor() {
-    super((api) => api.issueStatuses.issueStatusesList());
+    super((api) => api.issueStatuses.issueStatusesList()); // <.>
   }
 
+  // <.>
   override async load(fetch: Fetch) {
     await super.load(fetch);
     issueStatuses = this.store;

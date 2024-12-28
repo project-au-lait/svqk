@@ -4,8 +4,6 @@
 初期化処理は、当該画面への遷移イベントが発生してから画面が表示されるまでに実行される処理です。
 登録画面の初期化処理では以下の処理が実行されます。
 
-* *マスターデータの取得* +
-  画面で使用するマスターデータをBackendから取得します。
 * *入力項目の初期化* +
   画面表示時の入力項目の値を設定します。
 * *入力項目のバリデーションの設定* +
@@ -15,7 +13,7 @@
 登録画面の初期化処理のシーケンスは以下の通りです。
 
 .画面初期表示時の処理シーケンス
-[cols="3,2",frame=none,grid=none]
+[cols="1,2",frame=none,grid=none]
 |===
 a|
 [plantuml]
@@ -27,20 +25,12 @@ a|[.description]
 . ユーザーが登録画面に遷移します。
 . PageLoaderのload functionが呼び出されます。
 . PageLoaderが画面の入力値を格納するmodelのインスタンスを生成します。インスタンスのプロパティには画面要素の初期値を設定します。
-. PageLoaderが画面で使用するコード値等を取得するWeb APIを呼び出します。取得した結果はmodelとしてPageに返却します。
-. ControllerがServiceを呼び出します。
-. ServiceがRepositoryを呼び出します。
-. RepositoryがDBに対しSELECTを実行します。
-. ControllerがServiceから取得したentityをdtoに変換します。
 . PageがPageLoaderから取得したmodelを元に画面のHTMLを構築します。また入力項目のバリデーションを設定します。
 |===
 
 以降では、上記の処理シーケンスの各要素を以下の順に実装します。
 
 . Frontend:  画面要素の配置とバリデーション定義の実装
-. DB: テーブルを作成するマイグレーションスクリプトの実装
-. Backend: Web APIの実装
-. Frontend: Web API Clientの生成と組み込み
 
 ===== Frontend
 
@@ -61,12 +51,10 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
   import IssueForm from '$lib/domain/issue/IssueForm.svelte';
   import { t } from '$lib/translations';
 
-  const issue = { // <.>
+  const issue = $state({ // <.>
     subject: ''
     // ...
-  };
-
-  pageStore.setTitle($t('msg.newIssue')); // <.>
+  });
 
   async function handleAfterSave(id?: number) { // <.>
     await goto(`/issues/${id}`);
@@ -74,8 +62,7 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 ----
 
 <.> 入力項目の入力値を格納するオブジェクトを定義します。このオブジェクトのプロパティをマークアップセクションで入力項目にバインドすることで、入力値を格納できます。
-<.> `pageStore.setTitle` に画面名を設定します。これにより共通レイアウト側で指定した画面名が表示されます。
-<.> 
+<.> 登録処理後のコールバック関数を実装します。
 
 .{project-artifactId}-front/src/routes/issues/new/+page.svelte マークアップセクション
 [source,html]
@@ -94,15 +81,19 @@ UIComponentのsvelteファイルを作成/更新します。
 ----
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
+  import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
   import * as yup from 'yup';
 
   // <.>
-  export let issue: any;
-  export let handleAfterSave: (id?: number) => Promise<void>;
-  export let actionBtnLabel: string;
+  interface Props {
+    issue: IssueModel;
+    handleAfterSave: (id?: number) => Promise<void>;
+    actionBtnLabel: string;
+  }
 
-  let issueStatuses = [] as any[];
+  // <.>
+  let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
 
   // <.>
   const spec = {
@@ -118,7 +109,8 @@ UIComponentのsvelteファイルを作成/更新します。
   }
 ----
 
-<.> UIComponentが外部から受け取るプロパティを定義します。
+<.> UIComponentが外部から受け取るプロパティの型をinterfaceとして定義します。
+<.> 上記interfaceをUIComponentのプロパティとして定義します。
 <.> `yup.string()` 等の `yup` が提供する関数を使用して入力フォームのバリデーションの仕様を定義します。
     仕様は、入力項目ごとのプロパティと、プロパティのバリデーションを定義したオブジェクトとして定義します。
     ここでは、 `subject` という名前のstring型の必須入力項目を定義しています。
@@ -140,7 +132,7 @@ UIComponentのsvelteファイルを作成/更新します。
       <SelectBox
         id="status"
         label={$t('msg.status')}
-        options={issueStatuses}
+        options={$issueStatuses}   <.>
         bind:value={issue.issueStatus.id}
       />
     </div>
@@ -148,151 +140,15 @@ UIComponentのsvelteファイルを作成/更新します。
   ...  
 
   <div>
-    <input id="save" type="submit" name="action" value={actionBtnLabel} /> <.>
+    <button id="save" type="submit">{actionBtnLabel}</button> <.>
   </div>
 </form>
 ----
 
 <.> 入力フォームとなる `form` タグを配置します。 `form` タグにはスクリプトセクションで生成した `form` オブジェクトを設定します。
 <.> 入力項目を配置します。上記の例では、チケットの題名を入力するためのテキストボックスを配置しています。
-<.> 登録処理の起点となる画面要素を配置します。画面要素は `input type="submit"` で実装します。
-
-===== DB
-
-マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
-
-.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
-[source,sql]
-----
-include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="1..12"]
-----
-
-<.> テーブルを作成するCREATE文を実装します。
-<.> 作成対象のテーブルに共通カラム(作成者、作成日、など)を追加します。
-<.> テーブルにデータを投入するINSERT文を実装します。
-
-マイグレーションスクリプトを実装したら、VSCode Task: `migration` を実行します。
-
-===== Backend
-
-Backendに画面で使用するマスターデータをDBから取得するWeb APIを実装します。
-
-====== Entity
-
-Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
-
-.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
-[source,yml]
-----
-packages:
-  ${project.groupId}.domain.issue:  # <.>
-    - issue_status
-----
-
-<.> packages属性にEntityの生成先パッケージとテーブル名を追加します。
-** "Entityの生成先パッケージ" : ["テーブル名"]
-
-jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
-
-.{project-artifactid}-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java
-[source,java]
-----
-include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java[]
-----
-
-====== Repository
-
-xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルを作成/更新します。
-
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
-[source,java]
-----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java[]
-----
-
-====== Service
-
-xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
-
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java
-[source,java]
-----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java[]
-----
-
-<.> マスターデータをDBから取得するメソッドを定義します。
-<.> マスターデータをDBから取得するRepositoryのメソッドの呼び出しを実装します。上記の `findAll` は `IssueStatusRepository` が継承する `JpaRepository` のメソッドで、 `issue_status` テーブルの全レコードをSELECTします。
-
-====== DTO
-
-xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
-
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
-[source,java]
-----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java[]
-----
-
-====== Controller
-
-xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
-
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
-[source,java]
-----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
-----
-
-<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@GET` を設定します。
-<.> ServiceからのEntityの取得、 `BeanUtils` を使用したDTOへの変換、レスポンスとしての返却を実装します。
-
-include::../snippet/backend-verification.ad[]
-
-===== Frontend
-
-API Clientを生成し、Web APIの呼び出し処理を追加します。
-
-====== API Client
-
-VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
-生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
-
-.{project-artifactId}-front/src/lib/arch/api/Api.ts
-[source,ts]
-----
-include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="64..70,320,368..383,450"]
-----
-
-====== UIComponent
-
-UIComponentのsvelteファイルを更新します。
-
-.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
-[source,ts]
-----
-  ...
-  import type { IssueStatusModel } from '$lib/arch/api/Api';
-  import ApiHandler from '$lib/arch/api/ApiHandler';
-  import { onMount } from 'svelte';
-
-  ...
-
-  async function save() {
-    console.log('saved')
-  }
-
-  // <.>
-  onMount(async () => {
-    // <.>
-    issueStatuses = (await ApiHandler.handle<IssueStatusModel[]>(fetch, (api) => 
-      api.issueStatuses.issueStatusesList()
-    ))!;
-
-  });
-----
-
-<.> `onMount` 関数の実行とcallback関数を実装します。このcallback関数は、UIComponentのDOMがマウントされた後に呼び出されます。
-<.> `ApiHandler.handle` 関数を使用してマスターデータを取得するWeb APIを呼び出します。
+<.> セレクトボックスの選択肢等でマスターデータが必要な場合は、MasterStoreを使用します。MasterStoreは別途 <<master-load,マスターデータロード>> に従い実装しておく必要があります。
+<.> 登録処理の起点となる画面要素を配置します。画面要素は `button type="submit"` で実装します。
 
 [NOTE]
 ====
