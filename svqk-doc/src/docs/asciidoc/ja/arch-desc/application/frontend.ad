@@ -57,11 +57,11 @@ Pageの実装内容は以下の通りです。
 </script>
 
  <.>
- <!-- tepmlate section -->
+ <!-- markup section -->
 ----
 
 <.> スクリプトセクションには、TypeScriptでバリデーションの定義や画面イベントのハンドリング、Web APIを呼び出し等を実装します。
-<.> テンプレートセクションには、HTML + Svelteの構文で画面項目の配置を実装します。
+<.> マークアップセクションには、HTML + Svelteの構文で画面項目の配置を実装します。
 
 ==== PageLoader
 

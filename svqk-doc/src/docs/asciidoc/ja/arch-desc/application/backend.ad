@@ -18,7 +18,7 @@ Controllerの実装には、Jakarta RESTを使用します。
 .Controllerの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloController.java[lines="1..27,31..35,48..49"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloController.java[]
 ----
 
 <.> `@Path` をControllerクラスに設定します。これにより、このControllerクラスがWeb APIのエンドポイントしてQuarkusに認識されます。

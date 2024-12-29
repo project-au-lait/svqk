@@ -31,9 +31,7 @@ public class HelloController {
   @POST
   public int save(@Valid HelloDto dto) { // <4>
 
-    HelloEntity entity = new HelloEntity();
-    entity.setId(dto.getId());
-    entity.setMessage(dto.getMessage());
+    HelloEntity entity = HelloEntity.builder().id(dto.getId()).message(dto.getMessage()).build();
 
     HelloEntity savedEntity = helloService.save(entity);
 
