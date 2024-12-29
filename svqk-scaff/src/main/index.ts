@@ -79,7 +79,6 @@ class SvqkCodeGenerator extends Generator {
       entityNmCamel:
         entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
-      entityIdType: metadata.fields.find((field) => field.id)?.javaType ?? "",
       fields: metadata.fields,
     };
   }

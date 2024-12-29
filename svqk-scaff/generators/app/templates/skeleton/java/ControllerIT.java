@@ -1,17 +1,20 @@
+<% include('lib/common-func'); -%>
+<% include('lib/field-util', { fields }); -%>
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
-import java.util.Random;
 import org.junit.jupiter.api.Test;
+<% imports.forEach((_import) => { -%>
+import <%= _import %>;
+<% }); -%>
 
 /**
  * This integration test is automatically generated.
  * 
  * The test generated is a sample that only checks the id.
  * Tests will fail depending on the entity configuration.
- * (E.g. required fields other than id are present, etc.
  * 
  * Change the content of the test if necessary.
  */
@@ -22,8 +25,14 @@ class <%= entityNmPascal %>ControllerIT {
 
   @Test
   void testCrud() {
-    int id = new Random().nextInt();
-    <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>Dto.builder().id(id).build();
+    <%= entityNmPascal %>Dto dto =
+        <%= entityNmPascal %>Dto.builder()
+        <%_ fields.forEach((field) => { -%>
+            .<%= field.fieldName %>(<%= getValueCode(field) %>)
+        <%_ }); -%>
+            .build();
+
+    int id = dto.get<%= toPascal(idFieldNm) %>();
 
     // Create
     int createdId = client.save(dto);
@@ -31,6 +40,6 @@ class <%= entityNmPascal %>ControllerIT {
 
     // Reference
     <%= entityNmPascal %>Dto refDto = client.get(id);
-    assertEquals(id, refDto.getId());
+    assertEquals(id, refDto.get<%= toPascal(idFieldNm) %>());
   }
 }
