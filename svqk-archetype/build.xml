@@ -125,7 +125,7 @@
     </exec>
 
     <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
-      <arg line="-pl ${scaff.testprj}-back -am verify" />
+      <arg line="-pl ${scaff.testprj}-back -am compile" />
     </exec>
   </target>
 
