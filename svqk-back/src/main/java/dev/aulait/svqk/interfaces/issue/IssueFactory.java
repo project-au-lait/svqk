@@ -15,11 +15,13 @@ import dev.aulait.svqk.interfaces.issue.IssueController.IssueSearchResultDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 
-@ApplicationScoped // <.>
+@ApplicationScoped
 public class IssueFactory {
 
   private MappingConfig<IssueEntity, IssueDto> searchResultConfig =
-      BeanUtils.buildConfig(IssueEntity.class, IssueDto.class).skip(IssueDto::setJournals).build();
+      BeanUtils.buildConfig(IssueEntity.class, IssueDto.class)
+          .skip(IssueDto::setJournals)
+          .build(); // <.>
 
   public SearchCriteriaVo build(IssueSearchCriteriaDto criteria) { // <.>
     SearchCriteriaBuilder builder =
@@ -57,7 +59,7 @@ public class IssueFactory {
     return dto;
   }
 
-  public IssueSearchResultDto build(SearchResultVo<IssueEntity> vo) {
-    return BeanUtils.map(searchResultConfig, vo, IssueSearchResultDto.class);
+  public IssueSearchResultDto build(SearchResultVo<IssueEntity> vo) { // <.>
+    return BeanUtils.map(searchResultConfig, vo, IssueSearchResultDto.class); // <.>
   }
 }

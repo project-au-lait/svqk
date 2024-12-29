@@ -6,8 +6,6 @@
 
 * *検索* +
   デフォルトの検索条件でBackendから検索結果を取得します。
-* *マスターデータの取得* +
-  画面で使用するマスターデータをBackendから取得します。
 * *画面要素の描画*
 
 一覧画面の初期化処理のシーケンスは以下の通りです。
@@ -43,20 +41,20 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServ
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1,4..19,29..32"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..17,33..37"]
 ----
 
 <.> 検索を行うメソッドを定義します。引数には検索条件Voを、戻り値には検索結果Voを指定します。
-<.> 検索処理を行う`SearchUtils.search` メソッドの呼び出しを実装します。
+<.> 検索処理を行う `SearchUtils.search` メソッドの呼び出しを実装します。
 
 ====== DTO
 
 xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchConditionDto.java
+.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchConditionDto.java[]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java[]
 ----
 
 <.> `@EqualsAndHashCode` を設定します。
@@ -70,13 +68,15 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[lines="1..46,62..66"]
 ----
 
-<.> `@ApplicationScoped` をクラスに設定します。
+<.> 検索結果EntityからDTOへのマッピング設定を定義します。上記の例ではIssueEntityからIssueDtoへのマッピングにおいてIssueDto.journalsのマッピングを除外しています。
 <.> 検索条件DTOからVoを構築するメソッドを定義します。
 <.> `SearchConditionBuilder` に検索対象のEntityや検索条件DTOの項目を使用した抽出条件を設定します。
 <.> `SearchConditionBuilder` への設定結果を元に検索条件Voを構築して返却します。
+<.> 検索結果VoからDTOを構築するメソッドを定義します。
+<.> マッピング設定を使用して検索結果VoからDTOを構築して返却します。
 
 ====== Controller
 
@@ -85,7 +85,8 @@ xref:../arch-desc/index.adoc#_conttoller[アーキテクチャ記述] に従いC
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..36,55..64,71"]
+include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..26s,31..34,63..73"]
+}
 ----
 
 <.> 検索結果を格納するDTOの型を定義します。共通基底検索結果DTOを継承し、型パラメーターには検索結果1件の表すDTOを指定します。
@@ -110,7 +111,9 @@ VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
 .{project-artifactId}-front/src/lib/arch/api/Api.ts
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="37..63,320,402..418,450"]
+include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="34..52,92..110,392,343,425..440"]
+  };
+}
 ----
 
 ====== PageLoader
@@ -133,70 +136,38 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 .{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="2..21,27..32,42..45,49"]
+include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="2..29"]
+  }
 ----
 
-<.> 検索結果一覧のヘッダー項目の表示文字列とソートキーを定義します。
 <.> `FormValidator.createForm` 関数を使用し、formをsubmitするためのオブジェクトを定義します。
+<.> 検索結果一覧の各列(ヘッダー名、セル表示内容、ソートキー)を定義します。セル表示内容に独自のマークアップを使用する場合は、マークアップセクションで `#snippet` を定義しそれを指定します。(上記の例ではissueIdAnchorを設定しています)
 <.> 画面内の検索イベントをハンドリングする関数を定義します。この時点では空の関数とします。
-<.> 画面内のソートイベントをハンドリングする関数を定義します。この時点では空の関数とします。
 
 .{project-artifactId}-front/src/routes/issues/+page.svelte マークアップセクション
 [source,html]
 ----
-
-  <form use:form> <.>
-    <fieldset role="search"> <.>
+<section>
+  <form use:form>  <.>
+    <fieldset role="search">  <.>
       <input type="search" bind:value={condition.text} />
       <input type="submit" value="Search" />
     </fieldset>
 
-
+    :
   </form>
+</section>
 
-{#if result.list} <.>
-    <table class="list">
-      <thead>
-        <tr>
-          {#each resultHeaders as rh} <.>
-            <th>
-              <SortDirection
-                sortOrders={condition.sortOrders}
-                label={rh.label}
-                sortKey={rh.key}
-                {handleSort}
-              />
-            </th>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        {#each result.list as issue} <.>
-          <tr>
-            <td>
-              <a href={`/issues/${issue.id}`}>
-                {issue.id}
-              </a>
-            </td>
+<section>
+  <ListTable {result} {columns} bind:condition {search} />  <.>
+</section>
 
-
-           </tr>
-        {/each}
-     </tbody>
-    </table>
-
-    <Pagination bind:currentPage={condition.pageNumber} {result} handlePage={search} />
-    />  <.>
-
-{:else}
-  {$t('msg.noData')}
-{/if}
-
+<!-- for ListTable issueId Column -->
+{#snippet issueIdAnchor(issue: IssueModel)}
+  <a href={`/issues/${issue.id}`}>{issue.id}</a>
+{/snippet}
 ----
 
 <.> 検索条件の入力項目を配置するための `form` タグを配置します。 `form` タグにはスクリプトセクションで生成した `form` オブジェクトを設定します。
 <.> 検索条件の入力項目を配置します。
-<.> 検索結果が1件以上存在することを判定する `if` blockを配置します。`if` block内に検索結果一覧を配置します。
-<.> 検索結果一覧のヘッダーを配置します。
-<.> 検索結果ごとに `tr` タグを繰り返して配置します。
-<.> ページネーション共通コンポーネントを配置します。
+<.> 共通UICpomonentを使用して検索結果一覧を配置します。

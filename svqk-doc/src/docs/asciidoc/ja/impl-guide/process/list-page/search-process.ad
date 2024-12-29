@@ -5,7 +5,7 @@
 一覧画面の検索処理では以下の処理が実行されます。
 
 * *検索* +
-  デフォルトの検索条件でBackendから検索結果を取得します。
+  画面に入力された検索条件でBackendから検索結果を取得します。
 * *画面要素の描画*
 
 一覧画面の検索処理のシーケンスは以下の通りです。
@@ -35,12 +35,8 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 .{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="8..9,16..18,32..43,45..49"]
+include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="29..39"]
 ----
 
 <.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。
 <.> Web APIの呼び出し結果が正常に取得できた場合に、検索結果Objectを上書きます。
-<.> `SortOrderUtils.addSort` 関数を使用して、検索条件のソート順を変更します。
-<.> 変更後のソート順をDOMに反映するために、Reactiveな変数として宣言されたObjectへの代入を行います。
-** 参考: https://learn.svelte.dev/tutorial/updating-arrays-and-objects[Svelte Updating arrays and objects]
-<.> 変更後のソート順で検索処理を実行します。

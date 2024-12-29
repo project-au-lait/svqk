@@ -16,6 +16,15 @@
 
   const form = FormValidator.createForm({}, search); // <.>
 
+  const columns = new ColumnsBuilder<IssueModel>()
+    .add('#', 'id', () => issueIdAnchor)
+    .add($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
+    .add($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
+    .add($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
+    .add($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
+    .add($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
+    .build(); // <.>
+
   // <.>
   async function search() {
     // <.>
@@ -28,15 +37,6 @@
       result = r;
     }
   }
-
-  const columns = new ColumnsBuilder<IssueModel>()
-    .add('#', 'id', () => issueIdAnchor)
-    .add($t('msg.tracker'), 'tracker', (issue) => issue.tracker.name)
-    .add($t('msg.status'), 'issueStatus', (issue) => issue.issueStatus.name)
-    .add($t('msg.subject'), 'subject', (issue) => issue.subject, ['align-left'])
-    .add($t('msg.dueDate'), 'dueDate', (issue) => DateUtils.date(issue.dueDate))
-    .add($t('msg.updatedAt'), 'updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
-    .build();
 </script>
 
 <section>

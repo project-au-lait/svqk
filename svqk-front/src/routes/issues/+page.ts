@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ fetch }) => {
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
       api.issues.issuesSearch(condition)
-    )) || ({} as IssueSearchResultModel);
+    )) || ({} as IssueSearchResultModel); // <.>
 
   return {
     title: t.get('msg.issue'),
