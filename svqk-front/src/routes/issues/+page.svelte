@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
-  import ApiHandler from '$lib/arch/api/ApiHandler';
+  import type { IssueModel } from '$lib/arch/api/Api';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
@@ -10,8 +9,8 @@
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
-  import type { PageData } from '../issues/$types';
   import qs from 'qs';
+  import type { PageData } from '../issues/$types';
 
   let { data }: { data: PageData } = $props();
   let { condition } = $state(data);
@@ -29,17 +28,8 @@
     .build(); // <.>
 
   // <.>
-  async function search() {
+  function search() {
     goto(`?${qs.stringify(condition)}`);
-    // <.>
-    // const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-    //   api.issues.issuesSearch(condition)
-    // );
-
-    // // <.>
-    // if (r) {
-    //   result = r;
-    // }
   }
 </script>
 

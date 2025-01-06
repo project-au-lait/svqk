@@ -21,6 +21,7 @@
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/eslint": "^9.6.1",
     "@types/marked": "^6.0.0",
+    "@types/qs": "^6.9.17",
     "cpx": "^1.5.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^8.0.0",
