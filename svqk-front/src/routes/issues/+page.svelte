@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
@@ -10,9 +11,11 @@
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
   import type { PageData } from '../issues/$types';
+  import qs from 'qs';
 
   let { data }: { data: PageData } = $props();
-  let { result, condition } = $state(data);
+  let { condition } = $state(data);
+  let { result } = $derived(data);
 
   const form = FormValidator.createForm({}, search); // <.>
 
@@ -27,15 +30,16 @@
 
   // <.>
   async function search() {
+    goto(`?${qs.stringify(condition)}`);
     // <.>
-    const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearch(condition)
-    );
+    // const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
+    //   api.issues.issuesSearch(condition)
+    // );
 
-    // <.>
-    if (r) {
-      result = r;
-    }
+    // // <.>
+    // if (r) {
+    //   result = r;
+    // }
   }
 </script>
 
