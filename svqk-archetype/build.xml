@@ -51,10 +51,10 @@
     <property name="jdk-opts"
       value="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" />
     <property name="gen-entity-file" value="${projectdir}/${project}-entity/.gen-entity" />
-    <echo message="gen-entity" file="${gen-entity-file}" />
 
     <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
       <env key="MAVEN_OPTS" value="${jdk-opts}" />
+      <env key="GEN_ENTITY" value="true" />
       <arg line="-f ${project}-cicd -D ant.target=test" />
     </exec>
 

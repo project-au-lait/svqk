@@ -113,9 +113,10 @@
       <id>gen-entity</id>
 
       <activation>
-        <file>
-          <exists>.gen-entity</exists>
-        </file>
+        <property>
+          <name>env.GEN_ENTITY</name>
+          <value>true</value>
+        </property>
       </activation>
 
       <build>
