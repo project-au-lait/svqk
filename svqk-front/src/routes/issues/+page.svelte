@@ -9,7 +9,6 @@
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
-  import qs from 'qs';
   import type { PageData } from '../issues/$types';
 
   let { data }: { data: PageData } = $props();
@@ -29,7 +28,7 @@
 
   // <.>
   function search() {
-    goto(`?${qs.stringify(condition)}`);
+    goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
   }
 </script>
 

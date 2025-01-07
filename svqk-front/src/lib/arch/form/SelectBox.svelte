@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   interface Props {
     id: string;
     label: string;
@@ -8,16 +10,22 @@
     size?: number;
   }
 
-  let {
-    id,
-    label,
-    value = $bindable(),
-    options,
-    multiple = false,
-    size = 3
-  }: Props = $props();
+  let { id, label, value = $bindable(), options, multiple = false, size = 3 }: Props = $props();
 
   let stateOptions = $state(options);
+
+  onMount(() => {
+    const findOption = (value: any) =>
+      stateOptions.find((op) => JSON.stringify(op) === JSON.stringify(value));
+
+    if (Array.isArray(value)) {
+      value.forEach((v: any, i: number) => {
+        value[i] = findOption(v);
+      });
+    } else {
+      value = findOption(value);
+    }
+  });
 </script>
 
 <label for={id}>{label}</label>
