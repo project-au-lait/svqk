@@ -46,19 +46,29 @@
       </activation>
 
       <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>${exec-plugin-version}</version>
+              <configuration>
+                <executable>pnpm</executable>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+
+
         <plugins>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>${exec-plugin-version}</version>
-            <configuration>
-              <executable>pnpm</executable>
-            </configuration>
             <executions>
               <execution>
                 <?m2e ignore?>
                 <id>pnpm-install</id>
-                <phase>generate-sources</phase>
+                <phase>initialize</phase>
                 <goals>
                   <goal>exec</goal>
                 </goals>
@@ -72,5 +82,49 @@
       </build>
     </profile>
 
+    <profile>
+      <id>scaffolding</id>
+
+      <activation>
+        <property>
+          <name>env.SCAFFOLDING</name>
+          <value>true</value>
+        </property>
+      </activation>
+
+      <dependencies>
+        <!--
+          This dependency is required to set the build order of this project
+          to following the entity project
+        -->
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>svqk-entity</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <id>exec-scaffolding</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <commandlineArgs>start ${env.SCAFFOLDING_ENTITY}</commandlineArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>

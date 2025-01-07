@@ -55,15 +55,10 @@
     <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
       <env key="MAVEN_OPTS" value="${jdk-opts}" />
       <env key="GEN_ENTITY" value="true" />
+      <env key="SCAFFOLDING" value="true" />
+      <env key="SCAFFOLDING_ENTITY" value="World" />
       <arg line="-f ${project}-cicd -D ant.target=test" />
     </exec>
-
-    <delete file="${gen-entity-file}" />
-
-    <antcall target="test-scaffolding">
-      <param name="scaff.testdir" value="${projectdir}" />
-      <param name="scaff.testprj" value="${project}" />
-    </antcall>
 
     <exec executable="docker" dir="${projectdir}/${project}-container">
       <arg line="compose down" />
@@ -112,21 +107,6 @@
     </exec>
 
     <antcall target="adjust-archetype-resources" />
-  </target>
-
-
-  <target name="test-scaffolding">
-    <property name="scaff.testdir" value="${archetype.prjdir}" />
-    <property name="scaff.testprj" value="svqk" />
-
-    <exec executable="pnpm" dir="${scaff.testdir}/${scaff.testprj}-scaff"
-      failonerror="true">
-      <arg line="start WorldEntity" />
-    </exec>
-
-    <exec executable="${mvnw}" dir="${scaff.testdir}" failonerror="true">
-      <arg line="-pl ${scaff.testprj}-back -am compile" />
-    </exec>
   </target>
 
 
