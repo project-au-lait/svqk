@@ -1,13 +1,10 @@
 package dev.aulait.svqk.arch.util;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.modelmapper.spi.DestinationSetter;
@@ -88,7 +85,7 @@ public class BeanUtils {
    * @param dstType the class of the destination type
    * @return a MappingConfig object containing the mapper and type map for the specified types
    */
-  public static <S, D> MappingConfig<S, D> buildConfig(Class<S> srcType, Class<D> dstType) {
+  public static <S, D> MappingConfigBuilder<S, D> buildConfig(Class<S> srcType, Class<D> dstType) {
     MappingConfig<S, D> config = new MappingConfig<>();
     config.mapper = buildDefaultMapper();
     config.typeMap = config.mapper.emptyTypeMap(srcType, dstType);
@@ -97,12 +94,9 @@ public class BeanUtils {
 
   private static ModelMapper buildDefaultMapper() {
     ModelMapper mapper = new ModelMapper();
-    mapper.addConverter(
-        new AbstractConverter<String, LocalDate>() {
-          protected LocalDate convert(String source) {
-            return LocalDate.parse(source, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-          }
-        });
+
+    // Configure ModelMapper instance.
+
     return mapper;
   }
 
