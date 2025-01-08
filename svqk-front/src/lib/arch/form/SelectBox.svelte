@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-
   interface Props {
     id: string;
     label: string;
@@ -14,16 +12,11 @@
 
   let stateOptions = $state(options);
 
-  onMount(() => {
-    const findOption = (value: any) =>
-      stateOptions.find((op) => JSON.stringify(op) === JSON.stringify(value));
-
-    if (Array.isArray(value)) {
-      value.forEach((v: any, i: number) => {
-        value[i] = findOption(v);
+  $effect(() => {
+    if (multiple) {
+      value.map((v: any, i: number) => {
+        value[i] = stateOptions.find((op) => JSON.stringify(op) === JSON.stringify(v));
       });
-    } else {
-      value = findOption(value);
     }
   });
 </script>

@@ -19,10 +19,11 @@
   }
 </script>
 
-<a href="#/" onclick={onClick}>{label}{sortMark}</a>
+<a href={undefined} onclick={onClick}>{label}{sortMark}</a>
 
 <style>
   a {
+    cursor: pointer;
     text-decoration: none;
   }
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { afterNavigate, goto } from '$app/navigation';
   import type { IssueModel } from '$lib/arch/api/Api';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
@@ -15,6 +15,8 @@
   let { condition } = $state(data);
   let { result } = $derived(data);
 
+  let open = $state(false);
+
   const form = FormValidator.createForm({}, search); // <.>
 
   const columns = new ColumnsBuilder<IssueModel>()
@@ -26,10 +28,14 @@
     .add($t('msg.updatedAt'), 'i.updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
     .build(); // <.>
 
-  // <.>
   function search() {
     goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
   }
+
+  afterNavigate(() => {
+    condition = data.condition;
+    open = Boolean(condition.subjectOnly || condition.issueStatuses?.length || condition.dueDate);
+  });
 </script>
 
 <section>
@@ -39,7 +45,7 @@
       <input type="submit" value="Search" />
     </fieldset>
 
-    <details>
+    <details {open}>
       <summary style="display: flex; justify-content: end;">{$t('msg.advancedSearch')}</summary>
       <div class="grid">
         <div>
