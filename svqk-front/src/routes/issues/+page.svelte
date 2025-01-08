@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
-  import ApiHandler from '$lib/arch/api/ApiHandler';
+  import { afterNavigate, goto } from '$app/navigation';
+  import type { IssueModel } from '$lib/arch/api/Api';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
@@ -12,7 +12,10 @@
   import type { PageData } from '../issues/$types';
 
   let { data }: { data: PageData } = $props();
-  let { result, condition } = $state(data);
+  let { condition } = $state(data);
+  let { result } = $derived(data);
+
+  let open = $state(false);
 
   const form = FormValidator.createForm({}, search); // <.>
 
@@ -25,18 +28,14 @@
     .add($t('msg.updatedAt'), 'i.updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
     .build(); // <.>
 
-  // <.>
-  async function search() {
-    // <.>
-    const r = await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearch(condition)
-    );
-
-    // <.>
-    if (r) {
-      result = r;
-    }
+  function search() {
+    goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
   }
+
+  afterNavigate(() => {
+    condition = data.condition;
+    open = Boolean(condition.subjectOnly || condition.issueStatuses?.length || condition.dueDate);
+  });
 </script>
 
 <section>
@@ -46,7 +45,7 @@
       <input type="submit" value="Search" />
     </fieldset>
 
-    <details>
+    <details {open}>
       <summary style="display: flex; justify-content: end;">{$t('msg.advancedSearch')}</summary>
       <div class="grid">
         <div>

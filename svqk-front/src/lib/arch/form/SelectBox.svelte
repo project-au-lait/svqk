@@ -8,16 +8,17 @@
     size?: number;
   }
 
-  let {
-    id,
-    label,
-    value = $bindable(),
-    options,
-    multiple = false,
-    size = 3
-  }: Props = $props();
+  let { id, label, value = $bindable(), options, multiple = false, size = 3 }: Props = $props();
 
   let stateOptions = $state(options);
+
+  $effect(() => {
+    if (multiple) {
+      value.map((v: any, i: number) => {
+        value[i] = stateOptions.find((op) => JSON.stringify(op) === JSON.stringify(v));
+      });
+    }
+  });
 </script>
 
 <label for={id}>{label}</label>

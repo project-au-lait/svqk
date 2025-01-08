@@ -3,8 +3,12 @@ import ApiHandler from '$lib/arch/api/ApiHandler';
 import { t } from '$lib/translations';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch }) => {
-  const condition = { issueStatuses: [], pageNumber: 1 } as IssueSearchCriteriaModel; // <.>
+export const load: PageLoad = async ({ fetch, url }) => {
+  const condition = {
+    issueStatuses: [],
+    pageNumber: 1,
+    ...JSON.parse(decodeURIComponent(url.searchParams.get('q') ?? '{}'))
+  } as IssueSearchCriteriaModel;
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
