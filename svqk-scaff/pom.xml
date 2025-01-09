@@ -118,7 +118,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <commandlineArgs>start ${env.SCAFFOLDING_ENTITY}</commandlineArgs>
+                  <commandlineArgs>start ${env.SCAFFOLDING_ARGS}</commandlineArgs>
                 </configuration>
               </execution>
             </executions>

@@ -56,7 +56,7 @@
       <env key="MAVEN_OPTS" value="${jdk-opts}" />
       <env key="GEN_ENTITY" value="true" />
       <env key="SCAFFOLDING" value="true" />
-      <env key="SCAFFOLDING_ENTITY" value="World" />
+      <env key="SCAFFOLDING_ARGS" value="World" />
       <arg line="-f ${project}-cicd -D ant.target=test" />
     </exec>
 
