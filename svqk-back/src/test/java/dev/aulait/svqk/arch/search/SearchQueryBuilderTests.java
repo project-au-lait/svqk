@@ -16,7 +16,8 @@ class SearchQueryBuilderTests {
   class BuildWhereTests {
     @Test
     void testSingleField() {
-      List<FieldCriteriaVo> criteria = List.of(FieldCriteriaVo.of("field", "1"));
+      List<FieldCriteriaVo> criteria =
+          List.of(FieldCriteriaVo.builder().field("field").value("1").build());
 
       String where = builder.buildWhere(criteria);
 
@@ -27,7 +28,9 @@ class SearchQueryBuilderTests {
     @Test
     void testMultipleField() {
       List<FieldCriteriaVo> criteria =
-          List.of(FieldCriteriaVo.of("field1", "1"), FieldCriteriaVo.of("field2", "2"));
+          List.of(
+              FieldCriteriaVo.builder().field("field1").value("1").build(),
+              FieldCriteriaVo.builder().field("field2").value("2").build());
 
       String where = builder.buildWhere(criteria);
 
@@ -39,7 +42,12 @@ class SearchQueryBuilderTests {
     @Test
     void testIn() {
       List<FieldCriteriaVo> criteria =
-          List.of(FieldCriteriaVo.of("field", ComparisonOperatorCd.IN, List.of("1", "2")));
+          List.of(
+              FieldCriteriaVo.builder()
+                  .field("field")
+                  .comparisonOperator(ComparisonOperatorCd.IN)
+                  .value(List.of("1", "2"))
+                  .build());
 
       String where = builder.buildWhere(criteria);
 

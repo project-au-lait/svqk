@@ -8,30 +8,9 @@ import lombok.Value;
 @Builder
 public class FieldCriteriaVo {
   private String field;
-  private ComparisonOperatorCd comparisonOperator;
-  private LogicalOperatorCd logicalOperator;
+  @Builder.Default private ComparisonOperatorCd comparisonOperator = ComparisonOperatorCd.EQ;
+  @Builder.Default private LogicalOperatorCd logicalOperator = LogicalOperatorCd.AND;
   private Object value;
-
-  public static FieldCriteriaVo of(String field, Object value) {
-    return of(field, ComparisonOperatorCd.EQ, value);
-  }
-
-  public static FieldCriteriaVo of(String field, ComparisonOperatorCd operator, Object value) {
-    return of(field, operator, LogicalOperatorCd.AND, value);
-  }
-
-  public static FieldCriteriaVo of(
-      String field,
-      ComparisonOperatorCd comparisonOperator,
-      LogicalOperatorCd logicalOperator,
-      Object value) {
-    return FieldCriteriaVo.builder()
-        .field(field)
-        .comparisonOperator(comparisonOperator)
-        .value(value)
-        .logicalOperator(logicalOperator)
-        .build();
-  }
 
   public boolean hasValue() {
     if (value == null) {
