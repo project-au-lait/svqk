@@ -9,7 +9,6 @@ import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
 import dev.aulait.svqk.domain.issue.IssueEntity;
-import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import dev.aulait.svqk.domain.issue.IssueTrackingRs;
 import dev.aulait.svqk.interfaces.issue.IssueController.IssueSearchResultDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,10 +34,8 @@ public class IssueFactory {
       builder.where(OR, "i.description", LIKE, criteria.getText());
     }
 
-    var statuses = BeanUtils.mapAll(criteria.getIssueStatuses(), IssueStatusEntity.class);
-
     return builder
-        .where("i.issueStatus", IN, statuses)
+        .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
         .build(criteria.getPageControl()); // <.>

@@ -33,7 +33,7 @@ export interface IssueModel {
 
 export interface IssueSearchCriteriaModel {
   text?: string;
-  issueStatuses?: IssueStatusModel[];
+  issueStatuses?: string[];
   dueDate?: LocalDate;
   subjectOnly?: boolean;
   pageControl: PageControlModel;
@@ -108,8 +108,8 @@ export interface PageResultModel {
 }
 
 export interface SortOrderModel {
-  asc?: boolean;
-  field?: string;
+  asc: boolean;
+  field: string;
 }
 
 export interface TrackerModel {

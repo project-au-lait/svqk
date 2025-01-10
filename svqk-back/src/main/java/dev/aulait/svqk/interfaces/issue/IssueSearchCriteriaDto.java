@@ -11,7 +11,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class IssueSearchCriteriaDto { // <.>
   // <.>
   private String text;
-  private List<IssueStatusDto> issueStatuses = new ArrayList<>();
+  private List<String> issueStatuses = new ArrayList<>();
   private LocalDate dueDate;
   private boolean subjectOnly;
 
