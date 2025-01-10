@@ -1,7 +1,8 @@
 package dev.aulait.svqk.arch.jpa;
 
-import dev.aulait.svqk.arch.search.PageControlVo;
+import dev.aulait.svqk.arch.search.PageResultDto;
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;
+import dev.aulait.svqk.arch.search.SearchQueryBuilder;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -29,7 +30,7 @@ public class SearchUtils {
 
     if (count == 0) {
       return SearchResultVo.<T>builder()
-          .pageCtrl(PageControlVo.builder().count(count).build())
+          .pageResult(new PageResultDto().build(count, criteria.getPageControl()))
           .build();
     }
 
@@ -38,22 +39,15 @@ public class SearchUtils {
 
     Query searchQuery = em.createQuery(searchQueryStr);
     setQueryParams(searchQuery, builder.getQueryParams());
-    searchQuery.setMaxResults(criteria.getPageSize());
-    searchQuery.setFirstResult(criteria.getOffset());
+    searchQuery.setMaxResults(criteria.getPageControl().getPageSize());
+    searchQuery.setFirstResult(criteria.getPageControl().getOffset());
 
     @SuppressWarnings("unchecked")
     List<T> result = searchQuery.getResultList();
 
     return SearchResultVo.<T>builder()
         .list(result)
-        .pageCtrl(
-            PageControlVo.builder()
-                .count(count)
-                .pageSize(criteria.getPageSize())
-                .pageNumber(criteria.getPageNumber())
-                .pageNumsRange(criteria.getPageNumsRange())
-                .offset(criteria.getOffset())
-                .build())
+        .pageResult(new PageResultDto().build(count, criteria.getPageControl()))
         .build();
   }
 

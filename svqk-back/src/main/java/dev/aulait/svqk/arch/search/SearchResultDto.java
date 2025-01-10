@@ -11,5 +11,5 @@ public class SearchResultDto<T> {
   private List<T> list;
 
   @Schema(required = true)
-  private PageControlDto pageCtrl;
+  private PageResultDto pageResult;
 }

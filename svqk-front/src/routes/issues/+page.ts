@@ -6,7 +6,9 @@ import type { PageLoad } from './$types';
 export const load: PageLoad = async ({ fetch, url }) => {
   const condition = {
     issueStatuses: [],
-    pageNumber: 1,
+    pageControl: {
+      pageNumber: 1
+    },
     ...JSON.parse(decodeURIComponent(url.searchParams.get('q') ?? '{}'))
   } as IssueSearchCriteriaModel;
 

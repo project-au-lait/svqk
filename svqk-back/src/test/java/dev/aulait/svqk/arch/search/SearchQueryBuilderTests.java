@@ -1,17 +1,11 @@
-package dev.aulait.svqk.arch.jpa;
+package dev.aulait.svqk.arch.search;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.aulait.svqk.arch.search.ArithmeticOperatorCd;
-import dev.aulait.svqk.arch.search.FieldCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
-import dev.aulait.svqk.arch.search.SearchCriteriaDto;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 
 @Slf4j
 class SearchQueryBuilderTests {
@@ -45,7 +39,7 @@ class SearchQueryBuilderTests {
     @Test
     void testIn() {
       List<FieldCriteriaVo> criteria =
-          List.of(FieldCriteriaVo.of("field", ArithmeticOperatorCd.IN, List.of("1", "2")));
+          List.of(FieldCriteriaVo.of("field", ComparisonOperatorCd.IN, List.of("1", "2")));
 
       String where = builder.buildWhere(criteria);
 
@@ -56,8 +50,8 @@ class SearchQueryBuilderTests {
 
   @Test
   void testOrderBy() {
-    Sort sort = Sort.by(Direction.ASC, "field");
-    String orderBy = builder.buildOrderBy(sort);
+    List<SortOrderDto> orders = List.of(SortOrderDto.builder().field("field").asc(true).build());
+    String orderBy = builder.buildOrderBy(orders);
 
     assertEquals(" ORDER BY field ASC", orderBy);
   }
@@ -73,9 +67,7 @@ class SearchQueryBuilderTests {
           .where("t.field", "a")
           .where("j.field", "b");
 
-      SearchCriteriaDto criteria = new SearchCriteriaDto();
-
-      builder.buildQuery(cBuilder.build(criteria));
+      builder.buildQuery(cBuilder.build(new PageControlDto()));
 
       assertEquals(
           "SELECT COUNT(t) FROM TestEntity t JOIN t.join j"

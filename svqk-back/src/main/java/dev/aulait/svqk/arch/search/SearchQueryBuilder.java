@@ -1,15 +1,11 @@
-package dev.aulait.svqk.arch.jpa;
+package dev.aulait.svqk.arch.search;
 
-import dev.aulait.svqk.arch.search.ArithmeticOperatorCd;
-import dev.aulait.svqk.arch.search.FieldCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Sort;
 
 public class SearchQueryBuilder {
 
@@ -33,7 +29,7 @@ public class SearchQueryBuilder {
       count.append(" WHERE ").append(where);
     }
 
-    search.append(buildOrderBy(criteria.getSort()));
+    search.append(buildOrderBy(criteria.getPageControl().getSortOrders()));
 
     searchQuery = search.toString();
     countQuery = count.toString();
@@ -64,13 +60,13 @@ public class SearchQueryBuilder {
 
       String paramName = replaceDotsWithUnderscore(field);
 
-      ArithmeticOperatorCd operator = fieldCriterion.getArithmeticOperator();
+      ComparisonOperatorCd operator = fieldCriterion.getComparisonOperator();
 
       sb.append(operator.getValue() + " :" + paramName);
 
       queryParams.put(
           paramName,
-          operator == ArithmeticOperatorCd.LIKE
+          operator == ComparisonOperatorCd.LIKE
               ? "%" + fieldCriterion.getValue() + "%"
               : fieldCriterion.getValue());
     }
@@ -78,14 +74,14 @@ public class SearchQueryBuilder {
     return sb.toString();
   }
 
-  String buildOrderBy(Sort sort) {
-    if (sort.isEmpty()) {
+  String buildOrderBy(List<SortOrderDto> sortOrders) {
+    if (sortOrders.isEmpty()) {
       return "";
     }
 
     return " ORDER BY "
-        + sort.get()
-            .map(order -> order.getProperty() + " " + order.getDirection())
+        + sortOrders.stream()
+            .map(order -> order.getField() + " " + (order.isAsc() ? "ASC" : "DESC"))
             .collect(Collectors.joining(","));
   }
 

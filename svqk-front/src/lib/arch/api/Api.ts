@@ -32,22 +32,16 @@ export interface IssueModel {
 }
 
 export interface IssueSearchCriteriaModel {
-  /** @format int32 */
-  pageNumber?: number;
-  /** @format int32 */
-  pageSize?: number;
-  /** @format int32 */
-  pageNumsRange?: number;
-  sortOrders?: SortOrderModel[];
   text?: string;
   issueStatuses?: IssueStatusModel[];
   dueDate?: LocalDate;
   subjectOnly?: boolean;
+  pageControl: PageControlModel;
 }
 
 export interface IssueSearchResultModel {
   list: IssueModel[];
-  pageCtrl: PageControlModel;
+  pageResult: PageResultModel;
 }
 
 export interface IssueStatusModel {
@@ -90,16 +84,26 @@ export type LocalDate = string;
 export type LocalDateTime = string;
 
 export interface PageControlModel {
-  /** @format int64 */
-  count: number;
   /** @format int32 */
   pageSize: number;
   /** @format int32 */
-  start: number;
+  pageNumber: number;
   /** @format int32 */
+  pageNumsRange?: number;
+  sortOrders?: SortOrderModel[];
+  /** @format int32 */
+  offset?: number;
+}
+
+export interface PageResultModel {
+  /** @format int64 */
+  count: number;
+  /** @format int32 */
+  start: number;
+  /** @format int64 */
   end: number;
   /** @format int32 */
-  lastPage: number;
+  lastPageNum: number;
   pageNums: number[];
 }
 
@@ -338,7 +342,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title svqk-back API
- * @version 0.8-SNAPSHOT
+ * @version 0.9-SNAPSHOT
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   hello = {

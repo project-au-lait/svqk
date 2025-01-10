@@ -85,7 +85,7 @@
 </section>
 
 <section>
-  <ListTable {result} {columns} bind:condition {search} />
+  <ListTable {result} {columns} bind:pageContol={condition.pageControl} {search} />
 </section>
 
 <!-- for ListTable issueId Column -->

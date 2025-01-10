@@ -2,7 +2,7 @@ package dev.aulait.svqk.interfaces.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.aulait.svqk.arch.jpa.SearchQueryBuilder;
+import dev.aulait.svqk.arch.search.SearchQueryBuilder;
 import org.junit.jupiter.api.Test;
 
 class IssueFactoryTests {

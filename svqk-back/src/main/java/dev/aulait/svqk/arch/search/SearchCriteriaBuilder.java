@@ -2,17 +2,12 @@ package dev.aulait.svqk.arch.search;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 
 public class SearchCriteriaBuilder {
 
   private StringBuilder select = new StringBuilder();
   private List<FieldCriteriaVo> fields = new ArrayList<>();
-  private Order defaultOrder;
+  private SortOrderDto defaultOrder;
 
   public SearchCriteriaBuilder select(String select) {
     if (this.select.length() > 0) {
@@ -23,25 +18,25 @@ public class SearchCriteriaBuilder {
   }
 
   public SearchCriteriaBuilder where(String field, Object value) {
-    return where(field, ArithmeticOperatorCd.EQ, value);
+    return where(field, ComparisonOperatorCd.EQ, value);
   }
 
   public SearchCriteriaBuilder where(
-      String field, ArithmeticOperatorCd arithmeticOperator, Object value) {
-    return where(LogicalOperatorCd.AND, field, arithmeticOperator, value);
+      String field, ComparisonOperatorCd comparisonOperator, Object value) {
+    return where(LogicalOperatorCd.AND, field, comparisonOperator, value);
   }
 
   public SearchCriteriaBuilder where(
       LogicalOperatorCd logicalOperator,
       String field,
-      ArithmeticOperatorCd arithmeticOperator,
+      ComparisonOperatorCd comparisonOperator,
       Object value) {
 
     fields.add(
         FieldCriteriaVo.builder()
             .logicalOperator(logicalOperator)
             .field(field)
-            .arithmeticOperator(arithmeticOperator)
+            .comparisonOperator(comparisonOperator)
             .value(value)
             .build());
 
@@ -49,46 +44,19 @@ public class SearchCriteriaBuilder {
   }
 
   public SearchCriteriaBuilder defaultOrderBy(String field, boolean asc) {
-    this.defaultOrder = new Order(asc ? Direction.ASC : Direction.DESC, field);
+    this.defaultOrder = SortOrderDto.builder().field(field).asc(asc).build();
     return this;
   }
 
-  public SearchCriteriaVo build(SearchCriteriaDto criteria) {
+  public SearchCriteriaVo build(PageControlDto pageControl) {
+    if (defaultOrder != null && pageControl.getSortOrders().isEmpty()) {
+      pageControl.getSortOrders().add(defaultOrder);
+    }
+
     return SearchCriteriaVo.builder()
         .select(select.toString())
         .fieldCriteria(fields)
-        .pageable(buildPageable(criteria))
-        .pageNumsRange(Math.max(criteria.getPageNumsRange(), 2))
+        .pageControl(pageControl)
         .build();
-  }
-
-  private Pageable buildPageable(SearchCriteriaDto criteria) {
-
-    Sort sort = buildSort(criteria.getSortOrders());
-
-    int pageNumberSd = criteria.getPageNumber() - 1;
-
-    return PageRequest.of(
-        pageNumberSd < 0 ? 0 : pageNumberSd,
-        criteria.getPageSize() < 1 ? 10 : criteria.getPageSize(),
-        sort);
-  }
-
-  private Sort buildSort(List<SortOrderDto> sortOrders) {
-    if (sortOrders.isEmpty()) {
-
-      if (defaultOrder == null) {
-        return Sort.unsorted();
-      } else {
-        return Sort.by(defaultOrder);
-      }
-    }
-
-    List<Order> orders = sortOrders.stream().map(this::map).toList();
-    return Sort.by(orders);
-  }
-
-  private Order map(SortOrderDto sortOrder) {
-    return new Order(sortOrder.isAsc() ? Direction.ASC : Direction.DESC, sortOrder.getField());
   }
 }

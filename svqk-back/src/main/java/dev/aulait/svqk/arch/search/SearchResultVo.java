@@ -11,5 +11,5 @@ public class SearchResultVo<T> {
 
   @Builder.Default private List<T> list = new ArrayList<>();
 
-  private PageControlVo pageCtrl;
+  private PageResultDto pageResult;
 }

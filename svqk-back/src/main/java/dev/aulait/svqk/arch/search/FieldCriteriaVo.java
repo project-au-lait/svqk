@@ -7,28 +7,27 @@ import lombok.Value;
 @Value
 @Builder
 public class FieldCriteriaVo {
-  private String entityAlias;
   private String field;
-  private ArithmeticOperatorCd arithmeticOperator;
+  private ComparisonOperatorCd comparisonOperator;
   private LogicalOperatorCd logicalOperator;
   private Object value;
 
   public static FieldCriteriaVo of(String field, Object value) {
-    return of(field, ArithmeticOperatorCd.EQ, value);
+    return of(field, ComparisonOperatorCd.EQ, value);
   }
 
-  public static FieldCriteriaVo of(String field, ArithmeticOperatorCd operator, Object value) {
+  public static FieldCriteriaVo of(String field, ComparisonOperatorCd operator, Object value) {
     return of(field, operator, LogicalOperatorCd.AND, value);
   }
 
   public static FieldCriteriaVo of(
       String field,
-      ArithmeticOperatorCd arithmeticOperator,
+      ComparisonOperatorCd comparisonOperator,
       LogicalOperatorCd logicalOperator,
       Object value) {
     return FieldCriteriaVo.builder()
         .field(field)
-        .arithmeticOperator(arithmeticOperator)
+        .comparisonOperator(comparisonOperator)
         .value(value)
         .logicalOperator(logicalOperator)
         .build();

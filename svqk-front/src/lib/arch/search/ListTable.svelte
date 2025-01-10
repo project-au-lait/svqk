@@ -28,7 +28,7 @@
 </script>
 
 <script lang="ts" generics="T">
-  import type { PageControlModel, SortOrderModel } from '$lib/arch/api/Api';
+  import type { PageControlModel, PageResultModel, SortOrderModel } from '$lib/arch/api/Api';
   import Pagination from '$lib/arch/search/Pagination.svelte';
   import SortDirection from '$lib/arch/search/SortDirection.svelte';
   import { t } from '$lib/translations';
@@ -36,17 +36,14 @@
   interface Props {
     result: {
       list: T[];
-      pageCtrl: PageControlModel;
+      pageResult: PageResultModel;
     };
     columns: ListTableColumn<T>[];
-    condition: {
-      sortOrders?: SortOrderModel[];
-      pageNumber?: number;
-    };
+    pageContol: PageControlModel;
     search: () => void;
   }
 
-  let { result, columns, condition = $bindable(), search }: Props = $props();
+  let { result, columns, pageContol = $bindable(), search }: Props = $props();
 </script>
 
 {#if result.list.length}
@@ -57,7 +54,7 @@
           {#each columns as col}
             {@const { label, sortKey } = col}
             <th>
-              <SortDirection {label} {sortKey} bind:sortOrders={condition.sortOrders} {search} />
+              <SortDirection {label} {sortKey} bind:sortOrders={pageContol.sortOrders} {search} />
             </th>
           {/each}
         </tr>
@@ -82,7 +79,7 @@
   </section>
 
   <section>
-    <Pagination pageCtrl={result.pageCtrl} bind:pageNumber={condition.pageNumber} {search} />
+    <Pagination pageResult={result.pageResult} bind:pageNumber={pageContol.pageNumber} {search} />
   </section>
 {:else}
   {$t('msg.noData')}

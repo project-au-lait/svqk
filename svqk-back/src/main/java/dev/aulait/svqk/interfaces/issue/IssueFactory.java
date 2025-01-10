@@ -1,6 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import static dev.aulait.svqk.arch.search.ArithmeticOperatorCd.*;
+import static dev.aulait.svqk.arch.search.ComparisonOperatorCd.*;
 import static dev.aulait.svqk.arch.search.LogicalOperatorCd.*;
 
 import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
@@ -41,7 +41,7 @@ public class IssueFactory {
         .where("i.issueStatus", IN, statuses)
         .where("i.dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
-        .build(criteria); // <.>
+        .build(criteria.getPageControl()); // <.>
   }
 
   public IssueTrackingDto buildIssueTracking(List<IssueTrackingRs> issueTrackings) {

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { PageControlModel } from '$lib/arch/api/Api';
+  import type { PageResultModel } from '$lib/arch/api/Api';
 
   interface Props {
-    pageCtrl: PageControlModel;
+    pageResult: PageResultModel;
     pageNumber?: number;
     search: () => void;
   }
 
-  let { pageCtrl, pageNumber = $bindable(1), search }: Props = $props();
-  let { count, start, end, pageNums, lastPage } = $derived(pageCtrl);
+  let { pageResult, pageNumber = $bindable(1), search }: Props = $props();
+  let { count, start, end, pageNums, lastPageNum } = $derived(pageResult);
 
   function gotoPage(page: number) {
     pageNumber = page;
@@ -20,7 +20,7 @@
   <span>( {start}-{Math.max(0, end)} / {count} )</span>
 </div>
 
-{#if lastPage > 1}
+{#if lastPageNum > 1}
   <div class="page" role="group">
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(1)}> « </button>
 
@@ -38,19 +38,23 @@
       </button>
     {/each}
 
-    {#if (pageNums.slice(-1).pop() ?? lastPage) < lastPage}
+    {#if (pageNums.slice(-1).pop() ?? lastPageNum) < lastPageNum}
       <button class="outline" disabled>...</button>
     {/if}
 
     <button
       class="outline"
-      disabled={pageNumber >= lastPage}
+      disabled={pageNumber >= lastPageNum}
       onclick={() => gotoPage(pageNumber + 1)}
     >
       &gt;
     </button>
 
-    <button class="outline" disabled={pageNumber >= lastPage} onclick={() => gotoPage(lastPage)}>
+    <button
+      class="outline"
+      disabled={pageNumber >= lastPageNum}
+      onclick={() => gotoPage(lastPageNum)}
+    >
       »
     </button>
   </div>
