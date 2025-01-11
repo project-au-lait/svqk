@@ -101,7 +101,7 @@
   <!-- 
     This target creates the archetype from the project.
    -->
-  <target name="create" depends="pre-clean, create-archetype-props">
+  <target name="create" depends="pre-clean, create-archetype-props, keep-gitignore">
     <exec executable="${mvnw}" dir="${archetype.prjdir}" failonerror="true">
       <arg line="-N clean archetype:create-from-project" />
     </exec>
@@ -139,11 +139,17 @@
     <delete file="${propsfile}" />
     <propertyfile file="${propsfile}">
       <entry key="excludePatterns" value="${excludePatterns}" />
-      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml" />
+      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml,archetype" />
       <!-- This value is to avoid the possibility of incorrectly replacing the version string in
       package.json files. -->
       <entry key="version" value="string that cannot be matched" />
     </propertyfile>
+  </target>
+
+
+  <target name="keep-gitignore">
+    <copy file="${archetype.prjdir}/.gitignore"
+      tofile="${archetype.prjdir}/.gitignore.archetype" />
   </target>
 
 
@@ -153,6 +159,7 @@
   <target name="adjust-archetype-resources">
     <antcall target="add-pom" />
     <antcall target="adjust-archetype-metadata" />
+    <antcall target="add-post-generate-script" />
 
     <if>
       <equals arg1="${archetype.type}" arg2="arch" />
@@ -192,6 +199,12 @@
       file="${archetype.metadata.file}"
       match="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
       replace="\1*.ts\3" />
+  </target>
+
+
+  <target name="add-post-generate-script">
+    <copy file="${basedir}/src/archetype/archetype-post-generate.groovy"
+      todir="${archetype.gendir}/src/main/resources/META-INF" />
   </target>
 
 
