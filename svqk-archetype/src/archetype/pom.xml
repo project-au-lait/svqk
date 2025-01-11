@@ -20,15 +20,16 @@
       <extension>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-packaging</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.1</version>
       </extension>
     </extensions>
 
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.apache.maven.archetype</groupId>
           <artifactId>maven-archetype-plugin</artifactId>
-          <version>3.2.1</version>
+          <version>3.3.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
