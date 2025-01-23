@@ -12,6 +12,9 @@
       "windows": {
         "command": ".\\mvnw"
       },
+      "linux": {
+        "command": "./mvnw"
+      },
       "args": ["-f", "svqk-container", "-P", "setup", "compile"],
       "problemMatcher": [],
       "runOptions": {
@@ -27,6 +30,9 @@
       "windows": {
         "command": ".\\mvnw"
       },
+      "linux": {
+        "command": "./mvnw"
+      },
       "args": ["-f", "svqk-back", "quarkus:dev"],
       "problemMatcher": []
     },
@@ -38,6 +44,9 @@
       },
       "windows": {
         "command": ".\\mvnw"
+      },
+      "linux": {
+        "command": "./mvnw"
       },
       "args": ["-f", "svqk-doc", "-P", "gen-doc"],
       "problemMatcher": []
@@ -51,6 +60,9 @@
       "windows": {
         "command": ".\\mvnw"
       },
+      "linux": {
+        "command": "./mvnw"
+      },
       "args": ["-f", "svqk-migration", "compile", "-P", "setup"],
       "problemMatcher": []
     },
@@ -62,6 +74,9 @@
       },
       "windows": {
         "command": ".\\mvnw"
+      },
+      "linux": {
+        "command": "./mvnw"
       },
       "args": ["-f", "svqk-entity", "-P", "gen-entity"],
       "options": {
@@ -79,6 +94,9 @@
       },
       "windows": {
         "command": ".\\mvnw"
+      },
+      "linux": {
+        "command": "./mvnw"
       },
       "args": ["-f", "svqk-back", "package", "-P", "setup"],
       "problemMatcher": []
