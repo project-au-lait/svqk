@@ -41,5 +41,15 @@ class <%= entityNmPascal %>ControllerIT {
     // Reference
     <%= entityNmPascal %>Dto refDto = client.get(id);
     assertEquals(id, refDto.get<%= toPascal(idFieldNm) %>());
+
+    // TODO temporary
+    // Update
+    int updatedId = client.update(dto);
+    assertEquals(id, updatedId);
+
+    // TODO temporary
+    // Search
+    <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();
+    client.search(criteria);
   }
 }

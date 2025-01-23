@@ -4,6 +4,6 @@
     "destProjectPath": "../svqk-back",
     "destMainPath": "src/main/java",
     "destITPath": "src/integration-test/java",
-    "templateType": "skeleton"
+    "templateType": "arch"
   }
 }
