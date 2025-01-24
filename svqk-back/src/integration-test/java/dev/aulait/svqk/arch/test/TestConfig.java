@@ -36,7 +36,7 @@ public class TestConfig {
             + testHost.orElse("localhost")
             + ":"
             + testPort.orElse(8080)
-            + restPath.orElse("");
+            + restPath.orElse("/");
 
     log.info("Config: {}", this);
   }

@@ -126,6 +126,17 @@ class SvqkCodeGenerator extends Generator {
       this._output_java_file(component, destPkgPath, tmplData);
     });
 
+    // TODO refactor with later additional implementation
+    if (this.templateType === "arch") {
+      ["Factory", "SearchCriteriaDto"].forEach((component) => {
+        const destPkgPath = this._generate_dest_package_path(
+          this.destMainPath,
+          tmplData.interfacesPkgNm
+        );
+        this._output_java_file(component, destPkgPath, tmplData);
+      });
+    }
+
     // Generate files for integration test
     ["Client", "ControllerIT"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(

@@ -1,6 +1,9 @@
 package <%= interfacesPkgNm %>;
 
-import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
+import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_PATH;
+import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_GET_PATH;
+import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_SEARCH_PATH;
+import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -30,6 +33,29 @@ public class <%= entityNmPascal %>Client {
             .statusCode(200)
             .extract()
             .asString());
+  }
+
+  // TODO temporary
+  public int update(<%= entityNmPascal %>Dto dto) {
+    return Integer.parseInt(
+        given()
+            .body(dto)
+            .put(<%= entityNmAllCaps %>_PATH)
+            .then()
+            .statusCode(200)
+            .extract()
+            .asString());
+  }
+
+  // TODO temporary
+  public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {
+    return given()
+        .body(dto)
+        .post(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_SEARCH_PATH)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(<%= entityNmPascal %>SearchResultDto.class);
   }
 
   private static RequestSpecification given() {
