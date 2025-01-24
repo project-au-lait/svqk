@@ -45,7 +45,7 @@ public class <%= entityNmPascal %>Client {
                 + testHost.orElse("localhost")
                 + ":"
                 + testPort.orElse(8080)
-                + restPath.orElse(""))
+                + restPath.orElse("/"))
         .contentType("application/json; charset=UTF-8")
         .header("Accept-Language", Locale.getDefault().toString().replace("_", "-"))
         .filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
