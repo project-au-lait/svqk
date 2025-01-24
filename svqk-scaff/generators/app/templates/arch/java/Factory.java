@@ -1,7 +1,5 @@
 package <%= interfacesPkgNm %>;
 
-import static dev.aulait.svqk.arch.search.ComparisonOperatorCd.*;
-import static dev.aulait.svqk.arch.search.LogicalOperatorCd.*;
 import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
