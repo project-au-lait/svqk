@@ -138,7 +138,7 @@ class SvqkCodeGenerator extends Generator {
     }
 
     // Generate files for integration test
-    ["Client", "ControllerIT"].forEach((component) => {
+    ["Client", "ControllerIT", "DataFactory"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(
         this.destITPath,
         tmplData.interfacesPkgNm
