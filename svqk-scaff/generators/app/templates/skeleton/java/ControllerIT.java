@@ -25,7 +25,7 @@ class <%= entityNmPascal %>ControllerIT {
 
   @Test
   void testCrud() {
-    <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.createRandom<%= entityNmPascal %>();
+    <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
     int id = dto.get<%= toPascal(idFieldNm) %>();
 
     // Create

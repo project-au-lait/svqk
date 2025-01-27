@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class <%= entityNmPascal %>DataFactory {
 
-  public static <%= entityNmPascal %>Dto createRandom<%= entityNmPascal %>() {
+  public static <%= entityNmPascal %>Dto create<%= entityNmPascal %>() {
     <%= entityNmPascal %>Dto dto =
         <%= entityNmPascal %>Dto.builder()
         <%_ fields.forEach((field) => { -%>
