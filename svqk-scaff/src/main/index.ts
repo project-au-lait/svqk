@@ -2,25 +2,28 @@ import Generator from "yeoman-generator";
 import { Metadata, TemplateData } from "./types.js";
 
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
-const YO_RC_KEY_DEST_PROJECT_PATH = "destProjectPath";
-const YO_RC_KEY_DEST_MAIN_PATH = "destMainPath";
+const YO_RC_KEY_DEST_BACK_PATH = "destBackPath";
 const YO_RC_KEY_DEST_IT_PATH = "destITPath";
+const YO_RC_KEY_DEST_FRONT_PATH = "destFrontPath";
+const YO_RC_KEY_DEST_E2E_PATH = "destE2EPath";
 const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
 
 class SvqkCodeGenerator extends Generator {
   metadataFilePath: string;
-  destProjectPath: string;
-  destMainPath: string;
+  destBackPath: string;
   destITPath: string;
+  destFrontPath: string;
+  destE2EPath: string;
   templateType: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: Record<string, unknown>) {
     super(args, opts);
     this.metadataFilePath = this.config.get(YO_RC_KEY_METADATA_FPATH);
-    this.destProjectPath = this.config.get(YO_RC_KEY_DEST_PROJECT_PATH);
-    this.destMainPath = this.config.get(YO_RC_KEY_DEST_MAIN_PATH);
+    this.destBackPath = this.config.get(YO_RC_KEY_DEST_BACK_PATH);
     this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
+    this.destFrontPath = this.config.get(YO_RC_KEY_DEST_FRONT_PATH);
+    this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
     this.templateType = this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
     this.metadataList = [];
   }
@@ -61,7 +64,11 @@ class SvqkCodeGenerator extends Generator {
         return;
       }
 
-      this._generate_backend(metaData);
+      const tmplData = this._generate_template_data(metaData);
+
+      this._generate_backend(tmplData);
+      this._generate_frontend(tmplData);
+      this._generate_e2etest(tmplData);
     });
   }
 
@@ -83,16 +90,46 @@ class SvqkCodeGenerator extends Generator {
     };
   }
 
-  _output_java_file(
+  _output_file(
+    templatePath: string,
+    destinationPath: string,
+    tmplData: TemplateData
+  ) {
+    this.fs.copyTpl(templatePath, destinationPath, tmplData);
+  }
+
+  _output_back_file(
     component: string,
     destPkgPath: string,
     tmplData: TemplateData
   ) {
-    this.fs.copyTpl(
-      this.templatePath(`${this.templateType}/java/${component}.java`),
+    this._output_file(
+      this.templatePath(`${this.templateType}/back/${component}.java`),
       this.destinationPath(
         `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`
       ),
+      tmplData
+    );
+  }
+
+  _output_front_file(component: string, tmplData: TemplateData) {
+    this._output_file(
+      this.templatePath(`${this.templateType}/front/${component}`),
+      this.destinationPath(
+        `${this.destFrontPath}/${tmplData.entityNmCamel}/${component}`
+      ),
+      tmplData
+    );
+  }
+
+  _output_e2e_file(component: string, tmplData: TemplateData) {
+    const path =
+      component === "spec"
+        ? `${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.${component}.ts`
+        : `${tmplData.entityNmPascal}${component}.ts`;
+    this._output_file(
+      this.templatePath(`${this.templateType}/e2e/${component}.ts`),
+      this.destinationPath(`${this.destE2EPath}/${component}s/${path}`),
       tmplData
     );
   }
@@ -102,38 +139,33 @@ class SvqkCodeGenerator extends Generator {
   }
 
   _generate_dest_package_path(destRootPath: string, pkgNm: string): string {
-    return `${this.destProjectPath}/${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
+    return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
   }
 
-  _generate_backend(metadata: Metadata) {
-    const tmplData = this._generate_template_data(metadata);
-
+  _generate_backend(tmplData: TemplateData) {
     // Generate files for domain package
     ["Repository", "Service"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(
-        this.destMainPath,
+        this.destBackPath,
         tmplData.domainPkgNm
       );
-      this._output_java_file(component, destPkgPath, tmplData);
+      this._output_back_file(component, destPkgPath, tmplData);
     });
+
+    const destBackIfPkgPath = this._generate_dest_package_path(
+      this.destBackPath,
+      tmplData.interfacesPkgNm
+    );
 
     // Generate files for interfaces package
     ["Dto", "Controller"].forEach((component) => {
-      const destPkgPath = this._generate_dest_package_path(
-        this.destMainPath,
-        tmplData.interfacesPkgNm
-      );
-      this._output_java_file(component, destPkgPath, tmplData);
+      this._output_back_file(component, destBackIfPkgPath, tmplData);
     });
 
     // TODO refactor with later additional implementation
     if (this.templateType === "arch") {
       ["Factory", "SearchCriteriaDto"].forEach((component) => {
-        const destPkgPath = this._generate_dest_package_path(
-          this.destMainPath,
-          tmplData.interfacesPkgNm
-        );
-        this._output_java_file(component, destPkgPath, tmplData);
+        this._output_back_file(component, destBackIfPkgPath, tmplData);
       });
     }
 
@@ -143,7 +175,20 @@ class SvqkCodeGenerator extends Generator {
         this.destITPath,
         tmplData.interfacesPkgNm
       );
-      this._output_java_file(component, destPkgPath, tmplData);
+      this._output_back_file(component, destPkgPath, tmplData);
+    });
+  }
+
+  _generate_frontend(tmplData: TemplateData) {
+    ["+page.svelte", "+page.ts"].forEach((component) => {
+      this._output_front_file(component, tmplData);
+    });
+  }
+
+  _generate_e2etest(tmplData: TemplateData) {
+    // Plans to add Factory, etc.
+    ["spec"].forEach((component) => {
+      this._output_e2e_file(component, tmplData);
     });
   }
 }
