@@ -122,13 +122,13 @@ class SvqkCodeGenerator extends Generator {
     );
   }
 
-  _output_e2e_file(component: string, tmplData: TemplateData) {
+  _output_e2etest_file(component: string, tmplData: TemplateData) {
     const path =
       component === "spec"
         ? `${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.${component}.ts`
         : `${tmplData.entityNmPascal}${component}.ts`;
     this._output_file(
-      this.templatePath(`${this.templateType}/e2e/${component}.ts`),
+      this.templatePath(`${this.templateType}/e2etest/${component}.ts`),
       this.destinationPath(`${this.destE2EPath}/${component}s/${path}`),
       tmplData
     );
@@ -188,7 +188,7 @@ class SvqkCodeGenerator extends Generator {
   _generate_e2etest(tmplData: TemplateData) {
     // Plans to add Factory, etc.
     ["spec"].forEach((component) => {
-      this._output_e2e_file(component, tmplData);
+      this._output_e2etest_file(component, tmplData);
     });
   }
 }
