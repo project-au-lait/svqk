@@ -4,6 +4,7 @@ import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityN
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_GET_PATH;
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_SEARCH_PATH;
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
+import static dev.aulait.svqk.arch.test.RestAssuredUtils.given;
 
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -54,24 +55,5 @@ public class <%= entityNmPascal %>Client {
         .statusCode(200)
         .extract()
         .as(<%= entityNmPascal %>SearchResultDto.class);
-  }
-
-  private static RequestSpecification given() {
-    Config config = ConfigProvider.getConfig();
-
-    Optional<String> testHost = config.getOptionalValue("quarkus.http.test-host", String.class);
-    Optional<Integer> testPort = config.getOptionalValue("quarkus.http.test-port", Integer.class);
-    Optional<String> restPath = config.getOptionalValue("quarkus.rest.path", String.class);
-
-    return io.restassured.RestAssured.given()
-        .baseUri(
-            "http://"
-                + testHost.orElse("localhost")
-                + ":"
-                + testPort.orElse(8080)
-                + restPath.orElse("/"))
-        .contentType("application/json; charset=UTF-8")
-        .header("Accept-Language", Locale.getDefault().toString().replace("_", "-"))
-        .filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
   }
 }
