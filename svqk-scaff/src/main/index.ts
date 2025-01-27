@@ -95,7 +95,11 @@ class SvqkCodeGenerator extends Generator {
     destinationPath: string,
     tmplData: TemplateData
   ) {
-    this.fs.copyTpl(templatePath, destinationPath, tmplData);
+    this.fs.copyTpl(
+      this.templatePath(`${this.templateType}/${templatePath}`),
+      this.destinationPath(destinationPath),
+      tmplData
+    );
   }
 
   _output_back_file(
@@ -104,32 +108,28 @@ class SvqkCodeGenerator extends Generator {
     tmplData: TemplateData
   ) {
     this._output_file(
-      this.templatePath(`${this.templateType}/back/${component}.java`),
-      this.destinationPath(
-        `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`
-      ),
+      `back/${component}.java`,
+      `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`,
       tmplData
     );
   }
 
   _output_front_file(component: string, tmplData: TemplateData) {
     this._output_file(
-      this.templatePath(`${this.templateType}/front/${component}`),
-      this.destinationPath(
-        `${this.destFrontPath}/${tmplData.entityNmCamel}/${component}`
-      ),
+      `front/${component}`,
+      `${this.destFrontPath}/${tmplData.entityNmCamel}/${component}`,
       tmplData
     );
   }
 
-  _output_e2etest_file(component: string, tmplData: TemplateData) {
-    const path =
-      component === "spec"
-        ? `${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.${component}.ts`
-        : `${tmplData.entityNmPascal}${component}.ts`;
+  _output_e2etest_file(
+    component: string,
+    destpath: string,
+    tmplData: TemplateData
+  ) {
     this._output_file(
-      this.templatePath(`${this.templateType}/e2etest/${component}.ts`),
-      this.destinationPath(`${this.destE2EPath}/${component}s/${path}`),
+      `e2etest/${component}.ts`,
+      `${this.destE2EPath}/${destpath}`,
       tmplData
     );
   }
@@ -140,6 +140,10 @@ class SvqkCodeGenerator extends Generator {
 
   _generate_dest_package_path(destRootPath: string, pkgNm: string): string {
     return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
+  }
+
+  _generate_e2e_spec_path(tmplData: TemplateData): string {
+    return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
   }
 
   _generate_backend(tmplData: TemplateData) {
@@ -186,10 +190,11 @@ class SvqkCodeGenerator extends Generator {
   }
 
   _generate_e2etest(tmplData: TemplateData) {
-    // Plans to add Factory, etc.
-    ["spec"].forEach((component) => {
-      this._output_e2etest_file(component, tmplData);
-    });
+    this._output_e2etest_file(
+      "spec",
+      this._generate_e2e_spec_path(tmplData),
+      tmplData
+    );
   }
 }
 
