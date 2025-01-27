@@ -35,7 +35,6 @@ public class <%= entityNmPascal %>Client {
             .asString());
   }
 
-  // TODO temporary
   public int update(<%= entityNmPascal %>Dto dto) {
     return Integer.parseInt(
         given()
@@ -47,7 +46,6 @@ public class <%= entityNmPascal %>Client {
             .asString());
   }
 
-  // TODO temporary
   public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {
     return given()
         .body(dto)

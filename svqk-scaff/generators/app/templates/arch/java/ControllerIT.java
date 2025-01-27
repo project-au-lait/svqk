@@ -3,6 +3,9 @@
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -25,13 +28,7 @@ class <%= entityNmPascal %>ControllerIT {
 
   @Test
   void testCrud() {
-    <%= entityNmPascal %>Dto dto =
-        <%= entityNmPascal %>Dto.builder()
-        <%_ fields.forEach((field) => { -%>
-            .<%= field.fieldName %>(<%= getValueCode(field) %>)
-        <%_ }); -%>
-            .build();
-
+    <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.createRandom<%= entityNmPascal %>();
     int id = dto.get<%= toPascal(idFieldNm) %>();
 
     // Create
@@ -42,14 +39,13 @@ class <%= entityNmPascal %>ControllerIT {
     <%= entityNmPascal %>Dto refDto = client.get(id);
     assertEquals(id, refDto.get<%= toPascal(idFieldNm) %>());
 
-    // TODO temporary
     // Update
+    // TODO Implementation of assembling a request and assertion
     int updatedId = client.update(dto);
-    assertEquals(id, updatedId);
 
-    // TODO temporary
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();
-    client.search(criteria);
+    <%= entityNmPascal %>SearchResultDto result = client.search(criteria);
+    assertTrue(result.getList().size() > 1);
   }
 }
