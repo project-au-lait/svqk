@@ -5,6 +5,7 @@
     "destITPath": "../svqk-back/src/integration-test/java",
     "destFrontPath": "../svqk-front/src/routes",
     "destE2EPath": "../svqk-e2etest/tests",
-    "templateType": "skeleton"
+    "templateType": "skeleton",
+    "genEntityCmd":["./mvnw", "-f", "svqk-entity", "-P", "gen-entity"]
   }
 }
