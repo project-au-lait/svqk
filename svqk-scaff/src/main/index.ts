@@ -83,26 +83,32 @@ class SvqkCodeGenerator extends Generator {
     this.log("Completed.");
   }
 
-  _exec_gen_entity() {
+  _exec_cmd(cmd: string, env?: NodeJS.ProcessEnv) {
     const isWin = process.platform === "win32";
     const shell = isWin ? { cmd: "cmd", arg: "/C" } : { cmd: "sh", arg: "-c" };
-    const env = {
-      ...process.env,
-      MAVEN_OPTS:
-        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-    };
+
+    env = { ...process.env, ...env };
 
     if (isWin) {
-      this.genEntityCmd = this.genEntityCmd.replace("./mvnw", "mvnw");
+      cmd = cmd.replace("./mvnw", "mvnw");
     }
 
     this.log(`exec: ${this.genEntityCmd}`);
 
-    spawnSync(shell.cmd, [shell.arg, this.genEntityCmd], {
+    spawnSync(shell.cmd, [shell.arg, cmd], {
       cwd: "../",
       env: env,
       stdio: "inherit",
     });
+  }
+
+  _exec_gen_entity() {
+    const env = {
+      MAVEN_OPTS:
+        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+    };
+
+    this._exec_cmd(this.genEntityCmd, env);
   }
 
   _generate_template_data(metadata: Metadata): TemplateData {
