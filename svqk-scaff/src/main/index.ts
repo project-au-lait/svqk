@@ -1,7 +1,15 @@
 import { spawnSync } from "child_process";
 import Generator from "yeoman-generator";
+import type { GeneratorOptions } from '@yeoman/types';
 import { Metadata, TemplateData } from "./types.js";
 
+type CustomOptions = GeneratorOptions & {
+  component: string; 
+  templateType: string;
+};
+
+const allowedComponentValues = ["backend", "integration-test", "frontend", "e2e-test", "all"];
+const allowedTemplateTypeValues = ["arch", "skeleton"];
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
 const YO_RC_KEY_DEST_BACK_PATH = "destBackPath";
 const YO_RC_KEY_DEST_IT_PATH = "destITPath";
@@ -10,24 +18,52 @@ const YO_RC_KEY_DEST_E2E_PATH = "destE2EPath";
 const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
 const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 
-class SvqkCodeGenerator extends Generator {
+class SvqkCodeGenerator extends Generator<CustomOptions> {
   metadataFilePath: string;
   destBackPath: string;
   destITPath: string;
   destFrontPath: string;
   destE2EPath: string;
+  component: string;
   templateType: string;
   genEntityCmd: string;
   metadataList: Metadata[];
 
-  constructor(args: string | string[], opts: Record<string, unknown>) {
+  constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
+
+    this.option('component', {
+      type: String,
+      default: 'all'
+    });
+
+    if (this.options.component && !allowedComponentValues.includes(this.options.component)) {
+      throw new Error(
+        `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
+          ", "
+        )}.`
+      );
+    }
+
+    this.option('templateType', {
+      type: String,
+    });
+
+    if (this.options.templateType && !allowedTemplateTypeValues.includes(this.options.templateType)) {
+      throw new Error(
+        `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
+          ", "
+        )}.`
+      );
+    }
+
     this.metadataFilePath = this.config.get(YO_RC_KEY_METADATA_FPATH);
     this.destBackPath = this.config.get(YO_RC_KEY_DEST_BACK_PATH);
     this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
     this.destFrontPath = this.config.get(YO_RC_KEY_DEST_FRONT_PATH);
     this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
-    this.templateType = this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
+    this.component = this.options.component
+    this.templateType = this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
     this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
     this.metadataList = [];
   }
@@ -73,9 +109,26 @@ class SvqkCodeGenerator extends Generator {
 
       const tmplData = this._generate_template_data(metaData);
 
-      this._generate_backend(tmplData);
-      this._generate_frontend(tmplData);
-      this._generate_e2etest(tmplData);
+      switch (this.component) {
+        case "backend":
+          this._generate_backend(tmplData);
+          break;
+        case "integration-test":
+          this._generate_integrationtest(tmplData);
+          break;
+        case "frontend":
+          this._generate_frontend(tmplData);
+          break;
+        case "e2e-test":
+          this._generate_e2etest(tmplData);
+          break;
+        case "all":
+          this._generate_backend(tmplData);
+          this._generate_integrationtest(tmplData);
+          this._generate_frontend(tmplData);
+          this._generate_e2etest(tmplData);
+          break;
+      }
     });
   }
 
@@ -182,33 +235,39 @@ class SvqkCodeGenerator extends Generator {
   }
 
   _generate_backend(tmplData: TemplateData) {
-    // Generate files for domain package
-    ["Repository", "Service"].forEach((component) => {
-      const destPkgPath = this._generate_dest_package_path(
-        this.destBackPath,
-        tmplData.domainPkgNm
-      );
-      this._output_back_file(component, destPkgPath, tmplData);
-    });
+    if (this.templateType === "arch" || this.templateType === "skeleton") {
+      // Generate files for domain package
+      ["Repository", "Service"].forEach((component) => {
+        const destPkgPath = this._generate_dest_package_path(
+          this.destBackPath,
+          tmplData.domainPkgNm
+        );
+        this._output_back_file(component, destPkgPath, tmplData);
+      });
 
-    const destBackIfPkgPath = this._generate_dest_package_path(
-      this.destBackPath,
-      tmplData.interfacesPkgNm
-    );
-
-    // Generate files for interfaces package
-    ["Dto", "Controller"].forEach((component) => {
-      this._output_back_file(component, destBackIfPkgPath, tmplData);
-    });
-
-    // TODO refactor with later additional implementation
-    if (this.templateType === "arch") {
-      ["Factory", "SearchCriteriaDto"].forEach((component) => {
+      // Generate files for interfaces package
+      ["Dto", "Controller"].forEach((component) => {
+        const destBackIfPkgPath = this._generate_dest_package_path(
+          this.destBackPath,
+          tmplData.interfacesPkgNm
+        );
         this._output_back_file(component, destBackIfPkgPath, tmplData);
       });
     }
 
-    // Generate files for integration test
+    if (this.templateType === "arch") {
+      // Generate files for interfaces package
+      ["Factory", "SearchCriteriaDto"].forEach((component) => {
+        const destBackIfPkgPath = this._generate_dest_package_path(
+          this.destBackPath,
+          tmplData.interfacesPkgNm
+        );
+        this._output_back_file(component, destBackIfPkgPath, tmplData);
+      });
+    }
+  }
+
+  _generate_integrationtest(tmplData: TemplateData) {
     ["Client", "ControllerIT", "DataFactory"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(
         this.destITPath,
