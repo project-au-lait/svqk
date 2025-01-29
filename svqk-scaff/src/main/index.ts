@@ -41,9 +41,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
     this.destFrontPath = this.config.get(YO_RC_KEY_DEST_FRONT_PATH);
     this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
+    this.component = this.options.component
     this.templateType = this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
     this.metadataList = [];
-    this.component = this.options.component
   }
 
   async initializing() {
