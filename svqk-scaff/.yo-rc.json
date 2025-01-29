@@ -6,6 +6,6 @@
     "destFrontPath": "../svqk-front/src/routes",
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
-    "genEntityCmd":"./mvnw -f ./svqk-entity -P gen-entity"
+    "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity"
   }
 }
