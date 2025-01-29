@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@yeoman/types':
+        specifier: ^1.5.0
+        version: 1.5.0(@types/node@22.10.2)(@yeoman/adapter@1.6.0)(mem-fs@4.1.1)
       yeoman-generator:
         specifier: ^7.3.3
         version: 7.3.3(@yeoman/types@1.5.0(@types/node@22.10.2)(@yeoman/adapter@1.6.0)(mem-fs@4.1.1))(encoding@0.1.13)(mem-fs@4.1.1)

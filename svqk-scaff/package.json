@@ -16,6 +16,7 @@
     "start": "pnpm run prepare && pnpm yo svqk-scaff"
   },
   "dependencies": {
+    "@yeoman/types": "^1.5.0",
     "yeoman-generator": "^7.3.3"
   },
   "devDependencies": {
