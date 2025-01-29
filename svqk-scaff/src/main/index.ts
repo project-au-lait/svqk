@@ -17,7 +17,7 @@ class SvqkCodeGenerator extends Generator {
   destFrontPath: string;
   destE2EPath: string;
   templateType: string;
-  genEntityCmd: string[];
+  genEntityCmd: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: Record<string, unknown>) {
@@ -34,6 +34,7 @@ class SvqkCodeGenerator extends Generator {
 
   async initializing() {
     try {
+      // TODO Add an option not to be executed when cicd.
       this._exec_gen_entity();
 
       this.metadataList = await import(
@@ -83,13 +84,21 @@ class SvqkCodeGenerator extends Generator {
   }
 
   _exec_gen_entity() {
+    const isWin = process.platform === "win32";
+    const shell = isWin ? { cmd: "cmd", arg: "/C" } : { cmd: "sh", arg: "-c" };
     const env = {
       ...process.env,
       MAVEN_OPTS:
         "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
     };
 
-    spawnSync(this.genEntityCmd[0], this.genEntityCmd.slice(1), {
+    if (isWin) {
+      this.genEntityCmd = this.genEntityCmd.replace("./mvnw", "mvnw");
+    }
+
+    this.log(`exec: ${this.genEntityCmd}`);
+
+    spawnSync(shell.cmd, [shell.arg, this.genEntityCmd], {
       cwd: "../",
       env: env,
       stdio: "inherit",
