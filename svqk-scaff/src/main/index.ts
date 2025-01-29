@@ -1,3 +1,4 @@
+import { spawnSync } from "child_process";
 import Generator from "yeoman-generator";
 import type { GeneratorOptions } from '@yeoman/types';
 import { Metadata, TemplateData } from "./types.js";
@@ -15,6 +16,7 @@ const YO_RC_KEY_DEST_IT_PATH = "destITPath";
 const YO_RC_KEY_DEST_FRONT_PATH = "destFrontPath";
 const YO_RC_KEY_DEST_E2E_PATH = "destE2EPath";
 const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
+const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   metadataFilePath: string;
@@ -24,6 +26,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   destE2EPath: string;
   component: string;
   templateType: string;
+  genEntityCmd: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: CustomOptions) {
@@ -61,11 +64,15 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
     this.component = this.options.component
     this.templateType = this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
+    this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
     this.metadataList = [];
   }
 
   async initializing() {
     try {
+      // TODO Add an option not to be executed when cicd.
+      this._exec_gen_entity();
+
       this.metadataList = await import(
         `${this.destinationRoot()}/${this.metadataFilePath}`,
         { with: { type: "json" } }
@@ -127,6 +134,34 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   end() {
     this.log("Completed.");
+  }
+
+  _exec_cmd(cmd: string, env?: NodeJS.ProcessEnv) {
+    const isWin = process.platform === "win32";
+    const shell = isWin ? { cmd: "cmd", arg: "/C" } : { cmd: "sh", arg: "-c" };
+
+    env = { ...process.env, ...env };
+
+    if (isWin) {
+      cmd = cmd.replace("./mvnw", "mvnw");
+    }
+
+    this.log(`exec: ${this.genEntityCmd}`);
+
+    spawnSync(shell.cmd, [shell.arg, cmd], {
+      cwd: "../",
+      env: env,
+      stdio: "inherit",
+    });
+  }
+
+  _exec_gen_entity() {
+    const env = {
+      MAVEN_OPTS:
+        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+    };
+
+    this._exec_cmd(this.genEntityCmd, env);
   }
 
   _generate_template_data(metadata: Metadata): TemplateData {
