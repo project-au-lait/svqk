@@ -7,6 +7,8 @@ type CustomOptions = GeneratorOptions & {
   templateType: string;
 };
 
+const allowedComponentValues = ["backend", "integration-test", "frontend", "e2e-test", "all"];
+const allowedTemplateTypeValues = ["arch", "skeleton"];
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
 const YO_RC_KEY_DEST_BACK_PATH = "destBackPath";
 const YO_RC_KEY_DEST_IT_PATH = "destITPath";
@@ -31,7 +33,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       type: String,
       default: 'all'
     });
-    const allowedComponentValues = ["backend", "integration-test", "frontend", "e2e-test", "all"];
+
     if (this.options.component && !allowedComponentValues.includes(this.options.component)) {
       throw new Error(
         `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
@@ -43,7 +45,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.option('templateType', {
       type: String,
     });
-    const allowedTemplateTypeValues = ["arch", "skeleton"];
+
     if (this.options.templateType && !allowedTemplateTypeValues.includes(this.options.templateType)) {
       throw new Error(
         `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
