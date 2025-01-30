@@ -16,6 +16,7 @@ const YO_RC_KEY_DEST_IT_PATH = "destITPath";
 const YO_RC_KEY_DEST_FRONT_PATH = "destFrontPath";
 const YO_RC_KEY_DEST_E2E_PATH = "destE2EPath";
 const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
+const YO_RC_KEY_GEN_OPEN_API_JSON_CMD = "genOpenApiJsonCmd";
 const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
@@ -26,6 +27,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   destE2EPath: string;
   component: string;
   templateType: string;
+  genOpenApiJsonCmd: string;
   genEntityCmd: string;
   metadataList: Metadata[];
 
@@ -64,12 +66,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
     this.component = this.options.component
     this.templateType = this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
+    this.genOpenApiJsonCmd = this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD);
     this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
     this.metadataList = [];
   }
 
   async initializing() {
     try {
+      this._exec_gen_open_api_json();
       // TODO Add an option not to be executed when cicd.
       this._exec_gen_entity();
 
@@ -153,6 +157,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       env: env,
       stdio: "inherit",
     });
+  }
+
+  _exec_gen_open_api_json() {
+    this._exec_cmd(this.genOpenApiJsonCmd);
   }
 
   _exec_gen_entity() {
