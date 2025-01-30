@@ -6,6 +6,7 @@
     "destFrontPath": "../svqk-front/src/routes",
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
-    "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity"
+    "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
+    "genOpenApiJsonCmd":"./mvnw -f svqk-back quarkus:build -Dquarkus.openapi.generate-schema=true -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target"
   }
 }
