@@ -53,6 +53,10 @@
     <property name="gen-entity-file" value="${projectdir}/${project}-entity/.gen-entity" />
 
     <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
+      <arg line="-T 1C clean install -P setup" />
+    </exec>
+
+    <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
       <env key="MAVEN_OPTS" value="${jdk-opts}" />
       <env key="GEN_ENTITY" value="true" />
       <env key="SCAFFOLDING" value="true" />
