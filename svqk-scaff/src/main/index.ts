@@ -43,7 +43,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   genOpenApiJsonCmd: string;
   genEntityCmd: string;
   frontApiClientPath: string;
-  E2EApiClientPath: string;
+  e2eApiClientPath: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: CustomOptions) {
@@ -91,7 +91,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.genOpenApiJsonCmd = this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD);
     this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
     this.frontApiClientPath = this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH);
-    this.E2EApiClientPath = this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH);
+    this.e2eApiClientPath = this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH);
     this.metadataList = [];
   }
 
@@ -191,15 +191,15 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _exec_gen_api_client() {
-    const openapiPath = path.resolve(process.cwd(), "./target/openapi.json");
-    this.log("openapi.json Path:", openapiPath);
-    if (!fs.existsSync(openapiPath)) {
+    const openApiJsonPath = path.resolve(process.cwd(), "./target/openapi.json");
+    this.log("openapi.json Path:", openApiJsonPath);
+    if (!fs.existsSync(openApiJsonPath)) {
       throw new Error("openapi.json is not found.");
     }
 
     generateApi({
       name: "Api.ts",
-      input: openapiPath,
+      input: openApiJsonPath,
       output: path.resolve(process.cwd(), this.frontApiClientPath),
       moduleNameIndex: 1,
       hooks: {
@@ -237,7 +237,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   _exec_copy_api() {
     cpx.copy(
       `${this.frontApiClientPath}/Api.ts`,
-      this.E2EApiClientPath,
+      this.e2eApiClientPath,
       (err) => {
         if (err) {
           throw new Error(`Copy failed: ${err}`);
