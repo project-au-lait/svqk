@@ -100,15 +100,17 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       // TODO Add an option not to be executed when cicd.
       this._exec_gen_entity();
 
-      this.metadataList = await import(
-        `${this.destinationRoot()}/${this.metadataFilePath}`,
-        { with: { type: "json" } }
-      ).then((module) => module.default);
+      if (this.component !== "api-client") {
+        this.metadataList = await import(
+          `${this.destinationRoot()}/${this.metadataFilePath}`,
+          { with: { type: "json" } }
+        ).then((module) => module.default);
 
-      if (!this.metadataList || this.metadataList.length === 0) {
-        throw new Error(
-          `The meta data list on ${this.metadataFilePath} is empty.`
-        );
+        if (!this.metadataList || this.metadataList.length === 0) {
+          throw new Error(
+            `The meta data list on ${this.metadataFilePath} is empty.`
+          );
+        }
       }
     } catch (error) {
       this.log(`Failed to read ${this.metadataFilePath}. ${error}`);
@@ -116,7 +118,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   writing() {
-    if (this.args.length == 0) {
+    if (this.component !== "api-client" && this.args.length == 0) {
       const entities = this.metadataList
         .map((metadata) => metadata.className)
         .join(", ");
