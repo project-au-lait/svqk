@@ -143,9 +143,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         case "integration-test":
           this._generate_integrationtest(tmplData);
           break;
-        case "api-client":
-          this._generate_apiclient();
-          break;
         case "frontend":
           this._generate_frontend(tmplData);
           break;
@@ -155,12 +152,15 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         case "all":
           this._generate_backend(tmplData);
           this._generate_integrationtest(tmplData);
-          this._generate_apiclient();
           this._generate_frontend(tmplData);
           this._generate_e2etest(tmplData);
           break;
       }
     });
+
+    if (this.component === "api-client" || this.component === "all") {
+      this._generate_apiclient();
+    }
   }
 
   end() {
@@ -191,7 +191,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _exec_gen_api_client() {
-    const openApiJsonPath = path.resolve(process.cwd(), "./target/openapi.json");
+    const openApiJsonPath = path.resolve(
+      process.cwd(),
+      "./target/openapi.json"
+    );
     this.log("openapi.json Path:", openApiJsonPath);
     if (!fs.existsSync(openApiJsonPath)) {
       throw new Error("openapi.json is not found.");
