@@ -210,14 +210,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           );
 
           console.log(
-            `     Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
+            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
           );
           return newTemplateRouteName;
         },
         onFormatTypeName: (typeName, rawTypeName, schemaType) => {
           if (schemaType === "type-name" && typeName.endsWith("Dto")) {
             const newTypeName = typeName.replace(/Dto$/, "Model");
-            console.log(`    Replace typeName ${typeName} to ${newTypeName}`);
+            console.log(`Replace typeName ${typeName} to ${newTypeName}`);
             return newTypeName;
           }
 
