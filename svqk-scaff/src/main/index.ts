@@ -1,14 +1,25 @@
 import { spawnSync } from "child_process";
 import Generator from "yeoman-generator";
-import type { GeneratorOptions } from '@yeoman/types';
+import type { GeneratorOptions } from "@yeoman/types";
+import { generateApi } from "swagger-typescript-api";
+import path from "node:path";
+import fs from "fs";
+import cpx from "cpx";
 import { Metadata, TemplateData } from "./types.js";
 
 type CustomOptions = GeneratorOptions & {
-  component: string; 
+  component: string;
   templateType: string;
 };
 
-const allowedComponentValues = ["backend", "integration-test", "frontend", "e2e-test", "all"];
+const allowedComponentValues = [
+  "backend",
+  "integration-test",
+  "api-client",
+  "frontend",
+  "e2e-test",
+  "all",
+];
 const allowedTemplateTypeValues = ["arch", "skeleton"];
 const YO_RC_KEY_METADATA_FPATH = "metadataFilePath";
 const YO_RC_KEY_DEST_BACK_PATH = "destBackPath";
@@ -18,6 +29,8 @@ const YO_RC_KEY_DEST_E2E_PATH = "destE2EPath";
 const YO_RC_KEY_TEMPLATE_TYPE = "templateType";
 const YO_RC_KEY_GEN_OPEN_API_JSON_CMD = "genOpenApiJsonCmd";
 const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
+const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
+const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   metadataFilePath: string;
@@ -29,17 +42,22 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   templateType: string;
   genOpenApiJsonCmd: string;
   genEntityCmd: string;
+  frontApiClientPath: string;
+  e2eApiClientPath: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
 
-    this.option('component', {
+    this.option("component", {
       type: String,
-      default: 'all'
+      default: "all",
     });
 
-    if (this.options.component && !allowedComponentValues.includes(this.options.component)) {
+    if (
+      this.options.component &&
+      !allowedComponentValues.includes(this.options.component)
+    ) {
       throw new Error(
         `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
           ", "
@@ -47,11 +65,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       );
     }
 
-    this.option('templateType', {
+    this.option("templateType", {
       type: String,
     });
 
-    if (this.options.templateType && !allowedTemplateTypeValues.includes(this.options.templateType)) {
+    if (
+      this.options.templateType &&
+      !allowedTemplateTypeValues.includes(this.options.templateType)
+    ) {
       throw new Error(
         `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
           ", "
@@ -64,28 +85,32 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
     this.destFrontPath = this.config.get(YO_RC_KEY_DEST_FRONT_PATH);
     this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
-    this.component = this.options.component
-    this.templateType = this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
+    this.component = this.options.component;
+    this.templateType =
+      this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
     this.genOpenApiJsonCmd = this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD);
     this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
+    this.frontApiClientPath = this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH);
+    this.e2eApiClientPath = this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH);
     this.metadataList = [];
   }
 
   async initializing() {
     try {
-      this._exec_gen_open_api_json();
       // TODO Add an option not to be executed when cicd.
       this._exec_gen_entity();
 
-      this.metadataList = await import(
-        `${this.destinationRoot()}/${this.metadataFilePath}`,
-        { with: { type: "json" } }
-      ).then((module) => module.default);
+      if (this.component !== "api-client") {
+        this.metadataList = await import(
+          `${this.destinationRoot()}/${this.metadataFilePath}`,
+          { with: { type: "json" } }
+        ).then((module) => module.default);
 
-      if (!this.metadataList || this.metadataList.length === 0) {
-        throw new Error(
-          `The meta data list on ${this.metadataFilePath} is empty.`
-        );
+        if (!this.metadataList || this.metadataList.length === 0) {
+          throw new Error(
+            `The meta data list on ${this.metadataFilePath} is empty.`
+          );
+        }
       }
     } catch (error) {
       this.log(`Failed to read ${this.metadataFilePath}. ${error}`);
@@ -93,7 +118,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   writing() {
-    if (this.args.length == 0) {
+    if (this.component !== "api-client" && this.args.length == 0) {
       const entities = this.metadataList
         .map((metadata) => metadata.className)
         .join(", ");
@@ -134,6 +159,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
       }
     });
+
+    if (this.component === "api-client" || this.component === "all") {
+      this._generate_apiclient();
+    }
   }
 
   end() {
@@ -161,6 +190,72 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _exec_gen_open_api_json() {
     this._exec_cmd(this.genOpenApiJsonCmd);
+  }
+
+  _exec_gen_api_client() {
+    const openApiJsonPath = path.resolve(
+      process.cwd(),
+      "./target/openapi.json"
+    );
+    this.log("openapi.json Path:", openApiJsonPath);
+    if (!fs.existsSync(openApiJsonPath)) {
+      throw new Error("openapi.json is not found.");
+    }
+
+    generateApi({
+      name: "Api.ts",
+      input: openApiJsonPath,
+      output: path.resolve(process.cwd(), this.frontApiClientPath),
+      moduleNameIndex: 1,
+      hooks: {
+        onFormatRouteName: (routeInfo, templateRouteName) => {
+          const newTemplateRouteName = templateRouteName.replace(
+            /SearchCreate$/,
+            "Search"
+          );
+
+          console.log(
+            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
+          );
+          return newTemplateRouteName;
+        },
+        onFormatTypeName: (typeName, rawTypeName, schemaType) => {
+          if (schemaType === "type-name" && typeName.endsWith("Dto")) {
+            const newTypeName = typeName.replace(/Dto$/, "Model");
+            console.log(`Replace typeName ${typeName} to ${newTypeName}`);
+            return newTypeName;
+          }
+
+          return typeName;
+        },
+      },
+    })
+      .then(() => {
+        this._exec_copy_api();
+        this.log("Client API generated successfully!");
+      })
+      .catch((err) => {
+        throw new Error(`Error generating Client API: ${err}`);
+      });
+  }
+
+  _exec_copy_api() {
+    cpx.copy(
+      `${this.frontApiClientPath}/Api.ts`,
+      this.e2eApiClientPath,
+      (err) => {
+        if (err) {
+          throw new Error(`Copy failed: ${err}`);
+        } else {
+          this.log("Files copied successfully.");
+        }
+      }
+    );
+  }
+
+  _generate_apiclient() {
+    this._exec_gen_open_api_json();
+    this._exec_gen_api_client();
   }
 
   _exec_gen_entity() {
