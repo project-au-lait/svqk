@@ -25,6 +25,9 @@
     },
     {
       "path": "svqk-front"
+    },
+    {
+      "path": "svqk-scaff"
     }
   ],
   "settings": {

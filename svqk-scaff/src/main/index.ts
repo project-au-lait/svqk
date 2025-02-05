@@ -118,7 +118,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   writing() {
-    if (this.component !== "api-client" && this.args.length == 0) {
+    const splitedArgs = this.args.flatMap(arg => arg.trim().split(/\s+/));
+
+    if (this.component !== "api-client" && splitedArgs.length == 0) {
       const entities = this.metadataList
         .map((metadata) => metadata.className)
         .join(", ");
@@ -130,8 +132,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.metadataList.forEach((metaData) => {
       if (
-        !this.args.includes(metaData.className) &&
-        !this.args.includes(this._extract_entity_name(metaData.className))
+        !splitedArgs.includes(metaData.className) &&
+        !splitedArgs.includes(this._extract_entity_name(metaData.className))
       ) {
         return;
       }

@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "generate",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "start",
+        "--component",
+        "${input:component}",
+        "${input:entities}"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "component",
+      "type": "pickString",
+      "description": "Choose a component",
+      "options": [
+        "backend",
+        "integration-test",
+        "api-client",
+        "frontend",
+        "e2e-test",
+        "all"
+      ],
+      "default": "all"
+    },
+    {
+      "id": "entities",
+      "type": "promptString",
+      "description": "Enter entities (e.g. Entity1 Entity2 Entity3)"
+    }
+  ]
+}
