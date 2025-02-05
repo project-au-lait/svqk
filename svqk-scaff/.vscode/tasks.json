@@ -18,7 +18,7 @@
     {
       "id": "component",
       "type": "pickString",
-      "description": "Choose an component",
+      "description": "Choose a component",
       "options": [
         "backend",
         "integration-test",
