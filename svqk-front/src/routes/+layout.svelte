@@ -41,7 +41,7 @@
   {@render children?.()}
 </main>
 
-<style lang="less">
+<style lang="scss">
   :global(:root) {
     --pico-font-size: small;
   }
