@@ -22,6 +22,7 @@
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/cpx": "^1.5.5",
+    "@types/pluralize": "^0.0.33",
     "@types/yeoman-generator": "^5.2.14",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "coveralls": "^3.1.1",
@@ -35,6 +36,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "mem-fs": "^4.1.1",
+    "pluralize": "^8.0.0",
     "prettier": "^3.4.2",
     "swagger-typescript-api": "^13.0.23",
     "ts-node": "^10.9.2",

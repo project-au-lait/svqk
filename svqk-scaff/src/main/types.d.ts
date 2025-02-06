@@ -20,6 +20,7 @@ type TemplateData = {
   entityNmPascal: string;
   entityNmCamel: string;
   entityNmAllCaps: string;
+  entityNmPlural: string;
   fields: Field[];
 };
 
