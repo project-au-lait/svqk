@@ -6,9 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.junit.jupiter.api.Test;
-<% imports.forEach((_import) => { -%>
-import <%= _import %>;
-<% }); -%>
 
 /**
  * This integration test is automatically generated.
@@ -26,10 +23,10 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    int id = dto.get<%= toPascal(idFieldNm) %>();
+    <%= idJavaType %> id = dto.get<%= toPascal(idFieldNm) %>();
 
     // Create
-    int createdId = client.save(dto);
+    <%= idJavaType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference

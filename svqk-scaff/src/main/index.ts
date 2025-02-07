@@ -181,7 +181,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       cmd = cmd.replace("./mvnw", "mvnw");
     }
 
-    this.log(`exec: ${this.genEntityCmd}`);
+    this.log(`exec: ${cmd}`);
 
     spawnSync(shell.cmd, [shell.arg, cmd], {
       cwd: "../",

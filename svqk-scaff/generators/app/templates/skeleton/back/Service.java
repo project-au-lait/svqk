@@ -1,3 +1,4 @@
+<% include('../../lib/field-util', { fields }); -%>
 package <%= domainPkgNm %>;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -10,7 +11,7 @@ public class <%= entityNmPascal %>Service {
 
   private final <%= entityNmPascal %>Repository <%= entityNmCamel %>Repository;
 
-  public <%= entityNmPascal %>Entity find(int id) {
+  public <%= entityNmPascal %>Entity find(<%= idJavaType %> id) {
 
     return <%= entityNmCamel %>Repository.findById(id).orElseThrow(IllegalArgumentException::new);
   }

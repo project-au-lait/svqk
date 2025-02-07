@@ -11,4 +11,5 @@ imports = [...new Set(fields.map((field) => field.javaType))].reduce(
 
 idField = fields.find((field) => field.id);
 idFieldNm = idField?.fieldName ?? "";
+idJavaType = idField?.javaType ?? "Object";
 %>
