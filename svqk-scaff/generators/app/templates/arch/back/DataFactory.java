@@ -4,22 +4,18 @@ package <%= interfacesPkgNm %>;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
 <% imports.forEach((_import) => { -%>
-  import <%= _import %>;
-  <% }); -%>
+import <%= _import %>;
+<% }); -%>
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class <%= entityNmPascal %>DataFactory {
 
   public static <%= entityNmPascal %>Dto create<%= entityNmPascal %>() {
-    <%= entityNmPascal %>Dto dto =
-        <%= entityNmPascal %>Dto.builder()
-        <%_ fields.forEach((field) => { -%>
-            .<%= field.fieldName %>(<%= getValueCode(field) %>)
-        <%_ }); -%>
-            .build();
-
-    return dto;
+    return <%= entityNmPascal %>Dto.builder()
+      <%_ fields.forEach((field) => { -%>
+        .<%= field.fieldName %>(<%= getValueCode(field) %>)
+      <%_ }); -%>
+        .build();
   }
 }

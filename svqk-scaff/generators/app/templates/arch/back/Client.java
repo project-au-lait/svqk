@@ -1,3 +1,4 @@
+<% include('../../lib/field-util', { fields }); -%>
 package <%= interfacesPkgNm %>;
 
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_PATH;
@@ -6,17 +7,9 @@ import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityN
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 import static dev.aulait.svqk.arch.test.RestAssuredUtils.given;
 
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.specification.RequestSpecification;
-import java.util.Locale;
-import java.util.Optional;
-import org.eclipse.microprofile.config.Config;
-import org.eclipse.microprofile.config.ConfigProvider;
-
 public class <%= entityNmPascal %>Client {
 
-  public <%= entityNmPascal %>Dto get(int id) {
+  public <%= entityNmPascal %>Dto get(<%= idJavaType %> id) {
     return given()
         .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, id)
         .then()
@@ -25,26 +18,38 @@ public class <%= entityNmPascal %>Client {
         .as(<%= entityNmPascal %>Dto.class);
   }
 
-  public int save(<%= entityNmPascal %>Dto dto) {
-    return Integer.parseInt(
-        given()
-            .body(dto)
-            .post(<%= entityNmAllCaps %>_PATH)
-            .then()
-            .statusCode(200)
-            .extract()
-            .asString());
+  public <%= idJavaType %> save(<%= entityNmPascal %>Dto dto) {
+    return given()
+        .body(dto)
+        .post(<%= entityNmAllCaps %>_PATH)
+        .then()
+        .statusCode(200)
+        .extract()
+      <%_ if (idJavaType === 'Integer') { -%>
+        .jsonPath()
+        .getInt(".");
+      <%_ } else if(idJavaType === 'String') { -%>
+        .asString();
+      <%_ } else { -%>
+        .as(<%= idJavaType %>.class);
+      <%_ } -%>
   }
 
-  public int update(<%= entityNmPascal %>Dto dto) {
-    return Integer.parseInt(
-        given()
-            .body(dto)
-            .put(<%= entityNmAllCaps %>_PATH)
-            .then()
-            .statusCode(200)
-            .extract()
-            .asString());
+  public <%= idJavaType %> update(<%= entityNmPascal %>Dto dto) {
+    return given()
+        .body(dto)
+        .put(<%= entityNmAllCaps %>_PATH)
+        .then()
+        .statusCode(200)
+        .extract()
+      <%_ if (idJavaType === 'Integer') { -%>
+        .jsonPath()
+        .getInt(".");
+      <%_ } else if(idJavaType === 'String') { -%>
+        .asString();
+      <%_ } else { -%>
+        .as(<%= idJavaType %>.class);
+      <%_ } -%>
   }
 
   public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {

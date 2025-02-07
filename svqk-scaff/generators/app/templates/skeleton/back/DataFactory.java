@@ -3,10 +3,9 @@ package <%= interfacesPkgNm %>;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
 <% imports.forEach((_import) => { -%>
-  import <%= _import %>;
-  <% }); -%>
+import <%= _import %>;
+<% }); -%>
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class <%= entityNmPascal %>DataFactory {
