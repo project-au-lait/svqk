@@ -162,13 +162,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
       }
     });
-
-    if (this.component === "api-client" || this.component === "all") {
-      this._generate_apiclient();
-    }
   }
 
   end() {
+    if (this.component === "api-client" || this.component === "all") {
+      this._generate_apiclient();
+    }
+
     this.log("Completed.");
   }
 
