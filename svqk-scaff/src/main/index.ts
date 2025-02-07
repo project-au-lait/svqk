@@ -388,28 +388,32 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     let pathPairs: [string, string][] = [];
 
     if (this.templateType === "skeleton") {
-      pathPairs.push([
-        "front/+page.svelte",
-        `${this.destFrontPath}/routes/${tmplData.entityNmCamel}/+page.svelte`,
-      ]);
-      pathPairs.push([
-        "front/+page.ts",
-        `${this.destFrontPath}/routes/${tmplData.entityNmCamel}/+page.ts`,
-      ]);
+      pathPairs = [
+        [
+          "front/+page.svelte",
+          `${this.destFrontPath}/routes/${tmplData.entityNmCamel}/+page.svelte`,
+        ],
+        [
+          "front/+page.ts",
+          `${this.destFrontPath}/routes/${tmplData.entityNmCamel}/+page.ts`,
+        ],
+      ];
     } else if (this.templateType === "arch") {
       // TODO For create screen
 
       // TODO For update screen
 
       // For list screen
-      pathPairs.push([
-        "front/routes/list/+page.svelte",
-        `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.svelte`,
-      ]);
-      pathPairs.push([
-        "front/routes/list/+page.ts",
-        `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.ts`,
-      ]);
+      pathPairs = [
+        [
+          "front/routes/list/+page.svelte",
+          `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.svelte`,
+        ],
+        [
+          "front/routes/list/+page.ts",
+          `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.ts`,
+        ],
+      ];
     }
 
     for (const [srcPath, destPath] of pathPairs) {
