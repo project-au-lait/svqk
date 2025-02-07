@@ -286,12 +286,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _output_file(
-    templatePath: string,
+    tmplPath: string,
     destinationPath: string,
     tmplData: TemplateData
   ) {
     this.fs.copyTpl(
-      this.templatePath(`${this.templateType}/${templatePath}`),
+      this.templatePath(`${this.templateType}/${tmplPath}`),
       this.destinationPath(destinationPath),
       tmplData
     );
@@ -310,11 +310,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _output_front_file(
-    templatePath: string,
+    tmplPath: string,
     destinationPath: string,
     tmplData: TemplateData
   ) {
-    this._output_file(templatePath, destinationPath, tmplData);
+    this._output_file(tmplPath, destinationPath, tmplData);
   }
 
   _output_e2etest_file(
