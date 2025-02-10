@@ -3,7 +3,7 @@
     "metadataFilePath": "src/main/resources/jeg-metadata.json",
     "destBackPath": "../svqk-back/src/main/java",
     "destITPath": "../svqk-back/src/integration-test/java",
-    "destFrontPath": "../svqk-front/src/routes",
+    "destFrontPath": "../svqk-front/src",
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
