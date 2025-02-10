@@ -58,7 +58,7 @@
     </exec>
 
     <exec executable="pnpm" dir="${projectdir}/${project}-scaff">
-      <arg line="start World" />
+      <arg line="start --component all World" />
     </exec>
 
     <antcall target="cicd-test" />
