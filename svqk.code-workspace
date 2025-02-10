@@ -8,6 +8,7 @@
       "GabrielBB.vscode-lombok",
       "josevseb.google-java-format-for-vs-code",
       "mhutchie.git-graph",
+      "mtxr.sqltools",
       "redhat.vscode-xml",
       "redhat.vscode-yaml",
       "sonarsource.sonarlint-vscode",
@@ -46,6 +47,9 @@
     "[jsonc]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "[sql]": {
+      "editor.defaultFormatter": "mtxr.sqltools"
+    },
     "[svelte]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -72,6 +76,18 @@
     "sqltools.format": {
       "linesBetweenQueries": 3
     },
+    "sqltools.connections": [
+      {
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 5431,
+        "driver": "PostgreSQL",
+        "name": "svqk",
+        "database": "postgres",
+        "username": "svqk",
+        "password": "svqk"
+      }
+    ],
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
     "terminal.integrated.profiles.windows": {
       "Command Prompt": {
