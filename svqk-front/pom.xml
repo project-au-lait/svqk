@@ -125,31 +125,5 @@
         </plugins>
       </build>
     </profile>
-
-
-    <profile>
-      <id>scaffolding</id>
-
-      <activation>
-        <property>
-          <name>env.SCAFFOLDING</name>
-          <value>true</value>
-        </property>
-      </activation>
-
-      <dependencies>
-        <!--
-          This dependency is required to set the build order of this project
-          to following the scaffolding project
-        -->
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>svqk-scaff</artifactId>
-          <version>${project.version}</version>
-          <type>pom</type>
-        </dependency>
-      </dependencies>
-
-    </profile>
   </profiles>
 </project>
