@@ -99,7 +99,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   async initializing() {
     try {
       // TODO Add an option not to be executed when cicd.
-      this._exec_gen_entity();
+      EntityGenerator.exec(this.genEntityCmd);
 
       if (this.component !== "api-client") {
         this.metadataList = await import(
@@ -166,108 +166,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   end() {
     if (this.component === "api-client" || this.component === "all") {
-      this._generate_apiclient();
+      ApiClientGenerator.exec(
+        this.genOpenApiJsonCmd,
+        this.frontApiClientPath,
+        this.e2eApiClientPath
+      );
     }
 
     this.log("Completed.");
-  }
-
-  _exec_cmd(cmd: string, env?: NodeJS.ProcessEnv) {
-    const isWin = process.platform === "win32";
-    const shell = isWin ? { cmd: "cmd", arg: "/C" } : { cmd: "sh", arg: "-c" };
-
-    env = { ...process.env, ...env };
-
-    if (isWin) {
-      cmd = cmd.replace("./mvnw", "mvnw");
-    }
-
-    this.log(`exec: ${cmd}`);
-
-    spawnSync(shell.cmd, [shell.arg, cmd], {
-      cwd: "../",
-      env: env,
-      stdio: "inherit",
-    });
-  }
-
-  _exec_gen_open_api_json() {
-    this._exec_cmd(this.genOpenApiJsonCmd);
-  }
-
-  _exec_gen_api_client() {
-    const openApiJsonPath = path.resolve(
-      process.cwd(),
-      "./target/openapi.json"
-    );
-    this.log("openapi.json Path:", openApiJsonPath);
-    if (!fs.existsSync(openApiJsonPath)) {
-      throw new Error("openapi.json is not found.");
-    }
-
-    generateApi({
-      name: "Api.ts",
-      input: openApiJsonPath,
-      output: path.resolve(process.cwd(), this.frontApiClientPath),
-      moduleNameIndex: 1,
-      hooks: {
-        onFormatRouteName: (routeInfo, templateRouteName) => {
-          const newTemplateRouteName = templateRouteName.replace(
-            /SearchCreate$/,
-            "Search"
-          );
-
-          console.log(
-            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
-          );
-          return newTemplateRouteName;
-        },
-        onFormatTypeName: (typeName, rawTypeName, schemaType) => {
-          if (schemaType === "type-name" && typeName.endsWith("Dto")) {
-            const newTypeName = typeName.replace(/Dto$/, "Model");
-            console.log(`Replace typeName ${typeName} to ${newTypeName}`);
-            return newTypeName;
-          }
-
-          return typeName;
-        },
-      },
-    })
-      .then(() => {
-        this._exec_copy_api();
-        this.log("Client API generated successfully!");
-      })
-      .catch((err) => {
-        throw new Error(`Error generating Client API: ${err}`);
-      });
-  }
-
-  _exec_copy_api() {
-    cpx.copy(
-      `${this.frontApiClientPath}/Api.ts`,
-      this.e2eApiClientPath,
-      (err) => {
-        if (err) {
-          throw new Error(`Copy failed: ${err}`);
-        } else {
-          this.log("Files copied successfully.");
-        }
-      }
-    );
-  }
-
-  _generate_apiclient() {
-    this._exec_gen_open_api_json();
-    this._exec_gen_api_client();
-  }
-
-  _exec_gen_entity() {
-    const env = {
-      MAVEN_OPTS:
-        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-    };
-
-    this._exec_cmd(this.genEntityCmd, env);
   }
 
   _generate_template_data(metadata: Metadata): TemplateData {
@@ -434,6 +340,112 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         tmplData
       );
     }
+  }
+}
+
+class ExternalCommandExecutor {
+  static exec(cmd: string, env?: NodeJS.ProcessEnv) {
+    const isWin = process.platform === "win32";
+    const shell = isWin ? { cmd: "cmd", arg: "/C" } : { cmd: "sh", arg: "-c" };
+
+    env = { ...process.env, ...env };
+
+    if (isWin) {
+      cmd = cmd.replace("./mvnw", "mvnw");
+    }
+
+    console.log(`exec: ${cmd}`);
+
+    spawnSync(shell.cmd, [shell.arg, cmd], {
+      cwd: "../",
+      env: env,
+      stdio: "inherit",
+    });
+  }
+}
+
+class EntityGenerator {
+  static exec(genEntitycmd: string) {
+    const env = {
+      MAVEN_OPTS:
+        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+    };
+
+    ExternalCommandExecutor.exec(genEntitycmd, env);
+  }
+}
+
+class ApiClientGenerator {
+  static exec(
+    genOpenApiJsonCmd: string,
+    frontApiClientPath: string,
+    e2eApiClientPath: string
+  ) {
+    ExternalCommandExecutor.exec(genOpenApiJsonCmd);
+    this._exec_gen_api_client(frontApiClientPath, e2eApiClientPath);
+  }
+
+  private static _exec_gen_api_client(
+    frontApiClientPath: string,
+    e2eApiClientPath: string
+  ) {
+    const openApiJsonPath = path.resolve(
+      process.cwd(),
+      "./target/openapi.json"
+    );
+    console.log("openapi.json Path:", openApiJsonPath);
+    if (!fs.existsSync(openApiJsonPath)) {
+      throw new Error("openapi.json is not found.");
+    }
+
+    generateApi({
+      name: "Api.ts",
+      input: openApiJsonPath,
+      output: path.resolve(process.cwd(), frontApiClientPath),
+      moduleNameIndex: 1,
+      hooks: {
+        onFormatRouteName: (routeInfo, templateRouteName) => {
+          const newTemplateRouteName = templateRouteName.replace(
+            /SearchCreate$/,
+            "Search"
+          );
+
+          console.log(
+            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
+          );
+          return newTemplateRouteName;
+        },
+        onFormatTypeName: (typeName, rawTypeName, schemaType) => {
+          if (schemaType === "type-name" && typeName.endsWith("Dto")) {
+            const newTypeName = typeName.replace(/Dto$/, "Model");
+            console.log(`Replace typeName ${typeName} to ${newTypeName}`);
+            return newTypeName;
+          }
+
+          return typeName;
+        },
+      },
+    })
+      .then(() => {
+        this._exec_copy_api(frontApiClientPath, e2eApiClientPath);
+        console.log("Client API generated successfully!");
+      })
+      .catch((err) => {
+        throw new Error(`Error generating Client API: ${err}`);
+      });
+  }
+
+  private static _exec_copy_api(
+    frontApiClientPath: string,
+    e2eApiClientPath: string
+  ) {
+    cpx.copy(`${frontApiClientPath}/Api.ts`, e2eApiClientPath, (err) => {
+      if (err) {
+        throw new Error(`Copy failed: ${err}`);
+      } else {
+        console.log("Files copied successfully.");
+      }
+    });
   }
 }
 
