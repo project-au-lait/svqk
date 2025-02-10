@@ -399,12 +399,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         ],
       ];
     } else if (this.templateType === "arch") {
-      // TODO For create screen
-
-      // TODO For update screen
-
-      // For list screen
       pathPairs = [
+        // For list screen
         [
           "front/routes/list/+page.svelte",
           `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.svelte`,
@@ -413,6 +409,18 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           "front/routes/list/+page.ts",
           `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.ts`,
         ],
+
+        // For create screen
+        [
+          "front/routes/new/+page.svelte",
+          `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/new/+page.svelte`,
+        ],
+        [
+          "front/routes/new/+page.ts",
+          `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/new/+page.ts`,
+        ],
+
+        // TODO For update screen
       ];
     }
 

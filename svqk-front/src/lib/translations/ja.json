@@ -23,5 +23,15 @@
   "issueTracking": "チケットトラッキング",
   "viewAllIssues": "すべてのチケットを表示",
   "total": "合計",
-  "label": { "issue": { "subject": "題名" } }
+  "label": { 
+    "issue": { "subject": "題名" },
+    "hello": { 
+      "id": "ID",
+      "message": "メッセージ" 
+    },
+    "world": { 
+      "id": "ID",
+      "message": "メッセージ" 
+    }
+  }
 }
