@@ -13,6 +13,21 @@ type CustomOptions = GeneratorOptions & {
   templateType: string;
 };
 
+type paths = {
+  metadataFilePath: string;
+  destBackPath: string;
+  destITPath: string;
+  destFrontPath: string;
+  destE2EPath: string;
+  frontApiClientPath: string;
+  e2eApiClientPath: string;
+};
+
+type externalCmds = {
+  genOpenApiJsonCmd: string;
+  genEntityCmd: string;
+};
+
 const allowedComponentValues = [
   "backend",
   "integration-test",
@@ -34,17 +49,10 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
-  metadataFilePath: string;
-  destBackPath: string;
-  destITPath: string;
-  destFrontPath: string;
-  destE2EPath: string;
+  paths: paths;
+  externalCmds: externalCmds;
   component: string;
   templateType: string;
-  genOpenApiJsonCmd: string;
-  genEntityCmd: string;
-  frontApiClientPath: string;
-  e2eApiClientPath: string;
   metadataList: Metadata[];
 
   constructor(args: string | string[], opts: CustomOptions) {
@@ -81,40 +89,46 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       );
     }
 
-    this.metadataFilePath = this.config.get(YO_RC_KEY_METADATA_FPATH);
-    this.destBackPath = this.config.get(YO_RC_KEY_DEST_BACK_PATH);
-    this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
-    this.destFrontPath = this.config.get(YO_RC_KEY_DEST_FRONT_PATH);
-    this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
+    this.paths = {
+      metadataFilePath: this.config.get(YO_RC_KEY_METADATA_FPATH),
+      destBackPath: this.config.get(YO_RC_KEY_DEST_BACK_PATH),
+      destITPath: this.config.get(YO_RC_KEY_DEST_IT_PATH),
+      destFrontPath: this.config.get(YO_RC_KEY_DEST_FRONT_PATH),
+      destE2EPath: this.config.get(YO_RC_KEY_DEST_E2E_PATH),
+      frontApiClientPath: this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH),
+      e2eApiClientPath: this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH),
+    };
+
+    this.externalCmds = {
+      genOpenApiJsonCmd: this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD),
+      genEntityCmd: this.config.get(YO_RC_KEY_GEN_ENTITY_CMD),
+    };
+
     this.component = this.options.component;
     this.templateType =
       this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
-    this.genOpenApiJsonCmd = this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD);
-    this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
-    this.frontApiClientPath = this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH);
-    this.e2eApiClientPath = this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH);
     this.metadataList = [];
   }
 
   async initializing() {
     try {
       // TODO Add an option not to be executed when cicd.
-      EntityGenerator.exec(this.genEntityCmd);
+      EntityGenerator.exec(this.externalCmds["genEntityCmd"]);
 
       if (this.component !== "api-client") {
         this.metadataList = await import(
-          `${this.destinationRoot()}/${this.metadataFilePath}`,
+          `${this.destinationRoot()}/${this.paths["metadataFilePath"]}`,
           { with: { type: "json" } }
         ).then((module) => module.default);
 
         if (!this.metadataList || this.metadataList.length === 0) {
           throw new Error(
-            `The meta data list on ${this.metadataFilePath} is empty.`
+            `The meta data list on ${this.paths["metadataFilePath"]} is empty.`
           );
         }
       }
     } catch (error) {
-      this.log(`Failed to read ${this.metadataFilePath}. ${error}`);
+      this.log(`Failed to read ${this.paths["metadataFilePath"]}. ${error}`);
     }
   }
 
@@ -167,9 +181,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   end() {
     if (this.component === "api-client" || this.component === "all") {
       ApiClientGenerator.exec(
-        this.genOpenApiJsonCmd,
-        this.frontApiClientPath,
-        this.e2eApiClientPath
+        this.externalCmds["genOpenApiJsonCmd"],
+        this.paths["frontApiClientPath"],
+        this.paths["e2eApiClientPath"]
       );
     }
 
@@ -234,7 +248,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   ) {
     this._output_file(
       `e2etest/${component}.ts`,
-      `${this.destE2EPath}/${destpath}`,
+      `${this.paths["destE2EPath"]}/${destpath}`,
       tmplData
     );
   }
@@ -256,7 +270,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       // Generate files for domain package
       ["Repository", "Service"].forEach((component) => {
         const destPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
+          this.paths["destBackPath"],
           tmplData.domainPkgNm
         );
         this._output_back_file(component, destPkgPath, tmplData);
@@ -265,7 +279,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       // Generate files for interfaces package
       ["Dto", "Controller"].forEach((component) => {
         const destBackIfPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
+          this.paths["destBackPath"],
           tmplData.interfacesPkgNm
         );
         this._output_back_file(component, destBackIfPkgPath, tmplData);
@@ -276,7 +290,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       // Generate files for interfaces package
       ["Factory", "SearchCriteriaDto"].forEach((component) => {
         const destBackIfPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
+          this.paths["destBackPath"],
           tmplData.interfacesPkgNm
         );
         this._output_back_file(component, destBackIfPkgPath, tmplData);
@@ -287,7 +301,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   _generate_integrationtest(tmplData: TemplateData) {
     ["Client", "ControllerIT", "DataFactory"].forEach((component) => {
       const destPkgPath = this._generate_dest_package_path(
-        this.destITPath,
+        this.paths["destITPath"],
         tmplData.interfacesPkgNm
       );
       this._output_back_file(component, destPkgPath, tmplData);
@@ -297,8 +311,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   _generate_frontend(tmplData: TemplateData) {
     let pathPairs: [string, string][] = [];
 
-    const entityPathCamel = `${this.destFrontPath}/routes/${tmplData.entityNmCamel}`;
-    const entityPathPlural = `${this.destFrontPath}/routes/${tmplData.entityNmPlural}`;
+    const entityPathCamel = `${this.paths["destFrontPath"]}/routes/${tmplData.entityNmCamel}`;
+    const entityPathPlural = `${this.paths["destFrontPath"]}/routes/${tmplData.entityNmPlural}`;
 
     if (this.templateType === "skeleton") {
       pathPairs = [
@@ -319,7 +333,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         ["front/routes/new/+page.ts", `${entityPathPlural}/new/+page.ts`],
         [
           "front/lib/Form.svelte",
-          `${this.destFrontPath}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
+          `${this.paths["destFrontPath"]}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
         ],
 
         // TODO For update screen
