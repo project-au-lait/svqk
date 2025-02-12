@@ -7,7 +7,7 @@
   let <%= entityNmCamel %> = $state({} as <%= entityNmPascal %>Model);
 
   async function handleAfterSave(id?: number) {
-    await goto(`/issues/${id}`);
+    await goto(`/<%= entityNmPlural %>/${id}`);
   }
 </script>
 
