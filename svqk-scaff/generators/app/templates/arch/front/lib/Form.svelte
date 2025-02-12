@@ -27,7 +27,7 @@
 
   async function save() {
     const response = await ApiHandler.handle<number>(fetch, (api) => 
-      api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      <%= entityNmCamel %>.id ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
 
     if (response) {
       await handleAfterSave(response);
