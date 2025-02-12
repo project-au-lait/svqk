@@ -53,10 +53,6 @@
 
     <antcall target="cicd-test" />
 
-    <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
-      <arg line="-T 1C clean install -P setup" />
-    </exec>
-
     <exec executable="pnpm" dir="${projectdir}/${project}-scaff">
       <arg line="start --component all World" />
     </exec>
