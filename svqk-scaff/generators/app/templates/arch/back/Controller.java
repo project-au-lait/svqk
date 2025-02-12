@@ -1,4 +1,3 @@
-<% include('../../lib/field-util', { fields }); -%>
 package <%= interfacesPkgNm %>;
 
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;

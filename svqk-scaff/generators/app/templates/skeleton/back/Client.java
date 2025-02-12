@@ -1,4 +1,3 @@
-<% include('../../lib/field-util', { fields }); -%>
 package <%= interfacesPkgNm %>;
 
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;

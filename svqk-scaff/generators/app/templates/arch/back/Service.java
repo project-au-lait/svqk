@@ -1,4 +1,3 @@
-<% include('../../lib/field-util', { fields }); -%>
 package <%= domainPkgNm %>;
 
 import dev.aulait.svqk.arch.jpa.SearchUtils;

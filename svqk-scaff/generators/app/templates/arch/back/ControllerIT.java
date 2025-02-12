@@ -1,5 +1,3 @@
-<% include('../../lib/common-func'); -%>
-<% include('../../lib/field-util', { fields }); -%>
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +23,7 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= idJavaType %> id = dto.get<%= toPascal(idFieldNm) %>();
+    <%= idJavaType %> id = dto.get<%= idFieldNmPascal %>();
 
     // Create
     <%= idJavaType %> createdId = client.save(dto);
@@ -33,7 +31,7 @@ class <%= entityNmPascal %>ControllerIT {
 
     // Reference
     <%= entityNmPascal %>Dto refDto = client.get(id);
-    assertEquals(id, refDto.get<%= toPascal(idFieldNm) %>());
+    assertEquals(id, refDto.get<%= idFieldNmPascal %>());
 
     // Update
     // TODO Implementation of assembling a request and assertion

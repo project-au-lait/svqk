@@ -1,4 +1,4 @@
-<% include('../../lib/field-util', { fields }); -%>
+<% include('../../lib/data-factory-def', { fields }); -%>
 package <%= interfacesPkgNm %>;
 
 import lombok.AccessLevel;
