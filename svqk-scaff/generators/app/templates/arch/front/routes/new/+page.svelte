@@ -1,42 +1,14 @@
 <script lang="ts">
-  import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
-  import ApiHandler from '$lib/arch/api/ApiHandler';
-  import FormValidator from '$lib/arch/form/FormValidator';
-  import InputField from '$lib/arch/form/InputField.svelte';
   import { goto } from '$app/navigation';
-  import { messageStore } from '$lib/arch/global/MessageStore';
+  import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
+  import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
   import { t } from '$lib/translations';
-  import * as yup from 'yup';
 
   let <%= entityNmCamel %> = $state({} as <%= entityNmPascal %>Model);
 
-  const spec = {
-    <% for (field of fields) { %>
-      <% if (field.required) { %>
-        <%= field.fieldName %>: yup.string().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
-      <% } %>
-    <% } %>
-  };
-  const form = FormValidator.createForm(spec, save);
-
-  async function save() {
-    const response = await ApiHandler.handle<number>(fetch, (api) => 
-      api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
-
-    if (response) {
-      await goto(`/<%= entityNmPlural %>/${response}`);
-      messageStore.show($t('msg.saved'));
-    }
+  async function handleAfterSave(id?: number) {
+    await goto(`/issues/${id}`);
   }
 </script>
 
-<form use:form>
-  <% for (field of fields) { %>
-    <div>
-      <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-    </div>
-  <% } %>
-  <div>
-    <button id="save" type="submit">{$t('msg.register')}</button>
-  </div>
-</form>
+<<%= entityNmPascal %>Form bind:<%= entityNmCamel %> {handleAfterSave} actionBtnLabel={$t('msg.register')} />
