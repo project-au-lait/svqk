@@ -20,9 +20,23 @@
 
     <property file="${port.file}" />
 
+    <property name="db.port.regex" value="&lt;db.port&gt;.*?&lt;/db.port&gt;" />
+    <property name="db.port.replace" value="&lt;db.port&gt;${db.port.random}&lt;/db.port&gt;" />
+
+    <replaceregexp file="${prjdir}/pom.xml"
+      match="${db.port.regex}"
+      replace="${db.port.replace}" />
+
+    <property name="back.port.regex" value="&lt;back.port&gt;.*?&lt;/back.port&gt;" />
+    <property name="back.port.replace"
+      value="&lt;back.port&gt;${back.port.random}&lt;/back.port&gt;" />
+
+    <replaceregexp file="${prjdir}/pom.xml"
+      match="${back.port.regex}"
+      replace="${back.port.replace}" />
+
     <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
       <arg line="-T 1C clean verify -P setup${analyze.profile}" />
-      <arg line="-D db.port=${db.port.random} -D back.port=${back.port.random}" />
       <arg line="-D org.slf4j.simpleLogger.showThreadName=true" />
     </exec>
 
