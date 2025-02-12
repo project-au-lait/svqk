@@ -8,7 +8,6 @@ import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
 import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
 import <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
 
 @ApplicationScoped
 public class <%= entityNmPascal %>Factory {

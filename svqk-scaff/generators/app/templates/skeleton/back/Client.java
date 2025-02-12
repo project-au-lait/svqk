@@ -12,7 +12,7 @@ import org.eclipse.microprofile.config.ConfigProvider;
 
 public class <%= entityNmPascal %>Client {
 
-  public <%= entityNmPascal %>Dto get(int id) {
+  public <%= entityNmPascal %>Dto get(<%= idJavaType %> id) {
     return given()
         .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, id)
         .then()
@@ -21,15 +21,21 @@ public class <%= entityNmPascal %>Client {
         .as(<%= entityNmPascal %>Dto.class);
   }
 
-  public int save(<%= entityNmPascal %>Dto dto) {
-    return Integer.parseInt(
-        given()
-            .body(dto)
-            .post(<%= entityNmAllCaps %>_PATH)
-            .then()
-            .statusCode(200)
-            .extract()
-            .asString());
+  public <%= idJavaType %> save(<%= entityNmPascal %>Dto dto) {
+    return given()
+        .body(dto)
+        .post(<%= entityNmAllCaps %>_PATH)
+        .then()
+        .statusCode(200)
+        .extract()
+      <%_ if (idJavaType === 'Integer') { -%>
+        .jsonPath()
+        .getInt(".");
+      <%_ } else if(idJavaType === 'String') { -%>
+        .asString();
+      <%_ } else { -%>
+        .as(<%= idJavaType %>.class);
+      <%_ } -%>
   }
 
   private static RequestSpecification given() {
