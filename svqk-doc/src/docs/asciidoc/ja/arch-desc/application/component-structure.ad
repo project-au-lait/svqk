@@ -1,9 +1,9 @@
 [[component-structure]]
-=== コンポーネント構成
+=== コンポーネント構造
 
 本システムのFrontend・Backendアプリケーションを構成するコンポーネントとそれらの相互作用を以下の通り定義します。
 
-.コンポーネント構成
+.コンポーネント構造
 [plantuml]
 ----
 include::component-structure.pu[]

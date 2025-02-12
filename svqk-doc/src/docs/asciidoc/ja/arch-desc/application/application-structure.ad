@@ -1,9 +1,9 @@
 [[application-structure]]
-=== アプリケーション構成
+=== アプリケーション構造
 
 本システムは、FrontendとBackendの2つのアプリケーションとDBで構成されます。
 
-.アプリケーション構成
+.アプリケーション構造
 [plantuml]
 ----
 include::application-structure.pu[]

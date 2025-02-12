@@ -6,6 +6,7 @@ import path from "node:path";
 import fs from "fs";
 import cpx from "cpx";
 import { Metadata, TemplateData } from "./types.js";
+import pluralize from "pluralize";
 
 type CustomOptions = GeneratorOptions & {
   component: string;
@@ -118,7 +119,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   writing() {
-    const splitedArgs = this.args.flatMap(arg => arg.trim().split(/\s+/));
+    const splitedArgs = this.args.flatMap((arg) => arg.trim().split(/\s+/));
 
     if (this.component !== "api-client" && splitedArgs.length == 0) {
       const entities = this.metadataList
@@ -161,13 +162,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
       }
     });
-
-    if (this.component === "api-client" || this.component === "all") {
-      this._generate_apiclient();
-    }
   }
 
   end() {
+    if (this.component === "api-client" || this.component === "all") {
+      this._generate_apiclient();
+    }
+
     this.log("Completed.");
   }
 
@@ -279,17 +280,18 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmCamel:
         entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
+      entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
     };
   }
 
   _output_file(
-    templatePath: string,
+    tmplPath: string,
     destinationPath: string,
     tmplData: TemplateData
   ) {
     this.fs.copyTpl(
-      this.templatePath(`${this.templateType}/${templatePath}`),
+      this.templatePath(`${this.templateType}/${tmplPath}`),
       this.destinationPath(destinationPath),
       tmplData
     );
@@ -307,12 +309,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     );
   }
 
-  _output_front_file(component: string, tmplData: TemplateData) {
-    this._output_file(
-      `front/${component}`,
-      `${this.destFrontPath}/${tmplData.entityNmCamel}/${component}`,
-      tmplData
-    );
+  _output_front_file(
+    tmplPath: string,
+    destinationPath: string,
+    tmplData: TemplateData
+  ) {
+    this._output_file(tmplPath, destinationPath, tmplData);
   }
 
   _output_e2etest_file(
@@ -383,17 +385,51 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_frontend(tmplData: TemplateData) {
-    ["+page.svelte", "+page.ts"].forEach((component) => {
-      this._output_front_file(component, tmplData);
-    });
+    let pathPairs: [string, string][] = [];
+
+    if (this.templateType === "skeleton") {
+      pathPairs = [
+        [
+          "front/+page.svelte",
+          `${this.destFrontPath}/routes/${tmplData.entityNmCamel}/+page.svelte`,
+        ],
+        [
+          "front/+page.ts",
+          `${this.destFrontPath}/routes/${tmplData.entityNmCamel}/+page.ts`,
+        ],
+      ];
+    } else if (this.templateType === "arch") {
+      // TODO For create screen
+
+      // TODO For update screen
+
+      // For list screen
+      pathPairs = [
+        [
+          "front/routes/list/+page.svelte",
+          `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.svelte`,
+        ],
+        [
+          "front/routes/list/+page.ts",
+          `${this.destFrontPath}/routes/${tmplData.entityNmPlural}/+page.ts`,
+        ],
+      ];
+    }
+
+    for (const [srcPath, destPath] of pathPairs) {
+      this._output_front_file(srcPath, destPath, tmplData);
+    }
   }
 
   _generate_e2etest(tmplData: TemplateData) {
-    this._output_e2etest_file(
-      "spec",
-      this._generate_e2e_spec_path(tmplData),
-      tmplData
-    );
+    // TODO temporary
+    if (this.templateType === "skeleton") {
+      this._output_e2etest_file(
+        "spec",
+        this._generate_e2e_spec_path(tmplData),
+        tmplData
+      );
+    }
   }
 }
 

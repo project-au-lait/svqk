@@ -1,5 +1,5 @@
 [[build-structure]]
-=== ビルド構成
+=== ビルド構造
 
 ここでは、セットアップコマンド内の処理とその実現方式を説明します。
 
@@ -107,7 +107,7 @@ Backendコンテナの停止・削除
 
 ==== container
 
-ここではcontainerプロジェクトのビルド構成を説明します。
+ここではcontainerプロジェクトのビルド構造を説明します。
 
 .containerプロジェクトのビルドフェーズごとの処理
 [cols="1,2"]
@@ -146,7 +146,7 @@ docker compose up -d --wait
 
 ==== migration
 
-ここではmigrationプロジェクトのビルド構成を説明します。
+ここではmigrationプロジェクトのビルド構造を説明します。
 migrationプロジェクトはcontainerプロジェクトをdependency設定しているため、containerプロジェクトのビルド後に実行されます。
 
 .migrationプロジェクトのビルドフェーズごとの処理
@@ -160,7 +160,7 @@ a|setupプロファイルが有効である場合、Flyway Maven Pluginが `clea
 
 ==== front
 
-ここでは、frontプロジェクトのビルド構成を説明します。
+ここでは、frontプロジェクトのビルド構造を説明します。
 
 .frontプロジェクトのビルドフェーズごとの処理
 [cols="1,2"]
@@ -217,7 +217,7 @@ a|Maven JAR Pluginがfrontプロジェクトのビルド後の資材を含むjar
 
 ==== back
 
-ここでは、backプロジェクトのビルド構成を説明します。
+ここでは、backプロジェクトのビルド構造を説明します。
 backプロジェクトはfrontプロジェクトをdependency設定しているため、frontプロジェクトのビルド後に実行されます。
 
 
@@ -255,7 +255,7 @@ a|Maven Failsafe Plugnがsrc/integration-test/javaディレクトリ以下のテ
 
 ==== e2etest
 
-ここではe2etestプロジェクトのビルド構成を説明します。
+ここではe2etestプロジェクトのビルド構造を説明します。
 e2etestプロジェクトはbackプロジェクトをdependency設定しているため、backプロジェクトのビルド後に実行されます。
 
 .e2etestプロジェクトのビルドフェーズごとの処理

@@ -39,11 +39,11 @@
       pageResult: PageResultModel;
     };
     columns: ListTableColumn<T>[];
-    pageContol: PageControlModel;
+    pageControl: PageControlModel;
     search: () => void;
   }
 
-  let { result, columns, pageContol = $bindable(), search }: Props = $props();
+  let { result, columns, pageControl = $bindable(), search }: Props = $props();
 </script>
 
 {#if result.list.length}
@@ -54,7 +54,7 @@
           {#each columns as col}
             {@const { label, sortKey } = col}
             <th>
-              <SortDirection {label} {sortKey} bind:sortOrders={pageContol.sortOrders} {search} />
+              <SortDirection {label} {sortKey} bind:sortOrders={pageControl.sortOrders} {search} />
             </th>
           {/each}
         </tr>
@@ -79,7 +79,7 @@
   </section>
 
   <section>
-    <Pagination pageResult={result.pageResult} bind:pageNumber={pageContol.pageNumber} {search} />
+    <Pagination pageResult={result.pageResult} bind:pageNumber={pageControl.pageNumber} {search} />
   </section>
 {:else}
   {$t('msg.noData')}
