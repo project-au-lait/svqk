@@ -43,6 +43,6 @@
     </div>
   <%_ } _%>
   <div>
-    <button id="save" type="submit">{$t('msg.register')}</button>
+    <button id="save" type="submit">{actionBtnLabel}</button>
   </div>
 </form>
