@@ -5,7 +5,7 @@
   import InputField from '$lib/arch/form/InputField.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
   import { t } from '$lib/translations';
-  import * as yup from 'yup';
+  import { string } from 'yup';
 
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
@@ -16,11 +16,11 @@
   let { <%= entityNmCamel %> = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
 
   const spec = {
-    <% for (field of fields) { %>
-      <% if (field.required) { %>
-        <%= field.fieldName %>: yup.string().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
-      <% } %>
-    <% } %>
+    <%_ for (field of fields) { _%>
+      <%_ if (field.required) { _%>
+        <%= field.fieldName %>: string().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
+      <%_ } _%>
+    <%_ } _%>
   };
 
   const form = FormValidator.createForm(spec, save);
@@ -37,11 +37,11 @@
 </script>
 
 <form use:form>
-  <% for (field of fields) { %>
+  <%_ for (field of fields) { _%>
     <div>
       <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
     </div>
-  <% } %>
+  <%_ } _%>
   <div>
     <button id="save" type="submit">{$t('msg.register')}</button>
   </div>
