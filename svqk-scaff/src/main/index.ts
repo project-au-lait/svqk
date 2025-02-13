@@ -413,6 +413,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         ],
 
         // TODO For update screen
+        [
+          "front/routes/entityId/+page.svelte",
+          `${entityPathPlural}/[entityId]/+page.svelte`,
+        ],
+        [
+          "front/routes/entityId/+page.ts",
+          `${entityPathPlural}/[entityId]/+page.ts`,
+        ],
       ];
     }
 
