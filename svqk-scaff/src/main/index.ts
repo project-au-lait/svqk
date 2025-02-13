@@ -112,7 +112,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   async initializing() {
     try {
-      // TODO Add an option not to be executed when cicd.
       EntityGenerator.exec(this.externalCmds["genEntityCmd"]);
 
       if (this.component !== "api-client") {
