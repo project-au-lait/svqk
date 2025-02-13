@@ -53,7 +53,11 @@
 
     <antcall target="cicd-test" />
 
+    <property file="${projectdir}/${project}-cicd/port.properties" />
+
     <exec executable="pnpm" dir="${projectdir}/${project}-scaff">
+      <env key="BACK_PORT" value="${back.port.random}" />
+      <env key="DB_PORT" value="${db.port.random}" />
       <arg line="start --component all World" />
     </exec>
 

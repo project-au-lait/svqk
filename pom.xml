@@ -51,6 +51,30 @@
     <surefire-plugin.version>3.2.5</surefire-plugin.version>
   </properties>
 
+  <profiles>
+    <profile>
+      <id>use-env-back-port-if-defined</id>
+      <activation>
+        <property>
+          <name>env.BACK_PORT</name>
+        </property>
+      </activation>
+      <properties>
+        <back.port>${env.BACK_PORT}</back.port>
+      </properties>
+    </profile>
+    <profile>
+      <id>use-env-db-port-if-defined</id>
+      <activation>
+        <property>
+          <name>env.DB_PORT</name>
+        </property>
+      </activation>
+      <properties>
+        <db.port>${env.DB_PORT}</db.port>
+      </properties>
+    </profile>
+  </profiles>
 
   <build>
     <pluginManagement>
