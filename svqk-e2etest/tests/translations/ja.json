@@ -33,7 +33,7 @@
       "subject": "題名",
       "dueDate": "期日",
       "description": "説明",
-      "journals": "題名",
+      "journals": "履歴",
       "tracker": "トラッカー",
       "issueStatus": "ステータス"
     },
