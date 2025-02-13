@@ -5,7 +5,7 @@ import { generateApi } from "swagger-typescript-api";
 import path from "node:path";
 import fs from "fs";
 import cpx from "cpx";
-import { Metadata, TemplateData } from "./types.js";
+import { Field, Metadata, TemplateData } from "./types.js";
 import pluralize from "pluralize";
 
 type CustomOptions = GeneratorOptions & {
@@ -272,8 +272,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _generate_template_data(metadata: Metadata): TemplateData {
     const entityNmPascal = this._extract_entity_name(metadata.className);
-    const idField = metadata.fields.find((field) => field.id);
-    const idFieldNm = idField?.fieldName ?? "";
+    const idField = metadata.fields.find((field) => field.id) ?? ({} as Field);
 
     return {
       domainPkgNm: metadata.packageName,
@@ -284,9 +283,19 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
-      idFieldNmPascal: idFieldNm.charAt(0).toUpperCase() + idFieldNm.slice(1),
-      idJavaType: idField?.javaType ?? "Object",
+      idField: idField,
+      idFieldNmPascal:
+        idField.fieldName.charAt(0).toUpperCase() + idField.fieldName.slice(1),
+      idFieldNmCamel: idField.fieldName,
+      idJavaType: idField.javaType,
+      compositePk: this.metadataList.find(
+        (meta) => meta.className === idField.javaType
+      ),
     };
+  }
+
+  _find_composit(field: Field) {
+    return this.metadataList.find((meta) => meta.className === field.javaType);
   }
 
   _output_file(
