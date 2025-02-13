@@ -23,5 +23,36 @@
   "issueTracking": "Issue tracking",
   "viewAllIssues": "View all issues",
   "total": "total",
-  "label": { "issue": { "subject": "subject" } }
+  "label": {
+    "hello": {
+      "id": "ID",
+      "message": "Message"
+    },
+    "issue": {
+      "id": "ID",
+      "subject": "Subject",
+      "dueDate": "Due Date",
+      "description": "Description",
+      "journals": "Journals",
+      "tracker": "Tracker",
+      "issueStatus": "Issue status"
+    },
+    "issueStatus": {
+      "id": "ID",
+      "name": "Name"
+    },
+    "journal": {
+      "issueId": "Issue ID",
+      "seqNo": "Seq No",
+      "notes": "Notes"
+    },
+    "tracker": {
+      "id": "ID",
+      "name": "Name"
+    },
+    "world": {
+      "id": "ID",
+      "message": "Message"
+    }
+  }
 }

@@ -23,5 +23,36 @@
   "issueTracking": "チケットトラッキング",
   "viewAllIssues": "すべてのチケットを表示",
   "total": "合計",
-  "label": { "issue": { "subject": "題名" } }
+  "label": {
+    "hello": {
+      "id": "ID",
+      "message": "メッセージ"
+    },
+    "issue": {
+      "id": "ID",
+      "subject": "題名",
+      "dueDate": "期日",
+      "description": "説明",
+      "journals": "履歴",
+      "tracker": "トラッカー",
+      "issueStatus": "ステータス"
+    },
+    "issueStatus": {
+      "id": "ID",
+      "name": "名前"
+    },
+    "journal": {
+      "issueId": "チケットID",
+      "seqNo": "シーケンス番号",
+      "notes": "備考"
+    },
+    "tracker": {
+      "id": "ID",
+      "name": "名前"
+    },
+    "world": {
+      "id": "ID",
+      "message": "メッセージ"
+    }
+  }
 }
