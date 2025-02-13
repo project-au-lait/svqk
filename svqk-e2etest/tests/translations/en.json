@@ -31,7 +31,7 @@
     "issue": {
       "id": "ID",
       "subject": "Subject",
-      "dueDate": "Due date",
+      "dueDate": "Due Date",
       "description": "Description",
       "journals": "Journals",
       "tracker": "Tracker",
