@@ -14,11 +14,11 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @NoArgsConstructor
 @Builder
 public class <%= entityNmPascal %>Dto {
+<%_ fields.forEach(field => { -%>
 
-  <% fields.forEach(field => { %>
-    <% if (field.required) { %>
-      @Schema(required = true)
-    <% } %>
-    private <%= field.multiple ? `List<field.javaType>` : field.javaType %> <%= field.fieldName %>;
-  <% }); %>
+  <%_ if (field.required) { -%>
+  @Schema(required = true)
+  <%_ } -%>
+  private <%- field.multiple ? `List<${field.javaType}>` : field.javaType %> <%= field.fieldName %>;
+<%_ }); -%>
 }

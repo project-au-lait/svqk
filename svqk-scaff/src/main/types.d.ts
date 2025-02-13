@@ -22,6 +22,8 @@ type TemplateData = {
   entityNmAllCaps: string;
   entityNmPlural: string;
   fields: Field[];
+  idFieldNmPascal: string;
+  idJavaType: string;
 };
 
 declare module "**/jeg-metadata.json" {

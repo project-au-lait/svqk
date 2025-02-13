@@ -1,9 +1,9 @@
 :project_root: ../../../../../../..
 === Frontend
 
-==== パッケージ構成
+==== パッケージ構造
 
-frontプロジェクトのパッケージ構成はSvelteKitのプロジェクト構成を元にしています。
+frontプロジェクトのパッケージ構造はSvelteKitのプロジェクト構造を元にしています。
 
 
 [source,text,subs="callouts,attributes"]
@@ -18,7 +18,7 @@ include::frontend-dir-structure.txt[]
 
 [NOTE]
 ====
-SvelteKitのプロジェクト構成の詳細はSvelteKitのドキュメントを参照してください。
+SvelteKitのプロジェクト構造の詳細はSvelteKitのドキュメントを参照してください。
 
 * https://kit.svelte.dev/docs/project-structure[SvelteKit Project structure]
 ====

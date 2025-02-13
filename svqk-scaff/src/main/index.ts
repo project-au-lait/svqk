@@ -182,7 +182,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       cmd = cmd.replace("./mvnw", "mvnw");
     }
 
-    this.log(`exec: ${this.genEntityCmd}`);
+    this.log(`exec: ${cmd}`);
 
     spawnSync(shell.cmd, [shell.arg, cmd], {
       cwd: "../",
@@ -272,6 +272,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _generate_template_data(metadata: Metadata): TemplateData {
     const entityNmPascal = this._extract_entity_name(metadata.className);
+    const idField = metadata.fields.find((field) => field.id);
+    const idFieldNm = idField?.fieldName ?? "";
 
     return {
       domainPkgNm: metadata.packageName,
@@ -282,6 +284,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
+      idFieldNmPascal: idFieldNm.charAt(0).toUpperCase() + idFieldNm.slice(1),
+      idJavaType: idField?.javaType ?? "Object",
     };
   }
 
@@ -412,7 +416,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `${this.destFrontPath}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
         ],
 
-        // TODO For update screen
+        // For update screen
         [
           "front/routes/entityId/+page.svelte",
           `${entityPathPlural}/[entityId]/+page.svelte`,

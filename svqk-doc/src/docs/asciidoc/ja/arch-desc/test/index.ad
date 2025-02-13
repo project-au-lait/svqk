@@ -8,15 +8,15 @@ include::integration-test.ad[]
 
 End to End Testでは、システムがユースケースシナリオ通りに動作することを確認します。
 これはユーザーの操作をテストプログラムによって自動化する事で行います。
-End to End Testのアプリケーション構成を以下に示します。
+End to End Testのアプリケーション構造を以下に示します。
 
-.End to End Testのアプリケーション構成
+.End to End Testのアプリケーション構造
 [plantuml]
 ----
 include::e2etest-application-structure.pu[]
 ----
 
-上記は、アプリケーションアーキテクチャで定義したアプリケーション構成の内、ユーザーをテストプログラムに置き換えたものです。
+上記は、アプリケーションアーキテクチャで定義したアプリケーション構造の内、ユーザーをテストプログラムに置き換えたものです。
 
 include::e2etest-component-structure.ad[]
 

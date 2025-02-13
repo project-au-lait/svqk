@@ -3,19 +3,19 @@
 
 Integration Testでは、Backendが提供するREST APIが仕様通りに動作することを確認します。
 これはREST APIの呼び出しをテストプログラムによって自動化する事で行います。
-Integration Testのアプリケーション構成を以下に示します。
+Integration Testのアプリケーション構造を以下に示します。
 
-.Integration Testのアプリケーション構成
+.Integration Testのアプリケーション構造
 [plantuml]
 ----
 include::integration-test-application-structure.pu[]
 ----
 
-==== コンポーネント構成
+==== コンポーネント構造
 
 Integration Testのテストプログラムを構成するコンポーネントとそれらの相互作用を以下の通り定義します。
 
-.テストプログラムのコンポーネント構成
+.テストプログラムのコンポーネント構造
 [plantuml]
 ----
 include::integration-test-component-structure.pu[]
