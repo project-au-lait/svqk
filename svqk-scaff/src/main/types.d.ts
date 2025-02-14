@@ -5,7 +5,7 @@ type CustomOptions = GeneratorOptions & {
   templateType: string;
 };
 
-type OptionsInfo = {
+type OptionsValues = {
   component: string;
   templateType: string;
 };
@@ -16,12 +16,12 @@ type Metadata = {
   fields: Field[];
 };
 
-type MetadataInfo = {
+type MetadataConfig = {
   filePath: string;
   list: Metadata[];
 };
 
-type GenApiClientInfo = {
+type GenApiClientConfig = {
   genOpenApiJsonCmd: string;
   frontApiClientPath: string;
   e2eApiClientPath: string;
@@ -56,10 +56,10 @@ declare module "**/jeg-metadata.json" {
 
 export {
   CustomOptions,
-  OptionsInfo,
+  OptionsValues,
   Metadata,
-  MetadataInfo,
-  GenApiClientInfo,
+  MetadataConfig,
+  GenApiClientConfig,
   Field,
   TemplateData,
 };
