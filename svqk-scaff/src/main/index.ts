@@ -274,28 +274,38 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const entityNmPascal = this._extract_entity_name(metadata.className);
     const idField = metadata.fields.find((field) => field.id) ?? ({} as Field);
 
+    this._set_field_pascal_name(metadata);
+
     return {
       domainPkgNm: metadata.packageName,
       interfacesPkgNm: metadata.packageName.replace(".domain.", ".interfaces."),
       entityNmPascal: entityNmPascal,
-      entityNmCamel:
-        entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
+      entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
       idField: idField,
-      idFieldNmPascal:
-        idField.fieldName.charAt(0).toUpperCase() + idField.fieldName.slice(1),
-      idFieldNmCamel: idField.fieldName,
       idJavaType: idField.javaType,
-      compositePk: this.metadataList.find(
-        (meta) => meta.className === idField.javaType
-      ),
+      compositePk: this._get_composite_pk_data(idField),
     };
   }
 
-  _find_composit(field: Field) {
-    return this.metadataList.find((meta) => meta.className === field.javaType);
+  _get_composite_pk_data(field: Field) {
+    const compositePk = this.metadataList.find(
+      (meta) => meta.className === field.javaType
+    );
+
+    if (compositePk) {
+      this._set_field_pascal_name(compositePk);
+    }
+
+    return compositePk;
+  }
+
+  _set_field_pascal_name(metadata: Metadata) {
+    metadata.fields.forEach((field) => {
+      field.fieldNmPascal = this._camel_to_pascal(field.fieldName);
+    });
   }
 
   _output_file(
@@ -340,6 +350,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       `${this.destE2EPath}/${destpath}`,
       tmplData
     );
+  }
+
+  _pascal_to_camel(pascal: string): string {
+    return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+  }
+
+  _camel_to_pascal(camel: string): string {
+    return camel.charAt(0).toUpperCase() + camel.slice(1);
   }
 
   _extract_entity_name(entityClassNm: string): string {

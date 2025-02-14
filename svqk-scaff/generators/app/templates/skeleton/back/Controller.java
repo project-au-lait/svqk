@@ -1,16 +1,10 @@
 <%_
-dtoFields = (compositePk?.fields ?? []).concat(
-  fields.filter((f) => !compositePk || (compositePk && !f.id))
-);
-
 getPath = compositePk
   ? compositePk.fields.map((f) => `{${f.fieldName}}`).join("/")
-  : `{${idFieldNmCamel}}`;
+  : `{${idField.fieldName}}`;
 
 buildGetMethodArg = (field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`;
 getMethodArgs = (compositePk ? compositePk.fields : [idField]).map(buildGetMethodArg).join(', ');
-
-toPascal = (camel) => camel.charAt(0).toUpperCase() + camel.slice(1);
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -48,17 +42,17 @@ public class <%= entityNmPascal %>Controller {
               <%_ }); -%>
                 .build());
   <%_ } else { -%>
-    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(idFieldNmCamel);
+    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(idField.fieldName);
   <%_ } -%>
 
     return <%= entityNmPascal %>Dto.builder()
     <%_ fields.forEach(function(field) { -%>
       <%_ if (compositePk && field.id) { -%>
         <%_ compositePk.fields.forEach(function(pkField) { -%>
-        .<%= pkField.fieldName %>(entity.get<%= idFieldNmPascal %>().get<%= toPascal(pkField.fieldName) %>())
+        .<%= pkField.fieldName %>(entity.get<%= idField.fieldNmPascal %>().get<%= pkField.fieldNmPascal %>())
         <%_ }); -%>
       <%_ } else { -%>
-        .<%= field.fieldName %>(entity.get<%= toPascal(field.fieldName) %>())
+        .<%= field.fieldName %>(entity.get<%= field.fieldNmPascal %>())
       <%_ } -%>
     <%_ }); -%>
         .build();
@@ -69,13 +63,13 @@ public class <%= entityNmPascal %>Controller {
     <%= entityNmPascal %>Entity entity = <%= entityNmPascal %>Entity.builder()
     <%_ fields.forEach(function(field) { -%>
       <%_ if (compositePk && field.id) { -%>
-        .<%= idFieldNmCamel %>(<%= idJavaType %>.builder()
+        .<%= idField.fieldName %>(<%= idJavaType %>.builder()
           <%_ compositePk.fields.forEach(function(pkField) { -%>
-            .<%= pkField.fieldName %>(dto.get<%= toPascal(pkField.fieldName) %>())
+            .<%= pkField.fieldName %>(dto.get<%= pkField.fieldNmPascal %>())
           <%_ }); -%>
             .build())
       <%_ } else { -%>
-        .<%= field.fieldName %>(dto.get<%= toPascal(field.fieldName) %>())
+        .<%= field.fieldName %>(dto.get<%= field.fieldNmPascal %>())
       <%_ } -%>
     <%_ }); -%>
         .build();

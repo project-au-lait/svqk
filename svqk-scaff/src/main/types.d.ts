@@ -6,6 +6,7 @@ type Metadata = {
 
 type Field = {
   fieldName: string;
+  fieldNmPascal?: string;
   javaType: string;
   multiple: boolean;
   dbType: string;
@@ -23,8 +24,6 @@ type TemplateData = {
   entityNmPlural: string;
   fields: Field[];
   idField: Field;
-  idFieldNmPascal: string;
-  idFieldNmCamel: string;
   idJavaType: string;
   compositePk?: Metadata;
 };
