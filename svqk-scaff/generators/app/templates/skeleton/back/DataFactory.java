@@ -1,4 +1,4 @@
-<%_ include('../../lib/data-factory-def', { fields: fields.concat(compositePk?.fields) }); -%>
+<%_ include('../../lib/data-factory-def', { fields: fields.concat(compositePk?.fields ?? []) }); -%>
 package <%= interfacesPkgNm %>;
 
 import lombok.AccessLevel;

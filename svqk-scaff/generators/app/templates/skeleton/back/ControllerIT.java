@@ -1,5 +1,8 @@
 <%_
-getMethodArgs = (compositePk?.fields ?? [idField]).map((f) => `id.get${f.fieldNmPascal}()`).join(', ');
+getMethodArgs = compositePk 
+  ? compositePk.fields.map((field) => `id.get${field.fieldNmPascal}()`).join(', ')
+  : "id";
+
 idJavaType = compositePk ? `${entityNmPascal}IdDto` : idField.javaType;
 -%>
 package <%= interfacesPkgNm %>;

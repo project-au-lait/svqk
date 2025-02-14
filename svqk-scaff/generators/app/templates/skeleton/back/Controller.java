@@ -44,7 +44,7 @@ public class <%= entityNmPascal %>Controller {
               <%_ }); -%>
                 .build());
   <%_ } else { -%>
-    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(idField.fieldName);
+    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(<%= idField.fieldName %>);
   <%_ } -%>
 
     return <%= entityNmPascal %>Dto.builder()
