@@ -24,7 +24,7 @@ type TemplateData = {
   entityNmPlural: string;
   fields: Field[];
   idField: Field;
-  compositePk?: Metadata;
+  compIdFields?: Field[];
 };
 
 declare module "**/jeg-metadata.json" {

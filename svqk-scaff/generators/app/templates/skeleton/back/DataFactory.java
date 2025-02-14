@@ -1,4 +1,4 @@
-<%_ include('../../lib/data-factory-def', { fields: fields.concat(compositePk?.fields ?? []) }); -%>
+<%_ include('../../lib/data-factory-def', { fields: fields.concat(compIdFields ?? []) }); -%>
 package <%= interfacesPkgNm %>;
 
 import lombok.AccessLevel;
@@ -13,10 +13,10 @@ public class <%= entityNmPascal %>DataFactory {
   public static <%= entityNmPascal %>Dto create<%= entityNmPascal %>() {
     return <%= entityNmPascal %>Dto.builder()
       <%_ fields.forEach((field) => { -%>
-        <%_ if (compositePk && field.id) { -%>
+        <%_ if (compIdFields && field.id) { -%>
         .<%= field.fieldName %>(<%= entityNmPascal %>IdDto.builder()
-          <%_ compositePk.fields.forEach((pkField) => { -%>
-            .<%= pkField.fieldName %>(<%= getValueCode(pkField) %>)
+          <%_ compIdFields.forEach((compIdField) => { -%>
+            .<%= compIdField.fieldName %>(<%= getValueCode(compIdField) %>)
           <%_ }); -%>
             .build())
         <%_ } else { -%>

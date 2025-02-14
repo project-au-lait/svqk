@@ -1,12 +1,12 @@
 <%_
-pkFields = compositePk?.fields ?? [idField];
+idFields = compIdFields ?? [idField];
 
 buildGetMethodArg = (field) => `${field.javaType} ${field.fieldName}`;
 
-getMethodArgs = pkFields.map(buildGetMethodArg).join(', ');
-givenGetArgs = pkFields.map((field) => field.fieldName).join(', ');
+getMethodArgs = idFields.map(buildGetMethodArg).join(', ');
+givenGetArgs = idFields.map((field) => field.fieldName).join(', ');
 
-idJavaType = compositePk ? `${entityNmPascal}IdDto` : idField.javaType;
+idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
 -%>
 package <%= interfacesPkgNm %>;
 

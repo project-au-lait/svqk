@@ -14,7 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @NoArgsConstructor
 @Builder
 public class <%= entityNmPascal %>IdDto {
-<%_ compositePk.fields.forEach((field) => { -%>
+<%_ compIdFields.forEach((field) => { -%>
 
   <%_ if (field.required) { -%>
   @Schema(required = true)

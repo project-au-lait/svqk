@@ -274,7 +274,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const entityNmPascal = this._extract_entity_name(metadata.className);
     const idField = metadata.fields.find((field) => field.id) ?? ({} as Field);
 
-    this._set_field_pascal_name(metadata);
+    this._set_field_pascal_name(metadata.fields);
 
     return {
       domainPkgNm: metadata.packageName,
@@ -285,24 +285,24 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
       idField: idField,
-      compositePk: this._get_composite_pk_metadata(idField),
+      compIdFields: this._get_composite_id_fields(idField),
     };
   }
 
-  _get_composite_pk_metadata(field: Field) {
-    const compositePk = this.metadataList.find(
+  _get_composite_id_fields(field: Field): Field[] | undefined {
+    const compIdFields = this.metadataList.find(
       (meta) => meta.className === field.javaType
-    );
+    )?.fields;
 
-    if (compositePk) {
-      this._set_field_pascal_name(compositePk);
+    if (compIdFields) {
+      this._set_field_pascal_name(compIdFields);
     }
 
-    return compositePk;
+    return compIdFields;
   }
 
-  _set_field_pascal_name(metadata: Metadata) {
-    metadata.fields.forEach((field) => {
+  _set_field_pascal_name(fields: Field[]) {
+    fields.forEach((field) => {
       field.fieldNmPascal = this._camel_to_pascal(field.fieldName);
     });
   }
@@ -399,7 +399,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         tmplData
       );
 
-      if (tmplData.compositePk) {
+      if (tmplData.compIdFields) {
         this._output_back_file(["IdDto"], destBackIfPkgPath, tmplData);
       }
     }
