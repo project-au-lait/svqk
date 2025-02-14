@@ -416,7 +416,15 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `${this.destFrontPath}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
         ],
 
-        // TODO For update screen
+        // For update screen
+        [
+          "front/routes/entityId/+page.svelte",
+          `${entityPathPlural}/[entityId]/+page.svelte`,
+        ],
+        [
+          "front/routes/entityId/+page.ts",
+          `${entityPathPlural}/[entityId]/+page.ts`,
+        ],
       ];
     }
 
