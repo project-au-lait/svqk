@@ -286,11 +286,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       fields: metadata.fields,
       idField: idField,
       idJavaType: idField.javaType,
-      compositePk: this._get_composite_pk_data(idField),
+      compositePk: this._get_composite_pk_metadata(idField),
     };
   }
 
-  _get_composite_pk_data(field: Field) {
+  _get_composite_pk_metadata(field: Field) {
     const compositePk = this.metadataList.find(
       (meta) => meta.className === field.javaType
     );
@@ -321,15 +321,17 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _output_back_file(
-    component: string,
+    components: string[],
     destPkgPath: string,
     tmplData: TemplateData
   ) {
-    this._output_file(
-      `back/${component}.java`,
-      `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`,
-      tmplData
-    );
+    components.forEach((component) => {
+      this._output_file(
+        `back/${component}.java`,
+        `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`,
+        tmplData
+      );
+    });
   }
 
   _output_front_file(
@@ -373,46 +375,56 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_backend(tmplData: TemplateData) {
+    const destBackDomainPkgPath = this._generate_dest_package_path(
+      this.destBackPath,
+      tmplData.domainPkgNm
+    );
+
+    const destBackIfPkgPath = this._generate_dest_package_path(
+      this.destBackPath,
+      tmplData.interfacesPkgNm
+    );
+
     if (this.templateType === "arch" || this.templateType === "skeleton") {
       // Generate files for domain package
-      ["Repository", "Service"].forEach((component) => {
-        const destPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
-          tmplData.domainPkgNm
-        );
-        this._output_back_file(component, destPkgPath, tmplData);
-      });
+      this._output_back_file(
+        ["Repository", "Service"],
+        destBackDomainPkgPath,
+        tmplData
+      );
 
       // Generate files for interfaces package
-      ["Dto", "Controller"].forEach((component) => {
-        const destBackIfPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
-          tmplData.interfacesPkgNm
-        );
-        this._output_back_file(component, destBackIfPkgPath, tmplData);
-      });
+      this._output_back_file(
+        ["Dto", "Controller"],
+        destBackIfPkgPath,
+        tmplData
+      );
+
+      if (tmplData.compositePk) {
+        this._output_back_file(["IdDto"], destBackIfPkgPath, tmplData);
+      }
     }
 
     if (this.templateType === "arch") {
       // Generate files for interfaces package
-      ["Factory", "SearchCriteriaDto"].forEach((component) => {
-        const destBackIfPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
-          tmplData.interfacesPkgNm
-        );
-        this._output_back_file(component, destBackIfPkgPath, tmplData);
-      });
+      this._output_back_file(
+        ["Factory", "SearchCriteriaDto"],
+        destBackIfPkgPath,
+        tmplData
+      );
     }
   }
 
   _generate_integrationtest(tmplData: TemplateData) {
-    ["Client", "ControllerIT", "DataFactory"].forEach((component) => {
-      const destPkgPath = this._generate_dest_package_path(
-        this.destITPath,
-        tmplData.interfacesPkgNm
-      );
-      this._output_back_file(component, destPkgPath, tmplData);
-    });
+    const destITPkgPath = this._generate_dest_package_path(
+      this.destITPath,
+      tmplData.interfacesPkgNm
+    );
+    this._output_back_file(
+      ["Client", "ControllerIT", "DataFactory"],
+      destITPkgPath,
+      tmplData
+    );
   }
 
   _generate_frontend(tmplData: TemplateData) {

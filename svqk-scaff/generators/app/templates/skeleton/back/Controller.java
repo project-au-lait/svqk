@@ -1,10 +1,12 @@
 <%_
-getPath = compositePk
-  ? compositePk.fields.map((f) => `{${f.fieldName}}`).join("/")
-  : `{${idField.fieldName}}`;
+pkFields = compositePk ? compositePk.fields : [idField];
+
+getPath = pkFields.map((field) => `{${field.fieldName}}`).join("/");
 
 buildGetMethodArg = (field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`;
-getMethodArgs = (compositePk ? compositePk.fields : [idField]).map(buildGetMethodArg).join(', ');
+getMethodArgs = pkFields.map(buildGetMethodArg).join(', ');
+
+idJavaType = compositePk ? `${entityNmPascal}IdDto` : idField.javaType;
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -36,8 +38,8 @@ public class <%= entityNmPascal %>Controller {
   <%_ if (compositePk) { -%>
     <%= entityNmPascal %>Entity entity =
         <%= entityNmCamel %>Service.find(
-            <%= idJavaType %>.builder()
-              <%_ compositePk.fields.forEach(function(pkField) { -%>
+            <%= idField.javaType %>.builder()
+              <%_ compositePk.fields.forEach((pkField) => { -%>
                 .<%= pkField.fieldName %>(<%= pkField.fieldName %>)
               <%_ }); -%>
                 .build());
@@ -46,11 +48,13 @@ public class <%= entityNmPascal %>Controller {
   <%_ } -%>
 
     return <%= entityNmPascal %>Dto.builder()
-    <%_ fields.forEach(function(field) { -%>
+    <%_ fields.forEach((field) => { -%>
       <%_ if (compositePk && field.id) { -%>
-        <%_ compositePk.fields.forEach(function(pkField) { -%>
-        .<%= pkField.fieldName %>(entity.get<%= idField.fieldNmPascal %>().get<%= pkField.fieldNmPascal %>())
-        <%_ }); -%>
+        .<%= field.fieldName %>(<%= idJavaType %>.builder()
+          <%_ compositePk.fields.forEach((pkField) => { -%>
+            .<%= pkField.fieldName %>(entity.get<%= idField.fieldNmPascal %>().get<%= pkField.fieldNmPascal %>())
+          <%_ }); -%>
+            .build())
       <%_ } else { -%>
         .<%= field.fieldName %>(entity.get<%= field.fieldNmPascal %>())
       <%_ } -%>
@@ -61,11 +65,11 @@ public class <%= entityNmPascal %>Controller {
   @POST
   public <%= idJavaType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = <%= entityNmPascal %>Entity.builder()
-    <%_ fields.forEach(function(field) { -%>
+    <%_ fields.forEach((field) => { -%>
       <%_ if (compositePk && field.id) { -%>
-        .<%= idField.fieldName %>(<%= idJavaType %>.builder()
-          <%_ compositePk.fields.forEach(function(pkField) { -%>
-            .<%= pkField.fieldName %>(dto.get<%= pkField.fieldNmPascal %>())
+        .<%= idField.fieldName %>(<%= idField.javaType %>.builder()
+          <%_ compositePk.fields.forEach((pkField) => { -%>
+            .<%= pkField.fieldName %>(dto.get<%= idField.fieldNmPascal %>().get<%= pkField.fieldNmPascal %>())
           <%_ }); -%>
             .build())
       <%_ } else { -%>
@@ -76,6 +80,14 @@ public class <%= entityNmPascal %>Controller {
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
-    return savedEntity.getId();
+    <%_ if (compositePk) { -%>
+    return <%= idJavaType %>.builder()
+      <%_ compositePk.fields.forEach((pkField) => { -%>
+        .<%= pkField.fieldName %>(savedEntity.get<%= idField.fieldNmPascal %>().get<%= pkField.fieldNmPascal %>())
+      <%_ }); -%>
+        .build();
+    <%_ } else { -%>
+    return savedEntity.get<%= idField.fieldNmPascal %>();
+    <%_ } -%>
   }
 }

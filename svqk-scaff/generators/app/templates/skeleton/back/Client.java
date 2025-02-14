@@ -1,17 +1,17 @@
 <%_
 pkFields = compositePk?.fields ?? [idField];
+
 buildGetMethodArg = (field) => `${field.javaType} ${field.fieldName}`;
 
 getMethodArgs = pkFields.map(buildGetMethodArg).join(', ');
-givenGetArgs = pkFields.map((f) => f.fieldName).join(', ');
+givenGetArgs = pkFields.map((field) => field.fieldName).join(', ');
+
+idJavaType = compositePk ? `${entityNmPascal}IdDto` : idField.javaType;
 -%>
 package <%= interfacesPkgNm %>;
 
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
 
-<%_ if(compositePk) { -%>
-import <%= domainPkgNm %>.<%= entityNmPascal %>EntityId;
-<%_ } -%>
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
@@ -38,10 +38,10 @@ public class <%= entityNmPascal %>Client {
         .then()
         .statusCode(200)
         .extract()
-      <%_ if (idJavaType === 'Integer') { -%>
+      <%_ if (idField.javaType === 'Integer') { -%>
         .jsonPath()
         .getInt(".");
-      <%_ } else if(idJavaType === 'String') { -%>
+      <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
         .as(<%= idJavaType %>.class);
