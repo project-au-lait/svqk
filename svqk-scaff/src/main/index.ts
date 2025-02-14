@@ -1,17 +1,18 @@
 import { spawnSync } from "child_process";
 import Generator from "yeoman-generator";
-import type { GeneratorOptions } from "@yeoman/types";
 import { generateApi } from "swagger-typescript-api";
 import path from "node:path";
 import fs from "fs";
 import cpx from "cpx";
-import { Metadata, TemplateData } from "./types.js";
+import {
+  CustomOptions,
+  OptionsInfo,
+  Metadata,
+  MetadataInfo,
+  GenApiClientInfo,
+  TemplateData,
+} from "./types.js";
 import pluralize from "pluralize";
-
-type CustomOptions = GeneratorOptions & {
-  component: string;
-  templateType: string;
-};
 
 const allowedComponentValues = [
   "backend",
@@ -34,18 +35,14 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
-  metadataFilePath: string;
+  optionsInfo: OptionsInfo;
+  metadataInfo: MetadataInfo;
+  genEntityCmd: string;
   destBackPath: string;
   destITPath: string;
   destFrontPath: string;
   destE2EPath: string;
-  component: string;
-  templateType: string;
-  genOpenApiJsonCmd: string;
-  genEntityCmd: string;
-  frontApiClientPath: string;
-  e2eApiClientPath: string;
-  metadataList: Metadata[];
+  genApiClientInfo: GenApiClientInfo;
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -81,47 +78,56 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       );
     }
 
-    this.metadataFilePath = this.config.get(YO_RC_KEY_METADATA_FPATH);
+    this.optionsInfo = {
+      component: this.options.component,
+      templateType:
+        this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE),
+    };
+    this.metadataInfo = {
+      filePath: this.config.get(YO_RC_KEY_METADATA_FPATH),
+      list: [],
+    };
+    this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
     this.destBackPath = this.config.get(YO_RC_KEY_DEST_BACK_PATH);
     this.destITPath = this.config.get(YO_RC_KEY_DEST_IT_PATH);
     this.destFrontPath = this.config.get(YO_RC_KEY_DEST_FRONT_PATH);
     this.destE2EPath = this.config.get(YO_RC_KEY_DEST_E2E_PATH);
-    this.component = this.options.component;
-    this.templateType =
-      this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE);
-    this.genOpenApiJsonCmd = this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD);
-    this.genEntityCmd = this.config.get(YO_RC_KEY_GEN_ENTITY_CMD);
-    this.frontApiClientPath = this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH);
-    this.e2eApiClientPath = this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH);
-    this.metadataList = [];
+    this.genApiClientInfo = {
+      genOpenApiJsonCmd: this.config.get(YO_RC_KEY_GEN_OPEN_API_JSON_CMD),
+      frontApiClientPath: this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH),
+      e2eApiClientPath: this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH),
+    };
   }
 
   async initializing() {
     try {
       EntityGenerator.exec(this.genEntityCmd);
 
-      if (this.component !== "api-client") {
-        this.metadataList = await import(
-          `${this.destinationRoot()}/${this.metadataFilePath}`,
+      if (this.optionsInfo.component !== "api-client") {
+        this.metadataInfo.list = await import(
+          `${this.destinationRoot()}/${this.metadataInfo.filePath}`,
           { with: { type: "json" } }
         ).then((module) => module.default);
 
-        if (!this.metadataList || this.metadataList.length === 0) {
+        if (!this.metadataInfo.list || this.metadataInfo.list.length === 0) {
           throw new Error(
-            `The meta data list on ${this.metadataFilePath} is empty.`
+            `The meta data list on ${this.metadataInfo.filePath} is empty.`
           );
         }
       }
     } catch (error) {
-      this.log(`Failed to read ${this.metadataFilePath}. ${error}`);
+      this.log(`Failed to read ${this.metadataInfo.filePath}. ${error}`);
     }
   }
 
   writing() {
     const splitedArgs = this.args.flatMap((arg) => arg.trim().split(/\s+/));
 
-    if (this.component !== "api-client" && splitedArgs.length == 0) {
-      const entities = this.metadataList
+    if (
+      this.optionsInfo.component !== "api-client" &&
+      splitedArgs.length == 0
+    ) {
+      const entities = this.metadataInfo.list
         .map((metadata) => metadata.className)
         .join(", ");
       this.log(
@@ -130,7 +136,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       return;
     }
 
-    this.metadataList.forEach((metaData) => {
+    this.metadataInfo.list.forEach((metaData) => {
       if (
         !splitedArgs.includes(metaData.className) &&
         !splitedArgs.includes(this._extract_entity_name(metaData.className))
@@ -140,7 +146,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
       const tmplData = this._generate_template_data(metaData);
 
-      switch (this.component) {
+      switch (this.optionsInfo.component) {
         case "backend":
           this._generate_backend(tmplData);
           break;
@@ -164,12 +170,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   end() {
-    if (this.component === "api-client" || this.component === "all") {
-      ApiClientGenerator.exec(
-        this.genOpenApiJsonCmd,
-        this.frontApiClientPath,
-        this.e2eApiClientPath
-      );
+    if (
+      this.optionsInfo.component === "api-client" ||
+      this.optionsInfo.component === "all"
+    ) {
+      ApiClientGenerator.exec(this.genApiClientInfo);
     }
 
     this.log("Completed.");
@@ -200,7 +205,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     tmplData: TemplateData
   ) {
     this.fs.copyTpl(
-      this.templatePath(`${this.templateType}/${tmplPath}`),
+      this.templatePath(`${this.optionsInfo.templateType}/${tmplPath}`),
       this.destinationPath(destinationPath),
       tmplData
     );
@@ -251,7 +256,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_backend(tmplData: TemplateData) {
-    if (this.templateType === "arch" || this.templateType === "skeleton") {
+    if (
+      this.optionsInfo.templateType === "arch" ||
+      this.optionsInfo.templateType === "skeleton"
+    ) {
       // Generate files for domain package
       ["Repository", "Service"].forEach((component) => {
         const destPkgPath = this._generate_dest_package_path(
@@ -271,7 +279,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       });
     }
 
-    if (this.templateType === "arch") {
+    if (this.optionsInfo.templateType === "arch") {
       // Generate files for interfaces package
       ["Factory", "SearchCriteriaDto"].forEach((component) => {
         const destBackIfPkgPath = this._generate_dest_package_path(
@@ -299,12 +307,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const entityPathCamel = `${this.destFrontPath}/routes/${tmplData.entityNmCamel}`;
     const entityPathPlural = `${this.destFrontPath}/routes/${tmplData.entityNmPlural}`;
 
-    if (this.templateType === "skeleton") {
+    if (this.optionsInfo.templateType === "skeleton") {
       pathPairs = [
         ["front/+page.svelte", `${entityPathCamel}/+page.svelte`],
         ["front/+page.ts", `${entityPathCamel}/+page.ts`],
       ];
-    } else if (this.templateType === "arch") {
+    } else if (this.optionsInfo.templateType === "arch") {
       pathPairs = [
         // For list screen
         ["front/routes/list/+page.svelte", `${entityPathPlural}/+page.svelte`],
@@ -332,7 +340,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _generate_e2etest(tmplData: TemplateData) {
     // TODO temporary
-    if (this.templateType === "skeleton") {
+    if (this.optionsInfo.templateType === "skeleton") {
       this._output_e2etest_file(
         "spec",
         this._generate_e2e_spec_path(tmplData),
@@ -375,13 +383,12 @@ class EntityGenerator {
 }
 
 class ApiClientGenerator {
-  static exec(
-    genOpenApiJsonCmd: string,
-    frontApiClientPath: string,
-    e2eApiClientPath: string
-  ) {
-    ExternalCommandExecutor.exec(genOpenApiJsonCmd);
-    this._exec_gen_api_client(frontApiClientPath, e2eApiClientPath);
+  static exec(genApiClientInfo: GenApiClientInfo) {
+    ExternalCommandExecutor.exec(genApiClientInfo.genOpenApiJsonCmd);
+    this._exec_gen_api_client(
+      genApiClientInfo.frontApiClientPath,
+      genApiClientInfo.e2eApiClientPath
+    );
   }
 
   private static _exec_gen_api_client(
