@@ -24,7 +24,6 @@ type TemplateData = {
   entityNmPlural: string;
   fields: Field[];
   idField: Field;
-  idJavaType: string;
   compositePk?: Metadata;
 };
 

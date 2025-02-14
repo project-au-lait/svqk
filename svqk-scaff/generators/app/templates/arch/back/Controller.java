@@ -32,7 +32,7 @@ public class <%= entityNmPascal %>Controller {
 
   @GET
   @Path(<%= entityNmAllCaps %>_GET_PATH)
-  public <%= entityNmPascal %>Dto get(@PathParam("id") <%= idJavaType %> id) {
+  public <%= entityNmPascal %>Dto get(@PathParam("id") <%= idField.javaType %> id) {
     <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(id);
 
     return <%= entityNmPascal %>Dto.builder()
@@ -43,7 +43,7 @@ public class <%= entityNmPascal %>Controller {
   }
 
   @POST
-  public <%= idJavaType %> save(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= idField.javaType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = <%= entityNmPascal %>Entity.builder()
     <%_ fields.forEach(function(field) { -%>
       .<%= field.fieldName %>(dto.get<%= field.fieldName.charAt(0).toUpperCase() + field.fieldName.slice(1) %>())
@@ -56,7 +56,7 @@ public class <%= entityNmPascal %>Controller {
   }
 
   @PUT
-  public <%= idJavaType %> update(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= idField.javaType %> update(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);

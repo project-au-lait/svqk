@@ -285,7 +285,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
       idField: idField,
-      idJavaType: idField.javaType,
       compositePk: this._get_composite_pk_metadata(idField),
     };
   }

@@ -23,10 +23,10 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= idJavaType %> id = dto.get<%= idField.fieldNmPascal %>();
+    <%= idField.javaType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
-    <%= idJavaType %> createdId = client.save(dto);
+    <%= idField.javaType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
@@ -35,7 +35,7 @@ class <%= entityNmPascal %>ControllerIT {
 
     // Update
     // TODO Implementation of assembling a request and assertion
-    <%= idJavaType %> updatedId = client.update(dto);
+    <%= idField.javaType %> updatedId = client.update(dto);
 
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();
