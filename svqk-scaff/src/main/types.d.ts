@@ -1,7 +1,30 @@
+import type { GeneratorOptions } from "@yeoman/types";
+
+type CustomOptions = GeneratorOptions & {
+  component: string;
+  templateType: string;
+};
+
+type OptionsValues = {
+  component: string;
+  templateType: string;
+};
+
 type Metadata = {
   packageName: string;
   className: string;
   fields: Field[];
+};
+
+type MetadataConfig = {
+  filePath: string;
+  list: Metadata[];
+};
+
+type GenApiClientConfig = {
+  genOpenApiJsonCmd: string;
+  frontApiClientPath: string;
+  e2eApiClientPath: string;
 };
 
 type Field = {
@@ -31,4 +54,12 @@ declare module "**/jeg-metadata.json" {
   export default data;
 }
 
-export { Metadata, Field, TemplateData };
+export {
+  CustomOptions,
+  OptionsValues,
+  Metadata,
+  MetadataConfig,
+  GenApiClientConfig,
+  Field,
+  TemplateData,
+};
