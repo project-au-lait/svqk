@@ -7,7 +7,7 @@
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
-    "genOpenApiJsonCmd":"./mvnw -f svqk-back quarkus:build -Dquarkus.openapi.generate-schema=true -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target",
+    "genOpenApiJsonCmd":"./mvnw -pl svqk-back -am package -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target",
     "frontApiClientPath": "../svqk-front/src/lib/arch/api",
     "E2EApiClientPath": "../svqk-e2etest/tests/api"
   }
