@@ -1,9 +1,6 @@
+<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
 <%_
-getMethodArgs = compIdFields 
-  ? compIdFields.map((field) => `id.get${field.fieldNmPascal}()`).join(', ')
-  : "id";
-
-idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+clientGetArgs = compIdFields ? buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -30,19 +27,19 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= idJavaType %> id = dto.get<%= idField.fieldNmPascal %>();
+    <%= interfaceIdType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
-    <%= idJavaType %> createdId = client.save(dto);
+    <%= interfaceIdType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
-    <%= entityNmPascal %>Dto refDto = client.get(<%= getMethodArgs %>);
+    <%= entityNmPascal %>Dto refDto = client.get(<%= clientGetArgs %>);
     assertEquals(id, refDto.get<%= idField.fieldNmPascal %>());
 
     // Update
     // TODO Implementation of assembling a request and assertion
-    <%= idJavaType %> updatedId = client.update(dto);
+    <%= interfaceIdType %> updatedId = client.update(dto);
 
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();

@@ -1,12 +1,7 @@
+<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
 <%_
-idFields = compIdFields ?? [idField];
-
 getPath = idFields.map((field) => `{${field.fieldName}}`).join("/");
-
-buildGetMethodArg = (field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`;
-getMethodArgs = idFields.map(buildGetMethodArg).join(', ');
-
-idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+getMethodArgs = buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -16,7 +11,7 @@ import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
 <%_ if(compIdFields) { -%>
-  import <%= domainPkgNm %>.<%= entityNmPascal %>EntityId;
+import <%= domainPkgNm %>.<%= entityNmPascal %>EntityId;
 <%_ } -%>
 import <%= domainPkgNm %>.<%= entityNmPascal %>Service;
 import jakarta.validation.Valid;
@@ -62,26 +57,26 @@ public class <%= entityNmPascal %>Controller {
   }
 
   @POST
-  public <%= idJavaType %> save(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
   <%_ if (compIdFields) { -%>
-    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= idJavaType %>.class);
+    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
   <%_ } else { -%>
     return savedEntity.get<%= idField.fieldNmPascal %>();
   <%_ } -%>
   }
 
   @PUT
-  public <%= idJavaType %> update(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
   <%_ if (compIdFields) { -%>
-    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= idJavaType %>.class);
+    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
   <%_ } else { -%>
     return updatedEntity.get<%= idField.fieldNmPascal %>();
   <%_ } -%>
