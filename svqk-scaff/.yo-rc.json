@@ -8,7 +8,7 @@
     "templateType": "skeleton",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
     "genOpenApiJsonCmd":"./mvnw -pl svqk-back -am package -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target",
-    "frontApiClientPath": "../svqk-frontend/src/lib/arch/api",
+    "frontApiClientPath": "../svqk-front/src/lib/arch/api",
     "E2EApiClientPath": "../svqk-e2etest/tests/api"
   }
 }
