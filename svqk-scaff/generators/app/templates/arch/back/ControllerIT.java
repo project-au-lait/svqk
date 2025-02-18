@@ -1,3 +1,10 @@
+<%_
+getMethodArgs = compIdFields 
+  ? compIdFields.map((field) => `id.get${field.fieldNmPascal}()`).join(', ')
+  : "id";
+
+idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+-%>
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,19 +30,19 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= idField.javaType %> id = dto.get<%= idField.fieldNmPascal %>();
+    <%= idJavaType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
-    <%= idField.javaType %> createdId = client.save(dto);
+    <%= idJavaType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
-    <%= entityNmPascal %>Dto refDto = client.get(id);
+    <%= entityNmPascal %>Dto refDto = client.get(<%= getMethodArgs %>);
     assertEquals(id, refDto.get<%= idField.fieldNmPascal %>());
 
     // Update
     // TODO Implementation of assembling a request and assertion
-    <%= idField.javaType %> updatedId = client.update(dto);
+    <%= idJavaType %> updatedId = client.update(dto);
 
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();

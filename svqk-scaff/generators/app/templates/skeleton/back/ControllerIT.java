@@ -28,7 +28,6 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-
     <%= idJavaType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
