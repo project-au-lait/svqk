@@ -16,7 +16,7 @@
     <module>svqk-doc</module>
     <module>svqk-e2etest</module>
     <module>svqk-entity</module>
-    <module>svqk-front</module>
+    <module>svqk-frontend</module>
     <module>svqk-migration</module>
     <module>svqk-scaff</module>
   </modules>

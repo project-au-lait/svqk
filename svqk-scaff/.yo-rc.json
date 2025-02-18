@@ -3,12 +3,12 @@
     "metadataFilePath": "src/main/resources/jeg-metadata.json",
     "destBackPath": "../svqk-back/src/main/java",
     "destITPath": "../svqk-back/src/integration-test/java",
-    "destFrontPath": "../svqk-front/src",
+    "destFrontPath": "../svqk-frontend/src",
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
     "genOpenApiJsonCmd":"./mvnw -f svqk-back quarkus:build -Dquarkus.openapi.generate-schema=true -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target",
-    "frontApiClientPath": "../svqk-front/src/lib/arch/api",
+    "frontApiClientPath": "../svqk-frontend/src/lib/arch/api",
     "E2EApiClientPath": "../svqk-e2etest/tests/api"
   }
 }
