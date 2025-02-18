@@ -1,23 +1,26 @@
+<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<%_
+getMethodArgs = buildArgs((field) => `${field.javaType} ${field.fieldName}`);
+givenGetArgs = buildArgs((field) => field.fieldName);
+-%>
 package <%= interfacesPkgNm %>;
 
-import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_PATH;
-import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_GET_PATH;
-import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_SEARCH_PATH;
+import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 import static dev.aulait.svqk.arch.test.RestAssuredUtils.given;
 
 public class <%= entityNmPascal %>Client {
 
-  public <%= entityNmPascal %>Dto get(<%= idField.javaType %> id) {
+  public <%= entityNmPascal %>Dto get(<%= getMethodArgs %>) {
     return given()
-        .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, id)
+        .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, <%= givenGetArgs %>)
         .then()
         .statusCode(200)
         .extract()
         .as(<%= entityNmPascal %>Dto.class);
   }
 
-  public <%= idField.javaType %> save(<%= entityNmPascal %>Dto dto) {
+  public <%= interfaceIdType %> save(<%= entityNmPascal %>Dto dto) {
     return given()
         .body(dto)
         .post(<%= entityNmAllCaps %>_PATH)
@@ -30,11 +33,11 @@ public class <%= entityNmPascal %>Client {
       <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
-        .as(<%= idField.javaType %>.class);
+        .as(<%= interfaceIdType %>.class);
       <%_ } -%>
   }
 
-  public <%= idField.javaType %> update(<%= entityNmPascal %>Dto dto) {
+  public <%= interfaceIdType %> update(<%= entityNmPascal %>Dto dto) {
     return given()
         .body(dto)
         .put(<%= entityNmAllCaps %>_PATH)
@@ -47,7 +50,7 @@ public class <%= entityNmPascal %>Client {
       <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
-        .as(<%= idField.javaType %>.class);
+        .as(<%= interfaceIdType %>.class);
       <%_ } -%>
   }
 
