@@ -204,7 +204,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _get_composite_id_fields(field: Field): Field[] | undefined {
-    const compIdFields = this.metadataList.find(
+    const compIdFields = this.metadataConfig.list.find(
       (meta) => meta.className === field.javaType
     )?.fields;
 
