@@ -1,18 +1,19 @@
 import { spawnSync } from "child_process";
-import Generator from "yeoman-generator";
-import { generateApi } from "swagger-typescript-api";
-import path from "node:path";
-import fs from "fs";
 import cpx from "cpx";
+import fs from "fs";
+import path from "node:path";
+import pluralize from "pluralize";
+import { generateApi } from "swagger-typescript-api";
+import Generator from "yeoman-generator";
 import {
   CustomOptions,
-  OptionsValues,
+  Field,
+  GenApiClientConfig,
   Metadata,
   MetadataConfig,
-  GenApiClientConfig,
+  OptionsValues,
   TemplateData,
 } from "./types.js";
-import pluralize from "pluralize";
 
 const allowedComponentValues = [
   "backend",
@@ -185,21 +186,39 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _generate_template_data(metadata: Metadata): TemplateData {
     const entityNmPascal = this._extract_entity_name(metadata.className);
-    const idField = metadata.fields.find((field) => field.id);
-    const idFieldNm = idField?.fieldName ?? "";
+    const idField = metadata.fields.find((field) => field.id) ?? ({} as Field);
+
+    this._set_field_pascal_name(metadata.fields);
 
     return {
       domainPkgNm: metadata.packageName,
       interfacesPkgNm: metadata.packageName.replace(".domain.", ".interfaces."),
       entityNmPascal: entityNmPascal,
-      entityNmCamel:
-        entityNmPascal.charAt(0).toLowerCase() + entityNmPascal.slice(1),
+      entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       fields: metadata.fields,
-      idFieldNmPascal: idFieldNm.charAt(0).toUpperCase() + idFieldNm.slice(1),
-      idJavaType: idField?.javaType ?? "Object",
+      idField: idField,
+      compIdFields: this._get_composite_id_fields(idField),
     };
+  }
+
+  _get_composite_id_fields(field: Field): Field[] | undefined {
+    const compIdFields = this.metadataConfig.list.find(
+      (meta) => meta.className === field.javaType
+    )?.fields;
+
+    if (compIdFields) {
+      this._set_field_pascal_name(compIdFields);
+    }
+
+    return compIdFields;
+  }
+
+  _set_field_pascal_name(fields: Field[]) {
+    fields.forEach((field) => {
+      field.fieldNmPascal = this._camel_to_pascal(field.fieldName);
+    });
   }
 
   _output_file(
@@ -215,15 +234,17 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _output_back_file(
-    component: string,
+    components: string[],
     destPkgPath: string,
     tmplData: TemplateData
   ) {
-    this._output_file(
-      `back/${component}.java`,
-      `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`,
-      tmplData
-    );
+    components.forEach((component) => {
+      this._output_file(
+        `back/${component}.java`,
+        `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`,
+        tmplData
+      );
+    });
   }
 
   _output_front_file(
@@ -246,6 +267,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     );
   }
 
+  _pascal_to_camel(pascal: string): string {
+    return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+  }
+
+  _camel_to_pascal(camel: string): string {
+    return camel.charAt(0).toUpperCase() + camel.slice(1);
+  }
+
   _extract_entity_name(entityClassNm: string): string {
     return entityClassNm.replace("Entity", "");
   }
@@ -259,49 +288,59 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_backend(tmplData: TemplateData) {
+    const destBackDomainPkgPath = this._generate_dest_package_path(
+      this.destBackPath,
+      tmplData.domainPkgNm
+    );
+
+    const destBackIfPkgPath = this._generate_dest_package_path(
+      this.destBackPath,
+      tmplData.interfacesPkgNm
+    );
+
     if (
       this.optionsValues.templateType === "arch" ||
       this.optionsValues.templateType === "skeleton"
     ) {
       // Generate files for domain package
-      ["Repository", "Service"].forEach((component) => {
-        const destPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
-          tmplData.domainPkgNm
-        );
-        this._output_back_file(component, destPkgPath, tmplData);
-      });
+      this._output_back_file(
+        ["Repository", "Service"],
+        destBackDomainPkgPath,
+        tmplData
+      );
 
       // Generate files for interfaces package
-      ["Dto", "Controller"].forEach((component) => {
-        const destBackIfPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
-          tmplData.interfacesPkgNm
-        );
-        this._output_back_file(component, destBackIfPkgPath, tmplData);
-      });
+      this._output_back_file(
+        ["Dto", "Controller"],
+        destBackIfPkgPath,
+        tmplData
+      );
+
+      if (tmplData.compIdFields) {
+        this._output_back_file(["IdDto"], destBackIfPkgPath, tmplData);
+      }
     }
 
     if (this.optionsValues.templateType === "arch") {
       // Generate files for interfaces package
-      ["Factory", "SearchCriteriaDto"].forEach((component) => {
-        const destBackIfPkgPath = this._generate_dest_package_path(
-          this.destBackPath,
-          tmplData.interfacesPkgNm
-        );
-        this._output_back_file(component, destBackIfPkgPath, tmplData);
-      });
+      this._output_back_file(
+        ["Factory", "SearchCriteriaDto"],
+        destBackIfPkgPath,
+        tmplData
+      );
     }
   }
 
   _generate_integrationtest(tmplData: TemplateData) {
-    ["Client", "ControllerIT", "DataFactory"].forEach((component) => {
-      const destPkgPath = this._generate_dest_package_path(
-        this.destITPath,
-        tmplData.interfacesPkgNm
-      );
-      this._output_back_file(component, destPkgPath, tmplData);
-    });
+    const destITPkgPath = this._generate_dest_package_path(
+      this.destITPath,
+      tmplData.interfacesPkgNm
+    );
+    this._output_back_file(
+      ["Client", "ControllerIT", "DataFactory"],
+      destITPkgPath,
+      tmplData
+    );
   }
 
   _generate_frontend(tmplData: TemplateData) {

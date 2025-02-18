@@ -1,3 +1,10 @@
+<%_
+getMethodArgs = compIdFields 
+  ? compIdFields.map((field) => `id.get${field.fieldNmPascal}()`).join(', ')
+  : "id";
+
+idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+-%>
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,14 +28,15 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= idJavaType %> id = dto.get<%= idFieldNmPascal %>();
+
+    <%= idJavaType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
     <%= idJavaType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
-    <%= entityNmPascal %>Dto refDto = client.get(id);
-    assertEquals(id, refDto.get<%= idFieldNmPascal %>());
+    <%= entityNmPascal %>Dto refDto = client.get(<%= getMethodArgs %>);
+    assertEquals(id, refDto.get<%= idField.fieldNmPascal %>());
   }
 }

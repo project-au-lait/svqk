@@ -8,7 +8,7 @@ import static dev.aulait.svqk.arch.test.RestAssuredUtils.given;
 
 public class <%= entityNmPascal %>Client {
 
-  public <%= entityNmPascal %>Dto get(<%= idJavaType %> id) {
+  public <%= entityNmPascal %>Dto get(<%= idField.javaType %> id) {
     return given()
         .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, id)
         .then()
@@ -17,37 +17,37 @@ public class <%= entityNmPascal %>Client {
         .as(<%= entityNmPascal %>Dto.class);
   }
 
-  public <%= idJavaType %> save(<%= entityNmPascal %>Dto dto) {
+  public <%= idField.javaType %> save(<%= entityNmPascal %>Dto dto) {
     return given()
         .body(dto)
         .post(<%= entityNmAllCaps %>_PATH)
         .then()
         .statusCode(200)
         .extract()
-      <%_ if (idJavaType === 'Integer') { -%>
+      <%_ if (idField.javaType === 'Integer') { -%>
         .jsonPath()
         .getInt(".");
-      <%_ } else if(idJavaType === 'String') { -%>
+      <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
-        .as(<%= idJavaType %>.class);
+        .as(<%= idField.javaType %>.class);
       <%_ } -%>
   }
 
-  public <%= idJavaType %> update(<%= entityNmPascal %>Dto dto) {
+  public <%= idField.javaType %> update(<%= entityNmPascal %>Dto dto) {
     return given()
         .body(dto)
         .put(<%= entityNmAllCaps %>_PATH)
         .then()
         .statusCode(200)
         .extract()
-      <%_ if (idJavaType === 'Integer') { -%>
+      <%_ if (idField.javaType === 'Integer') { -%>
         .jsonPath()
         .getInt(".");
-      <%_ } else if(idJavaType === 'String') { -%>
+      <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
-        .as(<%= idJavaType %>.class);
+        .as(<%= idField.javaType %>.class);
       <%_ } -%>
   }
 
