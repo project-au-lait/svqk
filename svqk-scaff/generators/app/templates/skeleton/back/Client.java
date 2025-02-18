@@ -1,3 +1,13 @@
+<%_
+idFields = compIdFields ?? [idField];
+
+buildGetMethodArg = (field) => `${field.javaType} ${field.fieldName}`;
+
+getMethodArgs = idFields.map(buildGetMethodArg).join(', ');
+givenGetArgs = idFields.map((field) => field.fieldName).join(', ');
+
+idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+-%>
 package <%= interfacesPkgNm %>;
 
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
@@ -12,9 +22,9 @@ import org.eclipse.microprofile.config.ConfigProvider;
 
 public class <%= entityNmPascal %>Client {
 
-  public <%= entityNmPascal %>Dto get(<%= idJavaType %> id) {
+  public <%= entityNmPascal %>Dto get(<%= getMethodArgs %>) {
     return given()
-        .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, id)
+        .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, <%= givenGetArgs %>)
         .then()
         .statusCode(200)
         .extract()
@@ -28,10 +38,10 @@ public class <%= entityNmPascal %>Client {
         .then()
         .statusCode(200)
         .extract()
-      <%_ if (idJavaType === 'Integer') { -%>
+      <%_ if (idField.javaType === 'Integer') { -%>
         .jsonPath()
         .getInt(".");
-      <%_ } else if(idJavaType === 'String') { -%>
+      <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
         .as(<%= idJavaType %>.class);

@@ -10,7 +10,7 @@ public class <%= entityNmPascal %>Service {
 
   private final <%= entityNmPascal %>Repository <%= entityNmCamel %>Repository;
 
-  public <%= entityNmPascal %>Entity find(<%= idJavaType %> id) {
+  public <%= entityNmPascal %>Entity find(<%= idField.javaType %> id) {
     return <%= entityNmCamel %>Repository.findById(id).orElseThrow(IllegalArgumentException::new);
   }
 

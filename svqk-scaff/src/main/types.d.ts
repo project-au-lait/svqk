@@ -29,6 +29,7 @@ type GenApiClientConfig = {
 
 type Field = {
   fieldName: string;
+  fieldNmPascal?: string;
   javaType: string;
   multiple: boolean;
   dbType: string;
@@ -45,8 +46,8 @@ type TemplateData = {
   entityNmAllCaps: string;
   entityNmPlural: string;
   fields: Field[];
-  idFieldNmPascal: string;
-  idJavaType: string;
+  idField: Field;
+  compIdFields?: Field[];
 };
 
 declare module "**/jeg-metadata.json" {
