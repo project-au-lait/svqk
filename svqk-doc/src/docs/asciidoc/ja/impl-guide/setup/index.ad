@@ -149,9 +149,9 @@ Backendサーバーが起動すると、backプロジェクト内で実装され
 この操作はBackendが起動した状態で実行可能です。
 
 |Frontendの起動
-|VSCode Task: `start-front` +
+|VSCode Task: `start-frontend` +
 Command: pnpm dev --open +
-(at svqk-front directory)
+(at svqk-frontend directory)
 |Frontendサーバー(Vite)が起動します。 +
 Frontendサーバーが起動すると、ブラウザが起動しfrontプロジェクト内で実装されているWebアプリが表示されます。
 
@@ -171,7 +171,7 @@ Command: mvnw -f svqk-migration compile -P setup
 |Front用API Clientの生成
 |VSCode Task: `gen-api-client` +
 Command: pnpm gen-api-client +
-(at svqk-front directory)
+(at svqk-frontend directory)
 |swagger-typescript-apiが実行されます。
 実行が終了すると、API Clientがfrontプロジェクトとe2etestプロジェクト内に生成されます。 +
 この操作はBackendが起動した状態で実行可能です。

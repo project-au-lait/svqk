@@ -46,7 +46,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>svqk-front</artifactId>
+      <artifactId>svqk-frontend</artifactId>
       <version>${project.version}</version>
     </dependency>
 

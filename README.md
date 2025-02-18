@@ -99,7 +99,7 @@ Run the Backend/Frontend application using the following VSCode tasks.
 - `start-back`
   - The Quarkus development server starts and the Backend application is available.
   - Typing `w` in the `TERMINAL` panel where you started Qurakus will open the application in your browser.
-- `start-front`
+- `start-frontend`
   - The Vite development server will start and your Frontend application will be available.
   - Your browser will automatically open and display the application.
 
@@ -117,7 +117,7 @@ The above ` mvn archetype:generate ` command generates a project with the follow
 ├── 📁 my-artifactid-e2etest  <--- Playwright (pnpm)
 │   ├── 📄 package.json
 │   └── 📄 pom.xml
-├── 📁 my-artifactid-front  <----- SvelteKit (pnpm)
+├── 📁 my-artifactid-frontend  <----- SvelteKit (pnpm)
 │   ├── 📄 package.json
 │   └── 📄 pom.xml
 ├── 📁 my-artifactid-migration  <- Flyway (Maven)
@@ -140,7 +140,7 @@ The above ` mvn archetype:generate ` command generates a project with the follow
   - A project for DB Migration with Flyway.
   - The Flyway Maven Plugin has been set up for use.
     - Ex. You can use the usual Flyway Maven Plugin commands, such as ` mvn flyway:migrate `.
-- **my-artifactid-front**
+- **my-artifactid-frontend**
   - Project for developing Frontend applications with SvelteKit.
   - Because the project was created with standard SvelteKit functionality, the directory structure and available functionality are the same as the standard SvelteKit [SvelteKit - Creating a project](https://kit.svelte.dev/docs/creating-a-project).
     - Ex. You can use the usual SvelteKit commands, such as ` pnpm dev `.

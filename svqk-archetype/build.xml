@@ -181,7 +181,7 @@
     <if>
       <equals arg1="${archetype.type}" arg2="skeleton" />
       <then>
-        <antcall target="add-front-controller" />
+        <antcall target="add-frontend-controller" />
       </then>
     </if>
 
@@ -220,20 +220,20 @@
   <target name="add-top-page">
     <copy
       file="${archetype.prjdir}/svqk-archetype/src/archetype/+page.svelte.txt"
-      tofile="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-front/src/routes/+page.svelte"
+      tofile="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-frontend/src/routes/+page.svelte"
       overwrite="true" />
   </target>
 
 
   <target name="remove-domain-code">
     <replaceregexp flags="g"
-      file="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-front/src/routes/+layout.ts"
+      file="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-frontend/src/routes/+layout.ts"
       match=".*Issue.*"
       replace="" />
   </target>
 
 
-  <target name="add-front-controller">
+  <target name="add-frontend-controller">
     <copy
       file="${archetype.prjdir}/svqk-back/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
       todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-back/src/main/java/arch/front"

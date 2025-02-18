@@ -1,4 +1,4 @@
-📁 {project-artifactId}-front
+📁 {project-artifactId}-frontend
 └── 📁 src
     ├── 📁 lib -- 1
     │   ├── 📁 arch -- 2

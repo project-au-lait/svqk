@@ -68,7 +68,7 @@ Backendの資材を格納します。
   Backendのソースファイル
 
 
-|{project-artifactId}-front
+|{project-artifactId}-frontend
 a|
 Frontendの資材を格納します。
 このプロジェクトはSvelteKitのテンプレートから作成したものを元にしています。

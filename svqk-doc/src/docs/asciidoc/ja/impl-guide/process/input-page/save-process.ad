@@ -126,12 +126,12 @@ include::../snippet/frontend-verification.ad[]
 ====== API Client
 
 VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
-生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
+生成されたAPI Clientは {project-artifactId}-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。
 
 ====== UIComponent
 
 
-.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
+.{project-artifactId}-frontend/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
 [source,ts]
 ----
   ...

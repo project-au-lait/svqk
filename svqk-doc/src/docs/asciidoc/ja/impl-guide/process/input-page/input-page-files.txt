@@ -1,5 +1,5 @@
 svqk
-├── svqk-front
+├── svqk-frontend
 │   └── src
 │       ├── routes/issues/[issueId]
 │       │   └── #page.svelte --- 1.a, 1.d
