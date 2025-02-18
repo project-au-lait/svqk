@@ -1,0 +1,8 @@
+<%# args: (idField: Field, compIdFields?: Field[]) %>
+<%
+idFields = compIdFields ?? [idField];
+
+buildArgs = (argTemplate) => idFields.map(argTemplate).join(", ");
+
+interfaceIdType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+%>

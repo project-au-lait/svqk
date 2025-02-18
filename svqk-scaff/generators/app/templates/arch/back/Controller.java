@@ -1,3 +1,8 @@
+<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<%_
+getPath = idFields.map((field) => `{${field.fieldName}}`).join("/");
+getMethodArgs = buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
+-%>
 package <%= interfacesPkgNm %>;
 
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;
@@ -5,6 +10,9 @@ import dev.aulait.svqk.arch.search.SearchResultDto;
 import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
+<%_ if(compIdFields) { -%>
+import <%= domainPkgNm %>.<%= entityNmPascal %>EntityId;
+<%_ } -%>
 import <%= domainPkgNm %>.<%= entityNmPascal %>Service;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
@@ -24,7 +32,7 @@ public class <%= entityNmPascal %>Controller {
 
   static final String <%= entityNmAllCaps %>_PATH = "<%= entityNmCamel %>";
 
-  static final String <%= entityNmAllCaps %>_GET_PATH = "{id}";
+  static final String <%= entityNmAllCaps %>_GET_PATH = "<%= getPath %>";
 
   static final String <%= entityNmAllCaps %>_SEARCH_PATH = "search";
 
@@ -32,36 +40,46 @@ public class <%= entityNmPascal %>Controller {
 
   @GET
   @Path(<%= entityNmAllCaps %>_GET_PATH)
-  public <%= entityNmPascal %>Dto get(@PathParam("id") <%= idField.javaType %> id) {
-    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(id);
+  public <%= entityNmPascal %>Dto get(<%- getMethodArgs %>) {
+  <%_ if (compIdFields) { -%>
+    <%= entityNmPascal %>Entity entity =
+        <%= entityNmCamel %>Service.find(
+            <%= idField.javaType %>.builder()
+              <%_ compIdFields.forEach((compIdField) => { -%>
+                .<%= compIdField.fieldName %>(<%= compIdField.fieldName %>)
+              <%_ }); -%>
+                .build());
+  <%_ } else { -%>
+    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(<%= idField.fieldName %>);
+  <%_ } -%>
 
-    return <%= entityNmPascal %>Dto.builder()
-    <%_ fields.forEach(function(field) { -%>
-      .<%= field.fieldName %>(entity.get<%= field.fieldName.charAt(0).toUpperCase() + field.fieldName.slice(1) %>())
-    <%_ }); -%>
-      .build();
+    return BeanUtils.map(entity, <%= entityNmPascal %>Dto.class);
   }
 
   @POST
-  public <%= idField.javaType %> save(@Valid <%= entityNmPascal %>Dto dto) {
-    <%= entityNmPascal %>Entity entity = <%= entityNmPascal %>Entity.builder()
-    <%_ fields.forEach(function(field) { -%>
-      .<%= field.fieldName %>(dto.get<%= field.fieldName.charAt(0).toUpperCase() + field.fieldName.slice(1) %>())
-    <%_ }); -%>
-      .build();
+  public <%= interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
+    <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
-    return savedEntity.getId();
+  <%_ if (compIdFields) { -%>
+    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
+  <%_ } else { -%>
+    return savedEntity.get<%= idField.fieldNmPascal %>();
+  <%_ } -%>
   }
 
   @PUT
-  public <%= idField.javaType %> update(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
-    return updatedEntity.getId();
+  <%_ if (compIdFields) { -%>
+    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
+  <%_ } else { -%>
+    return updatedEntity.get<%= idField.fieldNmPascal %>();
+  <%_ } -%>
   }
 
   @POST

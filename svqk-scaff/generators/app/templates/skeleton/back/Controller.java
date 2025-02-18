@@ -1,12 +1,7 @@
+<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
 <%_
-idFields = compIdFields ?? [idField];
-
 getPath = idFields.map((field) => `{${field.fieldName}}`).join("/");
-
-buildGetMethodArg = (field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`;
-getMethodArgs = idFields.map(buildGetMethodArg).join(', ');
-
-idJavaType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+getMethodArgs = buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -50,7 +45,7 @@ public class <%= entityNmPascal %>Controller {
     return <%= entityNmPascal %>Dto.builder()
     <%_ fields.forEach((field) => { -%>
       <%_ if (compIdFields && field.id) { -%>
-        .<%= field.fieldName %>(<%= idJavaType %>.builder()
+        .<%= field.fieldName %>(<%= interfaceIdType %>.builder()
           <%_ compIdFields.forEach((compIdField) => { -%>
             .<%= compIdField.fieldName %>(entity.get<%= idField.fieldNmPascal %>().get<%= compIdField.fieldNmPascal %>())
           <%_ }); -%>
@@ -63,7 +58,7 @@ public class <%= entityNmPascal %>Controller {
   }
 
   @POST
-  public <%= idJavaType %> save(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = <%= entityNmPascal %>Entity.builder()
     <%_ fields.forEach((field) => { -%>
       <%_ if (compIdFields && field.id) { -%>
@@ -81,7 +76,7 @@ public class <%= entityNmPascal %>Controller {
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
     <%_ if (compIdFields) { -%>
-    return <%= idJavaType %>.builder()
+    return <%= interfaceIdType %>.builder()
       <%_ compIdFields.forEach((compIdField) => { -%>
         .<%= compIdField.fieldName %>(savedEntity.get<%= idField.fieldNmPascal %>().get<%= compIdField.fieldNmPascal %>())
       <%_ }); -%>

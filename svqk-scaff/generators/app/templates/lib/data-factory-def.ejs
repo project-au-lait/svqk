@@ -1,4 +1,4 @@
-<%# args: fields %>
+<%# args: (fields: Field[], compIdFields?: Field[]) %>
 <%
 javaTypeDefs = [
   {
@@ -25,8 +25,7 @@ getValueCode = (field) => {
   return code;
 }
 
-imports = [...new Set(fields.map((field) => field.javaType))].reduce(
-  (result, type) => result.concat(findTypeDef(type)?.imports ?? []),
-  []
-);
+imports = [
+  ...new Set(fields.concat(compIdFields ?? []).map((field) => field.javaType)),
+].reduce((result, type) => result.concat(findTypeDef(type)?.imports ?? []), []);
 %>

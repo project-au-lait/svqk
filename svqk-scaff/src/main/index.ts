@@ -203,9 +203,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     };
   }
 
-  _get_composite_id_fields(field: Field): Field[] | undefined {
+  _get_composite_id_fields(idField: Field): Field[] | undefined {
     const compIdFields = this.metadataConfig.list.find(
-      (meta) => meta.className === field.javaType
+      (meta) => meta.className === idField.javaType
     )?.fields;
 
     if (compIdFields) {
