@@ -4,6 +4,7 @@
   import FormValidator from '$lib/arch/form/FormValidator';
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import type { PageData } from '../<%= entityNmPlural %>/$types';
+  import { t } from '$lib/translations';
 
   let { data }: { data: PageData } = $props();
   let { condition } = $state(data);
@@ -28,7 +29,7 @@
 </section>
 
 <section>
-  <a id="new<%= entityNmPascal %>" href="/<%= entityNmPlural %>/new"> {$t('msg.newEntity', {entity: '<%= entityNmPascal %>'})} </a>
+  <a id="new<%= entityNmPascal %>" href="/<%= entityNmPlural %>/new"> {$t('msg.newEntity')} </a>
 </section>
 
 <section>

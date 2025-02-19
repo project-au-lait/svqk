@@ -7,7 +7,7 @@
   "home": "ホーム",
   "issue": "チケット",
   "multipleStatuses": "ステータス(複数選択可)",
-  "newEntity": "新しい{{ entity }}",
+  "newEntity": "新規登録",
   "newIssue": "新しいチケット",
   "noData": "表示するデータがありません",
   "notes": "注記",
