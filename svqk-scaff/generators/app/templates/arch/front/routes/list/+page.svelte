@@ -28,6 +28,10 @@
 </section>
 
 <section>
+  <a id="new<%= entityNmPascal %>" href="/<%= entityNmPlural %>/new"> {$t('msg.newEntity', {entity: '<%= entityNmPascal %>'})} </a>
+</section>
+
+<section>
   <ListTable {result} {columns} bind:pageControl={condition.pageControl} {search} />
 </section>
 
