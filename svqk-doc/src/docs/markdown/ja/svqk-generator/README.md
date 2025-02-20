@@ -1,6 +1,6 @@
 # Generator
 
-Genertorは、ソースファイルの自動生成ツールです。Generatorが生成するソースファイルは、DB内のテーブルのメタデータをもとに、テーブルに対するCRUD操作を実行するアプリケーション(Frontend、Backend)や自動テスト(Integration Test、End to End Test)のものです。
+Genertorは、ソースファイルの自動生成ツールです。Generatorが生成するソースファイルは、テーブルに対するCRUD操作を実行するアプリケーション(Frontend、Backend)や自動テスト(Integration Test、End to End Test)のもので、DB内のテーブルのメタデータをもとに生成されます。
 
 ## 使用方法
 
