@@ -1,16 +1,13 @@
-import BaseFacade from '../arch/BaseFacade';
-import MenuBar from '../pages/menu-bar/MenuBar';
+import { goto } from '$app/navigation';
+import BaseFacade from "../arch/BaseFacade";
 
+export class <%= entityNmPascal %>Facade extends BaseFacade {
+  async reference<%= entityNmPascal %>ById(id: string) {
+    this.logStart("<%= entityNmPascal %> Reference");
 
+    const <%= entityNmCamel %>ListPage = await goto(`/<%= entityNmPlural %>`);
+    const <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>ListPage.goto<%= entityNmPascal %>ById(id);
 
-export class IssueFacade extends BaseFacade {
-  async referenceIssueBySubject(menuBar: MenuBar, subject: string) {
-    this.logStart('Issue Reference');
-
-    const issueListPage = await menuBar.gotoIssueListPage();
-    await issueListPage.searchIssue({ text: subject });
-    const issueInputPage = await issueListPage.gotoIssueBySubject(subject);
-
-    return issueInputPage;
+    return <%= entityNmCamel %>InputPage;
   }
 }
