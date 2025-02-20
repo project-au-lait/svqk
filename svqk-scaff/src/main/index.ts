@@ -322,15 +322,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _output_e2etest_file(
-    component: string,
-    destpath: string,
+    tmplPath: string,
+    destinationPath: string,
     tmplData: TemplateData
   ) {
-    this._output_file(
-      `e2etest/${component}.ts`,
-      `${this.destE2EPath}/${destpath}`,
-      tmplData
-    );
+    this._output_file(tmplPath, destinationPath, tmplData);
   }
 
   _extract_entity_name(entityClassNm: string): string {
@@ -426,13 +422,63 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_e2etest(tmplData: TemplateData) {
+    let pathPairs: [string, string][] = [];
+
+    const inputTmplPath = "e2etest/pages/input";
+    const listTmplPath = "e2etest/pages/list";
+    const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmCamel}-input`;
+    const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmCamel}-list`;
+
     // TODO temporary
     if (this.templateType === "skeleton") {
-      this._output_e2etest_file(
-        "spec",
-        this._generate_e2e_spec_path(tmplData),
+      pathPairs = [
+        [
+          "e2etest/spec.ts",
+          `${this.destE2EPath}/${this._generate_e2e_spec_path(tmplData)}`,
+        ],
+      ];
+    } else if (this.templateType === "arch") {
+      pathPairs = [
+        [
+          "e2etest/spec.ts",
+          `${this.destE2EPath}/${this._generate_e2e_spec_path(tmplData)}`,
+        ],
+        [
+          "e2etest/Facade.ts",
+          `${this.destE2EPath}/facades/${tmplData.entityNmPascal}Facade.ts`,
+        ],
+        [
+          "e2etest/Factory.ts",
+          `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
+        ],
+        [
+          `${inputTmplPath}/InputPage.ts`,
+          `${inputDestPath}/${tmplData.entityNmPascal}InputPage.ts`,
+        ],
+        [
+          `${inputTmplPath}/InputPageElement.ts`,
+          `${inputDestPath}/${tmplData.entityNmPascal}InputPageElement.ts`,
+        ],
+        [
+          `${listTmplPath}/ListPage.ts`,
+          `${listDestPath}/${tmplData.entityNmPascal}ListPage.ts`,
+        ],
+        [
+          `${listTmplPath}/ListPageElement.ts`,
+          `${listDestPath}/${tmplData.entityNmPascal}ListPageElement.ts`,
+        ],
+      ];
+
+      // Add a link to the List of Entity
+      this._output_front_file(
+        "e2etest/+layout.svelte",
+        `${this.destFrontPath}/routes/+layout.svelte`,
         tmplData
       );
+    }
+
+    for (const [srcPath, destPath] of pathPairs) {
+      this._output_e2etest_file(srcPath, destPath, tmplData);
     }
   }
 }

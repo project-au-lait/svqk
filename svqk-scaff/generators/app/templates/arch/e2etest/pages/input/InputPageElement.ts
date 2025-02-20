@@ -1,4 +1,4 @@
-<% include('../../../../../lib/data-factory-def', { fields }); -%>
+<% include('../../../../lib/data-factory-def', { fields }); -%>
 import BasePageElement from '../../arch/BasePageElement';
 import { t } from '../../arch/MultiLng';
 

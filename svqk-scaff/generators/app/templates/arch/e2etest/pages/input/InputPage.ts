@@ -1,3 +1,4 @@
+<% include('../../../../lib/data-factory-def', { fields }); -%>
 import <%= entityNmPascal %>InputPageElement from './<%= entityNmPascal %>InputPageElement';
 import type { <%= entityNmPascal %>Model } from '../../api/Api';
 import BasePageElement from '../../arch/BasePageElement';
@@ -10,16 +11,16 @@ export default class <%= entityNmPascal %>InputPage {
   }
 
   async save(<%= entityNmCamel %>: <%= entityNmPascal %>Model) {
-    <%_ for (field of fields) { _%>
+    <%_ fields.forEach((field) => { _%>
       await this.<%= entityNmCamel %>InputPageEl.input<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %>);
-    <%_ } _%>
+    <%_ }) _%>
 
     await this.<%= entityNmCamel %>InputPageEl.clickSaveBtn();
   }
 
   async expect<%= entityNmPascal %>(<%= entityNmCamel %>: <%= entityNmPascal %>Model) {
-    <%_ for (field of fields) { _%>
+    <%_ fields.forEach((field) => { _%>
       await this.<%= entityNmCamel %>InputPageEl.expect<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %>);
-    <%_ } _%>
+    <%_ }) _%>
   }
 }
