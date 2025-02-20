@@ -1,6 +1,6 @@
 # Generator
 
-Genertorは、ソースファイルの自動生成ツールです。Generatorが生成するソースファイルは、テーブルに対するCRUD操作を実行するアプリケーション(Frontend、Backend)や自動テスト(Integration Test、End to End Test)のもので、DB内のテーブルのメタデータをもとに生成されます。
+Generatorは、ソースファイルの自動生成ツールです。Generatorが生成するソースファイルは、テーブルに対するCRUD操作を実行するアプリケーション(Frontend、Backend)や自動テスト(Integration Test、End to End Test)のもので、DB内のテーブルのメタデータをもとに生成されます。
 
 ## 使用方法
 
@@ -18,7 +18,7 @@ pnpm start [options] [Entity...]
 
 - `--component`: 生成するソースファイルの種類を指定します。指定可能な値は`backend`、`integration-test`、`api-client`、`frontend`、`e2e-test`、`all`です。指定しない場合は`all`として実行します。
 - `--templateType`: ソースファイルのテンプレートを指定します。指定可能な値は`skeleton`、`arch`です。指定しない場合は本プロジェクト以下の`.yo-rc.json`の`templateType`の値が使用されます。それぞれの値の意味は以下の通りです。
-  - `skeleton`: 生成されるソースファイルは、
+  - `skeleton`: 生成されるソースファイルは、HelloEntityのものと同様の構成になります。
   - `arch`: 生成されるソースファイルは、アーキテクチャ記述の定義に準拠し、archパッケージ以下の共通機能を使用したものになります。
 
 `Entity`にはCRUD操作を行う対象のEntityを指定します。複数指定する場合は、スペース区切りとします。
