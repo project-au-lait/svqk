@@ -426,8 +426,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     const inputTmplPath = "e2etest/pages/input";
     const listTmplPath = "e2etest/pages/list";
+    const menuBarTmplPath = "e2etest/pages/menu-bar";
     const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmCamel}-input`;
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmCamel}-list`;
+    const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
 
     // TODO temporary
     if (this.templateType === "skeleton") {
@@ -451,6 +453,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           "e2etest/Factory.ts",
           `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
         ],
+        [`${menuBarTmplPath}/MenuBar.ts`, `${menuBarDestPath}/MenuBar.ts`],
+        [
+          `${menuBarTmplPath}/MenuBarPageElement.ts`,
+          `${menuBarDestPath}/MenuBarPageElement.ts`,
+        ],
         [
           `${inputTmplPath}/InputPage.ts`,
           `${inputDestPath}/${tmplData.entityNmPascal}InputPage.ts`,
@@ -469,7 +476,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         ],
       ];
 
-      // Add a link to the List of Entity
+      // Add link to EntityListPage in layout
       this._output_front_file(
         "e2etest/+layout.svelte",
         `${this.destFrontPath}/routes/+layout.svelte`,

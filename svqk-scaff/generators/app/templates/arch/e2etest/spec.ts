@@ -2,8 +2,8 @@ import { test } from '@playwright/test';
 import { <%= entityNmPascal %>Facade } from '../../facades/<%= entityNmPascal %>Facade';
 import { DryRun } from '../../arch/DryRun';
 import { locale } from '../../arch/MultiLng';
+import TopPage from '../../pages/top/TopPage';
 import <%= entityNmPascal %>InputFactory from '../../factories/<%= entityNmPascal %>Factory';
-import <%= entityNmPascal %>ListPage from '../../pages/<%= entityNmCamel %>-list/<%= entityNmPascal %>ListPage';
 
 test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   const context = await browser.newContext({
@@ -13,9 +13,10 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   const page = await context.newPage();
   const dryRun = DryRun.build();
 
-  let <%= entityNmCamel %>ListPage = new <%= entityNmPascal %>ListPage(page, dryRun)
-  
-  await <%= entityNmCamel %>ListPage.open();
+  const topPage = new TopPage(page, dryRun);
+  const menuBar = await topPage.open();
+
+  let <%= entityNmCamel %>ListPage = await menuBar.goto<%= entityNmPascal %>ListPage();
   let <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>ListPage.gotoNew<%= entityNmPascal %>Page();
 
   // Create
@@ -24,8 +25,8 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
 
   // Rererence
   const <%= entityNmCamel %>Facade = new <%= entityNmPascal %>Facade(dryRun);
-  const entityIdStr = <%= entityNmCamel %>.id.toString();
-  <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>Facade.reference<%= entityNmPascal %>ById(entityIdStr);
+  const <%= entityNmCamel %>IdStr = <%= entityNmCamel %>.id.toString();
+  <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>Facade.reference<%= entityNmPascal %>ById(menuBar, <%= entityNmCamel %>IdStr);
 
   // Update
   const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>();

@@ -1,5 +1,6 @@
 import <%= entityNmPascal %>ListPageElement from "./<%= entityNmPascal %>ListPageElement";
 import <%= entityNmPascal %>InputPage from "../<%= entityNmCamel %>-input/<%= entityNmPascal %>InputPage";
+import BasePageElement from '../../arch/BasePageElement';
 
 export default class <%= entityNmPascal %>ListPage {
   private <%= entityNmCamel %>ListPageEl: <%= entityNmPascal %>ListPageElement;
