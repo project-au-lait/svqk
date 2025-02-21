@@ -3,7 +3,7 @@
 
 ==== パッケージ構造
 
-frontプロジェクトのパッケージ構造はSvelteKitのプロジェクト構造を元にしています。
+frontendプロジェクトのパッケージ構造はSvelteKitのプロジェクト構造を元にしています。
 
 
 [source,text,subs="callouts,attributes"]

@@ -153,7 +153,7 @@ Backendサーバーが起動すると、backプロジェクト内で実装され
 Command: pnpm dev --open +
 (at svqk-frontend directory)
 |Frontendサーバー(Vite)が起動します。 +
-Frontendサーバーが起動すると、ブラウザが起動しfrontプロジェクト内で実装されているWebアプリが表示されます。
+Frontendサーバーが起動すると、ブラウザが起動しfrontendプロジェクト内で実装されているWebアプリが表示されます。
 
 |DBマイグレーションの実行
 |VSCode Task: `migrage` +
@@ -173,7 +173,7 @@ Command: mvnw -f svqk-migration compile -P setup
 Command: pnpm gen-api-client +
 (at svqk-frontend directory)
 |swagger-typescript-apiが実行されます。
-実行が終了すると、API Clientがfrontプロジェクトとe2etestプロジェクト内に生成されます。 +
+実行が終了すると、API Clientがfrontendプロジェクトとe2etestプロジェクト内に生成されます。 +
 この操作はBackendが起動した状態で実行可能です。
 |====
 
