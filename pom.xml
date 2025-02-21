@@ -79,11 +79,11 @@
       <id>use-env-backend-port-if-defined</id>
       <activation>
         <property>
-          <name>env.BACK_PORT</name>
+          <name>env.BACKEND_PORT</name>
         </property>
       </activation>
       <properties>
-        <back.port>${env.BACK_PORT}</back.port>
+        <back.port>${env.BACKEND_PORT}</back.port>
       </properties>
     </profile>
     <profile>
