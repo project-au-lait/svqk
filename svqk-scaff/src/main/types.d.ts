@@ -1,11 +1,35 @@
+import type { GeneratorOptions } from "@yeoman/types";
+
+type CustomOptions = GeneratorOptions & {
+  component: string;
+  templateType: string;
+};
+
+type OptionsValues = {
+  component: string;
+  templateType: string;
+};
+
 type Metadata = {
   packageName: string;
   className: string;
   fields: Field[];
 };
 
+type MetadataConfig = {
+  filePath: string;
+  list: Metadata[];
+};
+
+type GenApiClientConfig = {
+  genOpenApiJsonCmd: string;
+  frontApiClientPath: string;
+  e2eApiClientPath: string;
+};
+
 type Field = {
   fieldName: string;
+  fieldNmPascal?: string;
   javaType: string;
   multiple: boolean;
   dbType: string;
@@ -22,8 +46,8 @@ type TemplateData = {
   entityNmAllCaps: string;
   entityNmPlural: string;
   fields: Field[];
-  idFieldNmPascal: string;
-  idJavaType: string;
+  idField: Field;
+  compIdFields?: Field[];
 };
 
 declare module "**/jeg-metadata.json" {
@@ -31,4 +55,12 @@ declare module "**/jeg-metadata.json" {
   export default data;
 }
 
-export { Metadata, Field, TemplateData };
+export {
+  CustomOptions,
+  OptionsValues,
+  Metadata,
+  MetadataConfig,
+  GenApiClientConfig,
+  Field,
+  TemplateData,
+};

@@ -92,44 +92,12 @@
 
 
   <profiles>
-    <profile>
-      <id>setup</id>
-
-      <dependencies>
-        <!--
-          This dependency is required to set the build order of the backend project
-          to following the migration project
-        -->
-        <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>svqk-migration</artifactId>
-          <version>${project.version}</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-    </profile>
 
     <profile>
       <id>gen-entity</id>
 
       <build>
-        <defaultGoal>process-resources jpa-entity-generator:reverse clean install</defaultGoal>
-
-        <plugins>
-          <plugin>
-            <groupId>dev.aulait.jeg</groupId>
-            <artifactId>jpa-entity-generator-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>reverse</id>
-                <goals>
-                  <goal>reverse</goal>
-                </goals>
-                <phase>process-resources</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
+        <defaultGoal>resources:resources jpa-entity-generator:reverse clean install</defaultGoal>
       </build>
     </profile>
   </profiles>

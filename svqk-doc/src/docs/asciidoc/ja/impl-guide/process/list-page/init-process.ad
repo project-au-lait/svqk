@@ -106,12 +106,12 @@ include::../snippet/frontend-verification.ad[]
 ====== API Client
 
 VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
-生成されたAPI Clientは {project-artifactId}-front/src/lib/arch/api/Api.ts ファイルに出力されます。
+生成されたAPI Clientは {project-artifactId}-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。
 
-.{project-artifactId}-front/src/lib/arch/api/Api.ts
+.{project-artifactId}-frontend/src/lib/arch/api/Api.ts
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="34..52,92..110,392,343,425..440"]
+include::{project_root}/svqk-frontend/src/lib/arch/api/Api.ts[lines="34..52,92..110,392,343,425..440"]
   };
 }
 ----
@@ -120,10 +120,10 @@ include::{project_root}/svqk-front/src/lib/arch/api/Api.ts[lines="34..52,92..110
 
 xref:../arch-desc/index.adoc#_pageloader[アーキテクチャ記述] に従いPageLoaderのtsファイルを作成/更新します。
 
-.{project-artifactId}-front/src/routes/issues/+page.ts
+.{project-artifactId}-frontend/src/routes/issues/+page.ts
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/routes/issues/+page.ts[]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.ts[]
 ----
 
 <.> 検索条件を格納するModelを定義します。
@@ -133,10 +133,10 @@ include::{project_root}/svqk-front/src/routes/issues/+page.ts[]
 
 xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
 
-.{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
+.{project-artifactId}-frontend/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="2..29"]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="2..29"]
   }
 ----
 
@@ -144,7 +144,7 @@ include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="2..29"]
 <.> 検索結果一覧の各列(ヘッダー名、セル表示内容、ソートキー)を定義します。セル表示内容に独自のマークアップを使用する場合は、マークアップセクションで `#snippet` を定義しそれを指定します。(上記の例ではissueIdAnchorを設定しています)
 <.> 画面内の検索イベントをハンドリングする関数を定義します。この時点では空の関数とします。
 
-.{project-artifactId}-front/src/routes/issues/+page.svelte マークアップセクション
+.{project-artifactId}-frontend/src/routes/issues/+page.svelte マークアップセクション
 [source,html]
 ----
 <section>

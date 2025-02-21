@@ -1,3 +1,7 @@
+<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<%_
+clientGetArgs = compIdFields ? buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
+-%>
 package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,19 +27,19 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= idJavaType %> id = dto.get<%= idFieldNmPascal %>();
+    <%= interfaceIdType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
-    <%= idJavaType %> createdId = client.save(dto);
+    <%= interfaceIdType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
-    <%= entityNmPascal %>Dto refDto = client.get(id);
-    assertEquals(id, refDto.get<%= idFieldNmPascal %>());
+    <%= entityNmPascal %>Dto refDto = client.get(<%= clientGetArgs %>);
+    assertEquals(id, refDto.get<%= idField.fieldNmPascal %>());
 
     // Update
     // TODO Implementation of assembling a request and assertion
-    <%= idJavaType %> updatedId = client.update(dto);
+    <%= interfaceIdType %> updatedId = client.update(dto);
 
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();

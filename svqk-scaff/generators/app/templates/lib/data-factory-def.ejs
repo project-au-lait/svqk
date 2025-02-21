@@ -1,4 +1,4 @@
-<%# args: fields %>
+<%# args: (fields: Field[], compIdFields?: Field[]) %>
 <%
 javaTypeDefs = [
   {
@@ -29,8 +29,7 @@ getFieldNmPascal = (fieldName) => {
   return fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
 }
 
-imports = [...new Set(fields.map((field) => field.javaType))].reduce(
-  (result, type) => result.concat(findTypeDef(type)?.imports ?? []),
-  []
-);
+imports = [
+  ...new Set(fields.concat(compIdFields ?? []).map((field) => field.javaType)),
+].reduce((result, type) => result.concat(findTypeDef(type)?.imports ?? []), []);
 %>
