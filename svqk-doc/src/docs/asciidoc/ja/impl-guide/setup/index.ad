@@ -137,7 +137,7 @@ Command: mvnw -f svqk-container compile -P setup
 このVSCode TaskはVSCodeワークスペースを開いた際にも自動で実行されます。
 
 |Backendの起動
-|VSCode Task: `start-back` +
+|VSCode Task: `start-backend` +
 Command: mvnw -f svqk-backend quarkus:dev
 |Backendサーバー(Quarkus)が起動します。 +
 Backendサーバーが起動すると、backendプロジェクト内で実装されているWeb APIアプリが使用可能になります。

@@ -38,7 +38,7 @@ a|[.description]
 
 xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..17,33..37"]
@@ -51,7 +51,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/
 
 xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java[]
@@ -65,7 +65,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/is
 
 検索条件のDTOからVoを構築するFactoryのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[lines="1..46,62..66"]
@@ -82,7 +82,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/is
 
 xref:../arch-desc/index.adoc#_conttoller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..26s,31..34,63..73"]

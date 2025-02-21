@@ -22,7 +22,7 @@
       }
     },
     {
-      "label": "start-back",
+      "label": "start-backend",
       "type": "shell",
       "osx": {
         "command": "./mvnw"
@@ -87,7 +87,7 @@
       "problemMatcher": []
     },
     {
-      "label": "build-back-image",
+      "label": "build-backend-image",
       "type": "shell",
       "osx": {
         "command": "./mvnw"

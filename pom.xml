@@ -76,7 +76,7 @@
 
   <profiles>
     <profile>
-      <id>use-env-back-port-if-defined</id>
+      <id>use-env-backend-port-if-defined</id>
       <activation>
         <property>
           <name>env.BACK_PORT</name>

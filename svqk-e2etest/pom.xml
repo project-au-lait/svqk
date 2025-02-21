@@ -25,7 +25,7 @@
   <properties>
     <playwright.test.args>--timeout 30000</playwright.test.args>
     <container.image>
-      ${image.registry}/${project.parent.artifactId}/${project.parent.artifactId}-back:${project.version}</container.image>
+      ${image.registry}/${project.parent.artifactId}/${project.parent.artifactId}-backend:${project.version}</container.image>
     <sonar.sources>tests/</sonar.sources>
   </properties>
 

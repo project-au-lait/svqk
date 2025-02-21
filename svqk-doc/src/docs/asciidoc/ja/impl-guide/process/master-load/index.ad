@@ -117,7 +117,7 @@ include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/I
 
 xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java[]
@@ -127,7 +127,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/
 
 xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java[]
@@ -140,7 +140,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/
 
 xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java[]
@@ -150,7 +150,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/is
 
 xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java
 [source,java]
 ----
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
