@@ -32,10 +32,10 @@ include::../snippet/frontend-verification.ad[]
 
 xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
 
-.{project-artifactId}-front/src/routes/issues/+page.svelte スクリプトセクション
+.{project-artifactId}-frontend/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/routes/issues/+page.svelte[lines="29..39"]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="29..39"]
 ----
 
 <.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。

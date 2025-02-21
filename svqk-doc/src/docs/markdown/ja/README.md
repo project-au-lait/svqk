@@ -99,7 +99,7 @@ code my-artifactid.code-workspace
 - `start-back`
   - Quarkusの開発サーバーが起動し、Backendアプリケーションが使用可能になります。
   - Qurakusを起動した`TERMINAL`パネルで`w`をタイプすると、アプリケーションをブラウザで開きます。
-- `start-front`
+- `start-frontend`
   - Viteの開発サーバーが起動し、Frontendアプリケーションが使用可能になります。
   - 自動でブラウザが開き、アプリケーションが表示されます。
 
@@ -117,7 +117,7 @@ code my-artifactid.code-workspace
 ├── 📁 my-artifactid-e2etest  <--- Playwright (pnpm)
 │   ├── 📄 package.json
 │   └── 📄 pom.xml
-├── 📁 my-artifactid-front  <----- SvelteKit (pnpm)
+├── 📁 my-artifactid-frontend  <----- SvelteKit (pnpm)
 │   ├── 📄 package.json
 │   └── 📄 pom.xml
 ├── 📁 my-artifactid-migration  <- Flyway (Maven)
@@ -140,7 +140,7 @@ code my-artifactid.code-workspace
   - FlywayでDB Migrationを行うためのプロジェクトです。
   - Flyway Maven Pluginが使用可能な状態でセットアップされています。
     - Ex. `mvn flyway:migrate` 等、通常のFlyway Maven Pluginのコマンドが使用できます。
-- **my-artifactid-front**
+- **my-artifactid-frontend**
   - SvelteKitでFrontendアプリケーションを開発するためのプロジェクトです。
   - SvelteKitの標準機能で作成したプロジェクトのため、ディレクトリ構成や使用できる機能はSvelteKitの標準のものと同じです。[SvelteKit - Creating a project](https://kit.svelte.dev/docs/creating-a-project)
     - Ex. `pnpm dev` 等、通常のSvelteKitのコマンドが使用できます。

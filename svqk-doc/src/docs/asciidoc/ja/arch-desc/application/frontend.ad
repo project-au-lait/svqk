@@ -3,7 +3,7 @@
 
 ==== パッケージ構造
 
-frontプロジェクトのパッケージ構造はSvelteKitのプロジェクト構造を元にしています。
+frontendプロジェクトのパッケージ構造はSvelteKitのプロジェクト構造を元にしています。
 
 
 [source,text,subs="callouts,attributes"]
@@ -81,7 +81,7 @@ SvelteKitのLoading dataの詳細な仕様はSvelteKitのドキュメントを�
 .+page.ts
 [source,ts]
 ----
-include::{project_root}/svqk-front/src/routes/hello/+page.ts[]
+include::{project_root}/svqk-frontend/src/routes/hello/+page.ts[]
 ----
 
 <.> load関数を定義します。load関数は対応する画面のURLにアクセスされた際に実行されます。
@@ -90,7 +90,7 @@ include::{project_root}/svqk-front/src/routes/hello/+page.ts[]
 .+page.svelte
 [source,html]
 ----
-include::{project_root}/svqk-front/src/routes/hello/+page.svelte[]
+include::{project_root}/svqk-frontend/src/routes/hello/+page.svelte[]
 ----
 
 <.> PageLoaderで返却したオブジェクトを格納するための変数を宣言します。

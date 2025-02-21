@@ -27,7 +27,7 @@ include::setup-process.pu[]
 a|
 . containerプロジェクトがDockerを使用してDBを起動します。
 . migrationプロジェクトがFlywayを使用してDBマイグレーションを実行します。
-. frontプロジェクトがSveltKitアプリであるFrontendをビルドします。
+. frontendプロジェクトがSveltKitアプリであるFrontendをビルドします。
 . backプロジェクトがQuarkusアプリであるBackendをビルドします。
 . backプロジェクトがBackendに対してUnit・Integrationテストを実行します。
 . e2etestプロジェクトがPlaywrightを使用してEnd to Endテストを実行します。
@@ -61,9 +61,9 @@ DBマイグレーションの状態を表示
 vite build +
 mvnw resources:resources +
 mvnw jar:jar
-|frontプロジェクトが使用するパッケージのインストール +
+|frontendプロジェクトが使用するパッケージのインストール +
 Frontend(SvelteKitアプリ)のビルド +
-frontプロジェクトが使用する.envファイルの作成 +
+frontendプロジェクトが使用する.envファイルの作成 +
 FrontendのWebJarを作成
 
 |entity
@@ -160,9 +160,9 @@ a|setupプロファイルが有効である場合、Flyway Maven Pluginが `clea
 
 ==== front
 
-ここでは、frontプロジェクトのビルド構造を説明します。
+ここでは、frontendプロジェクトのビルド構造を説明します。
 
-.frontプロジェクトのビルドフェーズごとの処理
+.frontendプロジェクトのビルドフェーズごとの処理
 [cols="1,2"]
 |===
 ^|Build Phase ^| Process
@@ -183,12 +183,12 @@ a|Maven Exec Pluginが以下のコマンドを実行します。
 pnpm build
 ----
 
-pnpm buildコマンドはfrontプロジェクトをSPAとしてビルドします。ビルド後の資材はfrontプロジェクト直下のbuildディレクトリに生成されます。
+pnpm buildコマンドはfrontendプロジェクトをSPAとしてビルドします。ビルド後の資材はfrontendプロジェクト直下のbuildディレクトリに生成されます。
 
 |process-resources
 a|Maven Resources Pluginが以下のコピーを行います。
 
-* resources/.envファイルをfrontプロジェクト直下にコピーします。この際、.envファイル内の一部の環境変数(Backendのポート番号等)は当該PluginのFilter機能によりプロジェクトのプロパティ値で置換されます。
+* resources/.envファイルをfrontendプロジェクト直下にコピーします。この際、.envファイル内の一部の環境変数(Backendのポート番号等)は当該PluginのFilter機能によりプロジェクトのプロパティ値で置換されます。
 
 .resources/.envファイルの内容
 [source,env]
@@ -196,7 +196,7 @@ a|Maven Resources Pluginが以下のコピーを行います。
 PUBLIC_BACKEND_URL=http://localhost:${back.port}
 ----
 
-.frontプロジェクト直下にコピーされた.envの内容
+.frontendプロジェクト直下にコピーされた.envの内容
 [source,env,subs="attributes"]
 ----
 PUBLIC_BACKEND_URL={back-port}
@@ -210,7 +210,7 @@ a|Maven Resources Pluginが以下のコピーを行います。
 参考: https://quarkus.io/guides/web-dependency-locator#webjars[Webjars]
 
 |pacakge
-a|Maven JAR Pluginがfrontプロジェクトのビルド後の資材を含むjarファイルを生成します。
+a|Maven JAR Pluginがfrontendプロジェクトのビルド後の資材を含むjarファイルを生成します。
 
 |===
 
@@ -218,7 +218,7 @@ a|Maven JAR Pluginがfrontプロジェクトのビルド後の資材を含むjar
 ==== back
 
 ここでは、backプロジェクトのビルド構造を説明します。
-backプロジェクトはfrontプロジェクトをdependency設定しているため、frontプロジェクトのビルド後に実行されます。
+backプロジェクトはfrontendプロジェクトをdependency設定しているため、frontendプロジェクトのビルド後に実行されます。
 
 
 .backプロジェクトのビルドフェーズごとの処理
@@ -243,7 +243,7 @@ quarkus.datasource.username={db-username}
 
 |package
 a|Maven JAR Pluginがbackプロジェクトをビルドしjarファイルを生成します。  +
-Quarkus Maven Plugin がこのjarファイルを使用してBackendのコンテナイメージをビルドします。このコンテナイメージにはfrontプロジェクトのビルド資材であるWebJarsも含まれます。
+Quarkus Maven Plugin がこのjarファイルを使用してBackendのコンテナイメージをビルドします。このコンテナイメージにはfrontendプロジェクトのビルド資材であるWebJarsも含まれます。
 
 |integration-test
 a|Maven Failsafe Plugnがsrc/integration-test/javaディレクトリ以下のテストクラス(*IT.java)を実行します。

@@ -43,7 +43,7 @@ include::../snippet/frontend-verification.ad[]
 
 xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageのsvelteファイルを作成/更新します。
 
-.{project-artifactId}-front/src/routes/issues/new/+page.svelte スクリプトセクション
+.{project-artifactId}-frontend/src/routes/issues/new/+page.svelte スクリプトセクション
 [source,ts]
 ----
   import { goto } from '$app/navigation';
@@ -64,7 +64,7 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 <.> 入力項目の入力値を格納するオブジェクトを定義します。このオブジェクトのプロパティをマークアップセクションで入力項目にバインドすることで、入力値を格納できます。
 <.> 登録処理後のコールバック関数を実装します。
 
-.{project-artifactId}-front/src/routes/issues/new/+page.svelte マークアップセクション
+.{project-artifactId}-frontend/src/routes/issues/new/+page.svelte マークアップセクション
 [source,html]
 ----
 <IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.register')} /> <.>
@@ -76,7 +76,7 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 
 UIComponentのsvelteファイルを作成/更新します。
 
-.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
+.{project-artifactId}-frontend/src/lib/domain/issue/IssueForm.svelte スクリプトセクション
 [source,ts]
 ----
   import FormValidator from '$lib/arch/form/FormValidator';
@@ -118,7 +118,7 @@ UIComponentのsvelteファイルを作成/更新します。
 <.> バリデーションがエラー無しで終了した場合に呼び出される関数を定義します。この時点では動作確認用のログ出力のみを実装します。
 
 
-.{project-artifactId}-front/src/lib/domain/issue/IssueForm.svelte マークアップセクション
+.{project-artifactId}-frontend/src/lib/domain/issue/IssueForm.svelte マークアップセクション
 [source,html]
 ----
 <form use:form>  <.>
