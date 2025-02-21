@@ -5,7 +5,7 @@
 node_modules
 target
 
-svqk-back/.env
+svqk-backend/.env
 
 svqk-container/.env
 

@@ -41,7 +41,7 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServ
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..17,33..37"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..17,33..37"]
 ----
 
 <.> 検索を行うメソッドを定義します。引数には検索条件Voを、戻り値には検索結果Voを指定します。
@@ -54,7 +54,7 @@ xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのja
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java[]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java[]
 ----
 
 <.> `@EqualsAndHashCode` を設定します。
@@ -68,7 +68,7 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[lines="1..46,62..66"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[lines="1..46,62..66"]
 ----
 
 <.> 検索結果EntityからDTOへのマッピング設定を定義します。上記の例ではIssueEntityからIssueDtoへのマッピングにおいてIssueDto.journalsのマッピングを除外しています。
@@ -85,7 +85,7 @@ xref:../arch-desc/index.adoc#_conttoller[アーキテクチャ記述] に従いC
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..26s,31..34,63..73"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..26s,31..34,63..73"]
 }
 ----
 

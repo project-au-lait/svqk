@@ -138,7 +138,7 @@ Command: mvnw -f svqk-container compile -P setup
 
 |Backendの起動
 |VSCode Task: `start-back` +
-Command: mvnw -f svqk-back quarkus:dev
+Command: mvnw -f svqk-backend quarkus:dev
 |Backendサーバー(Quarkus)が起動します。 +
 Backendサーバーが起動すると、backプロジェクト内で実装されているWeb APIアプリが使用可能になります。
 

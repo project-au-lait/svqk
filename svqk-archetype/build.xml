@@ -235,7 +235,7 @@
 
   <target name="add-front-controller">
     <copy
-      file="${archetype.prjdir}/svqk-back/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
+      file="${archetype.prjdir}/svqk-backend/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
       todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-back/src/main/java/arch/front"
       overwrite="true">
       <filterchain>

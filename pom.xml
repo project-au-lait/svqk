@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>svqk-back</module>
+    <module>svqk-backend</module>
     <module>svqk-cicd</module>
     <module>svqk-container</module>
     <module>svqk-doc</module>

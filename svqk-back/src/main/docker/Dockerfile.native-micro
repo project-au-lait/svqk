@@ -10,11 +10,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/svqk-back .
+# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/svqk-backend .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/svqk-back
+# docker run -i --rm -p 8080:8080 quarkus/svqk-backend
 #
 ###
 FROM quay.io/quarkus/quarkus-micro-image:2.0

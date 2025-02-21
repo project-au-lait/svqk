@@ -18,7 +18,7 @@ Controllerの実装には、Jakarta RESTを使用します。
 .Controllerの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloController.java[]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/hello/HelloController.java[]
 ----
 
 <.> `@Path` をControllerクラスに設定します。これにより、このControllerクラスがWeb APIのエンドポイントしてQuarkusに認識されます。
@@ -41,7 +41,7 @@ Serviceの実装には、JTA、CDIを使用します。
 .Serviceの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/hello/HelloService.java[lines="1..14,16..20,22..23"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/hello/HelloService.java[lines="1..14,16..20,22..23"]
 ----
 
 <.> `@ApplicationScoped` をServiceクラスに設定します。これにより、ServiceクラスのインスタンスがCDI Managed Beanとして使用可能になります。 
@@ -65,7 +65,7 @@ Repositoryの実装には、JPA、Spring Data JPAを使用します。
 .Repositoryの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/hello/HelloRepository.java[]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/hello/HelloRepository.java[]
 ----
 
 <.> `JpaRepository` を継承します。型パラメータにはEntityとEntityのIDの型を指定します。
@@ -85,7 +85,7 @@ DTOは、Web APIのリクエスト及びレスポンスを表すオブジェク�
 .DTOの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/hello/HelloDto.java[]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/hello/HelloDto.java[]
 ----
 
 <.> `@Data` をDTOクラスに設定します。これにより、フィールドのGetter、Setter等が自動生成されます。

@@ -33,7 +33,7 @@
       "linux": {
         "command": "./mvnw"
       },
-      "args": ["-f", "svqk-back", "quarkus:dev"],
+      "args": ["-f", "svqk-backend", "quarkus:dev"],
       "problemMatcher": []
     },
     {
@@ -98,7 +98,7 @@
       "linux": {
         "command": "./mvnw"
       },
-      "args": ["-f", "svqk-back", "package", "-P", "setup"],
+      "args": ["-f", "svqk-backend", "package", "-P", "setup"],
       "problemMatcher": []
     }
   ]

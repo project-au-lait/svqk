@@ -68,7 +68,7 @@ xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いR
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java[lines="1..10"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java[lines="1..10"]
 }
 ----
 
@@ -79,7 +79,7 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServ
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,12..16,20..24"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,12..16,20..24"]
 }
 ----
 
@@ -94,7 +94,7 @@ xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのja
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java[]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java[]
 ----
 
 ====== Controller
@@ -104,7 +104,7 @@ xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いC
 .{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,18..23,36..44"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,18..23,36..44"]
 }
 ----
 

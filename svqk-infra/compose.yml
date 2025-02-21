@@ -14,7 +14,7 @@ services:
       - ${DB_PORT}:5432
 
   back:
-    image: localhost:5000/svqk/svqk-back:0.8-SNAPSHOT
+    image: localhost:5000/svqk/svqk-backend:0.8-SNAPSHOT
     environment:
       QUARKUS_DATASOURCE_USERNAME: ${DB_USER}
       QUARKUS_DATASOURCE_PASSWORD: ${DB_PASSWORD}

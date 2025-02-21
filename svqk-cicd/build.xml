@@ -39,7 +39,7 @@
 
   <target name="push-image">
     <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-      <arg line="-f svqk-back quarkus:build -Dquarkus.container-image.push=true" />
+      <arg line="-f svqk-backend quarkus:build -Dquarkus.container-image.push=true" />
     </exec>
 
     <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">

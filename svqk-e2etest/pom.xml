@@ -10,7 +10,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>svqk-back</artifactId>
+      <artifactId>svqk-backend</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
