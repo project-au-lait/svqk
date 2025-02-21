@@ -202,15 +202,15 @@ a|
 * password: {db-password}
 
 |Quaruks Developer UI
-|http://localhost:{back-port}/q/dev-ui
+|http://localhost:{backend.port}/q/dev-ui
 
 |Backend Web APIs (Swagger UI)
-|http://localhost:{back-port}/q/dev-ui/io.quarkus.quarkus-smallrye-openapi/swagger-ui
+|http://localhost:{backend.port}/q/dev-ui/io.quarkus.quarkus-smallrye-openapi/swagger-ui
 
 |Frontend Web App
 a|
 * Hosted on Vite:
 ** http://localhost:5173
 * Hosted on Backend:
-** http://localhost:{back-port} 
+** http://localhost:{backend.port} 
 |====

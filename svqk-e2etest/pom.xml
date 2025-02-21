@@ -79,7 +79,7 @@
               <executable>pnpm</executable>
               <commandlineArgs>e2etest ${playwright.test.args}</commandlineArgs>
               <environmentVariables>
-                <BACKEND_BASE_URL>http://localhost:${back.port}</BACKEND_BASE_URL>
+                <BACKEND_BASE_URL>http://localhost:${backend.port}</BACKEND_BASE_URL>
                 <CI>true</CI>
               </environmentVariables>
               <successCodes>

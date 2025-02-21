@@ -22,7 +22,7 @@
   </modules>
 
   <properties>
-    <back.port>8081</back.port>
+    <backend.port>8081</backend.port>
 
     <build-helper-plugin.version>3.6.0</build-helper-plugin.version>
 
@@ -83,7 +83,7 @@
         </property>
       </activation>
       <properties>
-        <back.port>${env.BACKEND_PORT}</back.port>
+        <backend.port>${env.BACKEND_PORT}</backend.port>
       </properties>
     </profile>
     <profile>

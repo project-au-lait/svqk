@@ -43,7 +43,7 @@
         <configuration>
           <outputFile>${port.file}</outputFile>
           <portNames>
-            <portName>back.port.random</portName>
+            <portName>backend.port.random</portName>
             <portName>db.port.random</portName>
           </portNames>
         </configuration>

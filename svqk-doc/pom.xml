@@ -53,7 +53,7 @@
 
         <configuration>
           <attributes>
-            <back-port>${back.port}</back-port>
+            <backend.port>${backend.port}</backend.port>
             <db-port>${db.port}</db-port>
             <db-name>${db.name}</db-name>
             <db-schema>${db.schema}</db-schema>
