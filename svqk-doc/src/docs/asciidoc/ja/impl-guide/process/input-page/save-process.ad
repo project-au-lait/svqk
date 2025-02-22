@@ -26,32 +26,13 @@ a|[.description]
 
 ===== DB
 
-マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
-
-.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
-[source,sql]
-----
-include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="15..25"]
-----
-
-<.> テーブルを作成するCREATE文を実装します。
+include::../snippet/db-migration.ad[]
 
 ===== Backend
 
 ====== Entity
 
-Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
-
-.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
-[source,yml]
-----
-packages:
-  ${project.groupId}.domain.issue:  # <.>
-    - issue
-----
-
-. packages属性にEntityの生成先パッケージとテーブル名を追加します。
-** "Entityの生成先パッケージ" : ["テーブル名"]
+include::../snippet/entity-generation.ad[]
 
 jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
 

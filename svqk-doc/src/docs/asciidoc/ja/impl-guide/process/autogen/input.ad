@@ -1,0 +1,23 @@
+== 実装手順(自動生成)
+
+=== DB
+
+include::../snippet/db-migration.ad[]
+
+=== Entity
+
+include::../snippet/entity-generation.ad[]
+
+=== Generator
+
+VSCode Task: `generate` を実行します。
+生成対象のコンポーネントに `all` を選択し、生成元のEntityに `Issue` と入力します。
+Generatorの実行結果は以下の通りです。
+
+.自動生成されたソースファイル
+[source,txt]
+----
+include::gen-files.txt[]
+----
+
+include::../snippet/all-verification.ad[]

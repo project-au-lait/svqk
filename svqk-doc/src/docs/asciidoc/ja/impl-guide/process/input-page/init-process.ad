@@ -150,7 +150,4 @@ UIComponentのsvelteファイルを作成/更新します。
 <.> セレクトボックスの選択肢等でマスターデータが必要な場合は、MasterStoreを使用します。MasterStoreは別途 <<master-load,マスターデータロード>> に従い実装しておく必要があります。
 <.> 登録処理の起点となる画面要素を配置します。画面要素は `button type="submit"` で実装します。
 
-[NOTE]
-====
-Frontendサーバー、Backendサーバー、DBを全て起動した状態で画面操作を行い、期待通りの挙動になること、BackendサーバーのログにWeb APIの処理のログ等が出力されることを確認します。
-====
+include::../snippet/all-verification.ad[]
