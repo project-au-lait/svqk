@@ -18,7 +18,7 @@
     <module>svqk-entity</module>
     <module>svqk-frontend</module>
     <module>svqk-migration</module>
-    <module>svqk-scaff</module>
+    <module>svqk-generator</module>
   </modules>
 
   <properties>
