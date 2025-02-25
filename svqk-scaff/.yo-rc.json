@@ -5,7 +5,7 @@
     "destITPath": "../svqk-backend/src/integration-test/java",
     "destFrontPath": "../svqk-frontend/src",
     "destE2EPath": "../svqk-e2etest/tests",
-    "templateType": "skeleton",
+    "templateType": "__template-type-value__",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
     "genOpenApiJsonCmd":"./mvnw -pl svqk-backend -am package -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target",
     "frontApiClientPath": "../svqk-frontend/src/lib/arch/api",

@@ -55,7 +55,7 @@
 
     <property file="${projectdir}/${project}-cicd/port.properties" />
 
-    <exec executable="pnpm" dir="${projectdir}/${project}-scaff">
+    <exec executable="pnpm" dir="${projectdir}/${project}-generator">
       <env key="BACKEND_PORT" value="${backend.port.random}" />
       <env key="DB_PORT" value="${db.port.random}" />
       <arg line="start --component all World" />
@@ -168,6 +168,7 @@
   <target name="adjust-archetype-resources">
     <antcall target="add-pom" />
     <antcall target="adjust-archetype-metadata" />
+    <antcall target="adjust-generator-conf" />
     <antcall target="add-post-generate-script" />
 
     <if>
@@ -210,6 +211,31 @@
       replace="\1*.ts\3" />
   </target>
 
+  <target name="adjust-generator-conf">
+    <property name=".yo-rc.json"
+      value="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-generator/.yo-rc.json" />
+    <if>
+      <or>
+        <equals arg1="${archetype.type}" arg2="arch" />
+        <equals arg1="${archetype.type}" arg2="refimpl" />
+      </or>
+      <then>
+        <replace
+          file="${.yo-rc.json}"
+          token="__template-type-value__"
+          value="arch" />
+      </then>
+    </if>
+    <if>
+      <equals arg1="${archetype.type}" arg2="skeleton" />
+      <then>
+        <replace
+          file="${.yo-rc.json}"
+          token="__template-type-value__"
+          value="skeleton" />
+      </then>
+    </if>
+  </target>
 
   <target name="add-post-generate-script">
     <copy file="${basedir}/src/archetype/archetype-post-generate.groovy"
