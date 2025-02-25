@@ -31,6 +31,24 @@
       </resource>
     </resources>
 
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <configuration>
+              <target>
+                <replace file="${basedir}/.env" token="[user-timezone]" value="${user.timezone}" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
 
