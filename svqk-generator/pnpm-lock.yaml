@@ -48,7 +48,7 @@ importers:
       eslint-plugin-prettier:
         specifier: ^5.2.1
         version: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.16.0))(eslint@9.16.0)(prettier@3.4.2)
-      generator-svqk-scaff:
+      generator-svqk-generator:
         specifier: 'link:'
         version: 'link:'
       globals:

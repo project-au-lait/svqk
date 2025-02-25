@@ -1,5 +1,5 @@
 {
-  "generator-svqk-scaff": {
+  "generator-svqk-generator": {
     "metadataFilePath": "src/main/resources/jeg-metadata.json",
     "destBackPath": "../svqk-backend/src/main/java",
     "destITPath": "../svqk-backend/src/integration-test/java",
@@ -7,7 +7,7 @@
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
-    "genOpenApiJsonCmd":"./mvnw -pl svqk-backend -am package -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-scaff/target",
+    "genOpenApiJsonCmd":"./mvnw -pl svqk-backend -am package -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-generator/target",
     "frontApiClientPath": "../svqk-frontend/src/lib/arch/api",
     "E2EApiClientPath": "../svqk-e2etest/tests/api"
   }
