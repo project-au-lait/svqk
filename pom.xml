@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>svqk-back</module>
+    <module>svqk-backend</module>
     <module>svqk-cicd</module>
     <module>svqk-container</module>
     <module>svqk-doc</module>
@@ -22,7 +22,7 @@
   </modules>
 
   <properties>
-    <back.port>8081</back.port>
+    <backend.port>8081</backend.port>
 
     <build-helper-plugin.version>3.6.0</build-helper-plugin.version>
 
@@ -76,14 +76,14 @@
 
   <profiles>
     <profile>
-      <id>use-env-back-port-if-defined</id>
+      <id>use-env-backend-port-if-defined</id>
       <activation>
         <property>
-          <name>env.BACK_PORT</name>
+          <name>env.BACKEND_PORT</name>
         </property>
       </activation>
       <properties>
-        <back.port>${env.BACK_PORT}</back.port>
+        <backend.port>${env.BACKEND_PORT}</backend.port>
       </properties>
     </profile>
     <profile>

@@ -5,7 +5,7 @@ svqk
 │       │   └── #page.svelte --- 1.a, 1.d
 │       └── lib/api
 │           └── Api.ts --- 1.c
-├── svqk-back
+├── svqk-backend
 │   └── src
 │       ├── main/java/a/b/c/svqk
 │       │   ├── interfaces/issue

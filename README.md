@@ -96,7 +96,7 @@ code my-artifactid.code-workspace
 
 Run the Backend/Frontend application using the following VSCode tasks.
 
-- `start-back`
+- `start-backend`
   - The Quarkus development server starts and the Backend application is available.
   - Typing `w` in the `TERMINAL` panel where you started Qurakus will open the application in your browser.
 - `start-frontend`
@@ -105,11 +105,11 @@ Run the Backend/Frontend application using the following VSCode tasks.
 
 ### Project structure
 
-The above ` mvn archetype:generate ` command generates a project with the following configuration:
+The above `mvn archetype:generate` command generates a project with the following configuration:
 
 ```txt
 📁 my-artifactid
-├── 📁 my-artifactid-back  <------ Quarkus (Maven)
+├── 📁 my-artifactid-backend  <------ Quarkus (Maven)
 │   └── 📄 pom.xml
 ├── 📁 my-artifactid-container  <- Docker
 │   ├── 📄 compose.yml
@@ -125,26 +125,25 @@ The above ` mvn archetype:generate ` command generates a project with the follow
 └── 📄 pom.xml
 ```
 
-- **my-artifactid-back**
+- **my-artifactid-backend**
   - Project for developing Backend applications in Quarkus.
   - Because the project was created with standard Quarkus functionality, the directory structure and available functionality is the same as the standard Quarkus [Quarkus - Creating a new project](https://quarkus.io/guides/maven-tooling#project-creation).
-    - Ex. You can use the usual Quarkus Maven Plugin commands such as ` mvn quarkus:dev `.
+    - Ex. You can use the usual Quarkus Maven Plugin commands such as `mvn quarkus:dev`.
 - **my-artifactid-container**
   - It is a project to set up and run containers necessary for development, such as DBMS (PostgreSQL).
-  - The usual ` docker compose ` command can be used because it contains a compose. yml file.
+  - The usual `docker compose` command can be used because it contains a compose. yml file.
 - **my-artifactid-e2etest**
   - Project for End to End Test in Planwright.
   - Because the project was created using standard Playwright functionality, the directory structure and functionality available are the same as standard Playwright. [Playwright - Installing Playwright](https://playwright.dev/docs/intro#installing-playwright)
-    - Ex. You can use the usual Playwright commands, such as  ` pnpm playwright test `.
+    - Ex. You can use the usual Playwright commands, such as `pnpm playwright test`.
 - **my-artifactid-migration**
   - A project for DB Migration with Flyway.
   - The Flyway Maven Plugin has been set up for use.
-    - Ex. You can use the usual Flyway Maven Plugin commands, such as ` mvn flyway:migrate `.
+    - Ex. You can use the usual Flyway Maven Plugin commands, such as `mvn flyway:migrate`.
 - **my-artifactid-frontend**
   - Project for developing Frontend applications with SvelteKit.
   - Because the project was created with standard SvelteKit functionality, the directory structure and available functionality are the same as the standard SvelteKit [SvelteKit - Creating a project](https://kit.svelte.dev/docs/creating-a-project).
-    - Ex. You can use the usual SvelteKit commands, such as ` pnpm dev `.
-
+    - Ex. You can use the usual SvelteKit commands, such as `pnpm dev`.
 
 ## Document
 

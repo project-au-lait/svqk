@@ -137,10 +137,10 @@ Command: mvnw -f svqk-container compile -P setup
 このVSCode TaskはVSCodeワークスペースを開いた際にも自動で実行されます。
 
 |Backendの起動
-|VSCode Task: `start-back` +
-Command: mvnw -f svqk-back quarkus:dev
+|VSCode Task: `start-backend` +
+Command: mvnw -f svqk-backend quarkus:dev
 |Backendサーバー(Quarkus)が起動します。 +
-Backendサーバーが起動すると、backプロジェクト内で実装されているWeb APIアプリが使用可能になります。
+Backendサーバーが起動すると、backendプロジェクト内で実装されているWeb APIアプリが使用可能になります。
 
 |Backendのデバッグ実行
 |VSCodeデバッグ構成: `Attach Quarkus`
@@ -202,15 +202,15 @@ a|
 * password: {db-password}
 
 |Quaruks Developer UI
-|http://localhost:{back-port}/q/dev-ui
+|http://localhost:{backend-port}/q/dev-ui
 
 |Backend Web APIs (Swagger UI)
-|http://localhost:{back-port}/q/dev-ui/io.quarkus.quarkus-smallrye-openapi/swagger-ui
+|http://localhost:{backend-port}/q/dev-ui/io.quarkus.quarkus-smallrye-openapi/swagger-ui
 
 |Frontend Web App
 a|
 * Hosted on Vite:
 ** http://localhost:5173
 * Hosted on Backend:
-** http://localhost:{back-port} 
+** http://localhost:{backend-port} 
 |====

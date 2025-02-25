@@ -10,8 +10,8 @@ rectangle EC2 {
     component migration <<servcie>>
     ECR --> migration: 2. docker pull
 
-    component back <<service>>
-    ECR --> back: 2. docker pull
+    component backend <<service>>
+    ECR --> backend: 2. docker pull
 
     component dbms <<service>>
     migration --> dbms: 3. flyway:migrate

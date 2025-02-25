@@ -1,4 +1,4 @@
-📁 {project-artifactId}-back
+📁 {project-artifactId}-backend
 └── 📁 src/main/java
     └── 📁 {project-package}
         ├── 📁 arch

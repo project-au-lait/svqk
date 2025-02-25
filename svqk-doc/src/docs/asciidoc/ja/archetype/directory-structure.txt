@@ -6,7 +6,7 @@ svqk
     └── target
         ├── archetype-work    3. archetype.workdir
         │   ├── .mvn
-        │   ├── svqk-back
+        │   ├── svqk-backend
         │   ├── svqk-cicd
         │   ├── :
         │   ├── pom.xml

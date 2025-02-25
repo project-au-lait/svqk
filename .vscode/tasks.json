@@ -22,7 +22,7 @@
       }
     },
     {
-      "label": "start-back",
+      "label": "start-backend",
       "type": "shell",
       "osx": {
         "command": "./mvnw"
@@ -33,7 +33,7 @@
       "linux": {
         "command": "./mvnw"
       },
-      "args": ["-f", "svqk-back", "quarkus:dev"],
+      "args": ["-f", "svqk-backend", "quarkus:dev"],
       "problemMatcher": []
     },
     {
@@ -87,7 +87,7 @@
       "problemMatcher": []
     },
     {
-      "label": "build-back-image",
+      "label": "build-backend-image",
       "type": "shell",
       "osx": {
         "command": "./mvnw"
@@ -98,7 +98,7 @@
       "linux": {
         "command": "./mvnw"
       },
-      "args": ["-f", "svqk-back", "package", "-P", "setup"],
+      "args": ["-f", "svqk-backend", "package", "-P", "setup"],
       "problemMatcher": []
     }
   ]

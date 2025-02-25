@@ -10,7 +10,7 @@
       "request": "attach",
       "hostName": "localhost",
       "port": 5005,
-      "projectName": "svqk-back"
+      "projectName": "svqk-backend"
     },
     {
       "type": "java",

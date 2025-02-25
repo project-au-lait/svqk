@@ -56,7 +56,7 @@
     <property file="${projectdir}/${project}-cicd/port.properties" />
 
     <exec executable="pnpm" dir="${projectdir}/${project}-scaff">
-      <env key="BACK_PORT" value="${back.port.random}" />
+      <env key="BACKEND_PORT" value="${backend.port.random}" />
       <env key="DB_PORT" value="${db.port.random}" />
       <arg line="start --component all World" />
     </exec>
@@ -235,8 +235,8 @@
 
   <target name="add-front-controller">
     <copy
-      file="${archetype.prjdir}/svqk-back/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
-      todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-back/src/main/java/arch/front"
+      file="${archetype.prjdir}/svqk-backend/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
+      todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-backend/src/main/java/arch/front"
       overwrite="true">
       <filterchain>
         <replacetokens begintoken="" endtoken="">

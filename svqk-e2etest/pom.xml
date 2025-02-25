@@ -10,7 +10,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>svqk-back</artifactId>
+      <artifactId>svqk-backend</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -25,7 +25,7 @@
   <properties>
     <playwright.test.args>--timeout 30000</playwright.test.args>
     <container.image>
-      ${image.registry}/${project.parent.artifactId}/${project.parent.artifactId}-back:${project.version}</container.image>
+      ${image.registry}/${project.parent.artifactId}/${project.parent.artifactId}-backend:${project.version}</container.image>
     <sonar.sources>tests/</sonar.sources>
   </properties>
 
@@ -79,7 +79,7 @@
               <executable>pnpm</executable>
               <commandlineArgs>e2etest ${playwright.test.args}</commandlineArgs>
               <environmentVariables>
-                <BACKEND_BASE_URL>http://localhost:${back.port}</BACKEND_BASE_URL>
+                <BACKEND_BASE_URL>http://localhost:${backend.port}</BACKEND_BASE_URL>
                 <CI>true</CI>
               </environmentVariables>
               <successCodes>

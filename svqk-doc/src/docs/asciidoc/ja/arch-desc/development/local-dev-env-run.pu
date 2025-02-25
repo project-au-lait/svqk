@@ -5,7 +5,7 @@ folder root {
   folder front {
     file "package.json"
   }
-  folder back {
+  folder backend {
     file "pom.xml"
   }
   folder container {
@@ -26,7 +26,7 @@ node Quarkus {
 }
 
 front --> Vite: pnpm vite dev
-back --> Quarkus: mvnw quarkus:dev
+backend --> Quarkus: mvnw quarkus:dev
 container --> Docker: docker compose up
 
 Frontend -> Backend: HTTP

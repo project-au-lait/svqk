@@ -51,7 +51,7 @@ TestCaseは、テストケースに従いREST APIの呼び出しと期待値の�
 .TestCaseの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueControllerIT.java[lines="1..26,44..45"]
+include::{project_root}/svqk-backend/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueControllerIT.java[lines="1..26,44..45"]
 ----
 
 <.> @QuarkusIntegrationTestをTestCaseクラスに設定します。
@@ -68,7 +68,7 @@ RestClientは、REST APIの呼び出しと、そのRequest・ResponseのDTOへ�
 .RestClientの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueClient.java[lines="1..18,38"]
+include::{project_root}/svqk-backend/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueClient.java[lines="1..18,38"]
 ----
 
 <.> REST APIの呼び出しを行うメソッドを定義します。メソッドの引数はRequestのDTO、戻り値の型はResponseのDTOとします。
@@ -81,7 +81,7 @@ DataFactroyは、テストで必要なデータを格納したDTOの生成を担
 .DataFactoryの実装
 [source,java]
 ----
-include::{project_root}/svqk-back/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueDataFactory.java[lines="1..18,38"]
+include::{project_root}/svqk-backend/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueDataFactory.java[lines="1..18,38"]
 ----
 
 <.> テストで必要なデータパターンごとにメソッドを定義します。上記の例は、`subject` にランダムな文字列を格納した `IssueDto` インスタンスを生成するメソッドを定義しています。
