@@ -5,7 +5,7 @@ rectangle AWS {
 
     rectangle "Docker Compose" {
 
-      rectangle back <<service>>{
+      rectangle backend <<service>>{
         component Backend <<jar>>
         component Frontend <<wabjar>>
         Backend -> Frontend: 3.a read
