@@ -24,22 +24,24 @@ export default class FormValidator {
           console.error('No submit handler defined');
         } else if (submitHandlers.length == 1) {
           submitHandlers[0](values);
-        } else {
-          if (context.event && context.event instanceof SubmitEvent && context.event.submitter) {
-            const handlerName = context.event.submitter.dataset.handler;
+        } else if (
+          context.event &&
+          context.event instanceof SubmitEvent &&
+          context.event.submitter
+        ) {
+          const handlerName = context.event.submitter.dataset.handler;
 
-            if (handlerName) {
-              const submitHandler = submitHandlers.find((handler) => handler.name == handlerName);
-              if (submitHandler) {
-                submitHandler(values);
-              } else {
-                console.error(`No submit handler found for submitter ${context.event.submitter}`);
-              }
+          if (handlerName) {
+            const submitHandler = submitHandlers.find((handler) => handler.name == handlerName);
+            if (submitHandler) {
+              submitHandler(values);
             } else {
-              console.error(
-                `No data-handler attribute found for submitter ${context.event.submitter}`
-              );
+              console.error(`No submit handler found for submitter ${context.event.submitter}`);
             }
+          } else {
+            console.error(
+              `No data-handler attribute found for submitter ${context.event.submitter}`
+            );
           }
         }
       },
