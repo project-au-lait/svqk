@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -36,7 +37,8 @@ public class IssueService {
   }
 
   public void delete(int id) {
-    repository.deleteById(id);
+    Optional<IssueEntity> issueEntityOpt = repository.findById(id);
+    issueEntityOpt.ifPresent(repository::delete);
   }
 
   public SearchResultVo<IssueEntity> search(SearchCriteriaVo criteria) { // <.>
