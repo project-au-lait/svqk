@@ -54,7 +54,7 @@ JPA Entityを生成し、ライブラリ化するための資材を格納しま�
   JPA Entity Generatorにより生成されたEntityのjavaファイル
 
 
-|{project-artifactId}-back
+|{project-artifactId}-backend
 a|
 Backendの資材を格納します。
 このプロジェクトはQuarkus Maven Pluginで作成したものを元にしています。

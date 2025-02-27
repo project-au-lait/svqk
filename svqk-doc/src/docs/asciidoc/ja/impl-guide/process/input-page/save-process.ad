@@ -26,32 +26,13 @@ a|[.description]
 
 ===== DB
 
-マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
-
-.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
-[source,sql]
-----
-include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="15..25"]
-----
-
-<.> テーブルを作成するCREATE文を実装します。
+include::../snippet/db-migration.ad[]
 
 ===== Backend
 
 ====== Entity
 
-Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
-
-.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
-[source,yml]
-----
-packages:
-  ${project.groupId}.domain.issue:  # <.>
-    - issue
-----
-
-. packages属性にEntityの生成先パッケージとテーブル名を追加します。
-** "Entityの生成先パッケージ" : ["テーブル名"]
+include::../snippet/entity-generation.ad[]
 
 jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
 
@@ -65,10 +46,10 @@ include::{project_root}/svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/I
 
 xref:../arch-desc/index.adoc#_repository[アーキテクチャ記述] に従いRepositoryのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java[lines="1..10"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java[lines="1..10"]
 }
 ----
 
@@ -76,10 +57,10 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/Iss
 
 xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServiceのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,12..16,20..24"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..2,12..16,20..24"]
 }
 ----
 
@@ -91,20 +72,20 @@ include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/domain/issue/Iss
 
 xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java[]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java[]
 ----
 
 ====== Controller
 
 xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いControllerのjavaファイルを作成/更新します。
 
-.{project-artifactid}-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
+.{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,18..23,36..44"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..2,18..23,36..44"]
 }
 ----
 

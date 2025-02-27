@@ -11,7 +11,7 @@ package migration {
 DDL -left-> DB: 2. migrate
 
 
-package back {
+package backend {
   node "4. Backend" as Backend <<Quarkus>>
 
   component "      UnitTest\nIntegrationTest" <<JUnit>> as UIT

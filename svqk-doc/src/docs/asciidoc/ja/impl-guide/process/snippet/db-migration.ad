@@ -1,0 +1,13 @@
+:project_root: ../../../../../../../../
+
+マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。
+
+.{project-artifactid}-migration/src/main/resources/db/migration/V001__init.sql
+[source,sql]
+----
+include::{project_root}/svqk-migration/src/main/resources/db/migration/V001__init.sql[lines="15..25"]
+----
+
+<.> テーブルを作成するCREATE文を実装します。
+
+マイグレーションスクリプトを更新したらVSCode Task: `migrate` を実行し、テーブルが作成されていることを確認します。

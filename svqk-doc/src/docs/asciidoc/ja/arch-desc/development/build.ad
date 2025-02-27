@@ -28,8 +28,8 @@ a|
 . containerプロジェクトがDockerを使用してDBを起動します。
 . migrationプロジェクトがFlywayを使用してDBマイグレーションを実行します。
 . frontendプロジェクトがSveltKitアプリであるFrontendをビルドします。
-. backプロジェクトがQuarkusアプリであるBackendをビルドします。
-. backプロジェクトがBackendに対してUnit・Integrationテストを実行します。
+. backendプロジェクトがQuarkusアプリであるBackendをビルドします。
+. backendプロジェクトがBackendに対してUnit・Integrationテストを実行します。
 . e2etestプロジェクトがPlaywrightを使用してEnd to Endテストを実行します。
 |===
 
@@ -193,13 +193,13 @@ a|Maven Resources Pluginが以下のコピーを行います。
 .resources/.envファイルの内容
 [source,env]
 ----
-PUBLIC_BACKEND_URL=http://localhost:${back.port}
+PUBLIC_BACKEND_URL=http://localhost:${backend-port}
 ----
 
 .frontendプロジェクト直下にコピーされた.envの内容
 [source,env,subs="attributes"]
 ----
-PUBLIC_BACKEND_URL={back-port}
+PUBLIC_BACKEND_URL={backend-port}
 ----
 
 |process-classes
@@ -217,11 +217,11 @@ a|Maven JAR Pluginがfrontendプロジェクトのビルド後の資材を含む
 
 ==== back
 
-ここでは、backプロジェクトのビルド構造を説明します。
-backプロジェクトはfrontendプロジェクトをdependency設定しているため、frontendプロジェクトのビルド後に実行されます。
+ここでは、backendプロジェクトのビルド構造を説明します。
+backendプロジェクトはfrontendプロジェクトをdependency設定しているため、frontendプロジェクトのビルド後に実行されます。
 
 
-.backプロジェクトのビルドフェーズごとの処理
+.backendプロジェクトのビルドフェーズごとの処理
 [cols="1,2"]
 |===
 ^|Build Phase ^| Process
@@ -242,7 +242,7 @@ quarkus.datasource.username={db-username}
 ----
 
 |package
-a|Maven JAR Pluginがbackプロジェクトをビルドしjarファイルを生成します。  +
+a|Maven JAR Pluginがbackendプロジェクトをビルドしjarファイルを生成します。  +
 Quarkus Maven Plugin がこのjarファイルを使用してBackendのコンテナイメージをビルドします。このコンテナイメージにはfrontendプロジェクトのビルド資材であるWebJarsも含まれます。
 
 |integration-test
@@ -256,7 +256,7 @@ a|Maven Failsafe Plugnがsrc/integration-test/javaディレクトリ以下のテ
 ==== e2etest
 
 ここではe2etestプロジェクトのビルド構造を説明します。
-e2etestプロジェクトはbackプロジェクトをdependency設定しているため、backプロジェクトのビルド後に実行されます。
+e2etestプロジェクトはbackendプロジェクトをdependency設定しているため、backendプロジェクトのビルド後に実行されます。
 
 .e2etestプロジェクトのビルドフェーズごとの処理
 [cols="1,2"]

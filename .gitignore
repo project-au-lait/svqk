@@ -5,7 +5,7 @@
 node_modules
 target
 
-svqk-back/.env
+svqk-backend/.env
 
 svqk-container/.env
 
@@ -23,7 +23,7 @@ svqk-frontend/!.env.example
 svqk-frontend/vite.config.js.timestamp-*
 svqk-frontend/vite.config.ts.timestamp-*
 
-svqk-scaff/generators/app/index.d.ts
-svqk-scaff/generators/app/index.js
-svqk-scaff/generators/app/index.js.map
-svqk-scaff/src/main/resources/jeg-metadata.json
+svqk-generator/generators/app/index.d.ts
+svqk-generator/generators/app/index.js
+svqk-generator/generators/app/index.js.map
+svqk-generator/src/main/resources/jeg-metadata.json

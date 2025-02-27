@@ -1,0 +1,52 @@
+📁 svqk
+├── 📁 svqk-entity
+│   └── 📁 src
+│       └── 📁 main/java/dev/aulait/svqk/domain/issue
+│           └── 📄 IssueEntity.java
+├── 📁 svqk-backend
+│   └── 📁 src
+│       ├── 📁 main/java/dev/aulait/svqk
+│       │   ├── interfaces/issue
+│       │   │   ├── 📄 IssueController.java
+│       │   │   ├── 📄 IssueFactory.java
+│       │   │   └── 📄 IssueDto.java
+│       │   └── 📁 domain/issue
+│       │       ├── 📄 IssueService.java
+│       │       └── 📄 IssueRepository.java
+│       └── 📁 integration-test/java/dev/aulait/svqk/interfaces/issue
+│           ├── 📄 IssueControllerIT.java
+│           ├── 📄 IssueDataFactory.java
+│           └── 📄 IssueClient.java
+├── 📁 svqk-frontend
+│   └── 📁 src
+│       ├── 📁 routes/issues
+│       │   ├── 📁 [issueId]
+│       │   │   ├── 📄 +page.svelte
+│       │   │   └── 📄 +page.ts
+│       │   ├── 📁 new
+│       │   │   ├── 📄 +page.svelte
+│       │   │   └── 📄 +page.ts
+│       │   ├── 📄 +page.svelte
+│       │   └── 📄 +page.ts
+│       ├── 📁 lib
+│       │   └── 📁 arch
+│       │       └── 📄 Api.ts
+│       └── 📁 lib/domains/issue
+│           └── 📄 IssueForm.svelte
+└── 📁 svqk-e2etest
+    └── 📁 tests
+        ├── 📁 api
+        │   └── 📄 Api.ts
+        ├── 📁 facades
+        │   └── 📄 IssueFacade.ts
+        ├── 📁 factories
+        │   └── 📄 IssueDataFactory.ts
+        ├── 📁 pages
+        │   ├── 📁 issue-input
+        │   │   ├── 📄 IssueInputPage.ts
+        │   │   └── 📄 IssueInputPageElement.ts
+        │   └── 📁 issue-list
+        │       ├── 📄 IssueListPage.ts
+        │       └── 📄 IssueListPageElement.ts
+        └── 📁 specs
+            └── 📄 issue.spec.ts

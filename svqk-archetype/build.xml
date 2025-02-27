@@ -55,8 +55,8 @@
 
     <property file="${projectdir}/${project}-cicd/port.properties" />
 
-    <exec executable="pnpm" dir="${projectdir}/${project}-scaff">
-      <env key="BACK_PORT" value="${back.port.random}" />
+    <exec executable="pnpm" dir="${projectdir}/${project}-generator">
+      <env key="BACKEND_PORT" value="${backend.port.random}" />
       <env key="DB_PORT" value="${db.port.random}" />
       <arg line="start --component all World" />
     </exec>
@@ -168,6 +168,7 @@
   <target name="adjust-archetype-resources">
     <antcall target="add-pom" />
     <antcall target="adjust-archetype-metadata" />
+    <antcall target="adjust-generator-conf" />
     <antcall target="add-post-generate-script" />
 
     <if>
@@ -210,6 +211,22 @@
       replace="\1*.ts\3" />
   </target>
 
+<target name="adjust-generator-conf">
+  <property name=".yo-rc.json"
+    value="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-generator/.yo-rc.json" />
+    
+  <if>
+    <or>
+      <equals arg1="${archetype.type}" arg2="arch" />
+      <equals arg1="${archetype.type}" arg2="refimpl" />
+    </or>
+    <then>
+      <replaceregexp file="${.yo-rc.json}"
+          match="skeleton"
+          replace="arch" />
+    </then>
+  </if>
+</target>
 
   <target name="add-post-generate-script">
     <copy file="${basedir}/src/archetype/archetype-post-generate.groovy"
@@ -235,8 +252,8 @@
 
   <target name="add-front-controller">
     <copy
-      file="${archetype.prjdir}/svqk-back/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
-      todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-back/src/main/java/arch/front"
+      file="${archetype.prjdir}/svqk-backend/src/main/java/dev/aulait/svqk/arch/front/FrontResourceRouter.java"
+      todir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-backend/src/main/java/arch/front"
       overwrite="true">
       <filterchain>
         <replacetokens begintoken="" endtoken="">

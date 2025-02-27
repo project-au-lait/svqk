@@ -1,0 +1,31 @@
+== 実装手順(自動生成)
+
+実装手順(自動生成)は、 https://github.com/project-au-lait/svqk/tree/main/svqk-generator[Generator] を使用してソースファイルを自動生成する手順をガイドしたものです。
+
+Generatorを使うことで、アーキテクチャ記述に準拠したアプリケーション(Frontend、Backend)、自動テスト(Integration Test、End to End Test)の動作可能なソースファイルが生成できます。
+
+開発者は、Generatorを使用して生成されたソースファイルに対し、要件の詳細を実装します。
+
+=== DB
+
+include::../snippet/db-migration.ad[]
+
+=== Entity
+
+include::../snippet/entity-generation.ad[]
+
+=== Generator
+
+VSCode Task: `generate` を実行します。
+生成対象のコンポーネントに `all` を選択し、生成元のEntityに `Issue` と入力します。
+Generatorが生成するソースファイルは以下の通りです。
+
+.生成されたソースファイル
+[source,txt]
+----
+include::gen-files.txt[]
+----
+
+include::../snippet/all-verification.ad[]
+
+以降は、生成されたソースファイルに対し、要件の詳細を実装します。

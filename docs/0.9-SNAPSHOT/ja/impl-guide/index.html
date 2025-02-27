@@ -43,7 +43,14 @@
 <li><a href="#access-info">アクセス情報</a></li>
 </ul>
 </li>
-<li><a href="#dev-process">実装手順</a>
+<li><a href="#dev-process">実装手順(自動生成)</a>
+<ul class="sectlevel2">
+<li><a href="#_db">DB</a></li>
+<li><a href="#_entity">Entity</a></li>
+<li><a href="#_generator">Generator</a></li>
+</ul>
+</li>
+<li><a href="#_実装手順">実装手順</a>
 <ul class="sectlevel2">
 <li><a href="#_登録画面">登録画面</a>
 <ul class="sectlevel3">
@@ -59,10 +66,10 @@
 </li>
 <li><a href="#_登録処理">登録処理</a>
 <ul class="sectlevel4">
-<li><a href="#_db">DB</a></li>
+<li><a href="#_db_2">DB</a></li>
 <li><a href="#_backend">Backend</a>
 <ul class="sectlevel5">
-<li><a href="#_entity">Entity</a></li>
+<li><a href="#_entity_2">Entity</a></li>
 <li><a href="#_repository">Repository</a></li>
 <li><a href="#_service">Service</a></li>
 <li><a href="#_dto">DTO</a></li>
@@ -114,7 +121,7 @@
 </li>
 <li><a href="#master-load">マスターデータロード</a>
 <ul class="sectlevel3">
-<li><a href="#_db_2">DB</a>
+<li><a href="#_db_3">DB</a>
 <ul class="sectlevel4">
 <li><a href="#_migration_script_ddl">Migration Script - DDL</a></li>
 <li><a href="#_migration_script_data">Migration Script - Data</a></li>
@@ -122,7 +129,7 @@
 </li>
 <li><a href="#_backend_3">Backend</a>
 <ul class="sectlevel4">
-<li><a href="#_entity_2">Entity</a></li>
+<li><a href="#_entity_3">Entity</a></li>
 <li><a href="#_repository_2">Repository</a></li>
 <li><a href="#_service_3">Service</a></li>
 <li><a href="#_dto_3">DTO</a></li>
@@ -169,7 +176,7 @@
 <li>
 <p><strong>アプリケーションの確認</strong><br>
 構築した環境でアプリケーションを実行します。
-アーキテクチャ記述の<a href="../arch-desc/index.html#usecase">ユースケース</a>と照らし合わせてアプリケーションを操作し、実装されている機能を確認します。</p>
+アプリケーションを操作し、実装されている機能を確認します。</p>
 </li>
 <li>
 <p><strong>アプリケーションアーキテクチャの確認</strong><br></p>
@@ -181,7 +188,7 @@
 </li>
 <li>
 <p><strong>物理的な実装</strong><br>
-<a href="#dev-process">実装手順</a>とそこで説明されている各コンポーネントのソースコードを参照し、コンポーネントの実装方法を確認します。</p>
+<a href="#dev-process">実装手順(自動生成)</a>とそこで説明されている各コンポーネントのソースコードを参照し、コンポーネントの実装方法を確認します。</p>
 </li>
 </ol>
 </div>
@@ -338,7 +345,7 @@ mvnw install -T 1C -P setup,browse-e2etest
 </td>
 <td class="content">
 <div class="paragraph">
-<p>上記のセットアップコマンドの処理内容、及び実現方式は<a href="../arch-desc/index.html#build-structure">ビルド構成</a>を参照してください。</p>
+<p>上記のセットアップコマンドの処理内容、及び実現方式は<a href="../arch-desc/index.html#build-structure">ビルド構造</a>を参照してください。</p>
 </div>
 </td>
 </tr>
@@ -444,11 +451,11 @@ Backendサーバーが起動すると、backプロジェクト内で実装され
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Frontendの起動</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>start-front</code><br>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>start-frontend</code><br>
 Command: pnpm dev --open<br>
-(at svqk-front directory)</p></td>
+(at svqk-frontend directory)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Frontendサーバー(Vite)が起動します。<br>
-Frontendサーバーが起動すると、ブラウザが起動しfrontプロジェクト内で実装されているWebアプリが表示されます。</p></td>
+Frontendサーバーが起動すると、ブラウザが起動しfrontendプロジェクト内で実装されているWebアプリが表示されます。</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DBマイグレーションの実行</p></td>
@@ -469,9 +476,9 @@ Command: mvnw -f svqk-migration compile -P setup</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Front用API Clientの生成</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>gen-api-client</code><br>
 Command: pnpm gen-api-client<br>
-(at svqk-front directory)</p></td>
+(at svqk-frontend directory)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger-typescript-apiが実行されます。
-実行が終了すると、API Clientがfrontプロジェクトとe2etestプロジェクト内に生成されます。<br>
+実行が終了すると、API Clientがfrontendプロジェクトとe2etestプロジェクト内に生成されます。<br>
 この操作はBackendが起動した状態で実行可能です。</p></td>
 </tr>
 </tbody>
@@ -571,7 +578,147 @@ Command: pnpm gen-api-client<br>
 </div>
 </div>
 <div class="sect1">
-<h2 id="dev-process">実装手順</h2>
+<h2 id="dev-process">実装手順(自動生成)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_db">DB</h3>
+<div class="paragraph">
+<p>マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。</p>
+</div>
+<div class="listingblock">
+<div class="title">svqk-migration/src/main/resources/db/migration/V001__init.sql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql"><i class="conum" data-value="1"></i><b>(1)</b>
+CREATE TABLE issue (
+  id SERIAL PRIMARY KEY,
+  subject VARCHAR(128) NOT NULL,
+  due_date DATE,
+  status_id CHAR(1) NOT NULL REFERENCES issue_status,
+  tracker_id CHAR(1) NOT NULL REFERENCES tracker,
+  description VARCHAR(8192),
+  --${commonColumns}
+);</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>テーブルを作成するCREATE文を実装します。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>マイグレーションスクリプトを更新したらVSCode Task: <code>migrate</code> を実行し、テーブルが作成されていることを確認します。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_entity">Entity</h3>
+<div class="paragraph">
+<p>Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。</p>
+</div>
+<div class="listingblock">
+<div class="title">svqk-entity/src/tool/resources/jeg-config.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yml hljs" data-lang="yml">packages:
+  ${project.groupId}.domain.issue:  <i class="conum" data-value="1"></i><b>(1)</b>
+    - issue</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>packages属性にEntityの生成先パッケージとテーブル名を追加します。<br>
+Entityの生成先パッケージ :<br>
+&nbsp;&nbsp;&#45; テーブル名</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generator">Generator</h3>
+<div class="paragraph">
+<p>VSCode Task: <code>generate</code> を実行します。
+生成対象のコンポーネントに <code>all</code> を選択し、生成元のEntityに <code>Issue</code> と入力します。
+Generatorの実行結果は以下の通りです。</p>
+</div>
+<div class="listingblock">
+<div class="title">自動生成されたソースファイル</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">📁 svqk
+├── 📁 svqk-entity
+│   └── 📁 src
+│       └── 📁 main/java/dev/aulait/svqk/domain/issue
+│           └── 📄 IssueEntity.java
+├── 📁 svqk-backend
+│   └── 📁 src
+│       ├── 📁 main/java/dev/aulait/svqk
+│       │   ├── interfaces/issue
+│       │   │   ├── 📄 IssueController.java
+│       │   │   ├── 📄 IssueFactory.java
+│       │   │   └── 📄 IssueDto.java
+│       │   └── 📁 domain/issue
+│       │       ├── 📄 IssueService.java
+│       │       └── 📄 IssueRepository.java
+│       └── 📁 integration-test/java/dev/aulait/svqk/interfaces/issue
+│           ├── 📄 IssueControllerIT.java
+│           ├── 📄 IssueDataFactory.java
+│           └── 📄 IssueClient.java
+├── 📁 svqk-frontend
+│   └── 📁 src
+│       ├── 📁 routes/issues
+│       │   ├── 📁 [issueId]
+│       │   │   ├── 📄 +page.svelte
+│       │   │   └── 📄 +page.ts
+│       │   ├── 📁 new
+│       │   │   ├── 📄 +page.svelte
+│       │   │   └── 📄 +page.ts
+│       │   ├── 📄 +page.svelte
+│       │   └── 📄 +page.ts
+│       ├── 📁 lib
+│       │   └── 📁 arch
+│       │       └── 📄 Api.ts
+│       └── 📁 lib/domains/issue
+│           └── 📄 IssueForm.svelte
+└── 📁 svqk-e2etest
+    └── 📁 tests
+        ├── 📁 api
+        │   └── 📄 Api.ts
+        ├── 📁 facades
+        │   └── 📄 IssueFacade.ts
+        ├── 📁 factories
+        │   └── 📄 IssueDataFactory.ts
+        ├── 📁 pages
+        │   ├── 📁 issue-input
+        │   │   ├── 📄 IssueInputPage.ts
+        │   │   └── 📄 IssueInputPageElement.ts
+        │   └── 📁 issue-list
+        │       ├── 📄 IssueListPage.ts
+        │       └── 📄 IssueListPageElement.ts
+        └── 📁 specs
+            └── 📄 issue.spec.ts</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Frontendサーバー、Backendサーバー、DBを全て起動した状態で画面操作を行い、期待通りの挙動になること、BackendサーバーのログにWeb APIの処理のログ等が出力されることを確認します。
+それぞれの起動方法は<a href="#project-usage">プロジェクトの使い方</a>を参照してください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_実装手順">実装手順</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>実装手順は、ソースコードの実装方法とそのファイルの配置場所、及びそれらを実装する順序をガイドしたものです。</p>
@@ -708,7 +855,7 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <p><a href="../arch-desc/index.html#_page">アーキテクチャ記述</a> に従いPageのsvelteファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/routes/issues/new/+page.svelte スクリプトセクション</div>
+<div class="title">svqk-frontend/src/routes/issues/new/+page.svelte スクリプトセクション</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  import { goto } from '$app/navigation';
   import { pageStore } from '$lib/arch/global/PageStore';
@@ -738,7 +885,7 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 </table>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/routes/issues/new/+page.svelte マークアップセクション</div>
+<div class="title">svqk-frontend/src/routes/issues/new/+page.svelte マークアップセクション</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.register')} /&gt; <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
@@ -758,7 +905,7 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <p>UIComponentのsvelteファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション</div>
+<div class="title">svqk-frontend/src/lib/domain/issue/IssueForm.svelte スクリプトセクション</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
@@ -817,7 +964,7 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 </table>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/lib/domain/issue/IssueForm.svelte マークアップセクション</div>
+<div class="title">svqk-frontend/src/lib/domain/issue/IssueForm.svelte マークアップセクション</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;form use:form&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
   &lt;div&gt;
@@ -871,7 +1018,8 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Frontendサーバー、Backendサーバー、DBを全て起動した状態で画面操作を行い、期待通りの挙動になること、BackendサーバーのログにWeb APIの処理のログ等が出力されることを確認します。</p>
+<p>Frontendサーバー、Backendサーバー、DBを全て起動した状態で画面操作を行い、期待通りの挙動になること、BackendサーバーのログにWeb APIの処理のログ等が出力されることを確認します。
+それぞれの起動方法は<a href="#project-usage">プロジェクトの使い方</a>を参照してください。</p>
 </div>
 </td>
 </tr>
@@ -932,7 +1080,7 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_db">DB</h5>
+<h5 id="_db_2">DB</h5>
 <div class="paragraph">
 <p>マイグレーションスクリプトにテーブルを作成するCREATE文とデータをINSERT文を実装します。</p>
 </div>
@@ -959,11 +1107,14 @@ CREATE TABLE issue (
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>マイグレーションスクリプトを更新したらVSCode Task: <code>migrate</code> を実行し、テーブルが作成されていることを確認します。</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_backend">Backend</h5>
 <div class="sect5">
-<h6 id="_entity">Entity</h6>
+<h6 id="_entity_2">Entity</h6>
 <div class="paragraph">
 <p>Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。</p>
 </div>
@@ -978,14 +1129,9 @@ CREATE TABLE issue (
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>packages属性にEntityの生成先パッケージとテーブル名を追加します。</p>
-<div class="ulist">
-<ul>
-<li>
-<p>"Entityの生成先パッケージ" : ["テーブル名"]</p>
-</li>
-</ul>
-</div>
+<p>packages属性にEntityの生成先パッケージとテーブル名を追加します。<br>
+Entityの生成先パッケージ :<br>
+&nbsp;&nbsp;&#45; テーブル名</p>
 </li>
 </ol>
 </div>
@@ -1258,13 +1404,13 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <h6 id="_api_client">API Client</h6>
 <div class="paragraph">
 <p>VSCode Task: <code>gen-api-client</code> を実行し、API Clientを生成します。
-生成されたAPI Clientは svqk-front/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
+生成されたAPI Clientは svqk-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_uicomponent_2">UIComponent</h6>
 <div class="listingblock">
-<div class="title">svqk-front/src/lib/domain/issue/IssueForm.svelte スクリプトセクション</div>
+<div class="title">svqk-frontend/src/lib/domain/issue/IssueForm.svelte スクリプトセクション</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  ...
   import type { IssueModel, IssueStatusModel } from '$lib/arch/api/Api';
@@ -1498,22 +1644,23 @@ public class IssueService {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.SearchCriteriaDto;
-
+import dev.aulait.svqk.arch.search.PageControlDto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
-@EqualsAndHashCode(callSuper = true) <i class="conum" data-value="1"></i><b>(1)</b>
-public class IssueSearchCriteriaDto extends SearchCriteriaDto { <i class="conum" data-value="2"></i><b>(2)</b>
-  <i class="conum" data-value="3"></i><b>(3)</b>
+public class IssueSearchCriteriaDto { <i class="conum" data-value="1"></i><b>(1)</b>
+  <i class="conum" data-value="2"></i><b>(2)</b>
   private String text;
-  private List&lt;IssueStatusDto&gt; issueStatuses = new ArrayList&lt;&gt;();
+  private List&lt;String&gt; issueStatuses = new ArrayList&lt;&gt;();
   private LocalDate dueDate;
   private boolean subjectOnly;
+
+  @Schema(required = true)
+  private PageControlDto pageControl = new PageControlDto();
 }</code></pre>
 </div>
 </div>
@@ -1544,7 +1691,7 @@ public class IssueSearchCriteriaDto extends SearchCriteriaDto { <i class="conum"
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
-import static dev.aulait.svqk.arch.search.ArithmeticOperatorCd.*;
+import static dev.aulait.svqk.arch.search.ComparisonOperatorCd.*;
 import static dev.aulait.svqk.arch.search.LogicalOperatorCd.*;
 
 import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
@@ -1553,7 +1700,6 @@ import dev.aulait.svqk.arch.search.SearchResultVo;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
 import dev.aulait.svqk.domain.issue.IssueEntity;
-import dev.aulait.svqk.domain.issue.IssueStatusEntity;
 import dev.aulait.svqk.domain.issue.IssueTrackingRs;
 import dev.aulait.svqk.interfaces.issue.IssueController.IssueSearchResultDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -1568,30 +1714,26 @@ public class IssueFactory {
           .build(); <i class="conum" data-value="1"></i><b>(1)</b>
 
   public SearchCriteriaVo build(IssueSearchCriteriaDto criteria) { <i class="conum" data-value="2"></i><b>(2)</b>
-    SearchCriteriaBuilder builder =
-        new SearchCriteriaBuilder()
-            .select("SELECT i FROM IssueEntity i")
-            .select("JOIN FETCH i.issueStatus s")
-            .select("JOIN FETCH i.tracker t")
-            .where("i.subject", LIKE, criteria.getText()); <i class="conum" data-value="3"></i><b>(3)</b>
-
-    if (!criteria.isSubjectOnly()) {
-      builder.where(OR, "i.description", LIKE, criteria.getText());
-    }
-
-    var statuses = BeanUtils.mapAll(criteria.getIssueStatuses(), IssueStatusEntity.class);
-
-    return builder
-        .where("i.issueStatus", IN, statuses)
+    return new SearchCriteriaBuilder()
+        .select("SELECT i FROM IssueEntity i")
+        .select("JOIN FETCH i.issueStatus")
+        .select("JOIN FETCH i.tracker")
+        .where("i.subject", LIKE, criteria.getText())
+        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : criteria.getText())
+        .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
-        .build(criteria); <i class="conum" data-value="4"></i><b>(4)</b>
+        .build(criteria.getPageControl()); <i class="conum" data-value="3"></i><b>(3)</b>
   }
 
-  public IssueSearchResultDto build(SearchResultVo&lt;IssueEntity&gt; vo) { <i class="conum" data-value="5"></i><b>(5)</b>
-    return BeanUtils.map(searchResultConfig, vo, IssueSearchResultDto.class); <i class="conum" data-value="6"></i><b>(6)</b>
-  }
-}</code></pre>
+  public IssueTrackingDto buildIssueTracking(List&lt;IssueTrackingRs&gt; issueTrackings) {
+    IssueTrackingDto dto = new IssueTrackingDto();
+
+    for (IssueTrackingRs issueTracking : issueTrackings) {
+      dto.add(
+          issueTracking.getTracker().getId(),
+          issueTracking.getIssueStatus().getId(),
+          issueTracking.getCount());</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1746,51 +1888,55 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <h6 id="_api_client_2">API Client</h6>
 <div class="paragraph">
 <p>VSCode Task: <code>gen-api-client</code> を実行し、API Clientを生成します。
-生成されたAPI Clientは svqk-front/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
+生成されたAPI Clientは svqk-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/lib/arch/api/Api.ts</div>
+<div class="title">svqk-frontend/src/lib/arch/api/Api.ts</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">export interface IssueSearchCriteriaModel {
-  /** @format int32 */
-  pageNumber?: number;
-  /** @format int32 */
-  pageSize?: number;
-  /** @format int32 */
-  pageNumsRange?: number;
-  sortOrders?: SortOrderModel[];
   text?: string;
-  issueStatuses?: IssueStatusModel[];
+  issueStatuses?: string[];
   dueDate?: LocalDate;
   subjectOnly?: boolean;
+  pageControl: PageControlModel;
 }
 
 export interface IssueSearchResultModel {
   list: IssueModel[];
-  pageCtrl: PageControlModel;
+  pageResult: PageResultModel;
 }
 
-export interface PageControlModel {
+export interface IssueStatusModel {
+  id: string;
+  name: string;
+  /** @format int64 */
+  version: number;
+}
+  pageNumsRange?: number;
+  sortOrders?: SortOrderModel[];
+  /** @format int32 */
+  offset?: number;
+}
+
+export interface PageResultModel {
   /** @format int64 */
   count: number;
   /** @format int32 */
-  pageSize: number;
-  /** @format int32 */
   start: number;
-  /** @format int32 */
+  /** @format int64 */
   end: number;
   /** @format int32 */
-  lastPage: number;
+  lastPageNum: number;
   pageNums: number[];
 }
 
 export interface SortOrderModel {
-  asc?: boolean;
-  field?: string;
-}
+/**
+        format: 'json',
+        type: ContentType.Json,
+        ...params
+      }),
 
-export class Api&lt;SecurityDataType extends unknown&gt; extends HttpClient&lt;SecurityDataType&gt; {
-  issues = {
     /**
      * No description
      *
@@ -1803,10 +1949,6 @@ export class Api&lt;SecurityDataType extends unknown&gt; extends HttpClient&lt;S
         path: `/api/issues/search`,
         method: 'POST',
         body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params
-      }),
   };
 }</code></pre>
 </div>
@@ -1818,20 +1960,26 @@ export class Api&lt;SecurityDataType extends unknown&gt; extends HttpClient&lt;S
 <p><a href="../arch-desc/index.html#_pageloader">アーキテクチャ記述</a> に従いPageLoaderのtsファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/routes/issues/+page.ts</div>
+<div class="title">svqk-frontend/src/routes/issues/+page.ts</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">import type { IssueSearchCriteriaModel, IssueSearchResultModel } from '$lib/arch/api/Api';
 import ApiHandler from '$lib/arch/api/ApiHandler';
 import { t } from '$lib/translations';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch }) =&gt; {
-  const condition = { issueStatuses: [], pageNumber: 1 } as IssueSearchCriteriaModel; <i class="conum" data-value="1"></i><b>(1)</b>
+export const load: PageLoad = async ({ fetch, url }) =&gt; {
+  const condition = {
+    issueStatuses: [],
+    pageControl: {
+      pageNumber: 1
+    },
+    ...JSON.parse(decodeURIComponent(url.searchParams.get('q') ?? '{}'))
+  } as IssueSearchCriteriaModel;
 
   const result =
     (await ApiHandler.handle&lt;IssueSearchResultModel&gt;(fetch, (api) =&gt;
       api.issues.issuesSearch(condition)
-    )) || ({} as IssueSearchResultModel); <i class="conum" data-value="2"></i><b>(2)</b>
+    )) || ({} as IssueSearchResultModel); <i class="conum" data-value="1"></i><b>(1)</b>
 
   return {
     title: t.get('msg.issue'),
@@ -1860,10 +2008,10 @@ export const load: PageLoad = async ({ fetch }) =&gt; {
 <p><a href="../arch-desc/index.html#_page">アーキテクチャ記述</a> に従いPageのsvelteファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/routes/issues/+page.svelte スクリプトセクション</div>
+<div class="title">svqk-frontend/src/routes/issues/+page.svelte スクリプトセクション</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  import type { IssueModel, IssueSearchResultModel } from '$lib/arch/api/Api';
-  import ApiHandler from '$lib/arch/api/ApiHandler';
+<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  import { afterNavigate, goto } from '$app/navigation';
+  import type { IssueModel } from '$lib/arch/api/Api';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
@@ -1875,7 +2023,10 @@ export const load: PageLoad = async ({ fetch }) =&gt; {
   import type { PageData } from '../issues/$types';
 
   let { data }: { data: PageData } = $props();
-  let { result, condition } = $state(data);
+  let { condition } = $state(data);
+  let { result } = $derived(data);
+
+  let open = $state(false);
 
   const form = FormValidator.createForm({}, search); <i class="conum" data-value="1"></i><b>(1)</b>
 
@@ -1887,9 +2038,6 @@ export const load: PageLoad = async ({ fetch }) =&gt; {
     .add($t('msg.dueDate'), 'i.dueDate', (issue) =&gt; DateUtils.date(issue.dueDate))
     .add($t('msg.updatedAt'), 'i.updatedAt', (issue) =&gt; DateUtils.datetime(issue.updatedAt))
     .build(); <i class="conum" data-value="2"></i><b>(2)</b>
-
-  <i class="conum" data-value="3"></i><b>(3)</b>
-  async function search() {
   }</code></pre>
 </div>
 </div>
@@ -1910,7 +2058,7 @@ export const load: PageLoad = async ({ fetch }) =&gt; {
 </table>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/routes/issues/+page.svelte マークアップセクション</div>
+<div class="title">svqk-frontend/src/routes/issues/+page.svelte マークアップセクション</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;section&gt;
   &lt;form use:form&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
@@ -2025,19 +2173,19 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <p><a href="../arch-desc/index.html#_page">アーキテクチャ記述</a> に従いPageのsvelteファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/routes/issues/+page.svelte スクリプトセクション</div>
+<div class="title">svqk-frontend/src/routes/issues/+page.svelte スクリプトセクション</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  async function search() {
-    <i class="conum" data-value="1"></i><b>(1)</b>
-    const r = await ApiHandler.handle&lt;IssueSearchResultModel&gt;(fetch, (api) =&gt;
-      api.issues.issuesSearch(condition)
-    );
+<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">    .build(); <i class="conum" data-value="1"></i><b>(1)</b>
 
-    <i class="conum" data-value="2"></i><b>(2)</b>
-    if (r) {
-      result = r;
-    }
-  }</code></pre>
+  function search() {
+    goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
+  }
+
+  afterNavigate(() =&gt; {
+    condition = data.condition;
+    open = Boolean(condition.subjectOnly || condition.issueStatuses?.length || condition.dueDate);
+  });
+&lt;/script&gt;</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2141,7 +2289,7 @@ Backendから取得したマスターデータをstoreとして保持します�
 </ol>
 </div>
 <div class="sect3">
-<h4 id="_db_2">DB</h4>
+<h4 id="_db_3">DB</h4>
 <div class="sect4">
 <h5 id="_migration_script_ddl">Migration Script - DDL</h5>
 <div class="paragraph">
@@ -2219,7 +2367,7 @@ public class V002__AddRecords extends BaseJavaCsvMigration {}</code></pre>
 <p>Backendに画面で使用するマスターデータをDBから取得するWeb APIを実装します。</p>
 </div>
 <div class="sect4">
-<h5 id="_entity_2">Entity</h5>
+<h5 id="_entity_3">Entity</h5>
 <div class="paragraph">
 <p>Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。</p>
 </div>
@@ -2442,19 +2590,22 @@ Backendサーバーの起動方法は<a href="#project-usage">プロジェクト
 <h5 id="_api_client_3">API Client</h5>
 <div class="paragraph">
 <p>VSCode Task: <code>gen-api-client</code> を実行し、API Clientを生成します。
-生成されたAPI Clientは svqk-front/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
+生成されたAPI Clientは svqk-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/lib/arch/api/Api.ts</div>
+<div class="title">svqk-frontend/src/lib/arch/api/Api.ts</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">export interface IssueStatusModel {
-  id: string;
-  name: string;
-  /** @format int64 */
-  version: number;
+<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">export interface IssueTrackingModel {
+  trackerStatusCountMap: Record&lt;string, Record&lt;string, number&gt;&gt;;
+  trackerCountMap: Record&lt;string, number&gt;;
 }
 
-export class Api&lt;SecurityDataType extends unknown&gt; extends HttpClient&lt;SecurityDataType&gt; {
+export interface IssueUpdateModel {
+/**
+        format: 'json',
+        ...params
+      })
+  };
   issueStatuses = {
     /**
      * No description
@@ -2467,18 +2618,14 @@ export class Api&lt;SecurityDataType extends unknown&gt; extends HttpClient&lt;S
       this.request&lt;IssueStatusModel[], any&gt;({
         path: `/api/issue-statuses`,
         method: 'GET',
-        format: 'json',
-        ...params
-      })
-  };
-}</code></pre>
+        format: 'json',</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_masterstore">MasterStore</h5>
 <div class="listingblock">
-<div class="title">svqk-front/src/lib/domain/issue/IssueStatusMasterStore.ts</div>
+<div class="title">svqk-frontend/src/lib/domain/issue/IssueStatusMasterStore.ts</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">import { readable } from 'svelte/store';
 import { provide } from 'inversify-binding-decorators';
@@ -2525,7 +2672,7 @@ export class IssueStatusMasterStore extends MasterStoreBase&lt;IssueStatusModel[
 </table>
 </div>
 <div class="listingblock">
-<div class="title">svqk-front/src/hooks.ts</div>
+<div class="title">svqk-frontend/src/hooks.ts</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">import '$lib/domain/issue/IssueStatusMasterStore'; <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>

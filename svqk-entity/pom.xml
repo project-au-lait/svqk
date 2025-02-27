@@ -64,7 +64,7 @@
           <configuration>
             <configFilePath>${project.build.outputDirectory}/jeg-config.yml</configFilePath>
             <metadataOutputDir>
-              ${project.parent.basedir}/${project.parent.artifactId}-scaff/src/main/resources</metadataOutputDir>
+              ${project.parent.basedir}/${project.parent.artifactId}-generator/src/main/resources</metadataOutputDir>
             <jdbcUrl>${db.jdbc.url}</jdbcUrl>
             <jdbcUsername>${db.username}</jdbcUsername>
             <jdbcPassword>${db.password}</jdbcPassword>

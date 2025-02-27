@@ -6,7 +6,7 @@ svqk
 │       │   └── +page.ts --- 5
 │       └── arch/api
 │           └── Api.ts --- 4
-└── svqk-back
+└── svqk-backend
     └── src
         └── main/java/dev/aulait/svqk
             └── interfaces/issue

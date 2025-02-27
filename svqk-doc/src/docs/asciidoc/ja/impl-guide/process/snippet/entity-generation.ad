@@ -1,0 +1,13 @@
+Entityを生成するための設定をjeg設定ファイル(jeg-config.yml)に追加します。
+
+.{project-artifactid}-entity/src/tool/resources/jeg-config.yml
+[source,yml]
+----
+packages:
+  ${project.groupId}.domain.issue:  # <.>
+    - issue
+----
+
+. packages属性にEntityの生成先パッケージとテーブル名を追加します。 +
+  Entityの生成先パッケージ : +
+  &nbsp;&nbsp;&#45; テーブル名

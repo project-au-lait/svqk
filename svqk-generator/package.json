@@ -1,5 +1,5 @@
 {
-  "name": "generator-svqk-scaff",
+  "name": "generator-svqk-generator",
   "version": "1.0.0",
   "description": "Scaffold for SVQK project",
   "type": "module",
@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "pnpm run build",
-    "start": "pnpm run prepare && pnpm yo svqk-scaff"
+    "start": "pnpm run prepare && pnpm yo svqk-generator"
   },
   "dependencies": {
     "@yeoman/types": "^1.5.0",
@@ -31,7 +31,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-xo": "^0.46.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "generator-svqk-scaff": "link:",
+    "generator-svqk-generator": "link:",
     "globals": "^15.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
