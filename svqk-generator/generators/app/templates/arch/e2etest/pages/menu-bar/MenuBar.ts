@@ -16,9 +16,9 @@ export default class MenuBar {
   }
 
   <%_ if (entityNmPascal !== "Issue") { _%>
-    async goto<%= entityNmPascal %>ListPage() {
-      await this.menuBarEl.click<%= entityNmPascal %>Link();
-      return new <%= entityNmPascal %>ListPage(this.menuBarEl);
-    }
+  async goto<%= entityNmPascal %>ListPage() {
+    await this.menuBarEl.click<%= entityNmPascal %>Link();
+    return new <%= entityNmPascal %>ListPage(this.menuBarEl);
+  }
   <%_ } _%>
 }

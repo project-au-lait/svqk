@@ -10,8 +10,8 @@ export default class MenuBarPageElement extends BasePageElement {
   }
 
   <%_ if (entityNmPascal !== "Issue") { _%>
-    async click<%= entityNmPascal %>Link() {
-      await this.click("#<%= entityNmCamel %>");
-    }
+  async click<%= entityNmPascal %>Link() {
+    await this.click("#<%= entityNmCamel %>");
+  }
   <%_ } _%>
 }
