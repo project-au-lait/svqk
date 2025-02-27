@@ -271,8 +271,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   pascal_to_kebab(pascal: string): string {
     return pascal
       .replace(/([a-z])([A-Z])/g, '$1-$2')
-      .replace(/[A-Z]/g, letter => letter.toLowerCase())
-      .toLowerCase();
+      .replace(/[A-Z]/g, letter => letter.toLowerCase());
   }
 
   _camel_to_pascal(camel: string): string {
