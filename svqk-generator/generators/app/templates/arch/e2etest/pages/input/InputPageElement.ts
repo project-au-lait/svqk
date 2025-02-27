@@ -13,21 +13,18 @@ export default class <%= entityNmPascal %>InputPageElement extends BasePageEleme
   }
   
   <%_ } _%>
-
   <%_ for (field of fields) { _%>
     <%_ if (field.required) { _%>
   async expect<%= getFieldNmPascal(field.fieldName) %>(<%= field.fieldName %>: string) {
     await this.expectText('#<%= field.fieldName %>', <%= field.fieldName %>);
   }
-
     <%_ } else { _%>
   async expect<%= getFieldNmPascal(field.fieldName) %>(<%= field.fieldName %>?: string) {
     await this.expectText('#<%= field.fieldName %>', <%= field.fieldName %> ?? '');
   }
-
     <%_ } _%>
-  <%_ } _%>
 
+  <%_ } _%>
   async clickSaveBtn() {
     await this.click('#save');
     await this.expectGlobalMessage(t('saved'));
