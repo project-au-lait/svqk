@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@arch/*": ["tests/arch/*"]
+    },
     "allowJs": true,
     "checkJs": true,
     "esModuleInterop": true,
