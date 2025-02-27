@@ -197,6 +197,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
+      entityNmKebab: this.pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
       compIdFields: this._get_composite_id_fields(idField),
@@ -265,6 +266,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _pascal_to_camel(pascal: string): string {
     return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+  }
+
+  pascal_to_kebab(pascal: string): string {
+    return pascal
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/[A-Z]/g, letter => letter.toLowerCase())
+      .toLowerCase();
   }
 
   _camel_to_pascal(camel: string): string {
@@ -390,8 +398,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const inputTmplPath = "e2etest/pages/input";
     const listTmplPath = "e2etest/pages/list";
     const menuBarTmplPath = "e2etest/pages/menu-bar";
-    const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmCamel}-input`;
-    const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmCamel}-list`;
+    const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-input`;
+    const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
 
     // TODO temporary
