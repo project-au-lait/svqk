@@ -13,9 +13,9 @@ export default class <%= entityNmPascal %>Factory {
     <%_ for (field of fields) { _%>
       <%_ const fieldType = field.javaType; _%>
       <%_ if (fieldType === "String") { _%>
-        <%= entityNmCamel %>.<%= field.fieldName %> = StringUtils.generateRandomString();
+    <%= entityNmCamel %>.<%= field.fieldName %> = StringUtils.generateRandomString();
       <%_ } else if (fieldType === "Integer") { _%>
-        <%= entityNmCamel %>.<%= field.fieldName %> = NumberUtils.generateRandomNumber();
+    <%= entityNmCamel %>.<%= field.fieldName %> = NumberUtils.generateRandomNumber();
       <%_ } _%>
     <%_ } _%>
     return <%= entityNmCamel %>;
