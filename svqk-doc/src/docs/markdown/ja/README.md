@@ -24,6 +24,10 @@ SVQK は、SvelteKit と Quarkus で Web アプリケーションを開発する
 
 このリポジトリは、上記アセットを構成する資材一式を格納しています。
 
+## Website
+
+[aulait.dev/#svqk](https://aulait.dev/#svqk)
+
 ## ドキュメント
 
 - [実装ガイド](https://aulait.dev/svqk/0.8/en/impl-guide/)
