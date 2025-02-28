@@ -14,7 +14,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 @Path(IssueController.ISSUES_PATH)
@@ -29,7 +28,7 @@ public class IssueController {
 
   static final String ISSUES_GET_PATH = "{issueId}";
 
-  static final String ISSUES_DELETE_PATH = "{issueId}";
+  static final String ISSUES_DELETE_PATH = "{issueId}/{version}";
 
   static final String ISSUES_TRACKING_GET_PATH = "tracking";
 
@@ -67,10 +66,13 @@ public class IssueController {
 
   @DELETE
   @Path(ISSUES_DELETE_PATH)
-  public Response delete(@PathParam("issueId") int id) {
-    service.delete(id);
+  public Integer delete(@PathParam("issueId") int id, @PathParam("version") int version) {
+    boolean deleted = service.delete(id, version);
+    if (!deleted) {
+      return null;
+    }
 
-    return Response.noContent().build();
+    return id;
   }
 
   @POST

@@ -40,10 +40,12 @@
   }
 
   async function deleteIssue() {
-    await ApiHandler.handle<void>(fetch, (api) => api.issues.issuesDelete(issue.id));
+    const response = await ApiHandler.handle<number>(fetch, (api) => api.issues.issuesDelete(issue.id, issue.version));
 
-    await handleAfterDelete();
-    messageStore.show($t('msg.deleted'));
+    if (response) {
+      await handleAfterDelete();
+      messageStore.show($t('msg.deleted'));
+    }
   }
 </script>
 

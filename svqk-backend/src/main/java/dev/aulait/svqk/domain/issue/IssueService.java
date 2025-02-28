@@ -36,9 +36,15 @@ public class IssueService {
     return updatedEntity;
   }
 
-  public void delete(int id) {
-    Optional<IssueEntity> issueEntityOpt = repository.findById(id);
-    issueEntityOpt.ifPresent(repository::delete);
+  public boolean delete(int id, int version) {
+    Optional<IssueEntity> issueEntityOpt = repository.findByIdAndVersion(id, version);
+
+    if (!issueEntityOpt.isPresent()) {
+      return false;
+    }
+
+    repository.delete(issueEntityOpt.get());
+    return true;
   }
 
   public SearchResultVo<IssueEntity> search(SearchCriteriaVo criteria) { // <.>
