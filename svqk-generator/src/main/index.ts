@@ -445,13 +445,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `${listDestPath}/${tmplData.entityNmPascal}ListPageElement.ts`,
         ],
       ];
-
-      // Add link to EntityListPage in layout
-      this._output_front_file(
-        "e2etest/+layout.svelte",
-        `${this.destFrontPath}/routes/+layout.svelte`,
-        tmplData
-      );
     }
 
     for (const [srcPath, destPath] of pathPairs) {

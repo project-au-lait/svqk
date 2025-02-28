@@ -1,4 +1,4 @@
-import BasePageElement from "../../arch/BasePageElement";
+import BasePageElement from "@arch/BasePageElement";
 
 export default class MenuBarPageElement extends BasePageElement {
   get pageNameKey(): string {
@@ -10,8 +10,8 @@ export default class MenuBarPageElement extends BasePageElement {
   }
 
   <%_ if (entityNmPascal !== "Issue") { _%>
-  async click<%= entityNmPascal %>Link() {
-    await this.click("#<%= entityNmCamel %>");
+  async open<%= entityNmPascal %>ListPage() {
+    await super.open('/<%= entityNmPlural %>');
   }
   <%_ } _%>
 }

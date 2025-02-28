@@ -1,4 +1,4 @@
-import BasePageElement from '../../arch/BasePageElement';
+import BasePageElement from '@arch/BasePageElement';
 import MenuBarPageElement from './MenuBarPageElement';
 import IssueListPage from '../issue-list/IssueListPage';
 import <%= entityNmPascal %>ListPage from '../<%= entityNmCamel %>-list/<%= entityNmPascal %>ListPage';
@@ -17,7 +17,7 @@ export default class MenuBar {
 
   <%_ if (entityNmPascal !== "Issue") { _%>
   async goto<%= entityNmPascal %>ListPage() {
-    await this.menuBarEl.click<%= entityNmPascal %>Link();
+    await this.menuBarEl.open<%= entityNmPascal %>ListPage();
     return new <%= entityNmPascal %>ListPage(this.menuBarEl);
   }
   <%_ } _%>
