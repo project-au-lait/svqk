@@ -1,7 +1,8 @@
 import { test } from '@playwright/test';
 import { <%= entityNmPascal %>Facade } from '../../facades/<%= entityNmPascal %>Facade';
-import { DryRun } from '../../arch/DryRun';
-import { locale } from '../../arch/MultiLng';
+import { DryRun } from '@arch/DryRun';
+import { locale } from '@arch/MultiLng';
+import NumberUtils from '@arch/NumberUtils';
 import TopPage from '../../pages/top/TopPage';
 import <%= entityNmPascal %>InputFactory from '../../factories/<%= entityNmPascal %>Factory';
 
@@ -20,7 +21,8 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   let <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>ListPage.gotoNew<%= entityNmPascal %>Page();
 
   // Create
-  const <%= entityNmCamel %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>();
+  const id = NumberUtils.generateRandomNumber();
+  const <%= entityNmCamel %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>(id);
   await <%= entityNmCamel %>InputPage.save(<%= entityNmCamel %>);
 
   // Rererence
@@ -29,9 +31,9 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>Facade.reference<%= entityNmPascal %>ById(menuBar, <%= entityNmCamel %>IdStr);
 
   // Update
-  const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>();
-  <%= entityNmCamel %>InputPage.save(updating<%= entityNmPascal %>);
-  <%= entityNmCamel %>InputPage.expect<%= entityNmPascal %>(updating<%= entityNmPascal %>);
+  const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>(id);
+  await <%= entityNmCamel %>InputPage.save(updating<%= entityNmPascal %>);
+  await <%= entityNmCamel %>InputPage.expect<%= entityNmPascal %>(updating<%= entityNmPascal %>);
 
   // TODO: Add <%= entityNmCamel %> delete step
 });

@@ -28,8 +28,8 @@ test('CRUD of Issue', async ({ browser }) => {
 
   // Update
   const updatingIssue = IssueInputFactory.createRandomIssue();
-  issueInputPage.save(updatingIssue);
-  issueInputPage.expectIssue(updatingIssue);
+  await issueInputPage.save(updatingIssue);
+  await issueInputPage.expectIssue(updatingIssue);
 
   // TODO: Add issue delete step
 });
