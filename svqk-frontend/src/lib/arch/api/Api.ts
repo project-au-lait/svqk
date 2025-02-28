@@ -507,11 +507,15 @@ export class Api<
      *
      * @tags Issue Controller
      * @name IssuesDelete
-     * @request DELETE:/api/issues/{issueId}
+     * @request DELETE:/api/issues/{issueId}/{version}
      */
-    issuesDelete: (issueId: number, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/api/issues/${issueId}`,
+    issuesDelete: (
+      issueId: number,
+      version: number,
+      params: RequestParams = {}
+    ) =>
+      this.request<number, any>({
+        path: `/api/issues/${issueId}/${version}`,
         method: "DELETE",
         ...params,
       }),
