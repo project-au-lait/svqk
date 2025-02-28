@@ -16,6 +16,7 @@
 
   <properties>
     <sonar.sources>src/</sonar.sources>
+    <sonar.exclusions>src/lib/arch/api/Api.ts</sonar.exclusions>
   </properties>
 
   <!-- Build -->
