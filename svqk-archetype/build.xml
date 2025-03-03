@@ -58,7 +58,7 @@
     <exec executable="pnpm" dir="${projectdir}/${project}-generator">
       <env key="BACKEND_PORT" value="${backend.port.random}" />
       <env key="DB_PORT" value="${db.port.random}" />
-      <arg line="generate --component all World" />
+      <arg line="generate --component all world" />
     </exec>
 
     <antcall target="cicd-test" />
