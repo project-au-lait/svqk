@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "pnpm",
       "args": [
-        "start",
+        "generate",
         "--component",
         "${input:component}",
         "${input:entities}"
