@@ -27,6 +27,7 @@
     <container.image>
       ${image.registry}/${project.parent.artifactId}/${project.parent.artifactId}-backend:${project.version}</container.image>
     <sonar.sources>tests/</sonar.sources>
+    <sonar.exclusions>tests/api/Api.ts</sonar.exclusions>
   </properties>
 
 
