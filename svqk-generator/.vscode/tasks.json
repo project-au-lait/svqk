@@ -20,6 +20,7 @@
       "type": "pickString",
       "description": "Choose a component",
       "options": [
+        "entity",
         "backend",
         "integration-test",
         "api-client",

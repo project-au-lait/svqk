@@ -16,6 +16,7 @@ import {
 } from "./types.js";
 
 const allowedComponentValues = [
+  "entity",
   "backend",
   "integration-test",
   "api-client",
@@ -102,7 +103,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   async initializing() {
     try {
-      EntityGenerator.exec(this.genEntityCmd);
+      if (
+        this.optionsValues.component === "entity" ||
+        this.optionsValues.component === "all"
+      ) {
+        EntityGenerator.exec(this.genEntityCmd);
+      }
 
       if (this.optionsValues.component !== "api-client") {
         this.metadataConfig.list = await import(
