@@ -47,4 +47,15 @@ public class IssueClient {
             .extract()
             .asString());
   }
+
+  public Integer delete(int issueId, IssueDto issueDto) {
+    return Integer.parseInt(
+        given()
+            .body(issueDto)
+            .delete(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId)
+            .then()
+            .statusCode(200)
+            .extract()
+            .asString());
+  }
 }
