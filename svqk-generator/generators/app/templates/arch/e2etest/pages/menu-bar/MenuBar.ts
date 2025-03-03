@@ -1,4 +1,4 @@
-import BasePageElement from '@arch/BasePageElement';
+import BasePageElement from '../../arch/BasePageElement';
 import MenuBarPageElement from './MenuBarPageElement';
 import IssueListPage from '../issue-list/IssueListPage';
 import <%= entityNmPascal %>ListPage from '../<%= entityNmCamel %>-list/<%= entityNmPascal %>ListPage';

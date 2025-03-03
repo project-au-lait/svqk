@@ -1,7 +1,7 @@
 <% include('../../../../lib/data-factory-def', { fields }); -%>
 import <%= entityNmPascal %>InputPageElement from './<%= entityNmPascal %>InputPageElement';
 import type { <%= entityNmPascal %>Model } from '../../api/Api';
-import BasePageElement from '@arch/BasePageElement';
+import BasePageElement from '../../arch/BasePageElement';
 
 export default class <%= entityNmPascal %>InputPage {
   private <%= entityNmCamel %>InputPageEl: <%= entityNmPascal %>InputPageElement;

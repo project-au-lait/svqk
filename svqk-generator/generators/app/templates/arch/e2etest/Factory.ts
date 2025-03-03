@@ -1,5 +1,5 @@
 import type { <%= entityNmPascal %>Model } from '../api/Api';
-import StringUtils from '@arch/StringUtils';
+import StringUtils from '../arch/StringUtils';
 
 export default class <%= entityNmPascal %>Factory {
   static create() {
