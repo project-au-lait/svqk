@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "pnpm run build",
-    "start": "pnpm run prepare && pnpm yo svqk-generator"
+    "generate": "pnpm run prepare && pnpm yo svqk-generator"
   },
   "dependencies": {
     "@yeoman/types": "^1.5.0",
