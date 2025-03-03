@@ -32,7 +32,7 @@
     {
       "id": "entities",
       "type": "promptString",
-      "description": "Enter entities (e.g. Entity1 Entity2 Entity3)"
+      "description": "Enter tables (e.g. Table1 Table2 Table3)"
     }
   ]
 }
