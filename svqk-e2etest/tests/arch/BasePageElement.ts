@@ -52,9 +52,21 @@ export default abstract class BasePageElement {
   }
 
   protected async expectTdTextExists(text: string) {
-    await this.run(Action.EXPECT_VISIBLE, text, () =>
-      expect(this.page.locator(`td:has-text("${text}")`)).toBeVisible()
-    );
+    await this.run(Action.EXPECT_VISIBLE, text, async () => {
+      let hasNextPage = true;
+      while (hasNextPage) {
+        hasNextPage = await this.hasNextPage();
+        const isFound = await this.page.locator(`td:has-text("${text}")`).first().isVisible();
+        if (isFound) {
+          return;
+        }
+        if (hasNextPage) {
+          await this.gotoNextPage();
+        } else {
+          throw new Error(`"${text}" not found in any pages.`);
+        }
+      }
+    });
   }
 
   protected async expectText(selector: string, value: string) {
@@ -70,5 +82,15 @@ export default abstract class BasePageElement {
   protected async clickInRow(text: string) {
     await this.expectTdTextExists(text);
     await this.click(`tr:has(td:has-text("${text}")) a`);
+  }
+
+  private async hasNextPage(): Promise<boolean> {
+    const nextPageButton = this.page.locator('#nextPageButton')
+    return await nextPageButton.isVisible() && !(await nextPageButton.isDisabled());
+  }
+
+  private async gotoNextPage() {
+    await this.click('#nextPageButton');
+    await this.page.waitForLoadState('domcontentloaded');
   }
 }
