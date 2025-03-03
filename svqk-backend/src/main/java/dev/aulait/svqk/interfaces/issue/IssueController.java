@@ -26,9 +26,7 @@ public class IssueController {
 
   static final String ISSUES_PATH = "issues";
 
-  static final String ISSUES_GET_PATH = "{issueId}";
-
-  static final String ISSUES_DELETE_PATH = "{issueId}";
+  static final String ISSUES_ID_PATH = "{issueId}";
 
   static final String ISSUES_TRACKING_GET_PATH = "tracking";
 
@@ -47,7 +45,7 @@ public class IssueController {
   }
 
   @GET
-  @Path(ISSUES_GET_PATH)
+  @Path(ISSUES_ID_PATH)
   public IssueDto get(@PathParam("issueId") int id) {
     IssueEntity entity = service.find(id);
 
@@ -65,7 +63,7 @@ public class IssueController {
   }
 
   @DELETE
-  @Path(ISSUES_DELETE_PATH)
+  @Path(ISSUES_ID_PATH)
   public Integer delete(@PathParam("issueId") int id, @Valid IssueDto dto) {
     IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
     entity.setId(id);
