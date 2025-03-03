@@ -30,7 +30,7 @@ public class IssueClient {
 
   public IssueDto get(int issueId) {
     return given()
-        .get(ISSUES_PATH + "/" + ISSUES_GET_PATH, issueId)
+        .get(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId)
         .then()
         .statusCode(200)
         .extract()

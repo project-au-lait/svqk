@@ -23,6 +23,10 @@ public class IssueService {
     return repository.save(entity); // <.>
   }
 
+  public IssueEntity find(int id) {
+    return repository.findByIdWithDetails(id, em);
+  }
+
   @Transactional
   public IssueEntity update(IssueEntity issue, JournalEntity journal) {
     IssueEntity updatedEntity = repository.save(issue);
@@ -31,15 +35,17 @@ public class IssueService {
     return updatedEntity;
   }
 
+  @Transactional
+  public void delete(IssueEntity entity) {
+    IssueEntity managedEntity = em.merge(entity);
+    repository.delete(managedEntity);
+  }
+
   public SearchResultVo<IssueEntity> search(SearchCriteriaVo criteria) { // <.>
     return SearchUtils.search(em, criteria); // <.>
   }
 
   public List<IssueTrackingRs> getTracking() {
     return repository.count4tracking();
-  }
-
-  public IssueEntity find(int id) {
-    return repository.findByIdWithDetails(id, em);
   }
 }

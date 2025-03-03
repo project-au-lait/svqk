@@ -14,6 +14,8 @@
   "project": "プロジェクト",
   "register": "登録",
   "saved": "保存しました。",
+  "delete": "削除",
+  "deleted": "削除しました。",
   "searchBySubjectOnly": "題名のみで検索",
   "status": "ステータス",
   "subject": "題名",

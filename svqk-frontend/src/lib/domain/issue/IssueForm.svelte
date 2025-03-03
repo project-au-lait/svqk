@@ -10,21 +10,22 @@
   import { trackers } from '$lib/domain/issue/TrackerMasterStore';
   import { t } from '$lib/translations';
   import * as yup from 'yup';
+  import { goto } from '$app/navigation';
 
   interface Props {
     issue: IssueModel;
     handleAfterSave: (id?: number) => Promise<void>;
-    actionBtnLabel: string;
+    handleAfterDelete: (id?: number) => Promise<void>;
   }
 
-  let { issue = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
+  let { issue = $bindable(), handleAfterSave, handleAfterDelete }: Props = $props();
   let journal = $state({ issueId: issue.id } as JournalModel);
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
   };
 
-  const form = FormValidator.createForm(spec, save);
+  const form = FormValidator.createForm(spec, save, deleteIssue);
 
   async function save() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
@@ -35,6 +36,15 @@
       journal.notes = '';
       await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
+    }
+  }
+
+  async function deleteIssue() {
+    const response = await ApiHandler.handle<number>(fetch, (api) => api.issues.issuesDelete(issue.id, issue));
+
+    if (response) {
+      await handleAfterDelete();
+      messageStore.show($t('msg.deleted'));
     }
   }
 </script>
@@ -73,6 +83,13 @@
     </div>
   {/if}
   <div>
-    <button id="save" type="submit">{actionBtnLabel}</button>
+    <button type="submit" id="save" data-handler={save.name}
+      >{issue.id ? $t('msg.update') : $t('msg.register')}</button
+    >
+    {#if issue.id}
+      <button type="submit" id="deleteIssue" data-handler={deleteIssue.name}
+        >{$t('msg.delete')}</button
+      >
+    {/if}
   </div>
 </form>

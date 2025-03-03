@@ -501,6 +501,26 @@ export class Api<
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesDelete
+     * @request DELETE:/api/issues/{issueId}
+     */
+    issuesDelete: (
+      issueId: number,
+      data: IssueModel,
+      params: RequestParams = {}
+    ) =>
+      this.request<number, any>({
+        path: `/api/issues/${issueId}`,
+        method: "DELETE",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
   };
   tracker = {
     /**

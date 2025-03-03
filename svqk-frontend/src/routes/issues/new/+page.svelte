@@ -14,4 +14,4 @@
   }
 </script>
 
-<IssueForm bind:issue {handleAfterSave} actionBtnLabel={$t('msg.register')} />
+<IssueForm bind:issue {handleAfterSave} />

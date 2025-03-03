@@ -8,6 +8,7 @@ import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
 import dev.aulait.svqk.domain.issue.JournalEntity;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -25,7 +26,7 @@ public class IssueController {
 
   static final String ISSUES_PATH = "issues";
 
-  static final String ISSUES_GET_PATH = "{issueId}";
+  static final String ISSUES_ID_PATH = "{issueId}";
 
   static final String ISSUES_TRACKING_GET_PATH = "tracking";
 
@@ -43,6 +44,14 @@ public class IssueController {
     return savedEntity.getId();
   }
 
+  @GET
+  @Path(ISSUES_ID_PATH)
+  public IssueDto get(@PathParam("issueId") int id) {
+    IssueEntity entity = service.find(id);
+
+    return BeanUtils.map(entity, IssueDto.class);
+  }
+
   @PUT
   public int update(@Valid IssueUpdateDto dto) {
     IssueEntity issue = BeanUtils.map(dto.getIssue(), IssueEntity.class);
@@ -53,12 +62,14 @@ public class IssueController {
     return updatedIssue.getId();
   }
 
-  @GET
-  @Path(ISSUES_GET_PATH)
-  public IssueDto get(@PathParam("issueId") int id) {
-    IssueEntity entity = service.find(id);
+  @DELETE
+  @Path(ISSUES_ID_PATH)
+  public Integer delete(@PathParam("issueId") int id, @Valid IssueDto dto) {
+    IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
+    entity.setId(id);
+    service.delete(entity);
 
-    return BeanUtils.map(entity, IssueDto.class);
+    return entity.getId();
   }
 
   @POST

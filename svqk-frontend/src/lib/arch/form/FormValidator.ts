@@ -10,7 +10,7 @@ export default class FormValidator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spec: any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onSubmit: (values?: any) => void
+    ...submitHandlers: ((values?: any) => void)[]
   ) {
     if (locale.get() === 'ja') {
       yup.setLocale(ja.suggestive);
@@ -19,7 +19,33 @@ export default class FormValidator {
     const schema = yup.object(spec);
 
     const { form } = createForm({
-      onSubmit,
+      onSubmit: (values, context) => {
+        if (submitHandlers.length == 0) {
+          console.error('No submit handler defined');
+        } else if (submitHandlers.length == 1) {
+          submitHandlers[0](values);
+        } else if (
+          context.event &&
+          context.event instanceof SubmitEvent &&
+          context.event.submitter
+        ) {
+          const handlerName = context.event.submitter.dataset.handler;
+
+          if (!handlerName) {
+            console.error(
+              `No data-handler attribute found for submitter ${context.event.submitter}`
+            );
+            return;
+          }
+          const submitHandler = submitHandlers.find((handler) => handler.name == handlerName);
+          if (!submitHandler) {
+            console.error(`No submit handler found for submitter ${context.event.submitter}`);
+            return;
+          }
+          submitHandler(values);
+        }
+      },
+
       extend: [validator({ schema }), reporter]
     });
 

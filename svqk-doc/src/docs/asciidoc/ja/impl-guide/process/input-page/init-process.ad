@@ -67,7 +67,7 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 .{project-artifactId}-frontend/src/routes/issues/new/+page.svelte マークアップセクション
 [source,html]
 ----
-<IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.register')} /> <.>
+<IssueForm bind:issue {handleAfterSave} /> <.>
 ----
 
 <.> 入力フォームのUIComponentを配置しプロパティを設定します。
