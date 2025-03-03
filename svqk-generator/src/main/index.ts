@@ -103,10 +103,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   async initializing() {
     try {
-      if (
-        this.optionsValues.component === "entity" ||
-        this.optionsValues.component === "all"
-      ) {
+      if (this.optionsValues.component === "entity") {
+        EntityGenerator.exec(this.genEntityCmd);
+
+        return;
+      } else if (this.optionsValues.component === "all") {
         EntityGenerator.exec(this.genEntityCmd);
       }
 
