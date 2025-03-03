@@ -19,7 +19,7 @@ getValueCode = (field) => {
   let code = findTypeDef(field.javaType)?.valueCode ?? "null";
 
   if(field.javaType === "String"){
-    code = code.replace("@varchar.size@", Math.min(field.dbTypeSize, 36));
+    code = code.replace("@varchar.size@", Math.min(field.stringLength, 36));
   }
 
   return code;
