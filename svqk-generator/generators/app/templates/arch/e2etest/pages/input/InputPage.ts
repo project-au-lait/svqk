@@ -12,7 +12,7 @@ export default class <%= entityNmPascal %>InputPage {
 
   async save(<%= entityNmCamel %>: <%= entityNmPascal %>Model) {
     <%_ fields.forEach((field) => { _%>
-    await this.<%= entityNmCamel %>InputPageEl.input<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %><%_ if (field.javaType === 'Integer') { _%>.toString()<%_ } _%> ?? '');
+    await this.<%= entityNmCamel %>InputPageEl.input<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %><%_ if (field.javaType === 'Integer') { _%>.toString()<%_ } _%><%_ if (!field.required) { _%>!<%_ } _%>);
     <%_ }) _%>
 
     await this.<%= entityNmCamel %>InputPageEl.clickSaveBtn();
@@ -20,7 +20,7 @@ export default class <%= entityNmPascal %>InputPage {
 
   async expect<%= entityNmPascal %>(<%= entityNmCamel %>: <%= entityNmPascal %>Model) {
     <%_ fields.forEach((field) => { _%>
-    await this.<%= entityNmCamel %>InputPageEl.expect<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %><%_ if (field.javaType === 'Integer') { _%>.toString()<%_ } _%> ?? '');
+    await this.<%= entityNmCamel %>InputPageEl.expect<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %><%_ if (field.javaType === 'Integer') { _%>.toString()<%_ } _%>);
     <%_ }) _%>
   }
 }
