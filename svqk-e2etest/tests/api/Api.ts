@@ -507,16 +507,18 @@ export class Api<
      *
      * @tags Issue Controller
      * @name IssuesDelete
-     * @request DELETE:/api/issues/{issueId}/{version}
+     * @request DELETE:/api/issues/{issueId}
      */
     issuesDelete: (
       issueId: number,
-      version: number,
+      data: IssueModel,
       params: RequestParams = {}
     ) =>
       this.request<number, any>({
-        path: `/api/issues/${issueId}/${version}`,
+        path: `/api/issues/${issueId}`,
         method: "DELETE",
+        body: data,
+        type: ContentType.Json,
         ...params,
       }),
   };

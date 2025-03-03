@@ -4,7 +4,6 @@ import static dev.aulait.svqk.arch.jpa.JpaUtils.findWithFetch;
 
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,8 +12,6 @@ public interface IssueRepository extends JpaRepository<IssueEntity, Integer> {
   default IssueEntity findByIdWithDetails(Integer id, EntityManager em) {
     return findWithFetch(em, IssueEntity.class, id);
   }
-
-  Optional<IssueEntity> findByIdAndVersion(int id, int version);
 
   @Query(
       value =

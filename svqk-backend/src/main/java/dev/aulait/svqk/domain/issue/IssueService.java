@@ -7,7 +7,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -36,15 +35,10 @@ public class IssueService {
     return updatedEntity;
   }
 
-  public boolean delete(int id, int version) {
-    Optional<IssueEntity> issueEntityOpt = repository.findByIdAndVersion(id, version);
-
-    if (!issueEntityOpt.isPresent()) {
-      return false;
-    }
-
-    repository.delete(issueEntityOpt.get());
-    return true;
+  @Transactional
+  public void delete(IssueEntity entity) {
+    IssueEntity managedEntity = em.merge(entity);
+    repository.delete(managedEntity);
   }
 
   public SearchResultVo<IssueEntity> search(SearchCriteriaVo criteria) { // <.>

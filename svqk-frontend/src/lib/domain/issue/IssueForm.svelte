@@ -40,7 +40,7 @@
   }
 
   async function deleteIssue() {
-    const response = await ApiHandler.handle<number>(fetch, (api) => api.issues.issuesDelete(issue.id, issue.version));
+    const response = await ApiHandler.handle<number>(fetch, (api) => api.issues.issuesDelete(issue.id, issue));
 
     if (response) {
       await handleAfterDelete();
