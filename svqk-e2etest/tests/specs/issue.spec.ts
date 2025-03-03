@@ -31,5 +31,6 @@ test('CRUD of Issue', async ({ browser }) => {
   await issueInputPage.save(updatingIssue);
   await issueInputPage.expectIssue(updatingIssue);
 
-  // TODO: Add issue delete step
+  // Delete
+  await issueInputPage.delete();
 });

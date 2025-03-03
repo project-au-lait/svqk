@@ -26,4 +26,9 @@ export default class IssueInputPageElement extends BasePageElement {
   async expectDescription(description?: string) {
     await this.expectText('#description', description ?? '');
   }
+
+  async clickDeleteBtn() {
+    await this.click('#deleteIssue');
+    await this.expectGlobalMessage(t('deleted'));
+  }
 }

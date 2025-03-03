@@ -20,4 +20,8 @@ export default class IssueInputPage {
     await this.issueInputPageEl.expectSubject(issue.subject);
     await this.issueInputPageEl.expectDescription(issue.description);
   }
+
+  async delete() {
+    await this.issueInputPageEl.clickDeleteBtn();
+  }
 }
