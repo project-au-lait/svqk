@@ -13,17 +13,17 @@
   <table class="striped">
     <thead>
       <tr>
-        <th></th>
+        <th id="#"></th>
         {#each $issueStatuses as issueStatus}
-          <th>{issueStatus.name}</th>
+          <th id="status">{issueStatus.name}</th>
         {/each}
-        <th>{$t('msg.total')}</th>
+        <th id="total">{$t('msg.total')}</th>
       </tr>
     </thead>
     <tbody>
       {#each $trackers as tracker}
         <tr>
-          <th class="row">{tracker.name}</th>
+          <th id="tracker" class="row">{tracker.name}</th>
           {#each $issueStatuses as issueStatus}
             <td>{issueTracking.trackerStatusCountMap[tracker.id][issueStatus.id]}</td>
           {/each}
