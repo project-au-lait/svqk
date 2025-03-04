@@ -2,7 +2,7 @@
 skinparam linetype ortho
 
 folder root {
-  folder front {
+  folder frontend {
     file "package.json"
   }
   folder backend {
@@ -25,7 +25,7 @@ node Quarkus {
   component Backend
 }
 
-front --> Vite: pnpm vite dev
+frontend --> Vite: pnpm vite dev
 backend --> Quarkus: mvnw quarkus:dev
 container --> Docker: docker compose up
 

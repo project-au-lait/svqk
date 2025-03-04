@@ -20,7 +20,7 @@ package backend {
 Backend -up-> DB: access
 
 
-package front {
+package frontend {
   node "3. Frontend" as Frontend <<SvelteKit>>
 }
 Frontend -up-> Backend: access
