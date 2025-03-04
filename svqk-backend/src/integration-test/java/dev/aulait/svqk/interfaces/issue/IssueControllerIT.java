@@ -26,7 +26,8 @@ class IssueControllerIT {
 
     // Update
     createdIssue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
-    client.update(IssueUpdateDto.builder().issue(createdIssue).journal(new JournalDto()).build());
+    client.update(
+        IssueUpdateDto.builder().issue(createdIssue).journal(new JournalDto()).build(), issueId);
 
     IssueDto updatedIssue = client.get(issueId);
 
