@@ -16,6 +16,9 @@ export default class IssueInputPageElement extends BasePageElement {
 
   async clickSaveBtn() {
     await this.click('#save');
+  }
+
+  async expectSavedSuccessfully() {
     await this.expectGlobalMessage(t('saved'));
   }
 
@@ -25,5 +28,13 @@ export default class IssueInputPageElement extends BasePageElement {
 
   async expectDescription(description?: string) {
     await this.expectText('#description', description ?? '');
+  }
+
+  async clickDeleteBtn() {
+    await this.click('#deleteIssue');
+  }
+
+  async expectDeletedSuccessfully() {
+    await this.expectGlobalMessage(t('deleted'));
   }
 }

@@ -1,6 +1,7 @@
 package dev.aulait.svqk.interfaces.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
 import dev.aulait.svqk.arch.test.ValidationMessageUtils;
@@ -32,6 +33,11 @@ class IssueControllerIT {
     IssueDto updatedIssue = client.get(issueId);
 
     assertEquals(createdIssue.getSubject(), updatedIssue.getSubject());
+
+    // Delete
+    int deletedId = client.delete(issueId, updatedIssue);
+    assertEquals(deletedId, issueId);
+    assertNull(client.getOrNull(deletedId));
   }
 
   @Test
