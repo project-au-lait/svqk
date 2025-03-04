@@ -27,7 +27,7 @@ pnpm generate [options] [Table...]
 
 #### 実行例
 
-下記のコマンドは、`WorldTable`に対し CRUD を行う Backend を`skeleton`のテンプレートで生成する例です。
+下記のコマンドは、`World`Table に対し CRUD を行う Backend を`skeleton`のテンプレートで生成する例です。
 
 ```sh
 pnpm generate --component backend --templateType skeleton world
