@@ -7,6 +7,7 @@ packages:
   ${project.groupId}.domain.hello:
     - hello
     - world
+    - hello_world
 baseClassDefs:
   - tables:
       - "issue"
