@@ -424,22 +424,6 @@ export class Api<
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesUpdate
-     * @request PUT:/api/issues
-     */
-    issuesUpdate: (data: IssueUpdateModel, params: RequestParams = {}) =>
-      this.request<number, any>({
-        path: `/api/issues`,
-        method: "PUT",
-        body: data,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Issue Controller
      * @name IssuesCreate
      * @request POST:/api/issues
      */
@@ -499,6 +483,26 @@ export class Api<
         path: `/api/issues/${issueId}`,
         method: "GET",
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name IssuesUpdate
+     * @request PUT:/api/issues/{issueId}
+     */
+    issuesUpdate: (
+      issueId: number,
+      data: IssueUpdateModel,
+      params: RequestParams = {}
+    ) =>
+      this.request<number, any>({
+        path: `/api/issues/${issueId}`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
         ...params,
       }),
 

@@ -12,9 +12,10 @@ public class ResourceNotFoundExceptionMapper implements ExceptionMapper<Resource
   public Response toResponse(ResourceNotFoundException exception) {
     ErrorResponseDto response = new ErrorResponseDto();
 
+    response.setStatus(Status.NOT_FOUND);
     response.setTitle("The requested resource was not found.");
     response.setDetail("The resource of id: " + exception.getId() + " does not exist.");
 
-    return Response.status(Status.NOT_FOUND).entity(response).build();
+    return Response.status(response.getStatus()).entity(response).build();
   }
 }

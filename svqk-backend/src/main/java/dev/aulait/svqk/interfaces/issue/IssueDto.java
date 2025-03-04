@@ -1,5 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class IssueDto {
 
   @Schema(required = true, readOnly = true)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private Integer id;
 
   @Schema(required = true)

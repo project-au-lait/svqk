@@ -13,11 +13,10 @@ public class OptimisticLockExceptionMapper implements ExceptionMapper<Optimistic
   public Response toResponse(OptimisticLockException exception) {
     ErrorResponseDto response = new ErrorResponseDto();
 
+    response.setStatus(Status.CONFLICT);
     response.setTitle("Optimistic Lock Error");
     response.setDetail("The data you tried to update may have been updated by someone else");
 
-    return Response.status(Status.CONFLICT).entity(response).build();
-
+    return Response.status(response.getStatus()).entity(response).build();
   }
-
 }

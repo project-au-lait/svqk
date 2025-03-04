@@ -21,6 +21,7 @@ test('CRUD of Issue', async ({ browser }) => {
   // Create
   const issue = IssueInputFactory.createRandomIssue();
   await issueInputPage.save(issue);
+  await issueInputPage.expectSavedSuccessfully();
 
   // Rererence
   const issueFacade = new IssueFacade(dryRun);
@@ -29,7 +30,10 @@ test('CRUD of Issue', async ({ browser }) => {
   // Update
   const updatingIssue = IssueInputFactory.createRandomIssue();
   await issueInputPage.save(updatingIssue);
+  await issueInputPage.expectSavedSuccessfully();
   await issueInputPage.expectIssue(updatingIssue);
 
-  // TODO: Add issue delete step
+  // Delete
+  await issueInputPage.delete();
+  await issueInputPage.expectDeletedSuccessfully();
 });
