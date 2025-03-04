@@ -1,8 +1,7 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultDto;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
@@ -14,7 +13,9 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 @Path(IssueController.ISSUES_PATH)
 @RequiredArgsConstructor
@@ -32,7 +33,11 @@ public class IssueController {
 
   static final String ISSUES_SEARCH_PATH = "search";
 
-  public static class IssueSearchResultDto extends SearchResultDto<IssueDto> {} // <.>
+  @Value
+  @Builder
+  public static class IssueSearchResultDto {
+    private final SearchResult<IssueDto> searchResult;
+  }
 
   @POST
   public int create(@Valid IssueDto dto) { // <.>
@@ -76,8 +81,8 @@ public class IssueController {
   @Path(ISSUES_SEARCH_PATH)
   public IssueSearchResultDto search(IssueSearchCriteriaDto dto) { // <.>
     // <.>
-    SearchCriteriaVo vo = factory.build(dto);
-    SearchResultVo<IssueEntity> result = service.search(vo);
+    SearchCriteria vo = factory.build(dto);
+    SearchResult<IssueEntity> result = service.search(vo);
 
     return factory.build(result);
   }

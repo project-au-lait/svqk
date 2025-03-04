@@ -135,6 +135,12 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>dev.aulait.sqb</groupId>
+      <artifactId>sqb-jpa</artifactId>
+      <version>0.8-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -1,6 +1,6 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.PageControlDto;
+import dev.aulait.sqb.PageControl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,5 +16,5 @@ public class IssueSearchCriteriaDto { // <.>
   private boolean subjectOnly;
 
   @Schema(required = true)
-  private PageControlDto pageControl = new PageControlDto();
+  private PageControl pageControl = new PageControl();
 }

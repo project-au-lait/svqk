@@ -1,8 +1,8 @@
 package dev.aulait.svqk.domain.issue;
 
-import dev.aulait.svqk.arch.jpa.SearchUtils;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
+import dev.aulait.sqb.jpa.JpaSearchQueryExecutor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -41,8 +41,9 @@ public class IssueService {
     repository.delete(managedEntity);
   }
 
-  public SearchResultVo<IssueEntity> search(SearchCriteriaVo criteria) { // <.>
-    return SearchUtils.search(em, criteria); // <.>
+  public SearchResult<IssueEntity> search(SearchCriteria criteria) { // <.>
+    JpaSearchQueryExecutor executor = new JpaSearchQueryExecutor();
+    return executor.search(em, criteria); // <.>
   }
 
   public List<IssueTrackingRs> getTracking() {
