@@ -21,7 +21,7 @@
 </div>
 
 {#if lastPageNum > 1}
-  <div class="page" role="group">
+  <fieldset class="page">
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(1)}> « </button>
 
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(pageNumber - 1)}>
@@ -58,7 +58,7 @@
     >
       »
     </button>
-  </div>
+  </fieldset>
 {/if}
 
 <style>
@@ -71,5 +71,6 @@
   .page button {
     padding: 0.5rem 1.5rem;
     max-width: max-content;
+    border-radius: 0;
   }
 </style>
