@@ -24,4 +24,8 @@ export default class IssueInputPage {
   async delete() {
     await this.issueInputPageEl.clickDeleteBtn();
   }
+
+  async expectDeletedSuccessfully() {
+    await this.issueInputPageEl.expectDeletedSuccessfully();
+  }
 }

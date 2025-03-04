@@ -33,4 +33,5 @@ test('CRUD of Issue', async ({ browser }) => {
 
   // Delete
   await issueInputPage.delete();
+  await issueInputPage.expectDeletedSuccessfully();
 });
