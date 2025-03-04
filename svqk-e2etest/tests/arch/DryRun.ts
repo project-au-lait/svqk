@@ -100,7 +100,7 @@ class CsvLogFormatter implements LogFormatter {
 }
 
 export class DryRun {
-  private filePath: string;
+  private readonly filePath: string;
 
   private readonly LOG_DIR = 'dry_run_logs';
 
