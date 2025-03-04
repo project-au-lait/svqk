@@ -45,6 +45,7 @@ type TemplateData = {
   entityNmCamel: string;
   entityNmAllCaps: string;
   entityNmPlural: string;
+  entityNmKebab: string;
   fields: Field[];
   idField: Field;
   compIdFields?: Field[];

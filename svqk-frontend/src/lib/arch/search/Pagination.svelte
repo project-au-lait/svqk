@@ -43,6 +43,7 @@
     {/if}
 
     <button
+      id="nextPageButton"
       class="outline"
       disabled={pageNumber >= lastPageNum}
       onclick={() => gotoPage(pageNumber + 1)}

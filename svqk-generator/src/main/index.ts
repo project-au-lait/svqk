@@ -16,6 +16,7 @@ import {
 } from "./types.js";
 
 const allowedComponentValues = [
+  "entity",
   "backend",
   "integration-test",
   "api-client",
@@ -102,7 +103,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   async initializing() {
     try {
-      EntityGenerator.exec(this.genEntityCmd);
+      if (this.optionsValues.component === "entity") {
+        EntityGenerator.exec(this.genEntityCmd);
+
+        return;
+      } else if (this.optionsValues.component === "all") {
+        EntityGenerator.exec(this.genEntityCmd);
+      }
 
       if (this.optionsValues.component !== "api-client") {
         this.metadataConfig.list = await import(
@@ -197,6 +204,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
+      entityNmKebab: this.pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
       compIdFields: this._get_composite_id_fields(idField),
@@ -256,19 +264,21 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _output_e2etest_file(
-    component: string,
-    destpath: string,
+    tmplPath: string,
+    destinationPath: string,
     tmplData: TemplateData
   ) {
-    this._output_file(
-      `e2etest/${component}.ts`,
-      `${this.destE2EPath}/${destpath}`,
-      tmplData
-    );
+    this._output_file(tmplPath, destinationPath, tmplData);
   }
 
   _pascal_to_camel(pascal: string): string {
     return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+  }
+
+  pascal_to_kebab(pascal: string): string {
+    return pascal
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/[A-Z]/g, letter => letter.toLowerCase());
   }
 
   _camel_to_pascal(camel: string): string {
@@ -389,13 +399,63 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_e2etest(tmplData: TemplateData) {
+    let pathPairs: [string, string][] = [];
+
+    const inputTmplPath = "e2etest/pages/input";
+    const listTmplPath = "e2etest/pages/list";
+    const menuBarTmplPath = "e2etest/pages/menu-bar";
+    const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-input`;
+    const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
+    const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
+
     // TODO temporary
     if (this.optionsValues.templateType === "skeleton") {
-      this._output_e2etest_file(
-        "spec",
-        this._generate_e2e_spec_path(tmplData),
-        tmplData
-      );
+      pathPairs = [
+        [
+          "e2etest/spec.ts",
+          `${this.destE2EPath}/${this._generate_e2e_spec_path(tmplData)}`,
+        ],
+      ];
+    } else if (this.optionsValues.templateType === "arch") {
+      pathPairs = [
+        [
+          "e2etest/spec.ts",
+          `${this.destE2EPath}/${this._generate_e2e_spec_path(tmplData)}`,
+        ],
+        [
+          "e2etest/Facade.ts",
+          `${this.destE2EPath}/facades/${tmplData.entityNmPascal}Facade.ts`,
+        ],
+        [
+          "e2etest/Factory.ts",
+          `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
+        ],
+        [`${menuBarTmplPath}/MenuBar.ts`, `${menuBarDestPath}/MenuBar.ts`],
+        [
+          `${menuBarTmplPath}/MenuBarPageElement.ts`,
+          `${menuBarDestPath}/MenuBarPageElement.ts`,
+        ],
+        [
+          `${inputTmplPath}/InputPage.ts`,
+          `${inputDestPath}/${tmplData.entityNmPascal}InputPage.ts`,
+        ],
+        [
+          `${inputTmplPath}/InputPageElement.ts`,
+          `${inputDestPath}/${tmplData.entityNmPascal}InputPageElement.ts`,
+        ],
+        [
+          `${listTmplPath}/ListPage.ts`,
+          `${listDestPath}/${tmplData.entityNmPascal}ListPage.ts`,
+        ],
+        [
+          `${listTmplPath}/ListPageElement.ts`,
+          `${listDestPath}/${tmplData.entityNmPascal}ListPageElement.ts`,
+        ],
+      ];
+    }
+
+    for (const [srcPath, destPath] of pathPairs) {
+      this._output_e2etest_file(srcPath, destPath, tmplData);
     }
   }
 }

@@ -25,6 +25,10 @@ getValueCode = (field) => {
   return code;
 }
 
+getFieldNmPascal = (fieldName) => {
+  return fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+}
+
 imports = [
   ...new Set(fields.concat(compIdFields ?? []).map((field) => field.javaType)),
 ].reduce((result, type) => result.concat(findTypeDef(type)?.imports ?? []), []);
