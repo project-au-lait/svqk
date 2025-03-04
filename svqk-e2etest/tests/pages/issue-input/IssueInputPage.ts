@@ -16,6 +16,10 @@ export default class IssueInputPage {
     await this.issueInputPageEl.clickSaveBtn();
   }
 
+  async expectSavedSuccessfully() {
+    await this.issueInputPageEl.expectSavedSuccessfully();
+  }
+
   async expectIssue(issue: IssueModel) {
     await this.issueInputPageEl.expectSubject(issue.subject);
     await this.issueInputPageEl.expectDescription(issue.description);

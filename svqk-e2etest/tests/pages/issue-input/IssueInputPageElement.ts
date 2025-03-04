@@ -16,6 +16,9 @@ export default class IssueInputPageElement extends BasePageElement {
 
   async clickSaveBtn() {
     await this.click('#save');
+  }
+
+  async expectSavedSuccessfully() {
     await this.expectGlobalMessage(t('saved'));
   }
 
