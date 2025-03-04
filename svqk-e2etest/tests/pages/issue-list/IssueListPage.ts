@@ -4,7 +4,7 @@ import BasePageElement from '../../arch/BasePageElement';
 import { IssueSearchConditionModel } from '../../api/Api';
 
 export default class IssueListPage {
-  private issueListPageEl: IssueListPageElement;
+  private readonly issueListPageEl: IssueListPageElement;
 
   constructor(page: BasePageElement) {
     this.issueListPageEl = new IssueListPageElement(page);
