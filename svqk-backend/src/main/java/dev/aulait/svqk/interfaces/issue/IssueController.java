@@ -53,8 +53,11 @@ public class IssueController {
   }
 
   @PUT
-  public int update(@Valid IssueUpdateDto dto) {
+  @Path(ISSUES_ID_PATH)
+  public int update(@PathParam("issueId") int id, @Valid IssueUpdateDto dto) {
+    dto.getIssue().setId(id);
     IssueEntity issue = BeanUtils.map(dto.getIssue(), IssueEntity.class);
+
     JournalEntity journal = BeanUtils.map(dto.getJournal(), JournalEntity.class);
 
     IssueEntity updatedIssue = service.update(issue, journal);
