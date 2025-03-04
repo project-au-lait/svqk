@@ -29,7 +29,9 @@
 
   async function save() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
-      issue.id ? api.issues.issuesUpdate({ issue, journal }) : api.issues.issuesCreate(issue)
+      issue.id
+        ? api.issues.issuesUpdate(issue.id, { issue, journal })
+        : api.issues.issuesCreate(issue)
     );
 
     if (response) {
@@ -40,7 +42,9 @@
   }
 
   async function deleteIssue() {
-    const response = await ApiHandler.handle<number>(fetch, (api) => api.issues.issuesDelete(issue.id, issue));
+    const response = await ApiHandler.handle<number>(fetch, (api) =>
+      api.issues.issuesDelete(issue.id, issue)
+    );
 
     if (response) {
       await handleAfterDelete();
