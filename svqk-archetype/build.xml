@@ -58,7 +58,7 @@
     <exec executable="pnpm" dir="${projectdir}/${project}-generator">
       <env key="BACKEND_PORT" value="${backend.port.random}" />
       <env key="DB_PORT" value="${db.port.random}" />
-      <arg line="start --component all World" />
+      <arg line="start --component all World --force" />
     </exec>
 
     <antcall target="cicd-test" />
@@ -211,22 +211,22 @@
       replace="\1*.ts\3" />
   </target>
 
-<target name="adjust-generator-conf">
-  <property name=".yo-rc.json"
-    value="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-generator/.yo-rc.json" />
-    
-  <if>
-    <or>
-      <equals arg1="${archetype.type}" arg2="arch" />
-      <equals arg1="${archetype.type}" arg2="refimpl" />
-    </or>
-    <then>
-      <replaceregexp file="${.yo-rc.json}"
+  <target name="adjust-generator-conf">
+    <property name=".yo-rc.json"
+      value="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-generator/.yo-rc.json" />
+
+    <if>
+      <or>
+        <equals arg1="${archetype.type}" arg2="arch" />
+        <equals arg1="${archetype.type}" arg2="refimpl" />
+      </or>
+      <then>
+        <replaceregexp file="${.yo-rc.json}"
           match="skeleton"
           replace="arch" />
-    </then>
-  </if>
-</target>
+      </then>
+    </if>
+  </target>
 
   <target name="add-post-generate-script">
     <copy file="${basedir}/src/archetype/archetype-post-generate.groovy"
