@@ -36,7 +36,7 @@ class IssueControllerIT {
     // Delete
     int deletedId = client.delete(updatedIssue.getId(), updatedIssue);
     assertEquals(deletedId, updatedIssue.getId());
-    assertNull(client.get(deletedId));
+    assertNull(client.getOrNull(deletedId));
   }
 
   @Test

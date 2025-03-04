@@ -30,8 +30,16 @@ public class IssueClient {
   }
 
   public IssueDto get(int issueId) {
-    Response response =
-        given().get(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId).then().extract().response();
+    return given()
+        .get(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId)
+        .then()
+        .statusCode(200)
+        .extract()
+        .as(IssueDto.class);
+  }
+
+  public IssueDto getOrNull(int issueId) {
+    Response response = given().get(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId);
 
     if (response.getStatusCode() == 404) {
       return null;
