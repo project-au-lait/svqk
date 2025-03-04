@@ -138,19 +138,20 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.optionsValues.component !== "api-client" &&
       splitedArgs.length == 0
     ) {
-      const entities = this.metadataConfig.list
-        .map((metadata) => metadata.className)
+      const tables = this.metadataConfig.list
+        .map((metadata) => metadata.tableName)
+        .filter((name) => typeof name === "string" && name.trim() !== "")
         .join(", ");
       this.log(
-        `Please specify entity name(s) with space separated choosing from ${entities}.`
+        `Please specify table name(s) with space separated choosing from ${tables}.`
       );
       return;
     }
 
     this.metadataConfig.list.forEach((metaData) => {
       if (
-        !splitedArgs.includes(metaData.className) &&
-        !splitedArgs.includes(this._extract_entity_name(metaData.className))
+        !splitedArgs.includes(metaData.tableName) &&
+        !splitedArgs.includes(metaData.className)
       ) {
         return;
       }

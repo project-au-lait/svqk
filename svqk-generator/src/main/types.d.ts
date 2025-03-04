@@ -13,6 +13,7 @@ type OptionsValues = {
 type Metadata = {
   packageName: string;
   className: string;
+  tableName: string;
   fields: Field[];
 };
 
@@ -32,8 +33,7 @@ type Field = {
   fieldNmPascal?: string;
   javaType: string;
   multiple: boolean;
-  dbType: string;
-  dbTypeSize: number;
+  stringLength: number;
   id: boolean;
   required: boolean;
 };

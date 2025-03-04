@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "pnpm",
       "args": [
-        "start",
+        "generate",
         "--component",
         "${input:component}",
         "${input:entities}"
@@ -33,7 +33,7 @@
     {
       "id": "entities",
       "type": "promptString",
-      "description": "Enter entities (e.g. Entity1 Entity2 Entity3)"
+      "description": "Enter tables (e.g. tablea_name tableb_name tablec_name)"
     }
   ]
 }
