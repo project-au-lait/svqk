@@ -140,6 +140,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       const tables = this.metadataConfig.list
         .map((metadata) => metadata.tableName)
+        .filter((name) => typeof name === "string" && name.trim() !== "")
         .join(", ");
       this.log(
         `Please specify table name(s) with space separated choosing from ${tables}.`
