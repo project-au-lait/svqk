@@ -3,7 +3,7 @@ import type { IssueModel } from '../../api/Api';
 import BasePageElement from '../../arch/BasePageElement';
 
 export default class IssueInputPage {
-  private issueInputPageEl: IssueInputPageElement;
+  private readonly issueInputPageEl: IssueInputPageElement;
 
   constructor(page: BasePageElement) {
     this.issueInputPageEl = new IssueInputPageElement(page);
