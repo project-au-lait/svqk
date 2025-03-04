@@ -104,7 +104,7 @@ export class DryRun {
 
   private readonly LOG_DIR = 'dry_run_logs';
 
-  private constructor(public isOn: boolean, private formatter: LogFormatter) {
+  private constructor(public isOn: boolean, private readonly formatter: LogFormatter) {
     if (isOn) {
       this.createDir();
       this.filePath = this.buildFilePath(formatter);
