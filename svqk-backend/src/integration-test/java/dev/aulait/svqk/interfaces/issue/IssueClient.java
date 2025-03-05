@@ -1,73 +1,36 @@
 package dev.aulait.svqk.interfaces.issue;
 
-import static dev.aulait.svqk.arch.test.RestAssuredUtils.given;
 import static dev.aulait.svqk.interfaces.issue.IssueController.ISSUES_ID_PATH;
 import static dev.aulait.svqk.interfaces.issue.IssueController.ISSUES_PATH;
 
+import dev.aulait.svqk.arch.exception.ErrorResponseDto;
 import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
-import io.restassured.response.Response;
+import dev.aulait.svqk.arch.test.RestClientUtils;
 
 public class IssueClient {
 
   public Integer create(IssueDto issue) { // <.>
-    return Integer.parseInt(
-        given() // <.>
-            .body(issue)
-            .post(ISSUES_PATH)
-            .then()
-            .statusCode(200)
-            .extract()
-            .asString());
+    return RestClientUtils.post(ISSUES_PATH, issue, Integer.class);
   }
 
   public ConstraintViolationResponseDto createButValidationError(IssueDto issue) {
-    return given()
-        .body(issue)
-        .post(ISSUES_PATH)
-        .then()
-        .statusCode(400)
-        .extract()
-        .as(ConstraintViolationResponseDto.class);
+    return RestClientUtils.postWithBadRequest(ISSUES_PATH, issue);
   }
 
   public IssueDto get(int issueId) {
-    return given()
-        .get(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId)
-        .then()
-        .statusCode(200)
-        .extract()
-        .as(IssueDto.class);
+    return RestClientUtils.get(ISSUES_PATH + "/" + ISSUES_ID_PATH, IssueDto.class, issueId);
   }
 
-  public IssueDto getOrNull(int issueId) {
-    Response response = given().get(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId);
-
-    if (response.getStatusCode() == 404) {
-      return null;
-    }
-
-    return response.then().statusCode(200).extract().as(IssueDto.class);
+  public ErrorResponseDto getWithError(int issueId) {
+    return RestClientUtils.getWithError(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId);
   }
 
   public Integer update(IssueUpdateDto issue, int issueId) { // <.>
-    return Integer.parseInt(
-        given() // <.>
-            .body(issue)
-            .put(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId)
-            .then()
-            .statusCode(200)
-            .extract()
-            .asString());
+    return RestClientUtils.put(ISSUES_PATH + "/" + ISSUES_ID_PATH, issue, Integer.class, issueId);
   }
 
-  public Integer delete(int issueId, IssueDto issueDto) {
-    return Integer.parseInt(
-        given()
-            .body(issueDto)
-            .delete(ISSUES_PATH + "/" + ISSUES_ID_PATH, issueId)
-            .then()
-            .statusCode(200)
-            .extract()
-            .asString());
+  public Integer delete(int issueId, IssueDto issue) {
+    return RestClientUtils.delete(
+        ISSUES_PATH + "/" + ISSUES_ID_PATH, issue, Integer.class, issueId);
   }
 }
