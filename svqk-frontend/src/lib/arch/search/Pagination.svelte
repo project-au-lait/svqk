@@ -21,7 +21,8 @@
 </div>
 
 {#if lastPageNum > 1}
-  <fieldset class="page">
+  <!-- prettier-ignore -->
+  <div class="page" role="group"><!--//NOSONAR-->
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(1)}> « </button>
 
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(pageNumber - 1)}>
@@ -58,7 +59,7 @@
     >
       »
     </button>
-  </fieldset>
+  </div>
 {/if}
 
 <style>
@@ -71,6 +72,5 @@
   .page button {
     padding: 0.5rem 1.5rem;
     max-width: max-content;
-    border-radius: 0;
   }
 </style>
