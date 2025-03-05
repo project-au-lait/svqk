@@ -1,7 +1,7 @@
-import IssueListPageElement from './IssueListPageElement';
-import IssueInputPage from '../issue-input/IssueInputPage';
-import BasePageElement from '../../arch/BasePageElement';
-import { IssueSearchConditionModel } from '../../api/Api';
+import IssueListPageElement from '@pages/issue-list/IssueListPageElement';
+import IssueInputPage from '@pages/issue-input/IssueInputPage';
+import BasePageElement from '@arch/BasePageElement';
+import { IssueSearchConditionModel } from '@api/Api';
 
 export default class IssueListPage {
   private issueListPageEl: IssueListPageElement;

@@ -1,6 +1,6 @@
-import IssueInputPageElement from './IssueInputPageElement';
-import type { IssueModel } from '../../api/Api';
-import BasePageElement from '../../arch/BasePageElement';
+import IssueInputPageElement from '@pages/issue-input/IssueInputPageElement';
+import type { IssueModel } from '@api/Api';
+import BasePageElement from '@arch/BasePageElement';
 
 export default class IssueInputPage {
   private issueInputPageEl: IssueInputPageElement;

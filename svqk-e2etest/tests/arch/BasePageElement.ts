@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import { Action, DryRun } from './DryRun';
+import { Action, DryRun } from '@arch/DryRun';
 
 export default abstract class BasePageElement {
   page: Page;
