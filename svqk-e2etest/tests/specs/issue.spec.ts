@@ -1,9 +1,9 @@
 import { test } from '@playwright/test';
-import { IssueFacade } from '../facades/IssueFacade';
-import { DryRun } from '../arch/DryRun';
-import { locale } from '../arch/MultiLng';
-import TopPage from '../pages/top/TopPage';
-import IssueInputFactory from '../factories/IssueFactory';
+import { IssueFacade } from '@facades/IssueFacade';
+import { DryRun } from '@arch/DryRun';
+import { locale } from '@arch/MultiLng';
+import TopPage from '@pages/top/TopPage';
+import IssueInputFactory from '@factories/IssueFactory';
 
 test('CRUD of Issue', async ({ browser }) => {
   const context = await browser.newContext({

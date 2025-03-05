@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { format } from 'date-fns';
-import { t, locale } from '../arch/MultiLng';
+import { t, locale } from '@arch/MultiLng';
 
 export enum Action {
   GOTO,

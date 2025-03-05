@@ -1,5 +1,5 @@
-import type { IssueModel, IssueStatusModel } from '../api/Api';
-import StringUtils from '../arch/StringUtils';
+import type { IssueModel, IssueStatusModel } from '@api/Api';
+import StringUtils from '@arch/StringUtils';
 
 export default class IssueFactory {
   static create() {

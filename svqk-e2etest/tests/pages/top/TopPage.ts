@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
-import TopPageElement from './TopPageElement';
-import { DryRun } from '../../arch/DryRun';
-import MenuBar from '../menu-bar/MenuBar';
+import TopPageElement from '@pages/top/TopPageElement';
+import { DryRun } from '@arch/DryRun';
+import MenuBar from '@pages/menu-bar/MenuBar';
 
 export default class TopPage {
   private topPageEl: TopPageElement;

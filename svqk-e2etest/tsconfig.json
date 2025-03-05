@@ -11,6 +11,14 @@
     "moduleResolution": "bundler",
     "module": "esnext",
     "noEmit": true,
-    "target": "esnext"
+    "target": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "@arch/*": ["tests/arch/*"],
+      "@api/*": ["tests/api/*"],
+      "@facades/*": ["tests/facades/*"],
+      "@factories/*": ["tests/factories/*"],
+      "@pages/*": ["tests/pages/*"]
+    }
   }
 }

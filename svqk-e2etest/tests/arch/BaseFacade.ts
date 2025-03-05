@@ -1,4 +1,4 @@
-import { DryRun } from './DryRun';
+import { DryRun } from '@arch/DryRun';
 
 export default class BaseFacade {
   constructor(private dryRun: DryRun) {}
