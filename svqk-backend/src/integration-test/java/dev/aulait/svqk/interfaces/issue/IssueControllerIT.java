@@ -38,6 +38,7 @@ class IssueControllerIT {
     // Delete
     int deletedId = client.delete(issueId, updatedIssue);
     assertEquals(deletedId, issueId);
+
     ErrorResponseDto error = client.getWithError(issueId);
     assertEquals(Status.NOT_FOUND, error.getStatus());
   }
