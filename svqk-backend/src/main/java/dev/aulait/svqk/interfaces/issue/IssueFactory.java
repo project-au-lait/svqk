@@ -23,12 +23,14 @@ public class IssueFactory {
           .build(); // <.>
 
   public SearchCriteria build(IssueSearchCriteriaDto criteria) { // <.>
+    String text = "%" + criteria.getText() + "%";
+
     return new SearchCriteriaBuilder()
         .select("SELECT i FROM IssueEntity i")
         .select("JOIN FETCH i.issueStatus")
         .select("JOIN FETCH i.tracker")
-        .where("i.subject", LIKE, criteria.getText())
-        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : criteria.getText())
+        .where("i.subject", LIKE, text)
+        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : text)
         .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
