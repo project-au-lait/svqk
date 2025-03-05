@@ -4,7 +4,7 @@ import { DryRun } from '../../arch/DryRun';
 import MenuBar from '../menu-bar/MenuBar';
 
 export default class TopPage {
-  private topPageEl: TopPageElement;
+  private readonly topPageEl: TopPageElement;
 
   constructor(page: Page, dryRun: DryRun) {
     this.topPageEl = new TopPageElement({ page, dryRun });
