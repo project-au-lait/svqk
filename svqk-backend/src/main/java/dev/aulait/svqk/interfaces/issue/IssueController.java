@@ -13,9 +13,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 @Path(IssueController.ISSUES_PATH)
 @RequiredArgsConstructor
@@ -33,11 +31,7 @@ public class IssueController {
 
   static final String ISSUES_SEARCH_PATH = "search";
 
-  @Value
-  @Builder
-  public static class IssueSearchResultDto {
-    private final SearchResult<IssueDto> searchResult;
-  }
+  public static class IssueSearchResultDto extends SearchResult<IssueDto> {} // <.>
 
   @POST
   public int create(@Valid IssueDto dto) { // <.>
