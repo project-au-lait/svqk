@@ -11,6 +11,10 @@
   let { children }: Props = $props();
 </script>
 
+<svelte:head>
+  <title>{$page.data.title} - SVQK</title>
+</svelte:head>
+
 <nav class="container">
   <ul>
     <li><strong>SVQK</strong></li>
