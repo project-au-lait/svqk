@@ -7,60 +7,23 @@ package <%= interfacesPkgNm %>;
 
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
-import static dev.aulait.svqk.arch.test.RestAssuredUtils.given;
+import dev.aulait.svqk.arch.test.RestClientUtils;
 
 public class <%= entityNmPascal %>Client {
 
   public <%= entityNmPascal %>Dto get(<%= getMethodArgs %>) {
-    return given()
-        .get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, <%= givenGetArgs %>)
-        .then()
-        .statusCode(200)
-        .extract()
-        .as(<%= entityNmPascal %>Dto.class);
+    return RestClientUtils.get(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH, <%= entityNmPascal %>Dto.class, <%= givenGetArgs %>);
   }
 
   public <%= interfaceIdType %> save(<%= entityNmPascal %>Dto dto) {
-    return given()
-        .body(dto)
-        .post(<%= entityNmAllCaps %>_PATH)
-        .then()
-        .statusCode(200)
-        .extract()
-      <%_ if (idField.javaType === 'Integer') { -%>
-        .jsonPath()
-        .getInt(".");
-      <%_ } else if(idField.javaType === 'String') { -%>
-        .asString();
-      <%_ } else { -%>
-        .as(<%= interfaceIdType %>.class);
-      <%_ } -%>
+    return RestClientUtils.post(<%= entityNmAllCaps %>_PATH, dto, <%= interfaceIdType %>.class);
   }
 
   public <%= interfaceIdType %> update(<%= entityNmPascal %>Dto dto) {
-    return given()
-        .body(dto)
-        .put(<%= entityNmAllCaps %>_PATH)
-        .then()
-        .statusCode(200)
-        .extract()
-      <%_ if (idField.javaType === 'Integer') { -%>
-        .jsonPath()
-        .getInt(".");
-      <%_ } else if(idField.javaType === 'String') { -%>
-        .asString();
-      <%_ } else { -%>
-        .as(<%= interfaceIdType %>.class);
-      <%_ } -%>
+    return RestClientUtils.put(<%= entityNmAllCaps %>_PATH, dto, <%= interfaceIdType %>.class);
   }
 
   public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {
-    return given()
-        .body(dto)
-        .post(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_SEARCH_PATH)
-        .then()
-        .statusCode(200)
-        .extract()
-        .as(<%= entityNmPascal %>SearchResultDto.class);
+    return RestClientUtils.post(<%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_SEARCH_PATH, dto, <%= entityNmPascal %>SearchResultDto.class);
   }
 }
