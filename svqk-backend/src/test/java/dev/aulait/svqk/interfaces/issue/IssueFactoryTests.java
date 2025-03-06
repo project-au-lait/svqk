@@ -2,7 +2,7 @@ package dev.aulait.svqk.interfaces.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.aulait.svqk.arch.search.SearchQueryBuilder;
+import dev.aulait.sqb.SearchQueryBuilder;
 import org.junit.jupiter.api.Test;
 
 class IssueFactoryTests {
@@ -21,7 +21,7 @@ class IssueFactoryTests {
 
     assertEquals(
         "SELECT i FROM IssueEntity i JOIN FETCH i.issueStatus JOIN FETCH"
-            + " i.tracker WHERE i.subject LIKE :i_subject ORDER BY i.id DESC",
+            + " i.tracker WHERE i.subject LIKE ? ORDER BY i.id DESC",
         builder.getSearchQuery());
   }
 }
