@@ -93,11 +93,7 @@ public class BeanUtils {
   }
 
   private static ModelMapper buildDefaultMapper() {
-    ModelMapper mapper = new ModelMapper();
-
-    // Configure ModelMapper instance.
-
-    return mapper;
+    return new ModelMapper();
   }
 
   public static interface MappingConfigBuilder<S, D> {
