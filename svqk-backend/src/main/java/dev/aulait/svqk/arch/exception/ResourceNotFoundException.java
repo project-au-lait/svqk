@@ -9,5 +9,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ResourceNotFoundException extends RuntimeException {
 
-  private final Object id;
+  private final transient Object id;
 }

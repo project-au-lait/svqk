@@ -93,11 +93,7 @@ public class BeanUtils {
   }
 
   private static ModelMapper buildDefaultMapper() {
-    ModelMapper mapper = new ModelMapper();
-
-    // Configure ModelMapper instance.
-
-    return mapper;
+    return new ModelMapper();
   }
 
   public static interface MappingConfigBuilder<S, D> {
@@ -130,10 +126,7 @@ public class BeanUtils {
     private TypeMap<S, D> typeMap;
 
     public <V> MappingConfigBuilder<S, D> skip(DestinationSetter<D, V> setter) {
-      typeMap.addMappings(
-          m -> {
-            m.skip(setter);
-          });
+      typeMap.addMappings(m -> m.skip(setter));
       return this;
     }
 
