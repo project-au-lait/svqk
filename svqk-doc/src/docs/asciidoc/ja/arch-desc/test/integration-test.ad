@@ -68,11 +68,11 @@ RestClientは、REST APIの呼び出しと、そのRequest・ResponseのDTOへ�
 .RestClientの実装
 [source,java]
 ----
-include::{project_root}/svqk-backend/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueClient.java[lines="1..18,38"]
+include::{project_root}/svqk-backend/src/integration-test/java/dev/aulait/svqk/interfaces/issue/IssueClient.java[lines="1..19]
 ----
 
 <.> REST APIの呼び出しを行うメソッドを定義します。メソッドの引数はRequestのDTO、戻り値の型はResponseのDTOとします。
-<.> RestAssuredのAPIを使用して、REST APIの呼び出しを実装します。
+<.> RestClientUtilsのAPIを使用して、REST APIの呼び出しを実装します。
 
 ===== DataFactroy
 
