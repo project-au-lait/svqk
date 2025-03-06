@@ -3,7 +3,7 @@ import MenuBarPageElement from '@pages/menu-bar/MenuBarPageElement';
 import IssueListPage from '@pages/issue-list/IssueListPage';
 
 export default class MenuBar {
-  private menuBarEl: MenuBarPageElement;
+  private readonly menuBarEl: MenuBarPageElement;
 
   constructor(page: BasePageElement) {
     this.menuBarEl = new MenuBarPageElement(page);
