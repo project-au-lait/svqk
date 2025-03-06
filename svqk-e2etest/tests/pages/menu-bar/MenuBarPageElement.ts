@@ -8,4 +8,6 @@ export default class MenuBarPageElement extends BasePageElement {
   async clickIssueLink() {
     await this.click('#issue');
   }
+
+  /* clickEntityLink */
 }

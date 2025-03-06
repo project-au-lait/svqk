@@ -30,6 +30,7 @@
     <li>
       <a id="issue" href="/issues">{$t('msg.issue')}</a>
     </li>
+    <!-- entityListLink -->
   </ul>
 </nav>
 
