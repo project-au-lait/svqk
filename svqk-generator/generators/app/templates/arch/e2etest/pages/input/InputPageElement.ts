@@ -1,6 +1,6 @@
 <% include('../../../../lib/data-factory-def', { fields }); -%>
-import BasePageElement from '../../arch/BasePageElement';
-import { t } from '../../arch/MultiLng';
+import BasePageElement from '@arch/BasePageElement';
+import { t } from '@arch/MultiLng';
 
 export default class <%= entityNmPascal %>InputPageElement extends BasePageElement {
   get pageNameKey() {

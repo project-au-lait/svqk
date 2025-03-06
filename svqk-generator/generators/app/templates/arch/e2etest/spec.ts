@@ -1,10 +1,10 @@
 import { test } from '@playwright/test';
-import { <%= entityNmPascal %>Facade } from '../../facades/<%= entityNmPascal %>Facade';
-import { DryRun } from '../../arch/DryRun';
-import { locale } from '../../arch/MultiLng';
-import NumberUtils from '../../arch/NumberUtils';
-import TopPage from '../../pages/top/TopPage';
-import <%= entityNmPascal %>InputFactory from '../../factories/<%= entityNmPascal %>Factory';
+import { <%= entityNmPascal %>Facade } from '@facades/<%= entityNmPascal %>Facade';
+import { DryRun } from '@arch/DryRun';
+import { locale } from '@arch/MultiLng';
+import NumberUtils from '@arch/NumberUtils';
+import TopPage from '@pages/top/TopPage';
+import <%= entityNmPascal %>InputFactory from '@factories/<%= entityNmPascal %>Factory';
 
 test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   const context = await browser.newContext({
