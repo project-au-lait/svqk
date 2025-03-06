@@ -39,7 +39,7 @@ public class SearchQueryBuilder {
     return searchQuery
         .replaceFirst("SELECT ", "SELECT COUNT(")
         .replaceFirst(" FROM", ") FROM")
-        .replaceAll("FETCH ", "");
+        .replace("FETCH ", "");
   }
 
   String buildWhere(List<FieldCriteriaVo> fieldCriteria) {
