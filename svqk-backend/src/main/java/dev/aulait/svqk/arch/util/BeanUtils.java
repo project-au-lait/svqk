@@ -126,10 +126,7 @@ public class BeanUtils {
     private TypeMap<S, D> typeMap;
 
     public <V> MappingConfigBuilder<S, D> skip(DestinationSetter<D, V> setter) {
-      typeMap.addMappings(
-          m -> {
-            m.skip(setter);
-          });
+      typeMap.addMappings(m -> m.skip(setter));
       return this;
     }
 
