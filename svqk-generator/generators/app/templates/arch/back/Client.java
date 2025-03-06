@@ -11,8 +11,8 @@ import dev.aulait.svqk.arch.test.RestClientUtils;
 
 public class <%= entityNmPascal %>Client {
 
-  private static final String CREATE_PATH = <%= entityNmAllCaps %>_PATH;
   private static final String GET_PATH = <%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_GET_PATH;
+  private static final String CREATE_PATH = <%= entityNmAllCaps %>_PATH;
   private static final String UPDATE_PATH = <%= entityNmAllCaps %>_PATH;
   private static final String SEARCH_PATH = <%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_SEARCH_PATH;
 
