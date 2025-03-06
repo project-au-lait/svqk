@@ -43,7 +43,7 @@ public class PageResultDto {
   }
 
   static long end(long count, int start, int pageSize) {
-    return Math.min(start + pageSize - 1, count);
+    return Math.min((long) start + pageSize - 1, count);
   }
 
   static int lastPageNum(long count, int pageSize) {
