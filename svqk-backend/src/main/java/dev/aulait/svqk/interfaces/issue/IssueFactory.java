@@ -3,6 +3,7 @@ package dev.aulait.svqk.interfaces.issue;
 import static dev.aulait.sqb.ComparisonOperator.*;
 import static dev.aulait.sqb.LogicalOperator.*;
 
+import dev.aulait.sqb.LikePattern;
 import dev.aulait.sqb.SearchCriteria;
 import dev.aulait.sqb.SearchCriteriaBuilder;
 import dev.aulait.sqb.SearchResult;
@@ -23,7 +24,7 @@ public class IssueFactory {
           .build(); // <.>
 
   public SearchCriteria build(IssueSearchCriteriaDto criteria) { // <.>
-    String text = "%" + criteria.getText() + "%";
+    Object text = LikePattern.contains(criteria.getText());
 
     return new SearchCriteriaBuilder()
         .select("SELECT i FROM IssueEntity i")
