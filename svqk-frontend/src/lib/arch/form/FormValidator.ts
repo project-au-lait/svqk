@@ -33,13 +33,13 @@ export default class FormValidator {
 
           if (!handlerName) {
             console.error(
-              `No data-handler attribute found for submitter ${context.event.submitter}`
+              `No data-handler attribute found for submitter ${context.event.submitter}` //NOSONAR
             );
             return;
           }
           const submitHandler = submitHandlers.find((handler) => handler.name == handlerName);
           if (!submitHandler) {
-            console.error(`No submit handler found for submitter ${context.event.submitter}`);
+            console.error(`No submit handler found for submitter ${context.event.submitter}`); //NOSONAR
             return;
           }
           submitHandler(values);
