@@ -259,7 +259,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
-      entityNmKebab: this.pascal_to_kebab(entityNmPascal),
+      entityNmKebab: this._pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
       compIdFields: this._get_composite_id_fields(idField),
@@ -330,7 +330,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     return pascal.charAt(0).toLowerCase() + pascal.slice(1);
   }
 
-  pascal_to_kebab(pascal: string): string {
+  _pascal_to_kebab(pascal: string): string {
     return pascal
       .replace(/([a-z])([A-Z])/g, "$1-$2")
       .replace(/[A-Z]/g, (letter) => letter.toLowerCase());
@@ -458,10 +458,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     const inputTmplPath = "e2etest/pages/input";
     const listTmplPath = "e2etest/pages/list";
-    const menuBarTmplPath = "e2etest/pages/menu-bar";
     const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-input`;
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
+
+    // Added link to target EntityList in menuBar
+    this._generate_menu_bar(menuBarDestPath, tmplData);
 
     // TODO temporary
     if (this.optionsValues.templateType === "skeleton") {
@@ -485,11 +487,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           "e2etest/Factory.ts",
           `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
         ],
-        [`${menuBarTmplPath}/MenuBar.ts`, `${menuBarDestPath}/MenuBar.ts`],
-        [
-          `${menuBarTmplPath}/MenuBarPageElement.ts`,
-          `${menuBarDestPath}/MenuBarPageElement.ts`,
-        ],
         [
           `${inputTmplPath}/InputPage.ts`,
           `${inputDestPath}/${tmplData.entityNmPascal}InputPage.ts`,
@@ -512,6 +509,71 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     for (const [srcPath, destPath] of pathPairs) {
       this._output_e2etest_file(srcPath, destPath, tmplData);
     }
+  }
+
+  _generate_menu_bar(menuBarDestPath: string, tmplData: TemplateData) {
+    const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
+    const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
+    const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+
+    this._replace_placeholder(
+      `${menuBarDestPath}/MenuBarPageElement.ts`,
+      `click${tmplData.entityNmPascal}Link`,
+      PLACEHOLDER_FOR_TS,
+      `async click${tmplData.entityNmPascal}Link() {
+    await this.click('#${tmplData.entityNmCamel}');
+  }
+
+  ${PLACEHOLDER_FOR_TS}`
+    );
+
+    this._replace_placeholder(
+      `${menuBarDestPath}/MenuBar.ts`,
+      `goto${tmplData.entityNmPascal}ListPage`,
+      PLACEHOLDER_FOR_IMPORT,
+      `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
+${PLACEHOLDER_FOR_IMPORT}`
+    );
+
+    this._replace_placeholder(
+      `${menuBarDestPath}/MenuBar.ts`,
+      `goto${tmplData.entityNmPascal}ListPage`,
+      PLACEHOLDER_FOR_TS,
+      `async goto${tmplData.entityNmPascal}ListPage() {
+    await this.menuBarEl.click${tmplData.entityNmPascal}Link();
+    return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);
+  }
+
+  ${PLACEHOLDER_FOR_TS}`
+    );
+
+    const href = `href="/${tmplData.entityNmPlural}"`;
+    this._replace_placeholder(
+      `${this.destFrontPath}/routes/+layout.svelte`,
+      href,
+      PLACEHOLDER_FOR_HTML,
+      `<li>
+      <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>
+    </li>
+    ${PLACEHOLDER_FOR_HTML}`
+    );
+  }
+
+  _replace_placeholder(
+    filePath: string,
+    checkString: string,
+    placeholders: string,
+    newString: string
+  ) {
+    this.fs.copy(filePath, filePath, {
+      process: function (content) {
+        if (content.includes(checkString)) {
+          return content;
+        }
+
+        return content.toString().replace(placeholders, newString);
+      },
+    });
   }
 }
 

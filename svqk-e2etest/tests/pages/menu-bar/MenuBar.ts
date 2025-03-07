@@ -1,6 +1,11 @@
 import BasePageElement from '@arch/BasePageElement';
 import MenuBarPageElement from '@pages/menu-bar/MenuBarPageElement';
 import IssueListPage from '@pages/issue-list/IssueListPage';
+/**
+ * The following __PLACEHOLDER__ comments are dynamically replaced.
+ * Please do not delete.
+ */
+/* __PLACEHOLDER__:import */
 
 export default class MenuBar {
   private readonly menuBarEl: MenuBarPageElement;
@@ -13,4 +18,10 @@ export default class MenuBar {
     await this.menuBarEl.clickIssueLink();
     return new IssueListPage(this.menuBarEl);
   }
+
+  /**
+   * The following __PLACEHOLDER__ comments are dynamically replaced.
+   * Please do not delete.
+   */
+  /* __PLACEHOLDER__ */
 }
