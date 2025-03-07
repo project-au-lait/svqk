@@ -55,31 +55,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       type: String,
     });
 
-    if (
-      this.options.component &&
-      !allowedComponentValues.includes(this.options.component)
-    ) {
-      throw new Error(
-        `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
-          ", "
-        )}.`
-      );
-    }
-
     this.option("templateType", {
       type: String,
     });
-
-    if (
-      this.options.templateType &&
-      !allowedTemplateTypeValues.includes(this.options.templateType)
-    ) {
-      throw new Error(
-        `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
-          ", "
-        )}.`
-      );
-    }
 
     this.optionsValues = {
       component: this.options.component,
@@ -108,25 +86,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   async initializing() {
-    try {
-      if (this.optionsValues.component !== "api-client") {
-        this.metadataConfig.list = await import(
-          `${this.destinationRoot()}/${this.metadataConfig.filePath}`,
-          { with: { type: "json" } }
-        ).then((module) => module.default);
+    const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
 
-        if (
-          !this.metadataConfig.list ||
-          this.metadataConfig.list.length === 0
-        ) {
-          throw new Error(
-            `The meta data list on ${this.metadataConfig.filePath} is empty.`
-          );
-        }
-      }
-    } catch (error) {
-      this.log(`Failed to read ${this.metadataConfig.filePath}. ${error}`);
-    }
+    this.metadataConfig.list = await import(filePath, {
+      with: { type: "json" },
+    }).then((module) => module.default);
   }
 
   async prompting() {
@@ -157,11 +121,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.tables = answer.tables ? answer.tables.trim().split(/\s+/) : [];
     }
 
-    const metadataPath = this.destinationPath(
-      `${this.destinationRoot()}/${this.metadataConfig.filePath}`
-    );
-    const metadataExists = fs.existsSync(metadataPath);
-    if (!metadataExists && this.optionsValues.component !== "entity") {
+    if (
+      !this.metadataConfig.list &&
+      this.optionsValues.component !== "entity"
+    ) {
       const answer = await this.prompt([
         {
           type: "list" as const,
@@ -176,17 +139,43 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     }
   }
 
-  default() {
+  async configuring() {
+    if (
+      this.options.component &&
+      !allowedComponentValues.includes(this.options.component)
+    ) {
+      throw new Error(
+        `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
+          ", "
+        )}.`
+      );
+    }
+
+    if (
+      this.options.templateType &&
+      !allowedTemplateTypeValues.includes(this.options.templateType)
+    ) {
+      throw new Error(
+        `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
+          ", "
+        )}.`
+      );
+    }
+
     if (
       this.optionsValues.component === "entity" ||
       this.optionsValues.component === "all" ||
       this.generateEntity
     ) {
       EntityGenerator.exec(this.genEntityCmd);
-    }
-  }
 
-  writing() {
+      const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
+
+      this.metadataConfig.list = await import(filePath, {
+        with: { type: "json" },
+      }).then((module) => module.default);
+    }
+
     if (
       this.optionsValues.component !== "api-client" &&
       this.optionsValues.component !== "entity" &&
@@ -196,9 +185,19 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         .map((metadata) => metadata.tableName)
         .filter((name) => typeof name === "string" && name.trim() !== "")
         .join(", ");
-      this.log(
+
+      throw new Error(
         `Please specify table name(s) with space separated choosing from ${tables}.`
       );
+    }
+  }
+
+  writing() {
+    if (
+      this.optionsValues.component === "api-client" ||
+      this.optionsValues.component === "entity" ||
+      this.generateEntity
+    ) {
       return;
     }
 
