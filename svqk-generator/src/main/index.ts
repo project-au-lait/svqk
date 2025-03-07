@@ -189,6 +189,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   writing() {
     if (
       this.optionsValues.component !== "api-client" &&
+      this.optionsValues.component !== "entity" &&
       this.tables.length == 0
     ) {
       const tables = this.metadataConfig.list
