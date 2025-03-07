@@ -38,7 +38,7 @@ const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues;
-  tables: string[];
+  inputTables: string[];
   generateEntity: boolean | null = null;
   metadataConfig: MetadataConfig;
   genEntityCmd: string;
@@ -65,7 +65,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE),
     };
 
-    this.tables = this.args
+    this.inputTables = this.args
       .filter((arg) => typeof arg === "string" && arg.trim())
       .flatMap((arg) => arg.trim().split(/\s+/));
 
@@ -103,7 +103,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     }
 
     if (
-      this.tables.length === 0 &&
+      this.inputTables.length === 0 &&
       !["entity", "api-client"].includes(this.optionsValues.component)
     ) {
       const answer = await this.prompt([
@@ -114,7 +114,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         },
       ]);
 
-      this.tables = answer.tables ? answer.tables.trim().split(/\s+/) : [];
+      this.inputTables = answer.tables ? answer.tables.trim().split(/\s+/) : [];
     }
 
     if (
@@ -171,7 +171,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     if (
       this.optionsValues.component !== "api-client" &&
       this.optionsValues.component !== "entity" &&
-      this.tables.length == 0
+      this.inputTables.length == 0
     ) {
       const tables = this.metadataConfig.list
         .map((metadata) => metadata.tableName)
@@ -195,8 +195,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.metadataConfig.list.forEach((metaData) => {
       if (
-        !this.tables.includes(metaData.tableName) &&
-        !this.tables.includes(metaData.className)
+        !this.inputTables.includes(metaData.tableName) &&
+        !this.inputTables.includes(metaData.className)
       ) {
         return;
       }
