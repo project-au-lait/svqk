@@ -86,11 +86,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   async initializing() {
-    const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
-
-    this.metadataConfig.list = await import(filePath, {
-      with: { type: "json" },
-    }).then((module) => module.default);
+    this.metadataConfig.list = await this._load_metadata_config();
   }
 
   async prompting() {
@@ -169,11 +165,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       EntityGenerator.exec(this.genEntityCmd);
 
-      const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
-
-      this.metadataConfig.list = await import(filePath, {
-        with: { type: "json" },
-      }).then((module) => module.default);
+      this.metadataConfig.list = await this._load_metadata_config();
     }
 
     if (
@@ -243,6 +235,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     }
 
     this.log("Completed.");
+  }
+
+  async _load_metadata_config() {
+    const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
+
+    return import(filePath, {
+      with: { type: "json" },
+    }).then((module) => module.default);
   }
 
   _generate_template_data(metadata: Metadata): TemplateData {
