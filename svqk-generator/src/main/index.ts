@@ -460,7 +460,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
 
-    // TODO temporary
     if (this.optionsValues.templateType === "skeleton") {
       pathPairs = [
         [
