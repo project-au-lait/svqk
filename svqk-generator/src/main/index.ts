@@ -233,8 +233,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       ApiClientGenerator.exec(this.genApiClientConfig);
     }
-
-    this.log("Completed.");
   }
 
   async _load_metadata_config() {
