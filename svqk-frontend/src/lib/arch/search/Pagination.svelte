@@ -21,7 +21,8 @@
 </div>
 
 {#if lastPageNum > 1}
-  <div class="page" role="group">
+  <!-- prettier-ignore -->
+  <div class="page" role="group"><!--//NOSONAR-->
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(1)}> « </button>
 
     <button class="outline" disabled={pageNumber <= 1} onclick={() => gotoPage(pageNumber - 1)}>
