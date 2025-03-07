@@ -5,7 +5,6 @@ import path from "node:path";
 import pluralize from "pluralize";
 import { generateApi } from "swagger-typescript-api";
 import Generator from "yeoman-generator";
-
 import {
   CustomOptions,
   Field,
