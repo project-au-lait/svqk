@@ -30,7 +30,17 @@
     <li>
       <a id="issue" href="/issues">{$t('msg.issue')}</a>
     </li>
-    <!-- entityListLink -->
+    <li>
+      <a id="hello" href="/hellos">Hello</a>
+    </li>
+    <li>
+      <a id="world" href="/worlds">World</a>
+    </li>
+    <!-- 
+      The following __PLACEHOLDER__ comments are dynamically replaced.
+      Please do not delete.
+    -->
+    <!-- __PLACEHOLDER__ -->
   </ul>
 </nav>
 

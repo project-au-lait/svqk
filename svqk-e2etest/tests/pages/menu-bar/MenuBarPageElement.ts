@@ -9,5 +9,9 @@ export default class MenuBarPageElement extends BasePageElement {
     await this.click('#issue');
   }
 
-  /* clickEntityLink */
+  /**
+   * The following __PLACEHOLDER__ comments are dynamically replaced.
+   * Please do not delete.
+   */
+  /* __PLACEHOLDER__ */
 }
