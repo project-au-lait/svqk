@@ -408,8 +408,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
 
-    const menuBarPageElemenPath = `${menuBarDestPath}/MenuBarPageElement.ts`;
-    this.fs.copy(menuBarPageElemenPath, menuBarPageElemenPath, {
+    const menuBarPageElementPath = `${menuBarDestPath}/MenuBarPageElement.ts`;
+    this.fs.copy(menuBarPageElementPath, menuBarPageElementPath, {
       process: function (content) {
         const methodName = `click${tmplData.entityNmPascal}Link`;
         if (content.includes(methodName)) {
