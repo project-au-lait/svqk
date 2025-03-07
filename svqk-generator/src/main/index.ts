@@ -458,50 +458,50 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_menu_bar(menuBarDestPath: string, tmplData: TemplateData) {
-    const placeholderForTs = "/* __PLACEHOLDER__ */";
-    const placeholderForImport = "/* __PLACEHOLDER__:import */";
-    const placeholderForHtml = "<!-- __PLACEHOLDER__ -->";
+    const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
+    const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
+    const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
 
     this._replace_placeholder(
       `${menuBarDestPath}/MenuBarPageElement.ts`,
       `click${tmplData.entityNmPascal}Link`,
-      placeholderForTs,
+      PLACEHOLDER_FOR_TS,
       `async click${tmplData.entityNmPascal}Link() {
     await this.click('#${tmplData.entityNmCamel}');
   }
 
-  ${placeholderForTs}`
+  ${PLACEHOLDER_FOR_TS}`
     );
 
     this._replace_placeholder(
       `${menuBarDestPath}/MenuBar.ts`,
       `goto${tmplData.entityNmPascal}ListPage`,
-      placeholderForImport,
+      PLACEHOLDER_FOR_IMPORT,
       `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
-${placeholderForImport}`
+${PLACEHOLDER_FOR_IMPORT}`
     );
 
     this._replace_placeholder(
       `${menuBarDestPath}/MenuBar.ts`,
       `goto${tmplData.entityNmPascal}ListPage`,
-      placeholderForTs,
+      PLACEHOLDER_FOR_TS,
       `async goto${tmplData.entityNmPascal}ListPage() {
     await this.menuBarEl.click${tmplData.entityNmPascal}Link();
     return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);
   }
 
-  ${placeholderForTs}`
+  ${PLACEHOLDER_FOR_TS}`
     );
 
     const href = `href="/${tmplData.entityNmPlural}"`;
     this._replace_placeholder(
       `${this.destFrontPath}/routes/+layout.svelte`,
       href,
-      placeholderForHtml,
+      PLACEHOLDER_FOR_HTML,
       `<li>
       <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>
     </li>
-    ${placeholderForHtml}`
+    ${PLACEHOLDER_FOR_HTML}`
     );
   }
 
