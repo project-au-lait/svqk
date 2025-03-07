@@ -1,6 +1,6 @@
-import BasePageElement from '../../arch/BasePageElement';
-import MenuBarPageElement from './MenuBarPageElement';
-import IssueListPage from '../issue-list/IssueListPage';
+import BasePageElement from '@arch/BasePageElement';
+import MenuBarPageElement from '@pages/menu-bar/MenuBarPageElement';
+import IssueListPage from '@pages/issue-list/IssueListPage';
 /* importEntityListPage */
 
 export default class MenuBar {

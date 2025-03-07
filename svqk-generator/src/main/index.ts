@@ -206,7 +206,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
-      entityNmKebab: this.pascal_to_kebab(entityNmPascal),
+      entityNmKebab: this._pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
       compIdFields: this._get_composite_id_fields(idField),
@@ -277,7 +277,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     return pascal.charAt(0).toLowerCase() + pascal.slice(1);
   }
 
-  pascal_to_kebab(pascal: string): string {
+  _pascal_to_kebab(pascal: string): string {
     return pascal
       .replace(/([a-z])([A-Z])/g, "$1-$2")
       .replace(/[A-Z]/g, (letter) => letter.toLowerCase());
@@ -440,7 +440,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           .toString()
           .replace(
             "/* importEntityListPage */",
-            `import ${tmplData.entityNmPascal}ListPage from '../${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
+            `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
 /* importEntityListPage */`
           )
           .replace(
