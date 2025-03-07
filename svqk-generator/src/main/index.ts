@@ -38,6 +38,8 @@ const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues;
+  tables: string[];
+  generateEntity: boolean | null = null;
   metadataConfig: MetadataConfig;
   genEntityCmd: string;
   destBackPath: string;
@@ -51,7 +53,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.option("component", {
       type: String,
-      default: "all",
     });
 
     if (
@@ -85,6 +86,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       templateType:
         this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE),
     };
+
+    this.tables = this.args
+      .filter((arg) => typeof arg === "string" && arg.trim())
+      .flatMap((arg) => arg.trim().split(/\s+/));
+
     this.metadataConfig = {
       filePath: this.config.get(YO_RC_KEY_METADATA_FPATH),
       list: [],
@@ -103,14 +109,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   async initializing() {
     try {
-      if (this.optionsValues.component === "entity") {
-        EntityGenerator.exec(this.genEntityCmd);
-
-        return;
-      } else if (this.optionsValues.component === "all") {
-        EntityGenerator.exec(this.genEntityCmd);
-      }
-
       if (this.optionsValues.component !== "api-client") {
         this.metadataConfig.list = await import(
           `${this.destinationRoot()}/${this.metadataConfig.filePath}`,
@@ -131,12 +129,68 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     }
   }
 
-  writing() {
-    const splitedArgs = this.args.flatMap((arg) => arg.trim().split(/\s+/));
+  async prompting() {
+    if (!this.optionsValues.component) {
+      const answer = await this.prompt([
+        {
+          type: "list" as const,
+          name: "component",
+          message: "Select a component:",
+          choices: allowedComponentValues,
+        },
+      ]);
+      this.optionsValues.component = answer.component;
+    }
 
     if (
+      this.tables.length === 0 &&
+      !["entity", "api-client"].includes(this.optionsValues.component)
+    ) {
+      const answer = await this.prompt([
+        {
+          type: "input" as const,
+          name: "tables",
+          message: "Enter tables (e.g. tablea_name tableb_name tablec_name):",
+        },
+      ]);
+
+      this.tables = answer.tables ? answer.tables.trim().split(/\s+/) : [];
+    }
+
+    const metadataPath = this.destinationPath(
+      `${this.destinationRoot()}/${this.metadataConfig.filePath}`
+    );
+    const metadataExists = fs.existsSync(metadataPath);
+    if (!metadataExists && this.optionsValues.component !== "entity") {
+      const answer = await this.prompt([
+        {
+          type: "list" as const,
+          name: "generateEntity",
+          message: "Do you want to generate entities?",
+          choices: ["Yes", "No"],
+          filter: (input) => input === "Yes",
+        },
+      ]);
+
+      this.generateEntity = answer.generateEntity;
+    }
+  }
+
+  default() {
+    if (
+      this.optionsValues.component === "entity" ||
+      this.optionsValues.component === "all" ||
+      this.generateEntity
+    ) {
+      EntityGenerator.exec(this.genEntityCmd);
+    }
+  }
+
+  writing() {
+    if (
       this.optionsValues.component !== "api-client" &&
-      splitedArgs.length == 0
+      this.optionsValues.component !== "entity" &&
+      this.tables.length == 0
     ) {
       const tables = this.metadataConfig.list
         .map((metadata) => metadata.tableName)
@@ -150,8 +204,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.metadataConfig.list.forEach((metaData) => {
       if (
-        !splitedArgs.includes(metaData.tableName) &&
-        !splitedArgs.includes(metaData.className)
+        !this.tables.includes(metaData.tableName) &&
+        !this.tables.includes(metaData.className)
       ) {
         return;
       }
@@ -278,8 +332,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   pascal_to_kebab(pascal: string): string {
     return pascal
-      .replace(/([a-z])([A-Z])/g, '$1-$2')
-      .replace(/[A-Z]/g, letter => letter.toLowerCase());
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/[A-Z]/g, (letter) => letter.toLowerCase());
   }
 
   _camel_to_pascal(camel: string): string {
