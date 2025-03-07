@@ -408,68 +408,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
 
-    const menuBarPageElementPath = `${menuBarDestPath}/MenuBarPageElement.ts`;
-    this.fs.copy(menuBarPageElementPath, menuBarPageElementPath, {
-      process: function (content) {
-        const methodName = `click${tmplData.entityNmPascal}Link`;
-        if (content.includes(methodName)) {
-          return content;
-        }
-
-        return content.toString().replace(
-          "/* clickEntityLink */",
-          `async ${methodName}() {
-    await this.click('#${tmplData.entityNmCamel}');
-  }
-
-  /* clickEntityLink */`
-        );
-      },
-    });
-
-    const menuBarPath = `${menuBarDestPath}/MenuBar.ts`;
-    this.fs.copy(menuBarPath, menuBarPath, {
-      process: function (content) {
-        const methodName = `goto${tmplData.entityNmPascal}ListPage`;
-        if (content.includes(methodName)) {
-          return content;
-        }
-
-        return content
-          .toString()
-          .replace(
-            "/* importEntityListPage */",
-            `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
-/* importEntityListPage */`
-          )
-          .replace(
-            "/* gotoEntityListPage */",
-            `async ${methodName}() {
-    await this.menuBarEl.click${tmplData.entityNmPascal}Link();
-    return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);
-  }
-
-  /* gotoEntityListPage */`
-          );
-      },
-    });
-
-    const layoutPath = `${this.destFrontPath}/routes/+layout.svelte`;
-    this.fs.copy(layoutPath, layoutPath, {
-      process: function (content) {
-        const href = `href="/${tmplData.entityNmPlural}"`;
-        if (content.includes(href)) {
-          return content;
-        }
-        return content.toString().replace(
-          "<!-- entityListLink -->",
-          `<li>
-      <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>
-    </li>
-    <!-- entityListLink -->`
-        );
-      },
-    });
+    // Added link to target EntityList in menuBar
+    this._generate_menu_bar(menuBarDestPath, tmplData);
 
     // TODO temporary
     if (this.optionsValues.templateType === "skeleton") {
@@ -515,6 +455,71 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     for (const [srcPath, destPath] of pathPairs) {
       this._output_e2etest_file(srcPath, destPath, tmplData);
     }
+  }
+
+  _generate_menu_bar(menuBarDestPath: string, tmplData: TemplateData) {
+    const placeholderForTs = "/* __PLACEHOLDER__ */";
+    const placeholderForImport = "/* __PLACEHOLDER__:import */";
+    const placeholderForHtml = "<!-- __PLACEHOLDER__ -->";
+
+    this._replace_placeholder(
+      `${menuBarDestPath}/MenuBarPageElement.ts`,
+      `click${tmplData.entityNmPascal}Link`,
+      placeholderForTs,
+      `async click${tmplData.entityNmPascal}Link() {
+    await this.click('#${tmplData.entityNmCamel}');
+  }
+
+  ${placeholderForTs}`
+    );
+
+    this._replace_placeholder(
+      `${menuBarDestPath}/MenuBar.ts`,
+      `goto${tmplData.entityNmPascal}ListPage`,
+      placeholderForImport,
+      `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
+${placeholderForImport}`
+    );
+
+    this._replace_placeholder(
+      `${menuBarDestPath}/MenuBar.ts`,
+      `goto${tmplData.entityNmPascal}ListPage`,
+      placeholderForTs,
+      `async goto${tmplData.entityNmPascal}ListPage() {
+    await this.menuBarEl.click${tmplData.entityNmPascal}Link();
+    return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);
+  }
+
+  ${placeholderForTs}`
+    );
+
+    const href = `href="/${tmplData.entityNmPlural}"`;
+    this._replace_placeholder(
+      `${this.destFrontPath}/routes/+layout.svelte`,
+      href,
+      placeholderForHtml,
+      `<li>
+      <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>
+    </li>
+    ${placeholderForHtml}`
+    );
+  }
+
+  _replace_placeholder(
+    filePath: string,
+    checkString: string,
+    placeholders: string,
+    newString: string
+  ) {
+    this.fs.copy(filePath, filePath, {
+      process: function (content) {
+        if (content.includes(checkString)) {
+          return content;
+        }
+
+        return content.toString().replace(placeholders, newString);
+      },
+    });
   }
 }
 
