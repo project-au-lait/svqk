@@ -7,7 +7,7 @@
     "destE2EPath": "../svqk-e2etest/tests",
     "templateType": "skeleton",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
-    "genOpenApiJsonCmd":"./mvnw -pl svqk-backend -am package -Dquarkus.smallrye-openapi.store-schema-directory=../svqk-generator/target",
+    "genOpenApiJsonCmd":"./mvnw -T 1C -pl svqk-backend -am -P gen-openapi-spec package",
     "frontApiClientPath": "../svqk-frontend/src/lib/arch/api",
     "E2EApiClientPath": "../svqk-e2etest/tests/api"
   }

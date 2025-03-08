@@ -126,5 +126,29 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>gen-openapi-spec</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-plugin-version}</version>
+            <configuration>
+              <executable>pnpm</executable>
+            </configuration>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <id>pnpm-build</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>

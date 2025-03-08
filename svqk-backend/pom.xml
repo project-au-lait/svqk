@@ -291,6 +291,16 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>gen-openapi-spec</id>
+
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+        <quarkus.smallrye-openapi.store-schema-directory>../svqk-generator/target</quarkus.smallrye-openapi.store-schema-directory>
+        <quarkus.container-image.build>false</quarkus.container-image.build>
+      </properties>
+    </profile>
   </profiles>
 
 </project>
