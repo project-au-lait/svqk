@@ -1,0 +1,10 @@
+<%# args: (entityNmPascal: string, compIdFields?: Field[]) %>
+<%
+idType =  compIdFields ? entityNmPascal + "IdModel" : "number";
+
+importingIdType = compIdFields ? ", " + idType : "";
+
+importDecIdType = compIdFields ? `import type { ${idType} } from "$lib/arch/api/Api"` : "";
+
+idObj = compIdFields ? `id: {} as ${entityNmPascal}IdModel` : "";
+%>

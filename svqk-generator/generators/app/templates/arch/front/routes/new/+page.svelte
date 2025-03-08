@@ -1,13 +1,14 @@
+<%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
+  import type { <%= entityNmPascal %>Model<%= importingIdType %> } from '$lib/arch/api/Api';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
   import { t } from '$lib/translations';
 
-  let <%= entityNmCamel %> = $state({} as <%= entityNmPascal %>Model);
+  let <%= entityNmCamel %> = $state({<%= idObj%>} as <%= entityNmPascal %>Model);
 
-  async function handleAfterSave(id?: number) {
-    await goto(`/<%= entityNmPlural %>/${id}`);
+  async function handleAfterSave(id?: <%= idType %>) {
+    await goto(`/<%= entityNmPlural %>/<%= idPath %>`);
   }
 </script>
 
