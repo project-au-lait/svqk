@@ -587,9 +587,11 @@ class ApiClientGenerator {
             "Search"
           );
 
-          console.log(
-            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
-          );
+          if (templateRouteName !== newTemplateRouteName) {
+            console.log(
+              `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
+            );
+          }
           return newTemplateRouteName;
         },
         onFormatTypeName: (typeName, rawTypeName, schemaType) => {
