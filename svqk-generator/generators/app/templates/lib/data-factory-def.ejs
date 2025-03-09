@@ -32,4 +32,6 @@ getFieldNmPascal = (fieldName) => {
 imports = [
   ...new Set(fields.concat(compIdFields ?? []).map((field) => field.javaType)),
 ].reduce((result, type) => result.concat(findTypeDef(type)?.imports ?? []), []);
+
+nonIdFields = fields.filter((field) => !field.id);
 %>
