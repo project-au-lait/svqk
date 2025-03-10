@@ -461,48 +461,50 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
     const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+    const href = `href="/${tmplData.entityNmPlural}"`;
 
-    this._insert_snippet(
-      `${menuBarDestPath}/MenuBarPageElement.ts`,
-      `click${tmplData.entityNmPascal}Link`,
-      PLACEHOLDER_FOR_TS,
-      `async click${tmplData.entityNmPascal}Link() {
+    const argumentList = [
+      {
+        filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
+        checkString: `click${tmplData.entityNmPascal}Link`,
+        placeholder: PLACEHOLDER_FOR_TS,
+        snippet: `async click${tmplData.entityNmPascal}Link() {
     await this.click('#${tmplData.entityNmCamel}');
   }
 
-  `
-    );
-
-    this._insert_snippet(
-      `${menuBarDestPath}/MenuBar.ts`,
-      `goto${tmplData.entityNmPascal}ListPage`,
-      PLACEHOLDER_FOR_IMPORT,
-      `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
-`
-    );
-
-    this._insert_snippet(
-      `${menuBarDestPath}/MenuBar.ts`,
-      `goto${tmplData.entityNmPascal}ListPage`,
-      PLACEHOLDER_FOR_TS,
-      `async goto${tmplData.entityNmPascal}ListPage() {
+  `,
+      },
+      {
+        filePath: `${menuBarDestPath}/MenuBar.ts`,
+        checkString: `goto${tmplData.entityNmPascal}ListPage`,
+        placeholder: PLACEHOLDER_FOR_IMPORT,
+        snippet: `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
+`,
+      },
+      {
+        filePath: `${menuBarDestPath}/MenuBar.ts`,
+        checkString: `goto${tmplData.entityNmPascal}ListPage`,
+        placeholder: PLACEHOLDER_FOR_TS,
+        snippet: `async goto${tmplData.entityNmPascal}ListPage() {
     await this.menuBarEl.click${tmplData.entityNmPascal}Link();
     return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);
   }
 
-  `
-    );
-
-    const href = `href="/${tmplData.entityNmPlural}"`;
-    this._insert_snippet(
-      `${this.destFrontPath}/routes/+layout.svelte`,
-      href,
-      PLACEHOLDER_FOR_HTML,
-      `<li>
+  `,
+      },
+      {
+        filePath: `${this.destFrontPath}/routes/+layout.svelte`,
+        checkString: href,
+        placeholder: PLACEHOLDER_FOR_HTML,
+        snippet: `<li>
       <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>
     </li>
-    `
-    );
+    `,
+      },
+    ];
+    argumentList.forEach(({ filePath, checkString, placeholder, snippet }) => {
+      this._insert_snippet(filePath, checkString, placeholder, snippet);
+    });
   }
 
   _insert_snippet(
