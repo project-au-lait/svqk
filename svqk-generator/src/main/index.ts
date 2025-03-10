@@ -237,9 +237,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   async _load_metadata_config() {
     const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
 
-    return import(filePath, {
-      with: { type: "json" },
-    }).then((module) => module.default);
+    try {
+      return await import(filePath, {
+        with: { type: "json" },
+      }).then((module) => module.default);
+    } catch {
+      return null;
+    }
   }
 
   _generate_template_data(metadata: Metadata): TemplateData {
