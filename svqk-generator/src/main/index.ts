@@ -36,6 +36,21 @@ const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
+const LINE_BREAK = "\n";
+const INDENT = "  ";
+type SnippetInsertionParams = {
+  filePath: string;
+  checkString: string;
+  placeholder: string;
+  multilineFormatParamsList: MultilineFormatParams[];
+  lineBreakCount: number;
+  indentLevel: number;
+};
+type MultilineFormatParams = {
+  text: string;
+  indentLevel: number;
+};
+
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues;
   tables: string[];
@@ -259,7 +274,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       entityNmCamel: this._pascal_to_camel(entityNmPascal),
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
-      entityNmKebab: this.pascal_to_kebab(entityNmPascal),
+      entityNmKebab: this._pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
       compIdFields: this._get_composite_id_fields(idField),
@@ -330,7 +345,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     return pascal.charAt(0).toLowerCase() + pascal.slice(1);
   }
 
-  pascal_to_kebab(pascal: string): string {
+  _pascal_to_kebab(pascal: string): string {
     return pascal
       .replace(/([a-z])([A-Z])/g, "$1-$2")
       .replace(/[A-Z]/g, (letter) => letter.toLowerCase());
@@ -464,10 +479,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     const inputTmplPath = "e2etest/pages/input";
     const listTmplPath = "e2etest/pages/list";
-    const menuBarTmplPath = "e2etest/pages/menu-bar";
     const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-input`;
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
+
+    // Added link to target EntityList in menuBar
+    this._generate_menu_bar(menuBarDestPath, tmplData);
 
     // TODO temporary
     if (this.optionsValues.templateType === "skeleton") {
@@ -491,11 +508,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           "e2etest/Factory.ts",
           `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
         ],
-        [`${menuBarTmplPath}/MenuBar.ts`, `${menuBarDestPath}/MenuBar.ts`],
-        [
-          `${menuBarTmplPath}/MenuBarPageElement.ts`,
-          `${menuBarDestPath}/MenuBarPageElement.ts`,
-        ],
         [
           `${inputTmplPath}/InputPage.ts`,
           `${inputDestPath}/${tmplData.entityNmPascal}InputPage.ts`,
@@ -518,6 +530,146 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     for (const [srcPath, destPath] of pathPairs) {
       this._output_e2etest_file(srcPath, destPath, tmplData);
     }
+  }
+
+  _generate_menu_bar(menuBarDestPath: string, tmplData: TemplateData) {
+    const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
+    const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
+    const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+    const href = `href="/${tmplData.entityNmPlural}"`;
+
+    const snippetInsertionParamsList: SnippetInsertionParams[] = [
+      {
+        filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
+        checkString: `click${tmplData.entityNmPascal}Link`,
+        placeholder: PLACEHOLDER_FOR_TS,
+        multilineFormatParamsList: [
+          {
+            text: `async click${tmplData.entityNmPascal}Link() {`,
+            indentLevel: 0,
+          },
+          {
+            text: `await this.click('#${tmplData.entityNmCamel}');`,
+            indentLevel: 2,
+          },
+          {
+            text: "}",
+            indentLevel: 1,
+          },
+        ],
+        lineBreakCount: 2,
+        indentLevel: 1,
+      },
+      {
+        filePath: `${menuBarDestPath}/MenuBar.ts`,
+        checkString: `goto${tmplData.entityNmPascal}ListPage`,
+        placeholder: PLACEHOLDER_FOR_IMPORT,
+        multilineFormatParamsList: [
+          {
+            text: `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';`,
+            indentLevel: 0,
+          },
+        ],
+        lineBreakCount: 1,
+        indentLevel: 0,
+      },
+      {
+        filePath: `${menuBarDestPath}/MenuBar.ts`,
+        checkString: `goto${tmplData.entityNmPascal}ListPage`,
+        placeholder: PLACEHOLDER_FOR_TS,
+        multilineFormatParamsList: [
+          {
+            text: `async goto${tmplData.entityNmPascal}ListPage() {`,
+            indentLevel: 0,
+          },
+          {
+            text: `await this.menuBarEl.click${tmplData.entityNmPascal}Link();`,
+            indentLevel: 2,
+          },
+          {
+            text: `return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
+            indentLevel: 2,
+          },
+          {
+            text: "}",
+            indentLevel: 1,
+          },
+        ],
+        lineBreakCount: 2,
+        indentLevel: 1,
+      },
+      {
+        filePath: `${this.destFrontPath}/routes/+layout.svelte`,
+        checkString: href,
+        placeholder: PLACEHOLDER_FOR_HTML,
+        multilineFormatParamsList: [
+          {
+            text: "<li>",
+            indentLevel: 0,
+          },
+          {
+            text: `<a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
+            indentLevel: 3,
+          },
+          {
+            text: "</li>",
+            indentLevel: 2,
+          },
+        ],
+        lineBreakCount: 1,
+        indentLevel: 2,
+      },
+    ];
+
+    snippetInsertionParamsList.forEach((params) =>
+      this._insert_snippet(params)
+    );
+  }
+
+  _insert_snippet(params: SnippetInsertionParams) {
+    const {
+      filePath,
+      checkString,
+      placeholder,
+      multilineFormatParamsList,
+      lineBreakCount,
+      indentLevel,
+    } = params;
+    const snippet = this._format_multiline_text(multilineFormatParamsList);
+    const newSnippet =
+      this._append_line_break(snippet, lineBreakCount) +
+      this._prepend_indent(placeholder, indentLevel);
+    this.fs.copy(filePath, filePath, {
+      process: function (content) {
+        if (content.includes(checkString)) {
+          return content;
+        }
+
+        return content.toString().replace(placeholder, newSnippet);
+      },
+    });
+  }
+
+  _format_multiline_text(paramsList: MultilineFormatParams[]) {
+    return paramsList
+      .map((param: MultilineFormatParams, index: number) => {
+        const indentedText = this._prepend_indent(
+          param.text,
+          param.indentLevel
+        );
+        return index < paramsList.length - 1
+          ? this._append_line_break(indentedText, 1)
+          : indentedText;
+      })
+      .join("");
+  }
+
+  _prepend_indent(text: string, indentLevel: number) {
+    return INDENT.repeat(indentLevel) + text;
+  }
+
+  _append_line_break(text: string, lineBreakCount: number) {
+    return text + LINE_BREAK.repeat(lineBreakCount);
   }
 }
 
