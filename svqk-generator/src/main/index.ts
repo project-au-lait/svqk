@@ -331,6 +331,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   pascal_to_kebab(pascal: string): string {
+    if (pascal === undefined) {
+      return "";
+    }
     return pascal
       .replace(/([a-z])([A-Z])/g, "$1-$2")
       .replace(/[A-Z]/g, (letter) => letter.toLowerCase());
