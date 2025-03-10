@@ -1,4 +1,6 @@
+<%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
 import BasePageElement from '@arch/BasePageElement';
+<%- importDecIdTypeE2etest %>
 
 export default class <%= entityNmPascal %>ListPageElement extends BasePageElement {
   get pageNameKey() {
@@ -9,7 +11,10 @@ export default class <%= entityNmPascal %>ListPageElement extends BasePageElemen
     await this.click('#new<%= entityNmPascal %>');
   }
 
-  async click<%= entityNmPascal %>NoLinkById(id: string) {
-    await this.clickInRow(id);
+  async click<%= entityNmPascal %>NoLinkById(id: <%= idType %>) {
+    <%_
+    const id = compIdFields ? compIdFields.map((field) => `id.${field.fieldName}`).join(" + '/' + ") : "id";
+    -%>
+    await this.clickInRow(<%- id %>);
   }
 }

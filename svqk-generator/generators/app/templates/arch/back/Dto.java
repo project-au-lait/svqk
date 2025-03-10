@@ -20,6 +20,7 @@ public class <%= entityNmPascal %>Dto {
   @Schema(required = true)
   <%_ } -%>
   <%_ if (compIdFields && field.id) { -%>
+  @Schema(required = true)
   private <%= entityNmPascal %>IdDto <%= field.fieldName %>;
   <%_ } else { -%>
   private <%- field.multiple ? `List<${field.javaType}>` : field.javaType %> <%= field.fieldName %>;

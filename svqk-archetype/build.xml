@@ -48,30 +48,38 @@
 
     <chmod perm="u+x" file="${projectdir}/mvnw" />
 
-    <property name="jdk-opts"
-      value="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" />
-
-    <antcall target="cicd-test" />
+    <antcall target="cicd-test">
+      <param name="container.keep" value="true" />
+    </antcall>
 
     <property file="${projectdir}/${project}-cicd/port.properties" />
 
-    <exec executable="pnpm" dir="${projectdir}/${project}-generator">
-      <env key="BACKEND_PORT" value="${backend.port.random}" />
-      <env key="DB_PORT" value="${db.port.random}" />
-      <arg line="generate --component all world --force" />
-    </exec>
+    <trycatch>
+      <try>
+        <exec executable="pnpm" dir="${projectdir}/${project}-generator" failonerror="true">
+          <env key="BACKEND_PORT" value="${backend.port.random}" />
+          <env key="DB_PORT" value="${db.port.random}" />
+          <arg line="generate --component all world --force" />
+        </exec>
+      </try>
 
-    <antcall target="cicd-test" />
+      <finally>
+        <exec executable="docker" dir="${projectdir}/${project}-container">
+          <arg line="compose down" />
+        </exec>
+      </finally>
+    </trycatch>
 
-    <exec executable="docker" dir="${projectdir}/${project}-container">
-      <arg line="compose down" />
-    </exec>
+    <antcall target="cicd-test">
+      <param name="container.keep" value="false" />
+    </antcall>
+
   </target>
+
 
   <target name="cicd-test">
     <exec executable="${mvnw.local}" dir="${projectdir}" failonerror="true">
-      <env key="MAVEN_OPTS" value="${jdk-opts}" />
-      <arg line="-f ${project}-cicd -D ant.target=test" />
+      <arg line="-f ${project}-cicd -D ant.target=test -D container.keep=${container.keep}" />
     </exec>
   </target>
 
@@ -148,7 +156,7 @@
     <delete file="${propsfile}" />
     <propertyfile file="${propsfile}">
       <entry key="excludePatterns" value="${excludePatterns}" />
-      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml,archetype" />
+      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml,archetype,xml" />
       <!-- This value is to avoid the possibility of incorrectly replacing the version string in
       package.json files. -->
       <entry key="version" value="string that cannot be matched" />

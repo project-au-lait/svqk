@@ -351,6 +351,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
   }
 
+  _build_frontend_page_path(tmplData: TemplateData): string {
+    const idFields = tmplData.compIdFields || [tmplData.idField];
+    return idFields.map((idField) => `[${idField.fieldName}]`).join("/");
+  }
+
   _generate_e2e_spec_path(tmplData: TemplateData): string {
     return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
   }
@@ -416,6 +421,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     const entityPathCamel = `${this.destFrontPath}/routes/${tmplData.entityNmCamel}`;
     const entityPathPlural = `${this.destFrontPath}/routes/${tmplData.entityNmPlural}`;
+    const forntendPagePath = this._build_frontend_page_path(tmplData);
 
     if (this.optionsValues.templateType === "skeleton") {
       pathPairs = [
@@ -424,11 +430,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       ];
     } else if (this.optionsValues.templateType === "arch") {
       pathPairs = [
-        // For list screen
+        // For list page
         ["front/routes/list/+page.svelte", `${entityPathPlural}/+page.svelte`],
         ["front/routes/list/+page.ts", `${entityPathPlural}/+page.ts`],
 
-        // For create screen
+        // For create page
         [
           "front/routes/new/+page.svelte",
           `${entityPathPlural}/new/+page.svelte`,
@@ -439,14 +445,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `${this.destFrontPath}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
         ],
 
-        // For update screen
+        // For update page
         [
           "front/routes/entityId/+page.svelte",
-          `${entityPathPlural}/[entityId]/+page.svelte`,
+          `${entityPathPlural}/${forntendPagePath}/+page.svelte`,
         ],
         [
           "front/routes/entityId/+page.ts",
-          `${entityPathPlural}/[entityId]/+page.ts`,
+          `${entityPathPlural}/${forntendPagePath}/+page.ts`,
         ],
       ];
     }
@@ -583,9 +589,11 @@ class ApiClientGenerator {
             "Search"
           );
 
-          console.log(
-            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
-          );
+          if (templateRouteName !== newTemplateRouteName) {
+            console.log(
+              `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
+            );
+          }
           return newTemplateRouteName;
         },
         onFormatTypeName: (typeName, rawTypeName, schemaType) => {

@@ -20,20 +20,37 @@
 
     <property file="${port.file}" />
 
-    <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-      <arg line="-T 1C clean verify -P setup${analyze.profile}" />
-      <arg line="-D db.port=${db.port.random} -D backend.port=${backend.port.random}" />
-      <arg line="-D org.slf4j.simpleLogger.showThreadName=true" />
-    </exec>
-
-    <if>
-      <equals arg1="${analyze}" arg2="true" />
-      <then>
-        <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-          <arg line="sonar:sonar --fail-at-end" />
+    <trycatch>
+      <try>
+        <exec executable="${mvn.cmd}" dir="${prjdir}">
+          <arg line="-T 1C clean verify -P setup${analyze.profile}" />
+          <arg line="-D db.port=${db.port.random} -D backend.port=${backend.port.random}" />
+          <arg line="-D org.slf4j.simpleLogger.showThreadName=true" />
         </exec>
-      </then>
-    </if>
+
+        <if>
+          <equals arg1="${analyze}" arg2="true" />
+          <then>
+            <exec executable="${mvn.cmd}" dir="${prjdir}">
+              <arg line="sonar:sonar" />
+            </exec>
+          </then>
+        </if>
+      </try>
+
+      <finally>
+        <if>
+          <not>
+            <equals arg1="${container.keep}" arg2="true" />
+          </not>
+          <then>
+            <exec executable="docker" dir="${prjdir}/svqk-container">
+              <arg line="compose down" />
+            </exec>
+          </then>
+        </if>
+      </finally>
+    </trycatch>
   </target>
 
 

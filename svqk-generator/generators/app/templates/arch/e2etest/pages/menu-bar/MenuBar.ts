@@ -2,7 +2,7 @@ import BasePageElement from '@arch/BasePageElement';
 import MenuBarPageElement from '@pages/menu-bar/MenuBarPageElement';
 import IssueListPage from '@pages/issue-list/IssueListPage';
 <%_ if (entityNmPascal !== "Issue") { _%>
-import <%= entityNmPascal %>ListPage from '@pages/<%= entityNmCamel %>-list/<%= entityNmPascal %>ListPage';
+import <%= entityNmPascal %>ListPage from '@pages/<%= entityNmKebab %>-list/<%= entityNmPascal %>ListPage';
 <%_ } _%>
 
 export default class MenuBar {

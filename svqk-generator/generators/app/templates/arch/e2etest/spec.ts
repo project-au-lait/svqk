@@ -21,17 +21,15 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   let <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>ListPage.gotoNew<%= entityNmPascal %>Page();
 
   // Create
-  const id = NumberUtils.generateRandomNumber();
-  const <%= entityNmCamel %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>(id);
+  const <%= entityNmCamel %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>();
   await <%= entityNmCamel %>InputPage.save(<%= entityNmCamel %>);
 
   // Rererence
   const <%= entityNmCamel %>Facade = new <%= entityNmPascal %>Facade(dryRun);
-  const <%= entityNmCamel %>IdStr = <%= entityNmCamel %>.id.toString();
-  <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>Facade.reference<%= entityNmPascal %>ById(menuBar, <%= entityNmCamel %>IdStr);
+  <%= entityNmCamel %>InputPage = await <%= entityNmCamel %>Facade.reference<%= entityNmPascal %>ById(menuBar, <%= entityNmCamel %>.<%= idField.fieldName %>);
 
   // Update
-  const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>(id);
+  const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>WithId(<%= entityNmCamel %>.<%= idField.fieldName %>);
   await <%= entityNmCamel %>InputPage.save(updating<%= entityNmPascal %>);
   await <%= entityNmCamel %>InputPage.expect<%= entityNmPascal %>(updating<%= entityNmPascal %>);
 
