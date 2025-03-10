@@ -508,7 +508,7 @@ ${PLACEHOLDER_FOR_IMPORT}`
   _replace_placeholder(
     filePath: string,
     checkString: string,
-    placeholders: string,
+    placeholder: string,
     newString: string
   ) {
     this.fs.copy(filePath, filePath, {
@@ -517,7 +517,7 @@ ${PLACEHOLDER_FOR_IMPORT}`
           return content;
         }
 
-        return content.toString().replace(placeholders, newString);
+        return content.toString().replace(placeholder, newString);
       },
     });
   }
