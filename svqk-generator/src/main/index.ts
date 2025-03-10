@@ -463,7 +463,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
     const href = `href="/${tmplData.entityNmPlural}"`;
 
-    const argumentList = [
+    const argumentList: {
+      filePath: string;
+      checkString: string;
+      placeholder: string;
+      snippet: string;
+    }[] = [
       {
         filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
         checkString: `click${tmplData.entityNmPascal}Link`,
