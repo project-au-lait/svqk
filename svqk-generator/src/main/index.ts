@@ -462,7 +462,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
 
-    this._replace_placeholder(
+    this._insert_snippet(
       `${menuBarDestPath}/MenuBarPageElement.ts`,
       `click${tmplData.entityNmPascal}Link`,
       PLACEHOLDER_FOR_TS,
@@ -470,18 +470,18 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     await this.click('#${tmplData.entityNmCamel}');
   }
 
-  ${PLACEHOLDER_FOR_TS}`
+  `
     );
 
-    this._replace_placeholder(
+    this._insert_snippet(
       `${menuBarDestPath}/MenuBar.ts`,
       `goto${tmplData.entityNmPascal}ListPage`,
       PLACEHOLDER_FOR_IMPORT,
       `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';
-${PLACEHOLDER_FOR_IMPORT}`
+`
     );
 
-    this._replace_placeholder(
+    this._insert_snippet(
       `${menuBarDestPath}/MenuBar.ts`,
       `goto${tmplData.entityNmPascal}ListPage`,
       PLACEHOLDER_FOR_TS,
@@ -490,26 +490,26 @@ ${PLACEHOLDER_FOR_IMPORT}`
     return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);
   }
 
-  ${PLACEHOLDER_FOR_TS}`
+  `
     );
 
     const href = `href="/${tmplData.entityNmPlural}"`;
-    this._replace_placeholder(
+    this._insert_snippet(
       `${this.destFrontPath}/routes/+layout.svelte`,
       href,
       PLACEHOLDER_FOR_HTML,
       `<li>
       <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>
     </li>
-    ${PLACEHOLDER_FOR_HTML}`
+    `
     );
   }
 
-  _replace_placeholder(
+  _insert_snippet(
     filePath: string,
     checkString: string,
     placeholder: string,
-    newString: string
+    snippet: string
   ) {
     this.fs.copy(filePath, filePath, {
       process: function (content) {
@@ -517,7 +517,7 @@ ${PLACEHOLDER_FOR_IMPORT}`
           return content;
         }
 
-        return content.toString().replace(placeholder, newString);
+        return content.toString().replace(placeholder, snippet + placeholder);
       },
     });
   }
