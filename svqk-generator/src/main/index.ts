@@ -119,6 +119,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     if (
       !this.metadataConfig.list &&
+      this.optionsValues.component !== "all" &&
       this.optionsValues.component !== "entity"
     ) {
       const answer = await this.prompt([
