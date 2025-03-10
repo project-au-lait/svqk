@@ -1,3 +1,7 @@
+<!--
+  The section marked with "__PLACEHOLDER__" is dynamically replaced.
+  Do not remove or modify it.
+-->
 <script lang="ts">
   import { messageStore } from '$lib/arch/global/MessageStore';
   import '@picocss/pico/css/pico.min.css';
@@ -30,16 +34,6 @@
     <li>
       <a id="issue" href="/issues">{$t('msg.issue')}</a>
     </li>
-    <li>
-      <a id="hello" href="/hellos">Hello</a>
-    </li>
-    <li>
-      <a id="world" href="/worlds">World</a>
-    </li>
-    <!-- 
-      The following __PLACEHOLDER__ comments are dynamically replaced.
-      Please do not delete.
-    -->
     <!-- __PLACEHOLDER__ -->
   </ul>
 </nav>

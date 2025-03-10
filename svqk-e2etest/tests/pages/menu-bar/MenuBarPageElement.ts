@@ -1,3 +1,7 @@
+/**
+ * The section marked with "__PLACEHOLDER__" is dynamically replaced.
+ * Do not remove or modify it.
+ */
 import BasePageElement from '@arch/BasePageElement';
 
 export default class MenuBarPageElement extends BasePageElement {
@@ -9,9 +13,5 @@ export default class MenuBarPageElement extends BasePageElement {
     await this.click('#issue');
   }
 
-  /**
-   * The following __PLACEHOLDER__ comments are dynamically replaced.
-   * Please do not delete.
-   */
   /* __PLACEHOLDER__ */
 }

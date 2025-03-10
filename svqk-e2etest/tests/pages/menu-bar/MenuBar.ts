@@ -1,10 +1,10 @@
+/**
+ * The section marked with "__PLACEHOLDER__" is dynamically replaced.
+ * Do not remove or modify it.
+ */
 import BasePageElement from '@arch/BasePageElement';
 import MenuBarPageElement from '@pages/menu-bar/MenuBarPageElement';
 import IssueListPage from '@pages/issue-list/IssueListPage';
-/**
- * The following __PLACEHOLDER__ comments are dynamically replaced.
- * Please do not delete.
- */
 /* __PLACEHOLDER__:import */
 
 export default class MenuBar {
@@ -19,9 +19,5 @@ export default class MenuBar {
     return new IssueListPage(this.menuBarEl);
   }
 
-  /**
-   * The following __PLACEHOLDER__ comments are dynamically replaced.
-   * Please do not delete.
-   */
   /* __PLACEHOLDER__ */
 }
