@@ -187,8 +187,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   writing() {
     if (
       this.optionsValues.component === "api-client" ||
-      this.optionsValues.component === "entity" ||
-      this.generateEntity
+      this.optionsValues.component === "entity"
     ) {
       return;
     }
