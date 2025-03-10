@@ -42,12 +42,31 @@
     <%_ if (compIdFields && field.id) { _%>
       <%_ for (compIdField of compIdFields) { _%>
     <div>
-      <InputField id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:value={<%= entityNmCamel %>.id.<%= compIdField.fieldName %>} />
+      <%_ if (field.dbType?.toLowerCase() === 'varchar') { _%>
+          <InputField id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= compIdField.fieldName %>} />
+        <%_ } else if (field.dbType?.toLowerCase() === 'text') { _%>
+          <TextArea id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= compIdField.fieldName %>}></textarea>
+        <%_ } else if (field.dbType?.toLowerCase() === 'date') { _%>
+          <InputField type="date" id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= compIdField.fieldName %>} />
+        <%_ } else if (field.dbType?.toLowerCase() === 'boolean') { _%>
+          <InputField type="checkbox" id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:checked={<%= entityNmCamel %>.<%= compIdField.fieldName %>} />
+        <%_ } else { _%>
+          <SelectBox id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= compIdField.fieldName %>} options={[]} />
+        <%_ } _%>
     </div>
       <%_ } _%>
     <%_ } else { _%>
     <div>
       <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
+        <%_ } else if (field.dbType?.toLowerCase() === 'text') { _%>
+          <TextArea id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>}></textarea>
+        <%_ } else if (field.dbType?.toLowerCase() === 'date') { _%>
+          <InputField type="date" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
+        <%_ } else if (field.dbType?.toLowerCase() === 'boolean') { _%>
+          <InputField type="checkbox" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:checked={<%= entityNmCamel %>.<%= field.fieldName %>} />
+        <%_ } else { _%>
+          <SelectBox id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} options={[]} />
+        <%_ } _%>
     </div>
     <%_ } _%>
   <%_ } _%>
