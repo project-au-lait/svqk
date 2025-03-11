@@ -138,22 +138,22 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   async configuring() {
     if (
-      this.options.component &&
-      !allowedComponentValues.includes(this.options.component)
+      this.optionsValues.component &&
+      !allowedComponentValues.includes(this.optionsValues.component)
     ) {
       throw new Error(
-        `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
+        `Invalid value for option "--component": ${this.optionsValues.component}. Allowed values are: ${allowedComponentValues.join(
           ", "
         )}.`
       );
     }
 
     if (
-      this.options.templateType &&
-      !allowedTemplateTypeValues.includes(this.options.templateType)
+      this.optionsValues.templateType &&
+      !allowedTemplateTypeValues.includes(this.optionsValues.templateType)
     ) {
       throw new Error(
-        `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
+        `Invalid value for option "--templateType": ${this.optionsValues.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
           ", "
         )}.`
       );
