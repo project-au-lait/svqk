@@ -37,16 +37,16 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
-  optionsValues: OptionsValues;
-  inputTables: string[];
+  optionsValues!: OptionsValues;
+  inputTables!: string[];
   generateEntity: boolean | null = null;
-  metadataConfig: MetadataConfig;
-  genEntityCmd: string;
-  destBackPath: string;
-  destITPath: string;
-  destFrontPath: string;
-  destE2EPath: string;
-  genApiClientConfig: GenApiClientConfig;
+  metadataConfig!: MetadataConfig;
+  genEntityCmd!: string;
+  destBackPath!: string;
+  destITPath!: string;
+  destFrontPath!: string;
+  destE2EPath!: string;
+  genApiClientConfig!: GenApiClientConfig;
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -58,7 +58,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.option("templateType", {
       type: String,
     });
+  }
 
+  async initializing() {
     this.optionsValues = {
       component: this.options.component,
       templateType:
@@ -83,9 +85,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       frontApiClientPath: this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH),
       e2eApiClientPath: this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH),
     };
-  }
 
-  async initializing() {
     this.metadataConfig.list = await this._load_metadata_config();
   }
 
