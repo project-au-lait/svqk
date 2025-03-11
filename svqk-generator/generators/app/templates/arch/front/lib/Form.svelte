@@ -57,7 +57,8 @@
       <%_ } _%>
     <%_ } else { _%>
     <div>
-      <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
+      <%_ if (field.dbType?.toLowerCase() === 'varchar') { _%>
+          <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
         <%_ } else if (field.dbType?.toLowerCase() === 'text') { _%>
           <TextArea id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>}></textarea>
         <%_ } else if (field.dbType?.toLowerCase() === 'date') { _%>
@@ -66,7 +67,7 @@
           <InputField type="checkbox" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:checked={<%= entityNmCamel %>.<%= field.fieldName %>} />
         <%_ } else { _%>
           <SelectBox id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} options={[]} />
-        <%_ } _%>
+      <%_ } _%>
     </div>
     <%_ } _%>
   <%_ } _%>
