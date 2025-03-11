@@ -469,13 +469,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       filePath: string;
       checkString: string;
       placeholder: string;
-      multilineFormatParamsList: string[];
+      rawTextList: string[];
     }[] = [
       {
         filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
         checkString: `click${tmplData.entityNmPascal}Link`,
         placeholder: PLACEHOLDER_FOR_TS,
-        multilineFormatParamsList: [
+        rawTextList: [
           `async click${tmplData.entityNmPascal}Link() {`,
           `    await this.click('#${tmplData.entityNmCamel}');`,
           "  }",
@@ -487,7 +487,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         filePath: `${menuBarDestPath}/MenuBar.ts`,
         checkString: `goto${tmplData.entityNmPascal}ListPage`,
         placeholder: PLACEHOLDER_FOR_IMPORT,
-        multilineFormatParamsList: [
+        rawTextList: [
           `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';`,
           "",
         ],
@@ -496,7 +496,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         filePath: `${menuBarDestPath}/MenuBar.ts`,
         checkString: `goto${tmplData.entityNmPascal}ListPage`,
         placeholder: PLACEHOLDER_FOR_TS,
-        multilineFormatParamsList: [
+        rawTextList: [
           `async goto${tmplData.entityNmPascal}ListPage() {`,
           `    await this.menuBarEl.click${tmplData.entityNmPascal}Link();`,
           `    return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
@@ -509,7 +509,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         filePath: `${this.destFrontPath}/routes/+layout.svelte`,
         checkString: href,
         placeholder: PLACEHOLDER_FOR_HTML,
-        multilineFormatParamsList: [
+        rawTextList: [
           "<li>",
           `      <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
           "    </li>",
@@ -519,13 +519,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ];
 
     snippetInsertionParamsList.forEach(
-      ({ filePath, checkString, placeholder, multilineFormatParamsList }) => {
-        this._insert_snippet(
-          filePath,
-          checkString,
-          placeholder,
-          multilineFormatParamsList
-        );
+      ({ filePath, checkString, placeholder, rawTextList }) => {
+        this._insert_snippet(filePath, checkString, placeholder, rawTextList);
       }
     );
   }
@@ -534,9 +529,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     filePath: string,
     checkString: string,
     placeholder: string,
-    multilineFormatParamsList: string[]
+    rawTextList: string[]
   ) {
-    const snippet = this._format_multiline_text(multilineFormatParamsList);
+    const snippet = this._format_multiline_text(rawTextList);
     const newSnippet = snippet + placeholder;
     this.fs.copy(filePath, filePath, {
       process: function (content) {
@@ -549,10 +544,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     });
   }
 
-  _format_multiline_text(textList: string[]) {
-    return textList
+  _format_multiline_text(rawTextList: string[]) {
+    return rawTextList
       .map((text: string, index: number) => {
-        return index < textList.length - 1 ? text + LINE_BREAK : text;
+        return index < rawTextList.length - 1 ? text + LINE_BREAK : text;
       })
       .join("");
   }
