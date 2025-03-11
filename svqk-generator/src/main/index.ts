@@ -528,7 +528,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const { filePath, checkString, placeholder, multilineFormatParamsList } =
       params;
     const snippet = this._format_multiline_text(multilineFormatParamsList);
-    const newSnippet = snippet + LINE_BREAK + placeholder;
+    const newSnippet = snippet + placeholder;
     this.fs.copy(filePath, filePath, {
       process: function (content) {
         if (content.includes(checkString)) {
