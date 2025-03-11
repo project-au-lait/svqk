@@ -531,7 +531,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     placeholder: string,
     rawTextList: string[]
   ) {
-    const snippet = this._format_multiline_text(rawTextList);
+    const snippet = rawTextList.join(LINE_BREAK);
     const newSnippet = snippet + placeholder;
     this.fs.copy(filePath, filePath, {
       process: function (content) {
@@ -542,14 +542,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         return content.toString().replace(placeholder, newSnippet);
       },
     });
-  }
-
-  _format_multiline_text(rawTextList: string[]) {
-    return rawTextList
-      .map((text: string, index: number) => {
-        return index < rawTextList.length - 1 ? text + LINE_BREAK : text;
-      })
-      .join("");
   }
 }
 
