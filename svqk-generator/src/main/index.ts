@@ -36,6 +36,7 @@ const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
+const LINE_BREAK = "\n";
 type SnippetInsertionParams = {
   filePath: string;
   checkString: string;
@@ -480,6 +481,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `    await this.click('#${tmplData.entityNmCamel}');`,
           "  }",
           "",
+          "  ",
         ],
       },
       {
@@ -488,6 +490,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         placeholder: PLACEHOLDER_FOR_IMPORT,
         multilineFormatParamsList: [
           `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';`,
+          "",
         ],
       },
       {
@@ -500,6 +503,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `    return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
           "  }",
           "",
+          "  ",
         ],
       },
       {
@@ -510,6 +514,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           "<li>",
           `      <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
           "    </li>",
+          "    ",
         ],
       },
     ];
@@ -523,7 +528,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const { filePath, checkString, placeholder, multilineFormatParamsList } =
       params;
     const snippet = this._format_multiline_text(multilineFormatParamsList);
-    const newSnippet = `${snippet}  ${placeholder}`;
+    const newSnippet = snippet + LINE_BREAK + placeholder;
     this.fs.copy(filePath, filePath, {
       process: function (content) {
         if (content.includes(checkString)) {
@@ -537,8 +542,8 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
   _format_multiline_text(textList: string[]) {
     return textList
-      .map((text: string) => {
-        return text + "\n";
+      .map((text: string, index: number) => {
+        return index < textList.length - 1 ? text + LINE_BREAK : text;
       })
       .join("");
   }
