@@ -183,6 +183,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         `Please specify table name(s) with space separated choosing from ${tables}.`
       );
     }
+
+    if (
+      this.optionsValues.component !== "api-client" &&
+      this.optionsValues.component !== "entity" &&
+      !this.metadataConfig.list
+    ) {
+      throw new Error("Please generate entities.");
+    }
   }
 
   writing() {
@@ -191,8 +199,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.optionsValues.component === "entity"
     ) {
       return;
-    } else if (!this.metadataConfig.list) {
-      throw new Error("Please generate entities.");
     }
 
     this.metadataConfig.list.forEach((metaData) => {
