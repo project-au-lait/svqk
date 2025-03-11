@@ -37,12 +37,6 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 const LINE_BREAK = "\n";
-type SnippetInsertionParams = {
-  filePath: string;
-  checkString: string;
-  placeholder: string;
-  multilineFormatParamsList: string[];
-};
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues;
@@ -471,7 +465,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
     const href = `href="/${tmplData.entityNmPlural}"`;
 
-    const snippetInsertionParamsList: SnippetInsertionParams[] = [
+    const snippetInsertionParamsList: {
+      filePath: string;
+      checkString: string;
+      placeholder: string;
+      multilineFormatParamsList: string[];
+    }[] = [
       {
         filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
         checkString: `click${tmplData.entityNmPascal}Link`,
@@ -519,14 +518,24 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       },
     ];
 
-    snippetInsertionParamsList.forEach((params) =>
-      this._insert_snippet(params)
+    snippetInsertionParamsList.forEach(
+      ({ filePath, checkString, placeholder, multilineFormatParamsList }) => {
+        this._insert_snippet(
+          filePath,
+          checkString,
+          placeholder,
+          multilineFormatParamsList
+        );
+      }
     );
   }
 
-  _insert_snippet(params: SnippetInsertionParams) {
-    const { filePath, checkString, placeholder, multilineFormatParamsList } =
-      params;
+  _insert_snippet(
+    filePath: string,
+    checkString: string,
+    placeholder: string,
+    multilineFormatParamsList: string[]
+  ) {
     const snippet = this._format_multiline_text(multilineFormatParamsList);
     const newSnippet = snippet + placeholder;
     this.fs.copy(filePath, filePath, {
