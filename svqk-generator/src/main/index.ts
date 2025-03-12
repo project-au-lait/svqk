@@ -37,16 +37,26 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
-  optionsValues!: OptionsValues;
-  inputTables!: string[];
+  optionsValues: OptionsValues = {
+    component: "",
+    templateType: "",
+  };
+  inputTables: string[] = [];
   generateEntity: boolean | null = null;
-  metadataConfig!: MetadataConfig;
-  genEntityCmd!: string;
-  destBackPath!: string;
-  destITPath!: string;
-  destFrontPath!: string;
-  destE2EPath!: string;
-  genApiClientConfig!: GenApiClientConfig;
+  metadataConfig: MetadataConfig = {
+    filePath: "",
+    list: [],
+  };
+  genEntityCmd: string = "";
+  destBackPath: string = "";
+  destITPath: string = "";
+  destFrontPath: string = "";
+  destE2EPath: string = "";
+  genApiClientConfig: GenApiClientConfig = {
+    genOpenApiJsonCmd: "",
+    frontApiClientPath: "",
+    e2eApiClientPath: "",
+  };
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
