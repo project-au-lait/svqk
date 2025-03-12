@@ -42,6 +42,15 @@ export default abstract class BasePageElement {
     );
   }
 
+  protected async selectOption(selector: string, value: any) {
+    await this.run(
+      Action.INPUT,
+      selector,
+      () => this.page.locator(selector).selectOption(value),
+      value
+    );
+  }
+
   protected async open(path: string) {
     await this.run(Action.GOTO, path, () => this.page.goto(path));
   }
@@ -70,6 +79,14 @@ export default abstract class BasePageElement {
       () => expect(this.page.locator(selector)).toHaveValue(value.toString()),
       value
     );
+  }
+
+  protected async expectSelectedOption(selector: string, value: any) {
+    await this.page.waitForSelector(selector);
+    const runAction = Array.isArray(value)
+      ? () => expect(this.page.locator(selector)).toHaveValues(value.map(v => v.toString()))
+      : () => expect(this.page.locator(selector)).toHaveValue(value.toString());
+    await this.run(Action.EXPECT_TEXT, selector, runAction, value);
   }
 
   protected async clickInRow(text: string) {

@@ -2,23 +2,49 @@
 <%_
 const inputDef = (field) => {
   const required = field.required ? '' : '?';
-  const type = field.javaType === 'Integer' ? 'number' : 'string';
+  let type = 'string';
+  if (field.javaType === 'Integer') {
+    type = 'number'
+  } else if (field?.dbType === undefined) {
+    // the field reference to other table
+    type = 'any'
+  }
+  if (field.multiple === true) {
+    type += '[]'
+  }
   return `async input${field.fieldNmPascal}(${field.fieldName}${required}: ${type}) {`;
 }
 
 const inputImpl = (field) => {
   const required = field.required ? '' : '?? \'\'';
+  if (field?.dbType === undefined) {
+    // the field reference to other table
+    return `await this.selectOption('#${field.fieldName}', ${field.fieldName}${required});`;
+  }
   return `await this.inputText('#${field.fieldName}', ${field.fieldName}${required});`;
 }
 
 const expectDef = (field) => {
   const required = field.required ? '' : '?';
-  const type = field.javaType === 'Integer' ? 'number' : 'string';
+  let type = 'string';
+  if (field.javaType === 'Integer') {
+    type = 'number'
+  } else if (field?.dbType === undefined) {
+    // the field reference to other table
+    type = 'any'
+  }
+  if (field.multiple === true) {
+    type += '[]'
+  }
   return `async expect${field.fieldNmPascal}(${field.fieldName}${required}: ${type}) {`;
 }
 
 const expectImpl = (field) => {
   const required = field.required ? '' : '?? \'\'';
+  if (field?.dbType === undefined) {
+    // the field reference to other table
+    return `await this.expectSelectedOption('#${field.fieldName}', ${field.fieldName}${required});`;
+  }
   return `await this.expectText('#${field.fieldName}', ${field.fieldName}${required});`;
 }
 %>
