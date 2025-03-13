@@ -216,8 +216,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.optionsValues.component === "entity"
     ) {
       return;
-    } else if (!this.metadataConfig.list) {
-      throw new Error("Please generate entities.");
     }
 
     const generateTargets: GenerateTarget[] =
