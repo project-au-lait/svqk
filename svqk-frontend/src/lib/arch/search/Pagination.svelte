@@ -1,13 +1,15 @@
 <script lang="ts">
-  import type { PageResultModel } from '$lib/arch/api/Api';
+  import type { PageResult } from '$lib/arch/api/Api';
 
   interface Props {
-    pageResult: PageResultModel;
+    pageResult?: PageResult;
     pageNumber?: number;
     search: () => void;
   }
 
   let { pageResult, pageNumber = $bindable(1), search }: Props = $props();
+  pageResult = pageResult ?? { count: 0, start: 0, end: 0, pageNums: [], lastPageNum: 0 };
+
   let { count, start, end, pageNums, lastPageNum } = $derived(pageResult);
 
   function gotoPage(page: number) {
