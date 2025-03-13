@@ -1,9 +1,4 @@
-import { spawnSync } from "child_process";
-import cpx from "cpx";
-import fs from "fs";
-import path from "node:path";
 import pluralize from "pluralize";
-import { generateApi } from "swagger-typescript-api";
 import Generator from "yeoman-generator";
 import {
   CustomOptions,
@@ -14,6 +9,8 @@ import {
   OptionsValues,
   TemplateData,
 } from "./types.js";
+import { EntityGenerator } from "./entity-generator.js";
+import { ApiClientGenerator } from "./api-client-generator.js";
 
 const allowedComponentValues = [
   "entity",
@@ -536,113 +533,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     for (const [srcPath, destPath] of pathPairs) {
       this._output_e2etest_file(srcPath, destPath, tmplData);
     }
-  }
-}
-
-class ExternalCommandExecutor {
-  static exec(cmd: string, env?: NodeJS.ProcessEnv) {
-    const isWin = process.platform === "win32";
-    const shell = isWin ? { cmd: "cmd", arg: "/C" } : { cmd: "sh", arg: "-c" };
-
-    env = { ...process.env, ...env };
-
-    if (isWin) {
-      cmd = cmd.replace("./mvnw", "mvnw");
-    }
-
-    console.log(`exec: ${cmd}`);
-
-    spawnSync(shell.cmd, [shell.arg, cmd], {
-      cwd: "../",
-      env: env,
-      stdio: "inherit",
-    });
-  }
-}
-
-class EntityGenerator {
-  static exec(genEntitycmd: string) {
-    const env = {
-      MAVEN_OPTS:
-        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-    };
-
-    ExternalCommandExecutor.exec(genEntitycmd, env);
-  }
-}
-
-class ApiClientGenerator {
-  static exec(genApiClientConfig: GenApiClientConfig) {
-    ExternalCommandExecutor.exec(genApiClientConfig.genOpenApiJsonCmd);
-    this._exec_gen_api_client(
-      genApiClientConfig.frontApiClientPath,
-      genApiClientConfig.e2eApiClientPath
-    );
-  }
-
-  private static _exec_gen_api_client(
-    frontApiClientPath: string,
-    e2eApiClientPath: string
-  ) {
-    const openApiJsonPath = path.resolve(
-      process.cwd(),
-      "./target/openapi.json"
-    );
-    console.log("openapi.json Path:", openApiJsonPath);
-    if (!fs.existsSync(openApiJsonPath)) {
-      throw new Error("openapi.json is not found.");
-    }
-
-    generateApi({
-      name: "Api.ts",
-      input: openApiJsonPath,
-      output: path.resolve(process.cwd(), frontApiClientPath),
-      moduleNameIndex: 1,
-      hooks: {
-        onFormatRouteName: (routeInfo, templateRouteName) => {
-          const newTemplateRouteName = templateRouteName.replace(
-            /SearchCreate$/,
-            "Search"
-          );
-
-          if (templateRouteName !== newTemplateRouteName) {
-            console.log(
-              `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
-            );
-          }
-          return newTemplateRouteName;
-        },
-        onFormatTypeName: (typeName, rawTypeName, schemaType) => {
-          if (schemaType === "type-name" && typeName.endsWith("Dto")) {
-            const newTypeName = typeName.replace(/Dto$/, "Model");
-            console.log(`Replace typeName ${typeName} to ${newTypeName}`);
-            return newTypeName;
-          }
-
-          return typeName;
-        },
-      },
-    })
-      .then(() => {
-        this._exec_copy_api(frontApiClientPath, e2eApiClientPath);
-        console.log("Client API generated successfully!");
-      })
-      .catch((err) => {
-        throw new Error(`Error generating Client API: ${err}`);
-      });
-  }
-
-  private static _exec_copy_api(
-    frontApiClientPath: string,
-    e2eApiClientPath: string
-  ) {
-    cpx.copy(`${frontApiClientPath}/Api.ts`, e2eApiClientPath, (err) => {
-      if (err) {
-        throw new Error(`Copy failed: ${err}`);
-      } else {
-        console.log("Files copied successfully.");
-      }
-    });
   }
 }
 
