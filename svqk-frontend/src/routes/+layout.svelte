@@ -39,7 +39,7 @@
   {#if $messageStore.display}
     <article class="message">
       <span id="globalMessage"> {$messageStore.text}</span>
-      <button class="close" onclick={() => messageStore.hide()}></button>
+      <button class="close" aria-label="close" onclick={() => messageStore.hide()}></button>
     </article>
   {/if}
   {@render children?.()}
