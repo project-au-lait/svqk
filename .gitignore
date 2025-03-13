@@ -30,6 +30,8 @@ svqk-generator/generators/app/entity-generator.js
 svqk-generator/generators/app/entity-generator.js.map
 svqk-generator/generators/app/external-command-executer.js
 svqk-generator/generators/app/external-command-executer.js.map
+svqk-generator/generators/app/generator-utils.js
+svqk-generator/generators/app/generator-utils.js.map
 svqk-generator/generators/app/index.js
 svqk-generator/generators/app/index.js.map
 svqk-generator/src/main/resources/jeg-metadata.json
