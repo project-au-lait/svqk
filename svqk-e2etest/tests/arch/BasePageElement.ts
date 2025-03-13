@@ -51,6 +51,10 @@ export default abstract class BasePageElement {
     );
   }
 
+  protected async check(selector: string, value: boolean) {
+    await this.run(Action.INPUT, selector, () => this.page.locator(selector).setChecked(value));
+  }
+
   protected async open(path: string) {
     await this.run(Action.GOTO, path, () => this.page.goto(path));
   }
@@ -84,9 +88,17 @@ export default abstract class BasePageElement {
   protected async expectSelectedOption(selector: string, value: any) {
     await this.page.waitForSelector(selector);
     const runAction = Array.isArray(value)
-      ? () => expect(this.page.locator(selector)).toHaveValues(value.map(v => v.toString()))
+      ? () => expect(this.page.locator(selector)).toHaveValues(value.map((v) => v.toString()))
       : () => expect(this.page.locator(selector)).toHaveValue(value.toString());
     await this.run(Action.EXPECT_TEXT, selector, runAction, value);
+  }
+
+  protected async expectChecked(selector: string, value: boolean) {
+    await this.page.waitForSelector(selector);
+    const runAction = value
+      ? () => expect(this.page.locator(selector)).toBeChecked()
+      : () => expect(this.page.locator(selector)).not.toBeChecked();
+    await this.run(Action.EXPECT_TEXT, selector, runAction);
   }
 
   protected async clickInRow(text: string) {

@@ -4,7 +4,9 @@
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
+  import TextArea from '$lib/arch/form/TextArea.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
+  import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
   import { t } from '$lib/translations';
   import { string } from 'yup';
@@ -48,14 +50,16 @@
       <%_ } _%>
     <%_ } else { _%>
       <div>
-        <%_ if (field.dbType?.toLowerCase() === 'varchar') { _%>
+        <%_ if (field.javaType === 'String' && field.stringLength <= 128) { _%>
             <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-          <%_ } else if (field.dbType?.toLowerCase() === 'text') { _%>
-            <TextArea id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>}></textarea>
-          <%_ } else if (field.dbType?.toLowerCase() === 'date') { _%>
+          <%_ } else if (field.javaType === 'String') { _%>
+            <TextArea id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
+          <%_ } else if (field.javaType === 'java.time.LocalDate') { _%>
             <InputField type="date" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-          <%_ } else if (field.dbType?.toLowerCase() === 'boolean') { _%>
-            <InputField type="checkbox" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:checked={<%= entityNmCamel %>.<%= field.fieldName %>} />
+          <%_ } else if (field.javaType === 'java.time.LocalDateTime') { _%>
+            <InputField type="datetime-local" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
+          <%_ } else if (field.javaType === 'Boolean') { _%>
+            <CheckBox id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:checked={<%= entityNmCamel %>.<%= field.fieldName %>} />
           <%_ } else { _%>
             <SelectBox id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} options={[]} <%= field.multiple ? 'multiple' : '' %> />
         <%_ } _%>
