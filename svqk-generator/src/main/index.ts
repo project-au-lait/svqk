@@ -477,10 +477,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         placeholder: PLACEHOLDER_FOR_TS,
         rawTextList: [
           `async click${tmplData.entityNmPascal}Link() {`,
-          `    await this.click('#${tmplData.entityNmCamel}');`,
-          "  }",
+          `  await this.click('#${tmplData.entityNmCamel}');`,
+          "}",
           "",
-          "  ",
+          "",
         ],
       },
       {
@@ -498,11 +498,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         placeholder: PLACEHOLDER_FOR_TS,
         rawTextList: [
           `async goto${tmplData.entityNmPascal}ListPage() {`,
-          `    await this.menuBarEl.click${tmplData.entityNmPascal}Link();`,
-          `    return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
-          "  }",
+          `  await this.menuBarEl.click${tmplData.entityNmPascal}Link();`,
+          `  return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
+          "}",
           "",
-          "  ",
+          "",
         ],
       },
       {
@@ -511,9 +511,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         placeholder: PLACEHOLDER_FOR_HTML,
         rawTextList: [
           "<li>",
-          `      <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
-          "    </li>",
-          "    ",
+          `  <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
+          "</li>",
+          "",
         ],
       },
     ];
@@ -531,15 +531,28 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     placeholder: string,
     rawTextList: string[]
   ) {
-    const snippet = rawTextList.join(LINE_BREAK);
-    const newSnippet = snippet + placeholder;
     this.fs.copy(filePath, filePath, {
       process: function (content) {
-        if (content.includes(checkString)) {
+        const originalText = content.toString();
+        const initialIndex = originalText.indexOf(placeholder);
+
+        if (content.includes(checkString) || initialIndex === -1) {
           return content;
         }
 
-        return content.toString().replace(placeholder, newSnippet);
+        let nextCharIndex = initialIndex - 1;
+        let indentCount = 0;
+        while (nextCharIndex >= 0) {
+          if (originalText[nextCharIndex] === LINE_BREAK) {
+            break;
+          }
+          indentCount++;
+          nextCharIndex--;
+        }
+        const snippet = rawTextList.join(LINE_BREAK + " ".repeat(indentCount));
+        const newSnippet = snippet + placeholder;
+
+        return originalText.replace(placeholder, newSnippet);
       },
     });
   }
