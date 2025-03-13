@@ -59,7 +59,7 @@
         <exec executable="pnpm" dir="${projectdir}/${project}-generator" failonerror="true">
           <env key="BACKEND_PORT" value="${backend.port.random}" />
           <env key="DB_PORT" value="${db.port.random}" />
-          <arg line="generate --component all world --force" />
+          <arg line="generate --component all world hello_world --force" />
         </exec>
       </try>
 
