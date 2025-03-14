@@ -433,16 +433,6 @@ export class GeneratorUtils {
           templateData: templateData,
         },
         {
-          templatePath: `${templateType}/${menuBarTmplPath}/MenuBar.ts`,
-          destinationPath: `${menuBarDestPath}/MenuBar.ts`,
-          templateData: templateData,
-        },
-        {
-          templatePath: `${templateType}/${menuBarTmplPath}/MenuBarPageElement.ts`,
-          destinationPath: `${menuBarDestPath}/MenuBarPageElement.ts`,
-          templateData: templateData,
-        },
-        {
           templatePath: `${templateType}/${inputTmplPath}/InputPage.ts`,
           destinationPath: `${inputDestPath}/${templateData.entityNmPascal}InputPage.ts`,
           templateData: templateData,
@@ -483,6 +473,12 @@ export class GeneratorUtils {
       return [];
     }
 
+    const menuBarDestPath = `${destPaths.destE2EPath}/pages/menu-bar`;
+
+    const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
+    const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
+    const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+
     const insertionTargets: SnippetInsertionTarget[] = [];
 
     metadataConfig.list.forEach((metaData) => {
@@ -490,13 +486,7 @@ export class GeneratorUtils {
         inputTables.includes(metaData.tableName) ||
         inputTables.includes(metaData.className)
       ) {
-        const templateData = this.build_template_data(metaData, metadataConfig);
-
-        const menuBarDestPath = `${destPaths.destE2EPath}/pages/menu-bar`;
-
-        const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
-        const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
-        const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+        const templateData = this.build_template_data(metaData, metadataConfig)
         const href = `href="/${templateData.entityNmPlural}"`;
 
         insertionTargets.push(
