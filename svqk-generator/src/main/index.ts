@@ -36,6 +36,8 @@ const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
+const LINE_BREAK = "\n";
+
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues = {
     component: "",
@@ -483,10 +485,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     const inputTmplPath = "e2etest/pages/input";
     const listTmplPath = "e2etest/pages/list";
-    const menuBarTmplPath = "e2etest/pages/menu-bar";
     const inputDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-input`;
     const listDestPath = `${this.destE2EPath}/pages/${tmplData.entityNmKebab}-list`;
     const menuBarDestPath = `${this.destE2EPath}/pages/menu-bar`;
+
+    // Added link to target EntityList in menuBar
+    this._generate_menu_bar(menuBarDestPath, tmplData);
 
     if (this.optionsValues.templateType === "skeleton") {
       pathPairs = [
@@ -508,11 +512,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         [
           "e2etest/Factory.ts",
           `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
-        ],
-        [`${menuBarTmplPath}/MenuBar.ts`, `${menuBarDestPath}/MenuBar.ts`],
-        [
-          `${menuBarTmplPath}/MenuBarPageElement.ts`,
-          `${menuBarDestPath}/MenuBarPageElement.ts`,
         ],
         [
           `${inputTmplPath}/InputPage.ts`,
@@ -536,6 +535,104 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     for (const [srcPath, destPath] of pathPairs) {
       this._output_e2etest_file(srcPath, destPath, tmplData);
     }
+  }
+
+  _generate_menu_bar(menuBarDestPath: string, tmplData: TemplateData) {
+    const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
+    const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
+    const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+    const href = `href="/${tmplData.entityNmPlural}"`;
+
+    const snippetInsertionParamsList: {
+      filePath: string;
+      checkString: string;
+      placeholder: string;
+      rawTextList: string[];
+    }[] = [
+      {
+        filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
+        checkString: `click${tmplData.entityNmPascal}Link`,
+        placeholder: PLACEHOLDER_FOR_TS,
+        rawTextList: [
+          `async click${tmplData.entityNmPascal}Link() {`,
+          `  await this.click('#${tmplData.entityNmCamel}');`,
+          "}",
+          "",
+          "",
+        ],
+      },
+      {
+        filePath: `${menuBarDestPath}/MenuBar.ts`,
+        checkString: `goto${tmplData.entityNmPascal}ListPage`,
+        placeholder: PLACEHOLDER_FOR_IMPORT,
+        rawTextList: [
+          `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';`,
+          "",
+        ],
+      },
+      {
+        filePath: `${menuBarDestPath}/MenuBar.ts`,
+        checkString: `goto${tmplData.entityNmPascal}ListPage`,
+        placeholder: PLACEHOLDER_FOR_TS,
+        rawTextList: [
+          `async goto${tmplData.entityNmPascal}ListPage() {`,
+          `  await this.menuBarEl.click${tmplData.entityNmPascal}Link();`,
+          `  return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
+          "}",
+          "",
+          "",
+        ],
+      },
+      {
+        filePath: `${this.destFrontPath}/routes/+layout.svelte`,
+        checkString: href,
+        placeholder: PLACEHOLDER_FOR_HTML,
+        rawTextList: [
+          "<li>",
+          `  <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
+          "</li>",
+          "",
+        ],
+      },
+    ];
+
+    snippetInsertionParamsList.forEach(
+      ({ filePath, checkString, placeholder, rawTextList }) => {
+        this._insert_snippet(filePath, checkString, placeholder, rawTextList);
+      }
+    );
+  }
+
+  _insert_snippet(
+    filePath: string,
+    checkString: string,
+    placeholder: string,
+    rawTextList: string[]
+  ) {
+    this.fs.copy(filePath, filePath, {
+      process: function (content) {
+        const originalText = content.toString();
+        const initialIndex = originalText.indexOf(placeholder);
+
+        if (content.includes(checkString) || initialIndex === -1) {
+          return content;
+        }
+
+        let nextCharIndex = initialIndex - 1;
+        let indentCount = 0;
+        while (nextCharIndex >= 0) {
+          if (originalText[nextCharIndex] === LINE_BREAK) {
+            break;
+          }
+          indentCount++;
+          nextCharIndex--;
+        }
+        const snippet = rawTextList.join(LINE_BREAK + " ".repeat(indentCount));
+        const newSnippet = snippet + placeholder;
+
+        return originalText.replace(placeholder, newSnippet);
+      },
+    });
   }
 }
 
