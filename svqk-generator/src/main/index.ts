@@ -538,6 +538,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _generate_menu_bar(menuBarDestPath: string, tmplData: TemplateData) {
+    if (this.optionsValues.templateType === "skeleton") {
+      return;
+    }
+    
     const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
     const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
