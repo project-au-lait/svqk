@@ -57,6 +57,13 @@ type GenerateTarget = {
   templateData: TemplateData;
 };
 
+type SnippetInsertionTarget = {
+  filePath: string;
+  checkString: string;
+  placeholder: string;
+  rawTextList: string[];
+};
+
 type DestPaths = {
   destBackPath: string;
   destITPath: string;
@@ -78,5 +85,6 @@ export {
   Field,
   TemplateData,
   GenerateTarget,
+  SnippetInsertionTarget,
   DestPaths,
 };

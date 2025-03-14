@@ -5,6 +5,7 @@ import {
   MetadataConfig,
   TemplateData,
   GenerateTarget,
+  SnippetInsertionTarget,
   DestPaths,
 } from "./types.js";
 
@@ -469,5 +470,85 @@ export class GeneratorUtils {
 
   private static build_e2e_spec_path(tmplData: TemplateData): string {
     return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
+  }
+
+  static build_insert_targets(
+    metadataConfig: MetadataConfig,
+    component: string,
+    templateType: string,
+    inputTables: string[],
+    destPaths: DestPaths
+  ): SnippetInsertionTarget[] {
+    if (templateType === "skeleton") {
+      return [];
+    }
+
+    const insertionTargets: SnippetInsertionTarget[] = [];
+
+    metadataConfig.list.forEach((metaData) => {
+      if (
+        inputTables.includes(metaData.tableName) ||
+        inputTables.includes(metaData.className)
+      ) {
+        const templateData = this.build_template_data(metaData, metadataConfig);
+
+        const menuBarDestPath = `${destPaths.destE2EPath}/pages/menu-bar`;
+
+        const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
+        const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
+        const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
+        const href = `href="/${templateData.entityNmPlural}"`;
+
+        insertionTargets.push(
+          {
+            filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
+            checkString: `click${templateData.entityNmPascal}Link`,
+            placeholder: PLACEHOLDER_FOR_TS,
+            rawTextList: [
+              `async click${templateData.entityNmPascal}Link() {`,
+              `  await this.click('#${templateData.entityNmCamel}');`,
+              "}",
+              "",
+              "",
+            ],
+          },
+          {
+            filePath: `${menuBarDestPath}/MenuBar.ts`,
+            checkString: `goto${templateData.entityNmPascal}ListPage`,
+            placeholder: PLACEHOLDER_FOR_IMPORT,
+            rawTextList: [
+              `import ${templateData.entityNmPascal}ListPage from '@pages/${templateData.entityNmKebab}-list/${templateData.entityNmPascal}ListPage';`,
+              "",
+            ],
+          },
+          {
+            filePath: `${menuBarDestPath}/MenuBar.ts`,
+            checkString: `goto${templateData.entityNmPascal}ListPage`,
+            placeholder: PLACEHOLDER_FOR_TS,
+            rawTextList: [
+              `async goto${templateData.entityNmPascal}ListPage() {`,
+              `  await this.menuBarEl.click${templateData.entityNmPascal}Link();`,
+              `  return new ${templateData.entityNmPascal}ListPage(this.menuBarEl);`,
+              "}",
+              "",
+              "",
+            ],
+          },
+          {
+            filePath: `${destPaths.destFrontPath}/routes/+layout.svelte`,
+            checkString: href,
+            placeholder: PLACEHOLDER_FOR_HTML,
+            rawTextList: [
+              "<li>",
+              `  <a id="${templateData.entityNmCamel}" ${href}>${templateData.entityNmPascal}</a>`,
+              "</li>",
+              "",
+            ],
+          }
+        );
+      }
+    });
+
+    return insertionTargets;
   }
 }
