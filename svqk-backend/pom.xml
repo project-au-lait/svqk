@@ -135,6 +135,12 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>dev.aulait.sqb</groupId>
+      <artifactId>sqb-jpa</artifactId>
+      <version>0.8-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -284,6 +290,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>gen-openapi-spec</id>
+
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+        <quarkus.smallrye-openapi.store-schema-directory>
+          ../${project.parent.artifactId}-generator/target</quarkus.smallrye-openapi.store-schema-directory>
+        <quarkus.container-image.build>false</quarkus.container-image.build>
+      </properties>
     </profile>
   </profiles>
 

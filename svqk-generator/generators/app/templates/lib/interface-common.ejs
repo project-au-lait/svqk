@@ -5,4 +5,6 @@ idFields = compIdFields ?? [idField];
 buildArgs = (argTemplate) => idFields.map(argTemplate).join(", ");
 
 interfaceIdType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+
+idPath = compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`;
 %>

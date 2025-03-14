@@ -36,6 +36,9 @@
   <ListTable {result} {columns} bind:pageControl={condition.pageControl} {search} />
 </section>
 
+<%_
+idPath = compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`;
+-%>
 {#snippet <%= entityNmCamel %>IdAnchor(<%= entityNmCamel %>: <%= entityNmPascal %>Model)}
-  <a href={`/<%= entityNmPlural %>/${<%= entityNmCamel %>.id}`}>{<%= entityNmCamel %>.id}</a>
+  <a href={`/<%= entityNmPlural %>/<%= idPath %>`}>{`<%= idPath %>`}</a>
 {/snippet}

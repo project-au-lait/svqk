@@ -1,6 +1,8 @@
-import <%= entityNmPascal %>ListPageElement from "./<%= entityNmPascal %>ListPageElement";
-import <%= entityNmPascal %>InputPage from "../<%= entityNmCamel %>-input/<%= entityNmPascal %>InputPage";
-import BasePageElement from '../../arch/BasePageElement';
+<%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
+import <%= entityNmPascal %>ListPageElement from '@pages/<%= entityNmKebab %>-list/<%= entityNmPascal %>ListPageElement';
+import <%= entityNmPascal %>InputPage from '@pages/<%= entityNmKebab %>-input/<%= entityNmPascal %>InputPage';
+import BasePageElement from '@arch/BasePageElement';
+<%- importDecIdTypeE2etest %>
 
 export default class <%= entityNmPascal %>ListPage {
   private <%= entityNmCamel %>ListPageEl: <%= entityNmPascal %>ListPageElement;
@@ -14,7 +16,7 @@ export default class <%= entityNmPascal %>ListPage {
     return new <%= entityNmPascal %>InputPage(this.<%= entityNmCamel %>ListPageEl);
   }
 
-  async goto<%= entityNmPascal %>ById(id: string) {
+  async goto<%= entityNmPascal %>ById(id: <%= idType%>) {
     await this.<%= entityNmCamel %>ListPageEl.click<%= entityNmPascal %>NoLinkById(id);
     return new <%= entityNmPascal %>InputPage(this.<%= entityNmCamel %>ListPageEl);
   }

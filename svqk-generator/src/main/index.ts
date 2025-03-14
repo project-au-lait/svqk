@@ -39,54 +39,50 @@ const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 const LINE_BREAK = "\n";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
-  optionsValues: OptionsValues;
-  metadataConfig: MetadataConfig;
-  genEntityCmd: string;
-  destBackPath: string;
-  destITPath: string;
-  destFrontPath: string;
-  destE2EPath: string;
-  genApiClientConfig: GenApiClientConfig;
+  optionsValues: OptionsValues = {
+    component: "",
+    templateType: "",
+  };
+  inputTables: string[] = [];
+  generateEntity: boolean | null = null;
+  metadataConfig: MetadataConfig = {
+    filePath: "",
+    list: [],
+  };
+  genEntityCmd: string = "";
+  destBackPath: string = "";
+  destITPath: string = "";
+  destFrontPath: string = "";
+  destE2EPath: string = "";
+  genApiClientConfig: GenApiClientConfig = {
+    genOpenApiJsonCmd: "",
+    frontApiClientPath: "",
+    e2eApiClientPath: "",
+  };
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
 
     this.option("component", {
       type: String,
-      default: "all",
     });
-
-    if (
-      this.options.component &&
-      !allowedComponentValues.includes(this.options.component)
-    ) {
-      throw new Error(
-        `Invalid value for option "--component": ${this.options.component}. Allowed values are: ${allowedComponentValues.join(
-          ", "
-        )}.`
-      );
-    }
 
     this.option("templateType", {
       type: String,
     });
+  }
 
-    if (
-      this.options.templateType &&
-      !allowedTemplateTypeValues.includes(this.options.templateType)
-    ) {
-      throw new Error(
-        `Invalid value for option "--templateType": ${this.options.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
-          ", "
-        )}.`
-      );
-    }
-
+  async initializing() {
     this.optionsValues = {
       component: this.options.component,
       templateType:
         this.options.templateType || this.config.get(YO_RC_KEY_TEMPLATE_TYPE),
     };
+
+    this.inputTables = this.args
+      .filter((arg) => typeof arg === "string" && arg.trim())
+      .flatMap((arg) => arg.trim().split(/\s+/));
+
     this.metadataConfig = {
       filePath: this.config.get(YO_RC_KEY_METADATA_FPATH),
       list: [],
@@ -101,59 +97,126 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       frontApiClientPath: this.config.get(YO_RC_KEY_FRONT_API_CLIENT_PATH),
       e2eApiClientPath: this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH),
     };
+
+    this.metadataConfig.list = await this._load_metadata_config();
   }
 
-  async initializing() {
-    try {
-      if (this.optionsValues.component === "entity") {
-        EntityGenerator.exec(this.genEntityCmd);
+  async prompting() {
+    if (!this.optionsValues.component) {
+      const answer = await this.prompt([
+        {
+          type: "list" as const,
+          name: "component",
+          message: "Select a component:",
+          choices: allowedComponentValues,
+        },
+      ]);
+      this.optionsValues.component = answer.component;
+    }
 
-        return;
-      } else if (this.optionsValues.component === "all") {
-        EntityGenerator.exec(this.genEntityCmd);
-      }
+    if (
+      this.inputTables.length === 0 &&
+      !["entity", "api-client"].includes(this.optionsValues.component)
+    ) {
+      const answer = await this.prompt([
+        {
+          type: "input" as const,
+          name: "tables",
+          message: "Enter tables (e.g. tablea_name tableb_name tablec_name):",
+        },
+      ]);
 
-      if (this.optionsValues.component !== "api-client") {
-        this.metadataConfig.list = await import(
-          `${this.destinationRoot()}/${this.metadataConfig.filePath}`,
-          { with: { type: "json" } }
-        ).then((module) => module.default);
+      this.inputTables = answer.tables ? answer.tables.trim().split(/\s+/) : [];
+    }
 
-        if (
-          !this.metadataConfig.list ||
-          this.metadataConfig.list.length === 0
-        ) {
-          throw new Error(
-            `The meta data list on ${this.metadataConfig.filePath} is empty.`
-          );
-        }
-      }
-    } catch (error) {
-      this.log(`Failed to read ${this.metadataConfig.filePath}. ${error}`);
+    if (
+      !this.metadataConfig.list &&
+      this.optionsValues.component !== "all" &&
+      this.optionsValues.component !== "entity"
+    ) {
+      const answer = await this.prompt([
+        {
+          type: "list" as const,
+          name: "generateEntity",
+          message: "Do you want to generate entities?",
+          choices: ["Yes", "No"],
+          filter: (input) => input === "Yes",
+        },
+      ]);
+
+      this.generateEntity = answer.generateEntity;
     }
   }
 
-  writing() {
-    const splitedArgs = this.args.flatMap((arg) => arg.trim().split(/\s+/));
+  async configuring() {
+    if (
+      this.optionsValues.component &&
+      !allowedComponentValues.includes(this.optionsValues.component)
+    ) {
+      throw new Error(
+        `Invalid value for option "--component": ${this.optionsValues.component}. Allowed values are: ${allowedComponentValues.join(
+          ", "
+        )}.`
+      );
+    }
+
+    if (
+      this.optionsValues.templateType &&
+      !allowedTemplateTypeValues.includes(this.optionsValues.templateType)
+    ) {
+      throw new Error(
+        `Invalid value for option "--templateType": ${this.optionsValues.templateType}. Allowed values are: ${allowedTemplateTypeValues.join(
+          ", "
+        )}.`
+      );
+    }
+
+    if (
+      this.optionsValues.component === "entity" ||
+      this.optionsValues.component === "all" ||
+      this.generateEntity
+    ) {
+      EntityGenerator.exec(this.genEntityCmd);
+
+      this.metadataConfig.list = await this._load_metadata_config();
+    }
 
     if (
       this.optionsValues.component !== "api-client" &&
-      splitedArgs.length == 0
+      this.optionsValues.component !== "entity" &&
+      this.inputTables.length == 0
     ) {
       const tables = this.metadataConfig.list
         .map((metadata) => metadata.tableName)
         .filter((name) => typeof name === "string" && name.trim() !== "")
         .join(", ");
-      this.log(
+
+      throw new Error(
         `Please specify table name(s) with space separated choosing from ${tables}.`
       );
+    }
+
+    if (
+      this.optionsValues.component !== "api-client" &&
+      this.optionsValues.component !== "entity" &&
+      !this.metadataConfig.list
+    ) {
+      throw new Error("Please generate entities.");
+    }
+  }
+
+  writing() {
+    if (
+      this.optionsValues.component === "api-client" ||
+      this.optionsValues.component === "entity"
+    ) {
       return;
     }
 
     this.metadataConfig.list.forEach((metaData) => {
       if (
-        !splitedArgs.includes(metaData.tableName) &&
-        !splitedArgs.includes(metaData.className)
+        !this.inputTables.includes(metaData.tableName) &&
+        !this.inputTables.includes(metaData.className)
       ) {
         return;
       }
@@ -190,8 +253,18 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       ApiClientGenerator.exec(this.genApiClientConfig);
     }
+  }
 
-    this.log("Completed.");
+  async _load_metadata_config() {
+    const filePath = `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`;
+
+    try {
+      return await import(filePath, {
+        with: { type: "json" },
+      }).then((module) => module.default);
+    } catch {
+      return null;
+    }
   }
 
   _generate_template_data(metadata: Metadata): TemplateData {
@@ -296,6 +369,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
   }
 
+  _build_frontend_page_path(tmplData: TemplateData): string {
+    const idFields = tmplData.compIdFields || [tmplData.idField];
+    return idFields.map((idField) => `[${idField.fieldName}]`).join("/");
+  }
+
   _generate_e2e_spec_path(tmplData: TemplateData): string {
     return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
   }
@@ -361,6 +439,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     const entityPathCamel = `${this.destFrontPath}/routes/${tmplData.entityNmCamel}`;
     const entityPathPlural = `${this.destFrontPath}/routes/${tmplData.entityNmPlural}`;
+    const forntendPagePath = this._build_frontend_page_path(tmplData);
 
     if (this.optionsValues.templateType === "skeleton") {
       pathPairs = [
@@ -369,11 +448,11 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       ];
     } else if (this.optionsValues.templateType === "arch") {
       pathPairs = [
-        // For list screen
+        // For list page
         ["front/routes/list/+page.svelte", `${entityPathPlural}/+page.svelte`],
         ["front/routes/list/+page.ts", `${entityPathPlural}/+page.ts`],
 
-        // For create screen
+        // For create page
         [
           "front/routes/new/+page.svelte",
           `${entityPathPlural}/new/+page.svelte`,
@@ -384,14 +463,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `${this.destFrontPath}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
         ],
 
-        // For update screen
+        // For update page
         [
           "front/routes/entityId/+page.svelte",
-          `${entityPathPlural}/[entityId]/+page.svelte`,
+          `${entityPathPlural}/${forntendPagePath}/+page.svelte`,
         ],
         [
           "front/routes/entityId/+page.ts",
-          `${entityPathPlural}/[entityId]/+page.ts`,
+          `${entityPathPlural}/${forntendPagePath}/+page.ts`,
         ],
       ];
     }
@@ -413,7 +492,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     // Added link to target EntityList in menuBar
     this._generate_menu_bar(menuBarDestPath, tmplData);
 
-    // TODO temporary
     if (this.optionsValues.templateType === "skeleton") {
       pathPairs = [
         [
@@ -624,9 +702,11 @@ class ApiClientGenerator {
             "Search"
           );
 
-          console.log(
-            `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
-          );
+          if (templateRouteName !== newTemplateRouteName) {
+            console.log(
+              `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
+            );
+          }
           return newTemplateRouteName;
         },
         onFormatTypeName: (typeName, rawTypeName, schemaType) => {

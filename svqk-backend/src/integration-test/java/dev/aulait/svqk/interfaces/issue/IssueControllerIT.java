@@ -1,11 +1,12 @@
 package dev.aulait.svqk.interfaces.issue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
+import dev.aulait.svqk.arch.exception.ErrorResponseDto;
 import dev.aulait.svqk.arch.test.ConstraintViolationResponseDto;
 import dev.aulait.svqk.arch.test.ValidationMessageUtils;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
+import jakarta.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,9 @@ class IssueControllerIT {
     // Delete
     int deletedId = client.delete(issueId, updatedIssue);
     assertEquals(deletedId, issueId);
-    assertNull(client.getOrNull(deletedId));
+
+    ErrorResponseDto error = client.getWithError(issueId);
+    assertEquals(Status.NOT_FOUND, error.getStatus());
   }
 
   @Test
