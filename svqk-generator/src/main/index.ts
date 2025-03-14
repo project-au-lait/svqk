@@ -244,7 +244,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.optionsValues.component === "e2etest"
     ) {
       const snippetInsertionTargets: SnippetInsertionTarget[] =
-        GeneratorUtils.build_insert_targets(
+        GeneratorUtils.build_snippet_insert_targets(
           this.metadataConfig,
           this.optionsValues.component,
           this.optionsValues.templateType,
