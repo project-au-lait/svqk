@@ -26,72 +26,87 @@ export class GeneratorUtils {
     inputTables: string[],
     destPaths: DestPaths
   ): GenerateTarget[] {
-    let generateTargets: GenerateTarget[] = [];
+    const generateTargets: GenerateTarget[] = [];
 
     metadataConfig.list.forEach((metaData) => {
       if (
-        !inputTables.includes(metaData.tableName) &&
-        !inputTables.includes(metaData.className)
+        inputTables.includes(metaData.tableName) ||
+        inputTables.includes(metaData.className)
       ) {
-        return;
-      }
+        const templateData = this.build_template_data(metaData, metadataConfig);
 
-      const templateData = this.build_template_data(metaData, metadataConfig);
+        switch (component) {
+          case "backend":
+            generateTargets.push(
+              ...this.build_generate_targets_of_backend(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
+            break;
+          case "integration-test":
+            generateTargets.push(
+              ...this.build_generate_targets_of_integrationtest(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
+            break;
+          case "frontend":
+            generateTargets.push(
+              ...this.build_generate_targets_of_frontend(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
+            break;
+          case "e2e-test":
+            generateTargets.push(
+              ...this.build_generate_targets_of_e2etest(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
+            break;
+          case "all":
+            generateTargets.push(
+              ...this.build_generate_targets_of_backend(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
 
-      switch (component) {
-        case "backend":
-          generateTargets = this.build_generate_targets_of_backend(
-            templateData,
-            destPaths,
-            templateType
-          );
-          break;
-        case "integration-test":
-          generateTargets = this.build_generate_targets_of_integrationtest(
-            templateData,
-            destPaths,
-            templateType
-          );
-          break;
-        case "frontend":
-          generateTargets = this.build_generate_targets_of_frontend(
-            templateData,
-            destPaths,
-            templateType
-          );
-          break;
-        case "e2e-test":
-          generateTargets = this.build_generate_targets_of_e2etest(
-            templateData,
-            destPaths,
-            templateType
-          );
-          break;
-        case "all":
-          generateTargets = [
-            ...this.build_generate_targets_of_backend(
-              templateData,
-              destPaths,
-              templateType
-            ),
-            ...this.build_generate_targets_of_integrationtest(
-              templateData,
-              destPaths,
-              templateType
-            ),
-            ...this.build_generate_targets_of_frontend(
-              templateData,
-              destPaths,
-              templateType
-            ),
-            ...this.build_generate_targets_of_e2etest(
-              templateData,
-              destPaths,
-              templateType
-            ),
-          ];
+            generateTargets.push(
+              ...this.build_generate_targets_of_integrationtest(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
 
-          break;
+            generateTargets.push(
+              ...this.build_generate_targets_of_frontend(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
+
+            generateTargets.push(
+              ...this.build_generate_targets_of_e2etest(
+                templateData,
+                destPaths,
+                templateType
+              )
+            );
+
+            break;
+        }
       }
     });
 
