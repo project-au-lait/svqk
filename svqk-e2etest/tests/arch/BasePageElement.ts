@@ -104,4 +104,9 @@ export default abstract class BasePageElement {
   protected async clickInRow(text: string) {
     await this.click(`tr:has(td:has-text("${text}")) a`);
   }
+
+  protected async clickInRowID(id: any) {
+    await this.click(`tr:has(td a:has-text('${id.toString()}'))`);
+  }
+
 }
