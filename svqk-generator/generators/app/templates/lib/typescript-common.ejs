@@ -1,0 +1,43 @@
+<%
+function w(num) {
+  return " ".repeat(num);
+}
+
+function   getImpDcl(type) {
+  const from = type === "frontend" ? "$lib/arch/api/Api": "@api/Api" ;
+  const model = `${entityNmPascal}Model`;
+  const idModel = compIdFields ? `, ${entityNmPascal}idModel` : "";
+  return `import type { ${model}${idModel} } from "${from}";`;
+}
+
+tscom = {
+  idType: compIdFields ? entityNmPascal + "idModel" : (idField.javaType === "Integer" ? "number" : "string"),
+  idObj: compIdFields ? `id: {} as ${entityNmPascal}idModel` : "",
+  nonIdFields: fields.filter((field) => !field.id),
+  impDclF:  getImpDcl("frontend"),
+  impDclE2e: getImpDcl("e2etest"),
+  idProperty: compIdFields
+                    ? `id: {\n${fields2props(compIdFields, 8)}\n${w(6)}},`
+                    : "",
+
+  fieldToProp: function(field, num = 6) {
+    const fieldType = field.javaType;
+    const t = w(num);
+  
+    if (fieldType === "String") {
+      return `${t}${field.fieldName}: StringUtils.generateRandomString()`;
+    } else if (fieldType === "Integer") {
+      return `${t}${field.fieldName}: NumberUtils.generateRandomNumber()`;
+    } else {
+      console.log(`Skip to generate for field type: ${fieldType}`);
+    }
+  },
+
+  fieldsToProps: function(fields, num = 6) {
+    return fields
+      .map((field) => this.fieldToProp(field, num))
+      .filter((property) => property)
+      .join(",\n");
+  }
+}
+%>

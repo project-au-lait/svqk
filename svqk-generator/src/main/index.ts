@@ -510,7 +510,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `${this.destE2EPath}/facades/${tmplData.entityNmPascal}Facade.ts`,
         ],
         [
-          "e2etest/Factory.ts",
+          "e2etest/Factory.ts.ejs",
           `${this.destE2EPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
         ],
         [

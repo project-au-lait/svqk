@@ -1,0 +1,26 @@
+<% include('../../lib/typescript-common'); -%>
+<%- tscom.impDclE2e %>
+import StringUtils from '@arch/StringUtils';
+import NumberUtils from '@arch/NumberUtils';
+
+export default class <%= entityNmPascal %>Factory {
+  static create() {
+    const <%= entityNmCamel %> = {} as <%= entityNmPascal %>Model;
+    return <%= entityNmCamel %>;
+  }
+
+  static createRandom<%= entityNmPascal %>() {
+    return {
+      <%= tscom.idProperty %>
+<%= tscom.fieldsToProps(fields) %>
+    } as <%= entityNmPascal %>Model;
+  }
+
+  static createRandom<%= entityNmPascal %>WithId(id : <%= idType %>) {
+    return {
+      id,
+<%= tscom.fieldsToProps(tscom.nonIdFields) %>
+    } as <%= entityNmPascal %>Model;
+  }
+
+}
