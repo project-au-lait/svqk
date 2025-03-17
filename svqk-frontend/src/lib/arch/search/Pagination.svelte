@@ -7,9 +7,15 @@
     search: () => void;
   }
 
-  let { pageResult, pageNumber = $bindable(1), search }: Props = $props();
-  pageResult = pageResult ?? { count: 0, start: 0, end: 0, pageNums: [], lastPageNum: 0 };
+  const INITIAL_PAGE_RESULT: PageResult = {
+    count: 0,
+    start: 0,
+    end: 0,
+    pageNums: [],
+    lastPageNum: 0
+  };
 
+  let { pageResult = INITIAL_PAGE_RESULT, pageNumber = $bindable(1), search }: Props = $props();
   let { count, start, end, pageNums, lastPageNum } = $derived(pageResult);
 
   function gotoPage(page: number) {
