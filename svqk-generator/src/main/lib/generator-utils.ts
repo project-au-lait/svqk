@@ -28,6 +28,36 @@ export class GeneratorUtils {
     inputTables: string[],
     destPaths: DestPaths
   ): GenerateTarget[] {
+
+    let methods: ((
+      templateData: TemplateData,
+      destPaths: DestPaths,
+      templateType: string
+    ) => GenerateTarget[])[] = [];
+
+    switch (component) {
+      case "backend":
+        methods = [this.build_generate_targets_of_backend];
+        break;
+      case "integration-test":
+        methods = [this.build_generate_targets_of_integrationtest];
+        break;
+      case "frontend":
+        methods = [this.build_generate_targets_of_frontend];
+        break;
+        case "e2e-test":
+          methods = [this.build_generate_targets_of_e2etest];
+          break;
+      case "all":
+        methods = [
+          this.build_generate_targets_of_backend,
+          this.build_generate_targets_of_integrationtest,
+          this.build_generate_targets_of_frontend,
+          this.build_generate_targets_of_e2etest,
+        ];
+        break;
+    }
+
     const generateTargets: GenerateTarget[] = [];
 
     metadataConfig.list.forEach((metaData) => {
@@ -37,78 +67,11 @@ export class GeneratorUtils {
       ) {
         const templateData = this.build_template_data(metaData, metadataConfig);
 
-        switch (component) {
-          case "backend":
-            generateTargets.push(
-              ...this.build_generate_targets_of_backend(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-            break;
-          case "integration-test":
-            generateTargets.push(
-              ...this.build_generate_targets_of_integrationtest(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-            break;
-          case "frontend":
-            generateTargets.push(
-              ...this.build_generate_targets_of_frontend(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-            break;
-          case "e2e-test":
-            generateTargets.push(
-              ...this.build_generate_targets_of_e2etest(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-            break;
-          case "all":
-            generateTargets.push(
-              ...this.build_generate_targets_of_backend(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-
-            generateTargets.push(
-              ...this.build_generate_targets_of_integrationtest(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-
-            generateTargets.push(
-              ...this.build_generate_targets_of_frontend(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-
-            generateTargets.push(
-              ...this.build_generate_targets_of_e2etest(
-                templateData,
-                destPaths,
-                templateType
-              )
-            );
-
-            break;
-        }
+        methods.forEach((method) => {
+          generateTargets.push(
+            ...method(templateData, destPaths, templateType)
+          );
+        });
       }
     });
 
@@ -267,12 +230,12 @@ export class GeneratorUtils {
     destPaths: DestPaths,
     templateType: string
   ): GenerateTarget[] {
-    const destBackDomainPkgPath = this.build_dest_package_path(
+    const destBackDomainPkgPath = GeneratorUtils.build_dest_package_path(
       destPaths.destBackPath,
       templateData.domainPkgNm
     );
 
-    const destBackIfPkgPath = this.build_dest_package_path(
+    const destBackIfPkgPath = GeneratorUtils.build_dest_package_path(
       destPaths.destBackPath,
       templateData.interfacesPkgNm
     );
@@ -371,7 +334,7 @@ export class GeneratorUtils {
     destPaths: DestPaths,
     templateType: string
   ): GenerateTarget[] {
-    const destITPkgPath = this.build_dest_package_path(
+    const destITPkgPath = GeneratorUtils.build_dest_package_path(
       destPaths.destITPath,
       templateData.interfacesPkgNm
     );
@@ -409,7 +372,7 @@ export class GeneratorUtils {
   ): GenerateTarget[] {
     const entityPathCamel = `${destPaths.destFrontPath}/routes/${templateData.entityNmCamel}`;
     const entityPathPlural = `${destPaths.destFrontPath}/routes/${templateData.entityNmPlural}`;
-    const forntendPagePath = this.build_frontend_page_path(templateData);
+    const forntendPagePath = GeneratorUtils.build_frontend_page_path(templateData);
 
     let generateTargets: GenerateTarget[] = [];
 
@@ -495,7 +458,7 @@ export class GeneratorUtils {
       generateTargets = [
         {
           templatePath: `${templateType}/e2etest/spec.ts`,
-          destinationPath: `${destPaths.destE2EPath}/${this.build_e2e_spec_path(templateData)}`,
+          destinationPath: `${destPaths.destE2EPath}/${GeneratorUtils.build_e2e_spec_path(templateData)}`,
           templateData: templateData,
         },
       ];
@@ -503,7 +466,7 @@ export class GeneratorUtils {
       generateTargets = [
         {
           templatePath: `${templateType}/e2etest/spec.ts`,
-          destinationPath: `${destPaths.destE2EPath}/${this.build_e2e_spec_path(templateData)}`,
+          destinationPath: `${destPaths.destE2EPath}/${GeneratorUtils.build_e2e_spec_path(templateData)}`,
           templateData: templateData,
         },
         {
