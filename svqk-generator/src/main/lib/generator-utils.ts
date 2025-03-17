@@ -7,7 +7,7 @@ import {
   GenerateTarget,
   SnippetInsertionTarget,
   DestPaths,
-} from "./types.js";
+} from "../types.js";
 
 export class GeneratorUtils {
   static async load_json_file(filePath: string) {

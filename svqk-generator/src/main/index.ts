@@ -9,9 +9,9 @@ import {
   DestPaths,
   SnippetInsertionTarget,
 } from "./types.js";
-import { GeneratorUtils } from "./generator-utils.js";
-import { EntityGenerator } from "./entity-generator.js";
-import { ApiClientGenerator } from "./api-client-generator.js";
+import { GeneratorUtils } from "./lib/generator-utils.js";
+import { EntityGenerator } from "./lib/entity-generator.js";
+import { ApiClientGenerator } from "./lib/api-client-generator.js";
 
 const allowedComponentValues = [
   "entity",
