@@ -16,9 +16,6 @@ tscom = {
   nonIdFields: fields.filter((field) => !field.id),
   impDclF:  getImpDcl("frontend"),
   impDclE2e: getImpDcl("e2etest"),
-  idProperty: compIdFields
-                    ? `id: {\n${fields2props(compIdFields, 8)}\n${w(6)}},`
-                    : "",
 
   fieldToProp: function(field, num = 6) {
     const fieldType = field.javaType;
@@ -38,6 +35,12 @@ tscom = {
       .map((field) => this.fieldToProp(field, num))
       .filter((property) => property)
       .join(",\n");
-  }
+  },
+
 }
+
+tscom.idProperty = compIdFields
+      ? `id: {\n${tscom.fieldsToProps(compIdFields, 8)}\n${w(6)}},`
+      : "";
+
 %>
