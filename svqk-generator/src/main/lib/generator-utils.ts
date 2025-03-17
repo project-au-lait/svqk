@@ -12,9 +12,10 @@ import {
 export class GeneratorUtils {
   static async load_json_file(filePath: string) {
     try {
-      return await import(filePath, {
+      const module = await import(filePath, {
         with: { type: "json" },
-      }).then((module) => module.default);
+      });
+      return module.default;
     } catch {
       return null;
     }
