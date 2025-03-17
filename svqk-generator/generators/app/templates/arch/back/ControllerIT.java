@@ -1,6 +1,6 @@
 <%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
 <%_
-clientGetArgs = compIdFields ? buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
+clientIdArgs = compIdFields ? buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
+import jakarta.ws.rs.core.Response.Status;
 import org.junit.jupiter.api.Test;
+
+import dev.aulait.svqk.arch.exception.ErrorResponseDto;
 
 /**
  * This integration test is automatically generated.
@@ -34,7 +37,7 @@ class <%= entityNmPascal %>ControllerIT {
     assertEquals(id, createdId);
 
     // Reference
-    <%= entityNmPascal %>Dto refDto = client.get(<%= clientGetArgs %>);
+    <%= entityNmPascal %>Dto refDto = client.get(<%= clientIdArgs %>);
     assertEquals(id, refDto.get<%= idField.fieldNmPascal %>());
 
     // Update
@@ -45,5 +48,14 @@ class <%= entityNmPascal %>ControllerIT {
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();
     <%= entityNmPascal %>SearchResultDto result = client.search(criteria);
     assertTrue(result.getList().size() > 1);
+
+    <%= entityNmPascal %>Dto updated<%= entityNmPascal %> = client.get(<%= clientIdArgs %>);
+
+    // Delete
+    <%= interfaceIdType %> deletedId = client.delete(<%= clientIdArgs %>, updated<%= entityNmPascal %>);
+    assertEquals(deletedId, id);
+
+    ErrorResponseDto error = client.getWithError(<%= clientIdArgs %>);
+    assertEquals(Status.NOT_FOUND, error.getStatus());
   }
 }

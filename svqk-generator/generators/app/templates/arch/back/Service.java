@@ -1,5 +1,7 @@
 package <%= domainPkgNm %>;
 
+import static dev.aulait.svqk.arch.jpa.JpaUtils.findByIdAsResource;
+
 import dev.aulait.svqk.arch.jpa.SearchUtils;
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
@@ -17,12 +19,18 @@ public class <%= entityNmPascal %>Service {
   private final <%= entityNmPascal %>Repository <%= entityNmCamel %>Repository;
 
   public <%= entityNmPascal %>Entity find(<%= idField.javaType %> id) {
-    return <%= entityNmCamel %>Repository.findById(id).orElseThrow(IllegalArgumentException::new);
+    return findByIdAsResource(<%= entityNmCamel %>Repository, id);
   }
 
   @Transactional
   public <%= entityNmPascal %>Entity save(<%= entityNmPascal %>Entity entity) {
     return <%= entityNmCamel %>Repository.save(entity);
+  }
+
+  @Transactional
+  public void delete(<%= entityNmPascal %>Entity entity) {
+    <%= entityNmPascal %>Entity managedEntity = em.merge(entity);
+    <%= entityNmCamel %>Repository.delete(managedEntity);
   }
 
   public SearchResultVo<<%= entityNmPascal %>Entity> search(SearchCriteriaVo criteria) {
