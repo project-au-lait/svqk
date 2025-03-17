@@ -30,7 +30,7 @@ public class IssueFactory {
         .select("SELECT i FROM IssueEntity i")
         .select("JOIN FETCH i.issueStatus")
         .select("JOIN FETCH i.tracker")
-        .where("i.subject", LIKE, text)
+        .where("i.subject", LIKE, text) // <.>
         .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : text)
         .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())

@@ -68,7 +68,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/is
 .{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java
 [source,java]
 ----
-include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[lines="1..46,62..66"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java[lines="1..41,57..60"]
 ----
 
 <.> 検索結果EntityからDTOへのマッピング設定を定義します。上記の例ではIssueEntityからIssueDtoへのマッピングにおいてIssueDto.journalsのマッピングを除外しています。
