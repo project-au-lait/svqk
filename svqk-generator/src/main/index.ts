@@ -1,5 +1,4 @@
 import { spawnSync } from "child_process";
-import cpx from "cpx";
 import fs from "fs";
 import path from "node:path";
 import pluralize from "pluralize";
@@ -541,7 +540,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     if (this.optionsValues.templateType === "skeleton") {
       return;
     }
-    
+
     const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
     const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
@@ -737,13 +736,17 @@ class ApiClientGenerator {
     frontApiClientPath: string,
     e2eApiClientPath: string
   ) {
-    cpx.copy(`${frontApiClientPath}/Api.ts`, e2eApiClientPath, (err) => {
-      if (err) {
-        throw new Error(`Copy failed: ${err}`);
-      } else {
-        console.log("Files copied successfully.");
+    fs.copyFile(
+      `${frontApiClientPath}/Api.ts`,
+      `${e2eApiClientPath}/Api.ts`,
+      (err) => {
+        if (err) {
+          throw new Error(`Copy failed: ${err as Error}`);
+        } else {
+          console.log("Files copied successfully.");
+        }
       }
-    });
+    );
   }
 }
 
