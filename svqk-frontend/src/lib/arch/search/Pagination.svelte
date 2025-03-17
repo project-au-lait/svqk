@@ -15,7 +15,9 @@
     lastPageNum: 0
   };
 
-  let { pageResult = INITIAL_PAGE_RESULT, pageNumber = $bindable(1), search }: Props = $props();
+  let { pageResult, pageNumber = $bindable(1), search }: Props = $props();
+  pageResult = pageResult ?? INITIAL_PAGE_RESULT;
+
   let { count, start, end, pageNums, lastPageNum } = $derived(pageResult);
 
   function gotoPage(page: number) {
