@@ -1,13 +1,12 @@
 package dev.aulait.svqk.arch.jpa;
 
-import dev.aulait.svqk.arch.search.PageResultDto;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchQueryBuilder;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.PageResult;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchQueryBuilder;
+import dev.aulait.sqb.SearchResult;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.util.List;
-import java.util.Map;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SearchUtils {
 
-  public static <T> SearchResultVo<T> search(EntityManager em, SearchCriteriaVo criteria) {
+  public static <T> SearchResult<T> search(EntityManager em, SearchCriteria criteria) {
 
     SearchQueryBuilder builder = new SearchQueryBuilder();
     builder.buildQuery(criteria);
@@ -29,8 +28,8 @@ public class SearchUtils {
     long count = (Long) countQuery.getSingleResult();
 
     if (count == 0) {
-      return SearchResultVo.<T>builder()
-          .pageResult(new PageResultDto().build(count, criteria.getPageControl()))
+      return SearchResult.<T>builder()
+          .pageResult(new PageResult().build(count, criteria.getPageControl()))
           .build();
     }
 
@@ -45,14 +44,15 @@ public class SearchUtils {
     @SuppressWarnings("unchecked")
     List<T> result = searchQuery.getResultList();
 
-    return SearchResultVo.<T>builder()
+    return SearchResult.<T>builder()
         .list(result)
-        .pageResult(new PageResultDto().build(count, criteria.getPageControl()))
+        .pageResult(new PageResult().build(count, criteria.getPageControl()))
         .build();
   }
 
-  private static void setQueryParams(Query query, Map<String, Object> params) {
-    params.entrySet().stream()
-        .forEach(param -> query.setParameter(param.getKey(), param.getValue()));
+  private static void setQueryParams(Query query, List<Object> params) {
+    for (int i = 0; i < params.size(); i++) {
+      query.setParameter(i, params.get(i));
+    }
   }
 }

@@ -1,8 +1,8 @@
 package <%= domainPkgNm %>;
 
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.jpa.SearchUtils;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultVo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -25,7 +25,7 @@ public class <%= entityNmPascal %>Service {
     return <%= entityNmCamel %>Repository.save(entity);
   }
 
-  public SearchResultVo<<%= entityNmPascal %>Entity> search(SearchCriteriaVo criteria) {
+  public SearchResult<<%= entityNmPascal %>Entity> search(SearchCriteria criteria) {
     return SearchUtils.search(em, criteria);
   }
 }
