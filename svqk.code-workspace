@@ -3,10 +3,12 @@
     "recommendations": [
       "aprilandjan.ascii-tree-generator",
       "asciidoctor.asciidoctor-vscode",
+      "dannyhw.ejs-extended-language-support",
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode",
       "GabrielBB.vscode-lombok",
       "josevseb.google-java-format-for-vs-code",
+      "leonzalion.vscode-ejs",
       "mhutchie.git-graph",
       "mtxr.sqltools",
       "redhat.vscode-xml",

@@ -1,6 +1,7 @@
 package dev.aulait.svqk.interfaces.issue;
 
 import dev.aulait.sqb.PageControl;
+import dev.aulait.sqb.SortOrder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,4 +18,6 @@ public class IssueSearchCriteriaDto { // <.>
 
   @Schema(required = true)
   private PageControl pageControl = new PageControl();
+
+  private List<SortOrder> sortOrders = new ArrayList<>();
 }

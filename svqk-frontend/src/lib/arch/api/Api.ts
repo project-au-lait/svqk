@@ -36,12 +36,13 @@ export interface IssueSearchCriteriaModel {
   issueStatuses?: string[];
   dueDate?: LocalDate;
   subjectOnly?: boolean;
-  pageControl: PageControlModel;
+  pageControl: PageControl;
+  sortOrders?: SortOrder[];
 }
 
 export interface IssueSearchResultModel {
-  list: IssueModel[];
-  pageResult: PageResultModel;
+  list?: IssueModel[];
+  pageResult?: PageResult;
 }
 
 export interface IssueStatusModel {
@@ -83,19 +84,18 @@ export type LocalDate = string;
  */
 export type LocalDateTime = string;
 
-export interface PageControlModel {
+export interface PageControl {
   /** @format int32 */
   pageSize: number;
   /** @format int32 */
   pageNumber: number;
   /** @format int32 */
   pageNumsRange?: number;
-  sortOrders?: SortOrderModel[];
   /** @format int32 */
   offset?: number;
 }
 
-export interface PageResultModel {
+export interface PageResult {
   /** @format int64 */
   count: number;
   /** @format int32 */
@@ -107,7 +107,7 @@ export interface PageResultModel {
   pageNums: number[];
 }
 
-export interface SortOrderModel {
+export interface SortOrder {
   asc: boolean;
   field: string;
 }
