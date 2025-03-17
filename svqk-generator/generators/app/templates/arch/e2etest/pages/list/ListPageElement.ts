@@ -15,6 +15,6 @@ export default class <%= entityNmPascal %>ListPageElement extends BasePageElemen
     <%_
     const id = compIdFields ? compIdFields.map((field) => `id.${field.fieldName}`).join(" + '/' + ") : "id";
     -%>
-    await this.clickInRow(<%- id %>);
+    await this.clickInRowID(<%- id %>);
   }
 }

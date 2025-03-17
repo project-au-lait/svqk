@@ -10,15 +10,23 @@ fieldToProperty = (fields, num = 6) => {
       return `${w(num)}${field.fieldName}: StringUtils.generateRandomString()`;
     } else if (fieldType === "Integer") {
       return `${w(num)}${field.fieldName}: NumberUtils.generateRandomNumber()`;
+    } else if (fieldType === "java.time.LocalDate") {
+      return `${w(num)}${field.fieldName}: DateUtils.generateRandomLocalDate()`;
+    } else if (fieldType === "java.time.LocalDateTime") {
+      return `${w(num)}${field.fieldName}: DateUtils.generateRandomLocalDateTime()`;
+    } else if (fieldType === "Boolean") {
+      return `${w(num)}${field.fieldName}: BooleanUtils.generateRandomBoolean()`;
     }
   }).filter((property) => property).join(",\n");
 };
 
 idProperty = compIdFields ? `id: {\n${fieldToProperty(compIdFields, 8)}\n${w(6)}},` : "";
 _%>
-import type { <%= entityNmPascal %>Model } from '@api/Api';
+import type { <%= entityNmPascal %>Model, LocalDate, LocalDateTime } from '@api/Api';
 import StringUtils from '@arch/StringUtils';
 import NumberUtils from '@arch/NumberUtils';
+import BooleanUtils from '@arch/BooleanUtils';
+import DateUtils from '@arch/DateUtils';
 <%- importDecIdTypeE2etest %>
 
 export default class <%= entityNmPascal %>Factory {
