@@ -37,6 +37,7 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 const LINE_BREAK = "\n";
+const INDENT = " ";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues = {
@@ -541,7 +542,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     if (this.optionsValues.templateType === "skeleton") {
       return;
     }
-    
+
     const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
     const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
     const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
@@ -561,8 +562,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `async click${tmplData.entityNmPascal}Link() {`,
           `  await this.click('#${tmplData.entityNmCamel}');`,
           "}",
-          "",
-          "",
         ],
       },
       {
@@ -571,7 +570,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         placeholder: PLACEHOLDER_FOR_IMPORT,
         rawTextList: [
           `import ${tmplData.entityNmPascal}ListPage from '@pages/${tmplData.entityNmKebab}-list/${tmplData.entityNmPascal}ListPage';`,
-          "",
         ],
       },
       {
@@ -583,8 +581,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           `  await this.menuBarEl.click${tmplData.entityNmPascal}Link();`,
           `  return new ${tmplData.entityNmPascal}ListPage(this.menuBarEl);`,
           "}",
-          "",
-          "",
         ],
       },
       {
@@ -595,7 +591,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           "<li>",
           `  <a id="${tmplData.entityNmCamel}" ${href}>${tmplData.entityNmPascal}</a>`,
           "</li>",
-          "",
         ],
       },
     ];
@@ -624,15 +619,30 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
         let nextCharIndex = initialIndex - 1;
         let indentCount = 0;
+        let lineBreakCount = 0;
         while (nextCharIndex >= 0) {
-          if (originalText[nextCharIndex] === LINE_BREAK) {
+          const text = originalText[nextCharIndex];
+          if (text === INDENT) {
+            indentCount++;
+          }
+          if (text === LINE_BREAK) {
+            lineBreakCount++;
+          }
+          if (text !== INDENT && text !== LINE_BREAK) {
             break;
           }
-          indentCount++;
+
           nextCharIndex--;
         }
-        const snippet = rawTextList.join(LINE_BREAK + " ".repeat(indentCount));
-        const newSnippet = snippet + placeholder;
+
+        const snippet = rawTextList.join(
+          LINE_BREAK + INDENT.repeat(indentCount)
+        );
+        const newSnippet =
+          snippet +
+          LINE_BREAK.repeat(lineBreakCount) +
+          INDENT.repeat(indentCount) +
+          placeholder;
 
         return originalText.replace(placeholder, newSnippet);
       },
