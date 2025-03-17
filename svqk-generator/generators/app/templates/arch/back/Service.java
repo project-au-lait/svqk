@@ -1,5 +1,7 @@
 package <%= domainPkgNm %>;
 
+import static dev.aulait.svqk.arch.jpa.JpaUtils.findByIdAsResource;
+
 import dev.aulait.svqk.arch.jpa.SearchUtils;
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
@@ -18,7 +20,7 @@ public class <%= entityNmPascal %>Service {
   private final <%= entityNmPascal %>Repository <%= entityNmCamel %>Repository;
 
   public <%= entityNmPascal %>Entity find(<%= idField.javaType %> id) {
-    return <%= entityNmCamel %>Repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(1));
+    return findByIdAsResource(<%= entityNmCamel %>Repository, id);
   }
 
   @Transactional
