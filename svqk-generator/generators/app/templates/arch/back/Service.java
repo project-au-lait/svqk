@@ -5,7 +5,6 @@ import static dev.aulait.svqk.arch.jpa.JpaUtils.findByIdAsResource;
 import dev.aulait.svqk.arch.jpa.SearchUtils;
 import dev.aulait.svqk.arch.search.SearchCriteriaVo;
 import dev.aulait.svqk.arch.search.SearchResultVo;
-import dev.aulait.svqk.arch.exception.ResourceNotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
