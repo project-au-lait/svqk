@@ -1,4 +1,3 @@
-import cpx from "cpx";
 import fs from "fs";
 import path from "node:path";
 import { generateApi } from "swagger-typescript-api";
@@ -70,7 +69,7 @@ export class ApiClientGenerator {
     frontApiClientPath: string,
     e2eApiClientPath: string
   ) {
-    cpx.copy(`${frontApiClientPath}/Api.ts`, e2eApiClientPath, (err) => {
+    fs.copyFile(`${frontApiClientPath}/Api.ts`, `${e2eApiClientPath}/Api.ts`, (err) => {
       if (err) {
         throw new Error(`Copy failed: ${err}`);
       } else {
