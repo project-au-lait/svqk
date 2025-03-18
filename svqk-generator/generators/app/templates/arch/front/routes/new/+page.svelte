@@ -1,4 +1,4 @@
-<%_ include('../../../../lib/interface-common'); -%>
+<% include('../../../../lib/interface-common'); -%>
 <%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';

@@ -1,4 +1,4 @@
-<%_ include('../../lib/interface-common'); -%>
+<% include('../../lib/interface-common'); -%>
 <%_
 clientIdArgs = compIdFields ? ifcom.buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
 -%>

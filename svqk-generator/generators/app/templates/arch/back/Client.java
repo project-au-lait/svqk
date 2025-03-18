@@ -1,4 +1,4 @@
-<%_ include('../../lib/interface-common'); -%>
+<% include('../../lib/interface-common'); -%>
 <%_
 idMethodArgs = ifcom.buildArgs((field) => `${field.javaType} ${field.fieldName}`);
 givenGetArgs = ifcom.buildArgs((field) => field.fieldName);

@@ -1,4 +1,4 @@
-<%_ include('../../lib/interface-common'); -%>
+<% include('../../lib/interface-common'); -%>
 <%_
 getPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
 getMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
