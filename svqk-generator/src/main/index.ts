@@ -307,11 +307,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           const character = originalText[nextCharIndex];
           if (character === INDENT) {
             indentCount++;
-          }
-          if (character === LINE_BREAK) {
+          } else if (character === LINE_BREAK) {
             lineBreakCount++;
-          }
-          if (character !== INDENT && character !== LINE_BREAK) {
+          } else {
             break;
           }
 
