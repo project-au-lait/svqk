@@ -182,6 +182,7 @@ export class GeneratorUtils {
       entityNmKebab: this.pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
+      nonIdFields: metadata.fields.filter((field) => !field.id),
       compIdFields: this.get_composite_id_fields(idField, metadataConfig),
     };
   }
