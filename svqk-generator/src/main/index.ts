@@ -35,6 +35,7 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 const LINE_BREAK = "\n";
+const INDENT = " ";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues = {
@@ -301,15 +302,28 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
         let nextCharIndex = initialIndex - 1;
         let indentCount = 0;
+        let lineBreakCount = 0;
         while (nextCharIndex >= 0) {
-          if (originalText[nextCharIndex] === LINE_BREAK) {
+          const character = originalText[nextCharIndex];
+          if (character === INDENT) {
+            indentCount++;
+          } else if (character === LINE_BREAK) {
+            lineBreakCount++;
+          } else {
             break;
           }
-          indentCount++;
+
           nextCharIndex--;
         }
-        const snippet = rawTextList.join(LINE_BREAK + " ".repeat(indentCount));
-        const newSnippet = snippet + placeholder;
+
+        const snippet = rawTextList.join(
+          LINE_BREAK + INDENT.repeat(indentCount)
+        );
+        const newSnippet =
+          snippet +
+          LINE_BREAK.repeat(lineBreakCount) +
+          INDENT.repeat(indentCount) +
+          placeholder;
 
         return originalText.replace(placeholder, newSnippet);
       },
