@@ -1,4 +1,4 @@
-<%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
+<%_ include('../../../../lib/typescript-common', { entityNmPascal, compIdFields }); -%>
 import BasePageElement from '@arch/BasePageElement';
 <%- importDecIdTypeE2etest %>
 
