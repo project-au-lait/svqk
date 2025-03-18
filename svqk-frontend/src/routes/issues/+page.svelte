@@ -85,7 +85,13 @@
 </section>
 
 <section>
-  <ListTable {result} {columns} bind:pageControl={condition.pageControl} {search} />
+  <ListTable
+    {result}
+    {columns}
+    bind:pageControl={condition.pageControl}
+    bind:sortOrders={condition.sortOrders}
+    {search}
+  />
 </section>
 
 <!-- for ListTable issueId Column -->

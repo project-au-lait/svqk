@@ -28,25 +28,32 @@
 </script>
 
 <script lang="ts" generics="T">
-  import type { PageControlModel, PageResultModel, SortOrderModel } from '$lib/arch/api/Api';
+  import type { PageControl, PageResult, SortOrder } from '$lib/arch/api/Api';
   import Pagination from '$lib/arch/search/Pagination.svelte';
   import SortDirection from '$lib/arch/search/SortDirection.svelte';
   import { t } from '$lib/translations';
 
   interface Props {
     result: {
-      list: T[];
-      pageResult: PageResultModel;
+      list?: T[];
+      pageResult?: PageResult;
     };
     columns: ListTableColumn<T>[];
-    pageControl: PageControlModel;
+    pageControl: PageControl;
+    sortOrders?: SortOrder[];
     search: () => void;
   }
 
-  let { result, columns, pageControl = $bindable(), search }: Props = $props();
+  let {
+    result,
+    columns,
+    pageControl = $bindable(),
+    sortOrders = $bindable(),
+    search
+  }: Props = $props();
 </script>
 
-{#if result.list.length}
+{#if result.list?.length}
   <section>
     <table class="list striped">
       <thead>
@@ -54,7 +61,7 @@
           {#each columns as col}
             {@const { label, sortKey } = col}
             <th>
-              <SortDirection {label} {sortKey} bind:sortOrders={pageControl.sortOrders} {search} />
+              <SortDirection {label} {sortKey} bind:sortOrders {search} />
             </th>
           {/each}
         </tr>

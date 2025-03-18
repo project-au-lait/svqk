@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { SortOrderModel } from '$lib/arch/api/Api';
+  import type { SortOrder } from '$lib/arch/api/Api';
   import SortOrderUtils from '$lib/arch/search/SortOrderUtils';
 
   interface Props {
     label: string;
     sortKey: string;
-    sortOrders?: SortOrderModel[];
+    sortOrders?: SortOrder[];
     search: () => void;
   }
 
