@@ -1,3 +1,4 @@
+<%_ include('../../../../lib/interface-common'); -%>
 <%_
 idFields = compIdFields ?? [idField];
 
@@ -13,7 +14,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
   ))!;
 
   return {
-    title: `<%= idPath %>`,
+    title: `<%= ifcom.idPath %>`,
     <%= entityNmCamel %>
   };
 };

@@ -1,3 +1,4 @@
+<%_ include('../../../../lib/interface-common'); -%>
 <%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';
@@ -8,7 +9,7 @@
   let <%= entityNmCamel %> = $state({<%= idObj%>} as <%= entityNmPascal %>Model);
 
   async function handleAfterSave(id?: <%= idType %>) {
-    await goto(`/<%= entityNmPlural %>/<%= idPath %>`);
+    await goto(`/<%= entityNmPlural %>/<%= ifcom.idPath %>`);
   }
 </script>
 

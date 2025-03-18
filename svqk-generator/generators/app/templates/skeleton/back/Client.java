@@ -1,7 +1,7 @@
-<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<%_ include('../../lib/interface-common'); -%>
 <%_
-getMethodArgs = buildArgs((field) => `${field.javaType} ${field.fieldName}`);
-givenGetArgs = buildArgs((field) => field.fieldName);
+getMethodArgs = ifcom.buildArgs((field) => `${field.javaType} ${field.fieldName}`);
+givenGetArgs = ifcom.buildArgs((field) => field.fieldName);
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -26,7 +26,7 @@ public class <%= entityNmPascal %>Client {
         .as(<%= entityNmPascal %>Dto.class);
   }
 
-  public <%= interfaceIdType %> save(<%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> save(<%= entityNmPascal %>Dto dto) {
     return given()
         .body(dto)
         .post(<%= entityNmAllCaps %>_PATH)
@@ -39,7 +39,7 @@ public class <%= entityNmPascal %>Client {
       <%_ } else if(idField.javaType === 'String') { -%>
         .asString();
       <%_ } else { -%>
-        .as(<%= interfaceIdType %>.class);
+        .as(<%= ifcom.interfaceIdType %>.class);
       <%_ } -%>
   }
 

@@ -1,3 +1,4 @@
+<%_ include('../../../../lib/interface-common'); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
@@ -36,9 +37,6 @@
   <ListTable {result} {columns} bind:pageControl={condition.pageControl} {search} />
 </section>
 
-<%_
-idPath = compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`;
--%>
 {#snippet <%= entityNmCamel %>IdAnchor(<%= entityNmCamel %>: <%= entityNmPascal %>Model)}
   <a href={`/<%= entityNmPlural %>/<%= idPath %>`}>{`<%= idPath %>`}</a>
 {/snippet}

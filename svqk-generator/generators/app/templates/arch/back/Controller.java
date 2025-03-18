@@ -1,7 +1,7 @@
-<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<%_ include('../../lib/interface-common'); -%>
 <%_
-idPath = idFields.map((field) => `{${field.fieldName}}`).join("/");
-idMethodArgs = buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
+idPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
+idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -58,26 +58,26 @@ public class <%= entityNmPascal %>Controller {
   }
 
   @POST
-  public <%= interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
   <%_ if (compIdFields) { -%>
-    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
+    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= ifcom.interfaceIdType %>.class);
   <%_ } else { -%>
     return savedEntity.get<%= idField.fieldNmPascal %>();
   <%_ } -%>
   }
 
   @PUT
-  public <%= interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
   <%_ if (compIdFields) { -%>
-    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
+    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= ifcom.interfaceIdType %>.class);
   <%_ } else { -%>
     return updatedEntity.get<%= idField.fieldNmPascal %>();
   <%_ } -%>
@@ -85,7 +85,7 @@ public class <%= entityNmPascal %>Controller {
 
   @DELETE
   @Path(<%= entityNmAllCaps %>_ID_PATH)
-  public <%= interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%_ if (compIdFields) { -%>
@@ -101,7 +101,7 @@ public class <%= entityNmPascal %>Controller {
     <%= entityNmCamel %>Service.delete(entity);
 
     <%_ if (compIdFields) { -%>
-      return BeanUtils.map(entity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
+      return BeanUtils.map(entity.get<%= idField.fieldNmPascal %>(), <%= ifcom.interfaceIdType %>.class);
     <%_ } else { -%>
       return entity.get<%= idField.fieldNmPascal %>();
     <%_ } -%>
