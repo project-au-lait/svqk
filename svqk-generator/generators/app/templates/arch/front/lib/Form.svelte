@@ -18,7 +18,11 @@
   }
 
   let { <%= entityNmCamel %> = $bindable(), handleAfterSave, handleAfterDelete }: Props = $props();
-  let isUpdate = typeof <%= entityNmCamel %>.id != null;
+  <%_ if (compIdFields) { _%>
+  let isUpdate = <%- compIdFields.map(field => `${entityNmCamel}?.id?.${field.fieldName} != null`).join(' && ') %>;
+  <%_ } else { _%>
+  let isUpdate = <%= entityNmCamel %>?.id != null;
+  <%_ } _%>
 
   <%_ 
     const dataType = (javaType) => {
