@@ -1,6 +1,5 @@
-<%# args: (fields: Field[], compIdFields?: Field[]) %>
 <%
-javaTypeDefs = [
+const javaTypeDefs = [
   {
     type: "Integer",
     valueCode: "new Random().nextInt()",
@@ -13,25 +12,58 @@ javaTypeDefs = [
   },
 ];
 
-findTypeDef = (type) => javaTypeDefs.find((typeDef) => typeDef.type === type);
+function findTypeDef(type) {
+  return javaTypeDefs.find((typeDef) => typeDef.type === type);
+}
 
-getValueCode = (field) => {
+function buildImports() {
+  return [
+    ...new Set(
+      fields.concat(compIdFields ?? []).map((field) => field.javaType)
+    ),
+  ]
+    .reduce(
+      (result, type) => result.concat(findTypeDef(type)?.imports ?? []),
+      []
+    )
+    .map((package) => `import ${package};`)
+    .join("\n");
+}
+
+function getValueCode(field) {
   let code = findTypeDef(field.javaType)?.valueCode ?? "null";
 
-  if(field.javaType === "String"){
+  if (field.javaType === "String") {
     code = code.replace("@varchar.size@", Math.min(field.stringLength, 36));
   }
 
   return code;
 }
 
-getFieldNmPascal = (fieldName) => {
-  return fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+function w(num) {
+  return " ".repeat(num);
 }
 
-imports = [
-  ...new Set(fields.concat(compIdFields ?? []).map((field) => field.javaType)),
-].reduce((result, type) => result.concat(findTypeDef(type)?.imports ?? []), []);
+function fieldToBuilder(field, num = 8) {
+  return `${w(num)}.${field.fieldName}(${getValueCode(field)})`;
+}
 
-nonIdFields = fields.filter((field) => !field.id);
+function fieldsToBuilder(fields, num = 8) {
+  return fields.map((field) => fieldToBuilder(field, num)).join("\n");
+}
+
+function compIdToBuilder(num = 8) {
+  return [
+    `${w(num)}.${idField.fieldName}(`,
+    `${w(num + 4)}${entityNmPascal}IdDto.builder()`,
+    fieldsToBuilder(compIdFields, num + 8),
+    `${w(num + 8)}.build())`,
+  ].join("\n");
+}
+
+dfdef = {
+  imports: buildImports(),
+  idBuilder: compIdFields ? compIdToBuilder() : fieldToBuilder(idField),
+  nonIdsBuilder: fieldsToBuilder(nonIdFields),
+};
 %>

@@ -13,7 +13,6 @@ function   getImpDcl(type) {
 tscom = {
   idType: compIdFields ? entityNmPascal + "idModel" : (idField.javaType === "Integer" ? "number" : "string"),
   idObj: compIdFields ? `id: {} as ${entityNmPascal}idModel` : "",
-  nonIdFields: fields.filter((field) => !field.id),
   impDclF:  getImpDcl("frontend"),
   impDclE2e: getImpDcl("e2etest"),
 

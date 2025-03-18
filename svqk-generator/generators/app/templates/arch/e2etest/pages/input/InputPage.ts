@@ -1,4 +1,3 @@
-<% include('../../../../lib/data-factory-def', { fields }); -%>
 <%_
 const inputImpl = (field, isId) => {
   const id = isId ? '.id' : '';
