@@ -35,7 +35,8 @@ public class IssueFactory {
         .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
-        .build(criteria.getPageControl(), criteria.getSortOrders()); // <.>
+        .orderBy(criteria.getSortOrders())
+        .build(criteria.getPageControl()); // <.>
   }
 
   public IssueTrackingDto buildIssueTracking(List<IssueTrackingRs> issueTrackings) {
