@@ -304,14 +304,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
         let indentCount = 0;
         let lineBreakCount = 0;
         while (nextCharIndex >= 0) {
-          const text = originalText[nextCharIndex];
-          if (text === INDENT) {
+          const character = originalText[nextCharIndex];
+          if (character === INDENT) {
             indentCount++;
           }
-          if (text === LINE_BREAK) {
+          if (character === LINE_BREAK) {
             lineBreakCount++;
           }
-          if (text !== INDENT && text !== LINE_BREAK) {
+          if (character !== INDENT && character !== LINE_BREAK) {
             break;
           }
 
