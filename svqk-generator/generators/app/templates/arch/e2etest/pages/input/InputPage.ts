@@ -29,7 +29,7 @@ export default class <%= entityNmPascal %>InputPage {
   async expect<%= entityNmPascal %>(<%= entityNmCamel %>: <%= entityNmPascal %>Model) {
     <%_ fields.forEach((field) => { _%>
       <%_ if (field.javaType === 'Integer' || field.javaType === 'String') { _%>
-    await this.<%= entityNmCamel %>InputPageEl.expect<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %>);
+    await this.<%= entityNmCamel %>InputPageEl.expect<%= field.fieldNmPascal %>(<%= entityNmCamel %>.<%= field.fieldName %>);
       <%_ } _%>
     <%_ }) _%>
   }
