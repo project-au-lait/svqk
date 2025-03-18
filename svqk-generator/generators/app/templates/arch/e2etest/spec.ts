@@ -23,6 +23,7 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   // Create
   const <%= entityNmCamel %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>();
   await <%= entityNmCamel %>InputPage.save(<%= entityNmCamel %>);
+  await <%= entityNmCamel %>InputPage.expectSavedSuccessfully();
 
   // Rererence
   const <%= entityNmCamel %>Facade = new <%= entityNmPascal %>Facade(dryRun);
@@ -31,7 +32,10 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
   // Update
   const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>WithId(<%= entityNmCamel %>.<%= idField.fieldName %>);
   await <%= entityNmCamel %>InputPage.save(updating<%= entityNmPascal %>);
+  await <%= entityNmCamel %>InputPage.expectSavedSuccessfully();
   await <%= entityNmCamel %>InputPage.expect<%= entityNmPascal %>(updating<%= entityNmPascal %>);
 
-  // TODO: Add <%= entityNmCamel %> delete step
+  // Delete
+  await <%= entityNmCamel %>InputPage.delete();
+  await <%= entityNmCamel %>InputPage.expectDeletedSuccessfully();
 });

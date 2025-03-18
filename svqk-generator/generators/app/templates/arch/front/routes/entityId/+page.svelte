@@ -1,5 +1,6 @@
 <%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
   <%- importDecIdType %>
@@ -12,6 +13,10 @@
   async function handleAfterSave(id?: <%= idType %>) {
     await invalidateAll();
   }
+
+  async function handleAfterDelete() {
+    await goto(`/<%= entityNmPlural %>/`);
+  }
 </script>
 
-<<%= entityNmPascal %>Form {<%= entityNmCamel %>} {handleAfterSave} actionBtnLabel={$t('msg.update')} />
+<<%= entityNmPascal %>Form {<%= entityNmCamel %>} {handleAfterSave} {handleAfterDelete} />

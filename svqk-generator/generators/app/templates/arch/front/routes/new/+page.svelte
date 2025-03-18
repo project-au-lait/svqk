@@ -12,4 +12,4 @@
   }
 </script>
 
-<<%= entityNmPascal %>Form bind:<%= entityNmCamel %> {handleAfterSave} actionBtnLabel={$t('msg.register')} />
+<<%= entityNmPascal %>Form bind:<%= entityNmCamel %> {handleAfterSave} />
