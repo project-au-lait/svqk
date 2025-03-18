@@ -27,11 +27,23 @@ export default class <%= entityNmPascal %>InputPage {
     await this.<%= entityNmCamel %>InputPageEl.clickSaveBtn();
   }
 
+  async expectSavedSuccessfully() {
+    await this.<%= entityNmCamel %>InputPageEl.expectSavedSuccessfully();
+  }
+
   async expect<%= entityNmPascal %>(<%= entityNmCamel %>: <%= entityNmPascal %>Model) {
     <%_ fields.forEach((field) => { _%>
       <%_ if (field.javaType === 'Integer' || field.javaType === 'String') { _%>
     await this.<%= entityNmCamel %>InputPageEl.expect<%= getFieldNmPascal(field.fieldName) %>(<%= entityNmCamel %>.<%= field.fieldName %>);
       <%_ } _%>
     <%_ }) _%>
+  }
+
+  async delete() {    
+    await this.<%= entityNmCamel %>InputPageEl.clickDeleteBtn();
+  }
+
+  async expectDeletedSuccessfully() {
+    await this.<%= entityNmCamel %>InputPageEl.expectDeletedSuccessfully();
   }
 }

@@ -14,10 +14,11 @@
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
     handleAfterSave: (id?: <%= idType %>) => Promise<void>;
-    actionBtnLabel: string;
+    handleAfterDelete: (id?: <%= idType %>) => Promise<void>;
   }
 
-  let { <%= entityNmCamel %> = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
+  let { <%= entityNmCamel %> = $bindable(), handleAfterSave, handleAfterDelete }: Props = $props();
+  let isUpdate = typeof <%= entityNmCamel %>.id != null;
 
   <%_ 
     const dataType = (javaType) => {
@@ -40,15 +41,34 @@
     <%_ } _%>
   };
 
-  const form = FormValidator.createForm(spec, save);
+  const form = FormValidator.createForm(spec, save, delete<%= entityNmPascal %>);
 
   async function save() {
     const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) => 
-      <%= entityNmCamel %>.id ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      isUpdate ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
 
     if (response) {
       await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
+    }
+  }
+
+  async function delete<%= entityNmPascal %>() {
+    const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) =>
+      <%_ if (compIdFields) { _%>
+        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(
+          <%_ for (compIdField of compIdFields) { _%>
+            <%= entityNmCamel %>.id.<%= compIdField.fieldName %>,
+          <%_ } _%>
+        <%= entityNmCamel %>)
+      <%_ } else { _%>
+        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%= entityNmCamel %>.id, <%= entityNmCamel %>)
+      <%_ } _%>        
+    );
+
+    if (response) {
+      await handleAfterDelete();
+      messageStore.show($t('msg.deleted'));
     }
   }
 </script>
@@ -82,6 +102,13 @@
     <%_ } _%>
   <%_ } _%>
   <div>
-    <button id="save" type="submit">{actionBtnLabel}</button>
+    <button type="submit" id="save" data-handler={save.name}
+      >{isUpdate ? $t('msg.update') : $t('msg.register')}</button
+    >
+    {#if isUpdate}
+      <button type="submit" id="delete<%= entityNmPascal %>" data-handler={delete<%= entityNmPascal %>.name}
+        >{$t('msg.delete')}</button
+      >
+    {/if}
   </div>
 </form>
