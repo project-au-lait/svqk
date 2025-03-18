@@ -1,4 +1,4 @@
-<%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
+<%_ include('../../../../lib/typescript-common', { entityNmPascal, compIdFields }); -%>
 import <%= entityNmPascal %>ListPageElement from '@pages/<%= entityNmKebab %>-list/<%= entityNmPascal %>ListPageElement';
 import <%= entityNmPascal %>InputPage from '@pages/<%= entityNmKebab %>-input/<%= entityNmPascal %>InputPage';
 import BasePageElement from '@arch/BasePageElement';

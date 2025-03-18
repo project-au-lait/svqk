@@ -1,4 +1,4 @@
-<%_ include('../../../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
+<%_ include('../../../../lib/typescript-common', { entityNmPascal, compIdFields }); -%>
 <script lang="ts">
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';

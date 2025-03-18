@@ -1,4 +1,4 @@
-<%_ include('../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
+<%_ include('../../lib/typescript-common', { entityNmPascal, compIdFields }); -%>
 import BaseFacade from '@arch/BaseFacade';
 import MenuBar from '@pages/menu-bar/MenuBar';
 <%- importDecIdTypeE2etest %>

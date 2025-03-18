@@ -1,5 +1,5 @@
 <% include('../../lib/data-factory-def', { fields }); -%>
-<% include('../../lib/frontend-common', { entityNmPascal, compIdFields }); -%>
+<% include('../../lib/typescript-common', { entityNmPascal, compIdFields }); -%>
 <%_
 w = (num) => " ".repeat(num);
 
