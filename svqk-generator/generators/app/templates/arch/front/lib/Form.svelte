@@ -56,11 +56,7 @@
   async function delete<%= entityNmPascal %>() {
     const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) =>
       <%_ if (compIdFields) { _%>
-        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(
-          <%_ for (compIdField of compIdFields) { _%>
-            <%= entityNmCamel %>.id.<%= compIdField.fieldName %>,
-          <%_ } _%>
-        <%= entityNmCamel %>)
+        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>)
       <%_ } else { _%>
         api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%= entityNmCamel %>.id, <%= entityNmCamel %>)
       <%_ } _%>        
