@@ -54,6 +54,66 @@ tscom = {
     return typeMap[javaType] || 'string';
   },
 
+  generateFormHTML: function(entityNmCamel, fields, compIdFields, actionBtnLabel) {
+    let formHTML = `<form use:form>`;
+
+    fields.forEach(field => {
+      if (compIdFields && field.id) {
+        compIdFields.forEach(compIdField => {
+          formHTML += `
+  <div>
+    <InputField id="${compIdField.fieldName}" label={$t('msg.label.${entityNmCamel}.${compIdField.fieldName}')} bind:value={${entityNmCamel}.id.${compIdField.fieldName}} />
+  </div>`;
+        });
+      } else {
+        if (field.javaType === 'Integer') {
+          formHTML += `
+  <div>
+    <InputField type='number' id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:value={${entityNmCamel}.${field.fieldName}} />;
+  </div>`
+        } else if (field.javaType === 'String' && field.stringLength <= 128) {
+          formHTML += `
+  <div>
+    <InputField id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:value={${entityNmCamel}.${field.fieldName}} />;
+  </div>`
+        } else if (field.javaType === 'String') {
+          formHTML += `
+  <div>
+    <TextArea id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:value={${entityNmCamel}.${field.fieldName}} />;
+  </div>`
+        } else if (field.javaType === 'java.time.LocalDate') {
+          formHTML += `
+  <div>
+    <InputField type="date" id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:value={${entityNmCamel}.${field.fieldName}} />;
+  </div>`
+        } else if (field.javaType === 'java.time.LocalDateTime') {
+          formHTML += `
+  <div>
+    <InputField type="datetime-local" id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:value={${entityNmCamel}.${field.fieldName}} />;
+  </div>`
+        } else if (field.javaType === 'Boolean') {
+          formHTML += `
+  <div>
+     <CheckBox id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:checked={${entityNmCamel}.${field.fieldName}} />;
+  </div>`
+        } else {
+          formHTML += `
+  <div>
+    <SelectBox id="${field.fieldName}" label={$t('msg.label.${entityNmCamel}.${field.fieldName}')} bind:value={${entityNmCamel}.${field.fieldName}} options={[]} ${field.multiple ? 'multiple' : ''} />;
+  </div>`
+        }
+      }
+    });
+
+    formHTML += `
+  <div>
+    <button id="save" type="submit">{${actionBtnLabel}}</button>
+  </div>
+</form>`;
+    return formHTML;
+  },
+}
+
 tscom.idProperty = compIdFields
       ? `id: {\n${tscom.fieldsToProps(compIdFields, 8)}\n${w(6)}},`
       : "";

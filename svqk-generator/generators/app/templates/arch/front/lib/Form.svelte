@@ -40,35 +40,4 @@
   }
 </script>
 
-<form use:form>
-  <%_ for (field of fields) { _%>
-    <%_ if (compIdFields && field.id) { _%>
-      <%_ for (compIdField of compIdFields) { _%>
-        <div>
-          <InputField id="<%= compIdField.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= compIdField.fieldName %>`)} bind:value={<%= entityNmCamel %>.id.<%= compIdField.fieldName %>} />
-        </div>
-      <%_ } _%>
-    <%_ } else { _%>
-      <div>
-        <%_ if (field.javaType === 'Integer') { _%>
-          <InputField type='number' id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-        <%_ } else if (field.javaType === 'String' && field.stringLength <= 128) { _%>
-          <InputField id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-        <%_ } else if (field.javaType === 'String') { _%>
-          <TextArea id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-        <%_ } else if (field.javaType === 'java.time.LocalDate') { _%>
-          <InputField type="date" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-        <%_ } else if (field.javaType === 'java.time.LocalDateTime') { _%>
-          <InputField type="datetime-local" id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} />
-        <%_ } else if (field.javaType === 'Boolean') { _%>
-          <CheckBox id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:checked={<%= entityNmCamel %>.<%= field.fieldName %>} />
-        <%_ } else { _%>
-          <SelectBox id="<%= field.fieldName %>" label={$t(`msg.label.<%= entityNmCamel %>.<%= field.fieldName %>`)} bind:value={<%= entityNmCamel %>.<%= field.fieldName %>} options={[]} <%= field.multiple ? 'multiple' : '' %> />
-        <%_ } _%>
-      </div>
-    <%_ } _%>
-  <%_ } _%>
-  <div>
-    <button id="save" type="submit">{actionBtnLabel}</button>
-  </div>
-</form>
+<%- tscom.generateFormHTML(entityNmCamel, fields, compIdFields, actionBtnLabel) %>
