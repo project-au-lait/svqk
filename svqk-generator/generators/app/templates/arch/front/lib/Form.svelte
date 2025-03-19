@@ -1,4 +1,4 @@
-<%_ include('../../../lib/typescript-common', { entityNmPascal, compIdFields }); -%>
+<%_ include('../../../lib/typescript-common'); -%>
 <script lang="ts">
   import type { <%= entityNmPascal %>Model<%= importingIdType %>} from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
