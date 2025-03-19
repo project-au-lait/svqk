@@ -107,18 +107,21 @@ export class GeneratorUtils {
               destinationPath: `${menuBarDestPath}/MenuBar.ts`,
               placeholder: "GOTO",
               templateData: templateData,
+              checkString: `goto${templateData.entityNmPascal}ListPage`,
             },
             {
               templatePath: `${menuBarTemplatePath}/MenuBar_IMPORT.ejs`,
               destinationPath: `${menuBarDestPath}/MenuBar.ts`,
               placeholder: "IMPORT",
               templateData: templateData,
+              checkString: `goto${templateData.entityNmPascal}ListPage`,
             },
             {
               templatePath: `${menuBarTemplatePath}/MenuBarPageElement_CLICK.ejs`,
               destinationPath: `${menuBarDestPath}/MenuBarPageElement.ts`,
               placeholder: "CLICK",
               templateData: templateData,
+              checkString: `click${templateData.entityNmPascal}Link`,
             },
             {
               templatePath:
@@ -126,6 +129,7 @@ export class GeneratorUtils {
               destinationPath: `${destPaths.destFrontPath}/routes/+layout.svelte`,
               placeholder: "LINK",
               templateData: templateData,
+              checkString: `href="/${templateData.entityNmPlural}"`,
             }
           );
         }

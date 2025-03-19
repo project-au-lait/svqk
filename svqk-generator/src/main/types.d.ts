@@ -63,6 +63,7 @@ type SnippetInsertionTarget = {
   destinationPath: string;
   placeholder: string;
   templateData: TemplateData;
+  checkString: string;
 };
 
 type DestPaths = {
