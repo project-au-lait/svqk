@@ -15,7 +15,7 @@ public class IssueService {
 
   private final IssueRepository repository;
   private final EntityManager em;
-
+  private final JpaSearchQueryExecutor searchExecutor;
   private final JournalService journalService;
 
   @Transactional
@@ -42,8 +42,7 @@ public class IssueService {
   }
 
   public SearchResult<IssueEntity> search(SearchCriteria criteria) { // <.>
-    JpaSearchQueryExecutor executor = new JpaSearchQueryExecutor();
-    return executor.search(em, criteria); // <.>
+    return searchExecutor.search(em, criteria); // <.>
   }
 
   public List<IssueTrackingRs> getTracking() {
