@@ -1,6 +1,6 @@
 <%_ include('../../../lib/typescript-common'); -%>
 <script lang="ts">
-  import type { <%= entityNmPascal %>Model<%= importingIdType %>} from '$lib/arch/api/Api';
+  import type { <%= entityNmPascal %>Model<%= tscom.impIdType %>} from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
@@ -13,7 +13,7 @@
 
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
-    handleAfterSave: (id?: <%= idType %>) => Promise<void>;
+    handleAfterSave: (id?: <%= tscom.idType %>) => Promise<void>;
     actionBtnLabel: string;
   }
 
@@ -43,7 +43,7 @@
   const form = FormValidator.createForm(spec, save);
 
   async function save() {
-    const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) => 
+    const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) => 
       <%= entityNmCamel %>.id ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
 
     if (response) {

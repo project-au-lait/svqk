@@ -1,15 +1,15 @@
-<%_ include('../../../../lib/typescript-common); -%>
+<%_ include('../../../../lib/typescript-common'); -%>
 <script lang="ts">
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
-  <%- importDecIdType %>
+  <%- tscom.impDclF %>
   import { t } from '$lib/translations';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
   let <%= entityNmCamel %> = $derived(data.<%= entityNmCamel %>);
 
-  async function handleAfterSave(id?: <%= idType %>) {
+  async function handleAfterSave(id?: <%= tscom.idType %>) {
     await invalidateAll();
   }
 </script>
