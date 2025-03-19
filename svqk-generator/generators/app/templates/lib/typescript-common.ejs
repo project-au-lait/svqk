@@ -26,11 +26,11 @@ tscom = {
     } else if (fieldType === "Integer") {
       return `${t}${field.fieldName}: NumberUtils.generateRandomNumber()`;
     } else if (fieldType === "java.time.LocalDate") {
-      return `${w(num)}${field.fieldName}: DateUtils.generateRandomLocalDate()`;
+      return `${t}${field.fieldName}: DateUtils.generateRandomLocalDate()`;
     } else if (fieldType === "java.time.LocalDateTime") {
-      return `${w(num)}${field.fieldName}: DateUtils.generateRandomLocalDateTime()`;
+      return `${t}${field.fieldName}: DateUtils.generateRandomLocalDateTime()`;
     } else if (fieldType === "Boolean") {
-      return `${w(num)}${field.fieldName}: BooleanUtils.generateRandomBoolean()`;
+      return `${t}${field.fieldName}: BooleanUtils.generateRandomBoolean()`;
     } else {
       console.log(`Skip to generate for field type: ${fieldType}`);
     }
