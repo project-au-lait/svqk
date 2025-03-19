@@ -54,7 +54,7 @@ tscom = {
     return typeMap[javaType] || 'string';
   },
 
-  generateFormHTML: function(entityNmCamel, fields, compIdFields, actionBtnLabel) {
+  generateFormHTML: function(entityNmCamel, fields, compIdFields) {
     let formHTML = `<form use:form>`;
 
     fields.forEach(field => {
@@ -107,7 +107,7 @@ tscom = {
 
     formHTML += `
   <div>
-    <button id="save" type="submit">{${actionBtnLabel}}</button>
+    <button id="save" type="submit">{actionBtnLabel}</button>
   </div>
 </form>`;
     return formHTML;

@@ -40,4 +40,4 @@
   }
 </script>
 
-<%- tscom.generateFormHTML(entityNmCamel, fields, compIdFields, actionBtnLabel) %>
+<%- tscom.generateFormHTML(entityNmCamel, fields, compIdFields) %>
