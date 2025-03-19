@@ -1,6 +1,6 @@
 <%_ include('../../../lib/typescript-common'); -%>
 <script lang="ts">
-  import type { <%= entityNmPascal %>Model<%= tscom.impIdType %>} from '$lib/arch/api/Api';
+  import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
   import ApiHandler from '$lib/arch/api/ApiHandler';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';

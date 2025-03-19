@@ -16,7 +16,6 @@ tscom = {
   nonIdFields: fields.filter((field) => !field.id),
   impDclF:  getImpDcl("frontend"),
   impDclE2e: getImpDcl("e2etest"),
-  impIdType: compIdFields ? ", " + idType : "",
 
   fieldToProp: function(field, num = 6) {
     const fieldType = field.javaType;
