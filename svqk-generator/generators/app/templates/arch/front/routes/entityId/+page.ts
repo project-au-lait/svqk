@@ -1,5 +1,7 @@
 <%_
-apiCallArgs = ifcom.idFields.map((idField) => idField.javaType == "Integer" ? `Number(params.${idField.fieldName})` : `params.${idField.fieldName}`).join(", ");
+idFields = compIdFields ?? [idField];
+
+apiCallArgs = idFields.map((idField) => idField.javaType == "Integer" ? `Number(params.${idField.fieldName})` : `params.${idField.fieldName}`).join(", ");
 %>
 import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
 import ApiHandler from '$lib/arch/api/ApiHandler';
