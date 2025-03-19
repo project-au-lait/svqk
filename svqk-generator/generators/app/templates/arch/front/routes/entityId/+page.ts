@@ -1,4 +1,3 @@
-<% include('../../../../lib/interface-common'); -%>
 <%_
 apiCallArgs = ifcom.idFields.map((idField) => idField.javaType == "Integer" ? `Number(params.${idField.fieldName})` : `params.${idField.fieldName}`).join(", ");
 %>
@@ -12,7 +11,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
   ))!;
 
   return {
-    title: `<%= ifcom.idPath %>`,
+    title: `<%= idPath %>`,
     <%= entityNmCamel %>
   };
 };

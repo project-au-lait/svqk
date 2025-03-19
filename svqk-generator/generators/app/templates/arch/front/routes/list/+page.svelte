@@ -1,4 +1,3 @@
-<% include('../../../../lib/interface-common'); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
@@ -38,5 +37,5 @@
 </section>
 
 {#snippet <%= entityNmCamel %>IdAnchor(<%= entityNmCamel %>: <%= entityNmPascal %>Model)}
-  <a href={`/<%= entityNmPlural %>/<%= ifcom.idPath %>`}>{`<%= ifcom.idPath %>`}</a>
+  <a href={`/<%= entityNmPlural %>/<%= idPath %>`}>{`<%= idPath %>`}</a>
 {/snippet}
