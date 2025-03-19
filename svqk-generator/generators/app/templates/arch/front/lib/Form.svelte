@@ -19,23 +19,10 @@
 
   let { <%= entityNmCamel %> = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
 
-  <%_ 
-    const dataType = (javaType) => {
-      const typeMap = {
-        'Integer': 'number',
-        'String': 'string',
-        'java.time.LocalDate': 'date',
-        'java.time.LocalDateTime': 'date',
-        'Boolean': 'boolean'
-      };
-      return typeMap[javaType] || 'string'
-    }
-  %>
-
   const spec = {
     <%_ for (field of fields) { _%>
       <%_ if (field.required) { _%>
-        <%= field.fieldName %>: <%= dataType(field.javaType) %>().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
+        <%= field.fieldName %>: <%= tscom.dataType(field.javaType) %>().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
       <%_ } _%>
     <%_ } _%>
   };

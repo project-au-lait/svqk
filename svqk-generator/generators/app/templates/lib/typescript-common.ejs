@@ -3,7 +3,7 @@ function w(num) {
   return " ".repeat(num);
 }
 
-function   getImpDcl(type) {
+function getImpDcl(type) {
   const from = type === "frontend" ? "$lib/arch/api/Api": "@api/Api" ;
   const model = `${entityNmPascal}Model`;
   const idModel = compIdFields ? `, ${entityNmPascal}idModel` : "";
@@ -43,7 +43,16 @@ tscom = {
       .join(",\n");
   },
 
-}
+  dataType: function(javaType) {
+    const typeMap = {
+      'Integer': 'number',
+      'String': 'string',
+      'java.time.LocalDate': 'date',
+      'java.time.LocalDateTime': 'date',
+      'Boolean': 'boolean'
+    };
+    return typeMap[javaType] || 'string';
+  },
 
 tscom.idProperty = compIdFields
       ? `id: {\n${tscom.fieldsToProps(compIdFields, 8)}\n${w(6)}},`
