@@ -4,7 +4,7 @@ import MenuBar from '@pages/menu-bar/MenuBar';
 <%- tscom.impDclE2e %>
 
 export class <%= entityNmPascal %>Facade extends BaseFacade {
-  async reference<%= entityNmPascal %>ById(menuBar: MenuBar, id: <%= tscom.impDclF%>) {
+  async reference<%= entityNmPascal %>ById(menuBar: MenuBar, id: <%= tscom.idType%>) {
     this.logStart("<%= entityNmPascal %> Reference");
 
     const <%= entityNmCamel %>ListPage = await menuBar.goto<%= entityNmPascal %>ListPage();
