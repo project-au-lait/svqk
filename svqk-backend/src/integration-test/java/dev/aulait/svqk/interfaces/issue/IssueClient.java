@@ -11,7 +11,7 @@ public class IssueClient {
 
   private static final String ISSUES_AND_ISSUES_ID_PATH = ISSUES_PATH + "/" + ISSUES_ID_PATH;
 
-  public Integer create(IssueDto issue) { // <.>
+  public int create(IssueDto issue) { // <.>
     return RestClientUtils.post(ISSUES_PATH, issue, Integer.class); // <.>
   }
 
@@ -27,7 +27,7 @@ public class IssueClient {
     return RestClientUtils.getWithError(ISSUES_AND_ISSUES_ID_PATH, issueId);
   }
 
-  public Integer update(IssueUpdateDto issue, int issueId) { // <.>
+  public int update(IssueUpdateDto issue, int issueId) { // <.>
     return RestClientUtils.put(ISSUES_AND_ISSUES_ID_PATH, issue, Integer.class, issueId);
   }
 
