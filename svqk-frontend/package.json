@@ -29,7 +29,6 @@
     "marked": "^15.0.7",
     "prettier": "^3.5.3",
     "prettier-plugin-svelte": "^3.3.3",
-    "sass": "^1.86.0",
     "svelte": "^5.23.2",
     "svelte-check": "^4.1.5",
     "sveltekit-i18n": "^2.4.2",
@@ -49,5 +48,13 @@
     "reflect-metadata": "^0.2.2",
     "yup": "^1.6.1",
     "yup-locale-ja": "^1.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ],
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher"
+    ]
   }
 }

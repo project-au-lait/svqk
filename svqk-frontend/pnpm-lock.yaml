@@ -84,9 +84,6 @@ importers:
       prettier-plugin-svelte:
         specifier: ^3.3.3
         version: 3.3.3(prettier@3.5.3)(svelte@5.23.2)
-      sass:
-        specifier: ^1.86.0
-        version: 1.86.0
       svelte:
         specifier: ^5.23.2
         version: 5.23.2
@@ -2234,7 +2231,8 @@ snapshots:
   image-size@0.5.5:
     optional: true
 
-  immutable@5.0.3: {}
+  immutable@5.0.3:
+    optional: true
 
   import-fresh@3.3.1:
     dependencies:
@@ -2497,6 +2495,7 @@ snapshots:
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.1
+    optional: true
 
   sax@1.4.1:
     optional: true
