@@ -29,6 +29,9 @@ importers:
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
+      rison:
+        specifier: ^0.1.1
+        version: 0.1.1
       yup:
         specifier: ^1.6.1
         version: 1.6.1
@@ -60,6 +63,9 @@ importers:
       '@types/eslint':
         specifier: ^9.6.1
         version: 9.6.1
+      '@types/rison':
+        specifier: ^0.1.0
+        version: 0.1.0
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -634,6 +640,9 @@ packages:
 
   '@types/node@20.14.9':
     resolution: {integrity: sha512-06OCtnTXtWOZBJlRApleWndH4JsRVs1pDCc8dLSQp+7PpUpX3ePdHyeNSFTeSe7FtKyQkrlPvHwJOW3SLd8Oyg==}
+
+  '@types/rison@0.1.0':
+    resolution: {integrity: sha512-Xj7FO2KBR555nDy58tzrSPpNrShppZpPMZi5WjcNglyFEKQZwRnJLrU2U4wHs61Fl/A8gr+siO/Py04hTWLjzg==}
 
   '@typescript-eslint/eslint-plugin@8.27.0':
     resolution: {integrity: sha512-4henw4zkePi5p252c8ncBLzLce52SEUz2Ebj8faDnuUXz2UuHEONYcJ+G0oaCF+bYCWVZtrGzq3FD7YXetmnSA==}
@@ -1234,6 +1243,9 @@ packages:
   reusify@1.1.0:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  rison@0.1.1:
+    resolution: {integrity: sha512-8C+/PKKTaAYE2quDtOUwny/eQpNn9YGby7T80wntbVWSGvw0aUT9M0YgLdLkUgIQzQwaB1ZTr80rwLVKyohHig==}
 
   rollup@4.36.0:
     resolution: {integrity: sha512-zwATAXNQxUcd40zgtQG0ZafcRK4g004WtEl7kbuhTWPvf07PsfohXl39jVUvPF7jvNAIkKPQ2XrsDlWuxBd++Q==}
@@ -1849,6 +1861,8 @@ snapshots:
       undici-types: 5.26.5
     optional: true
 
+  '@types/rison@0.1.0': {}
+
   '@typescript-eslint/eslint-plugin@8.27.0(@typescript-eslint/parser@8.27.0(eslint@9.22.0)(typescript@5.8.2))(eslint@9.22.0)(typescript@5.8.2)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
@@ -2451,6 +2465,8 @@ snapshots:
   resolve-from@4.0.0: {}
 
   reusify@1.1.0: {}
+
+  rison@0.1.1: {}
 
   rollup@4.36.0:
     dependencies:

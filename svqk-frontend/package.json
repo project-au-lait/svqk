@@ -21,6 +21,7 @@
     "@sveltejs/kit": "^2.20.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/eslint": "^9.6.1",
+    "@types/rison": "^0.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
@@ -46,6 +47,7 @@
     "inversify": "^6.2.2",
     "inversify-binding-decorators": "^4.0.0",
     "reflect-metadata": "^0.2.2",
+    "rison": "^0.1.1",
     "yup": "^1.6.1",
     "yup-locale-ja": "^1.0.0"
   },
