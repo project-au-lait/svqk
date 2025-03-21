@@ -10,7 +10,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
       pageNumber: 1
     },
     ...JSON.parse(decodeURIComponent(url.searchParams.get('q') ?? '{}'))
-  } as IssueSearchCriteriaModel;
+  } as IssueSearchCriteriaModel; // <.>
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>

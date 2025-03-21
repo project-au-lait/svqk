@@ -28,7 +28,7 @@
     .add($t('msg.updatedAt'), 'i.updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
     .build(); // <.>
 
-  function search() {
+  function search() { // <.>
     goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
   }
 

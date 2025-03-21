@@ -35,8 +35,7 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 .{project-artifactId}-frontend/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="29..39"]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="31..33"]
 ----
 
-<.> `ApiHandler.handle` 関数を使用してWeb APIを呼び出します。
-<.> Web APIの呼び出し結果が正常に取得できた場合に、検索結果Objectを上書きます。
+<.> 検索条件オブジェクトをJSON文字列に変換しURIエンコードしたものをURLパラメータに付与して自画面に遷移します。

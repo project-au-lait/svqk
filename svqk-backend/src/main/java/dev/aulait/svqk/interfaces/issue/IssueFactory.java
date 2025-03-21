@@ -26,11 +26,11 @@ public class IssueFactory {
   public SearchCriteria build(IssueSearchCriteriaDto criteria) { // <.>
     Object text = LikePattern.contains(criteria.getText());
 
-    return new SearchCriteriaBuilder()
+    return new SearchCriteriaBuilder() // <.>
         .select("SELECT i FROM IssueEntity i")
         .select("JOIN FETCH i.issueStatus")
         .select("JOIN FETCH i.tracker")
-        .where("i.subject", LIKE, text) // <.>
+        .where("i.subject", LIKE, text)
         .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : text)
         .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
