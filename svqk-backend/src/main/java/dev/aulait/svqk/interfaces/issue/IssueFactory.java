@@ -31,9 +31,9 @@ public class IssueFactory {
         .select("JOIN FETCH i.issueStatus")
         .select("JOIN FETCH i.tracker")
         .where("i.subject", LIKE, text)
-        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : text)
         .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
+        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : text)
         .defaultOrderBy("i.id", false)
         .orderBy(criteria.getSortOrders())
         .build(criteria.getPageControl()); // <.>
