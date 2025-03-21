@@ -252,9 +252,20 @@
 
   <target name="remove-domain-code">
     <replaceregexp flags="g"
-      file="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-frontend/src/routes/+layout.ts"
-      match=".*Issue.*"
+      file="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-frontend/src/routes/+layout.svelte"
+      match=" +&lt;li((?!&lt;li)(.|\n))*?issue((?!&lt;li)(.|\n))*?&lt;/li&gt;\n"
       replace="" />
+
+    <replaceregexp flags="g">
+      <regexp
+        pattern="(import| +async).*Issue.*?(;|\{(.|\n)*?\}\n)\n" />
+      <substitution expression="" />
+      <fileset
+        dir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-e2etest/tests/pages/menu-bar">
+        <include name="MenuBar.ts" />
+        <include name="MenuBarPageElement.ts" />
+      </fileset>
+    </replaceregexp>
   </target>
 
 
