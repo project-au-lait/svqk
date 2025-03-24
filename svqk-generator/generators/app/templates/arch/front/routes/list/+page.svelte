@@ -8,7 +8,7 @@
   import { t } from '$lib/translations';
 
   let { data }: { data: PageData } = $props();
-  let { criteria, open } = $state(data);
+  let { criteria } = $state(data);
   let { result } = $derived(data);
 
   const form = FormValidator.createForm({}, search);
@@ -16,7 +16,7 @@
   const columns = new ColumnsBuilder<<%= entityNmPascal %>Model>().add('#', 'i.id', () => <%= entityNmCamel %>IdAnchor).build();
 
   function search() {
-    goto(CriteriaUtils.encode(criteria, { open }));
+    goto(CriteriaUtils.encode(criteria));
   }
 </script>
 

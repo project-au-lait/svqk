@@ -7,8 +7,6 @@ export const load: PageLoad = async ({ fetch, url }) => {
     ...CriteriaUtils.decode(url)
   } as <%= entityNmPascal %>SearchCriteriaModel;
 
-  const open = CriteriaUtils.decodeParam<boolean>(url, 'open') ?? false;
-
   const result =
     (await ApiHandler.handle<<%= entityNmPascal %>SearchResultModel>(fetch, (api) =>
       api.<%= entityNmCamel %>.<%= entityNmCamel %>Search(criteria)
@@ -16,7 +14,6 @@ export const load: PageLoad = async ({ fetch, url }) => {
 
   return {
     criteria,
-    open,
     result
   };
 };
