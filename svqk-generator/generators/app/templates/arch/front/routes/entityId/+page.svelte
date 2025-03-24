@@ -2,7 +2,6 @@
 <script lang="ts">
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
-  <%- tscom.impDclF %>
   import { t } from '$lib/translations';
   import type { PageData } from './$types';
 
