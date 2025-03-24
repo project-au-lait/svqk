@@ -8,11 +8,7 @@ package <%= interfacesPkgNm %>;
 import dev.aulait.sqb.SearchCriteria;
 import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
-import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
-<%_ if(compIdFields) { -%>
-import <%= domainPkgNm %>.<%= entityNmPascal %>EntityId;
-<%_ } -%>
-import <%= domainPkgNm %>.<%= entityNmPascal %>Service;
+<%= ifcom.imports %>
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -41,17 +37,7 @@ public class <%= entityNmPascal %>Controller {
   @GET
   @Path(<%= entityNmAllCaps %>_ID_PATH)
   public <%= entityNmPascal %>Dto get(<%- idMethodArgs %>) {
-  <%_ if (compIdFields) { -%>
-    <%= entityNmPascal %>Entity entity =
-        <%= entityNmCamel %>Service.find(
-            <%= idField.javaType %>.builder()
-              <%_ compIdFields.forEach((compIdField) => { -%>
-                .<%= compIdField.fieldName %>(<%= compIdField.fieldName %>)
-              <%_ }); -%>
-                .build());
-  <%_ } else { -%>
-    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(<%= idField.fieldName %>);
-  <%_ } -%>
+<%= ifcom.entityBuilder %>
 
     return BeanUtils.map(entity, <%= entityNmPascal %>Dto.class);
   }
@@ -62,11 +48,7 @@ public class <%= entityNmPascal %>Controller {
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
-  <%_ if (compIdFields) { -%>
-    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= ifcom.interfaceIdType %>.class);
-  <%_ } else { -%>
-    return savedEntity.get<%= idField.fieldNmPascal %>();
-  <%_ } -%>
+<%= ifcom.returnStringBuilder("savedEntity") %>
   }
 
   @PUT
@@ -75,11 +57,7 @@ public class <%= entityNmPascal %>Controller {
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
-  <%_ if (compIdFields) { -%>
-    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= ifcom.interfaceIdType %>.class);
-  <%_ } else { -%>
-    return updatedEntity.get<%= idField.fieldNmPascal %>();
-  <%_ } -%>
+<%= ifcom.returnStringBuilder("updatedEntity") %>
   }
 
   @DELETE
@@ -87,23 +65,11 @@ public class <%= entityNmPascal %>Controller {
   public <%= ifcom.interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
-    <%_ if (compIdFields) { -%>
-      <%= idField.javaType %> entityId = <%= idField.javaType %>.builder()
-                                  <%_ compIdFields.forEach((compIdField) => { -%>
-                                    .<%= compIdField.fieldName %>(<%= compIdField.fieldName %>)
-                                  <%_ }); -%>.build();
-      entity.setId(entityId);
-    <%_ } else { -%>
-      entity.setId(id);
-    <%_ } -%>
+<%= ifcom.entityIdBuilder %>
 
     <%= entityNmCamel %>Service.delete(entity);
 
-    <%_ if (compIdFields) { -%>
-      return BeanUtils.map(entity.get<%= idField.fieldNmPascal %>(), <%= ifcom.interfaceIdType %>.class);
-    <%_ } else { -%>
-      return entity.get<%= idField.fieldNmPascal %>();
-    <%_ } -%>
+<%= ifcom.returnStringBuilder("entity") %>
   }
 
   @POST

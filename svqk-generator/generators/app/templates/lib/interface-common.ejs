@@ -1,9 +1,53 @@
 <%
 const idFields = compIdFields ?? [idField];
+const fieldsBuildString = compIdFields ? compIdFields.map((compIdField) => {
+  return `.${compIdField.fieldName}(${compIdField.fieldName})`
+}).join("") : "";
+
+function w(num) {
+  return " ".repeat(num);
+}
+
+function buildImports() {
+  const snippet = `import ${domainPkgNm}.${entityNmPascal}`;
+  return `${snippet}Entity;\n`.concat(compIdFields ? `${snippet}EntityId;\n` : [], `${snippet}Service;`);
+}
+
+function entityBuilder(num = 4) {
+  if (compIdFields) {
+    return `${w(num)}${entityNmPascal}Entity entity = ${entityNmCamel}Service.find(${idField.javaType}.builder()${fieldsBuildString}.build());`;
+  } else {
+    return `${w(num)}${entityNmPascal}Entity entity = ${entityNmCamel}Service.find(${idField.fieldName});`;
+  }
+}
+
+function entityIdBuilder(num = 4) {
+  if (compIdFields) {
+    return [
+      `${w(num)}${idField.javaType} entityId = ${idField.javaType}.builder()${fieldsBuildString}.build();`,
+      `${w(num)}entity.setId(entityId);`
+      ].join("\n");
+  } else {
+    return `${w(num)}entity.setId(id);`;
+  }
+}
+
+function returnStringBuilder(entityVariable, num = 4) {
+  if (compIdFields) {
+    return `${w(num)}return BeanUtils.map(${entityVariable}.get${idField.fieldNmPascal}(), ${ifcom.interfaceIdType}.class);`;
+  } else {
+    return `${w(num)}return ${entityVariable}.get${idField.fieldNmPascal}();`;
+  }
+}
+
 ifcom = {
   idFields: idFields,
   buildArgs: (argTemplate) => idFields.map(argTemplate).join(", "),
   interfaceIdType: compIdFields ? `${entityNmPascal}IdDto` : idField.javaType,
   idPath: compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`,
+  imports: buildImports(),
+  entityBuilder: entityBuilder(),
+  entityIdBuilder: entityIdBuilder(),
+  returnStringBuilder: (entityVariable) => returnStringBuilder(entityVariable),
 }
 %>
