@@ -347,18 +347,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     }
   }
 
-  _generate_file(
-    templatePath: string,
-    destinationPath: string,
-    tmplData: TemplateData
-  ) {
-    this.fs.copyTpl(
-      this.templatePath(templatePath),
-      this.destinationPath(destinationPath),
-      tmplData
-    );
-  }
-
   _insert_snippet(
     templatePath: string,
     destinationPath: string,
