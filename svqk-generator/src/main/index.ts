@@ -35,7 +35,6 @@ const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
 
 const LINE_BREAK = "\n";
-const INDENT = " ";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues = {
