@@ -18,5 +18,5 @@
   }
 </script>
 
-<IssueForm {issue} {handleAfterSave} {handleAfterDelete} />
+<IssueForm {issue} updateMode={true} {handleAfterSave} {handleAfterDelete} />
 <Journals journals={issue.journals} />
