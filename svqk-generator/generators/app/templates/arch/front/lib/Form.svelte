@@ -40,4 +40,32 @@
   }
 </script>
 
-<%- tscom.generateFormHTML(entityNmCamel, fields, compIdFields) %>
+<form use:form>
+  <%_ if(compIdFields) { _%>
+    <%_ for (field of compIdFields || []) { _%>
+      <%= console.log("###"); %>
+      <%= console.log(field); %>
+  <div>
+    <%- tscom.inputField(field, true) %>
+  </div>
+    <%_ } _%>  
+    <%_ for (field of nonIdFields) { _%>
+      <%= console.log("$$$"); %>
+      <%= console.log(field); %>
+  <div>
+    <%- tscom.inputField(field, false) %>
+  </div>
+    <%_ } _%>
+  <%_ } else { _%>
+    <%_ for (field of fields) { _%>
+      <%= console.log("%%%"); %>
+      <%= console.log(field); %>
+  <div>
+    <%- tscom.inputField(field, false) %>
+  </div>
+    <%_ } _%>
+  <%_ } _%>
+  <div>
+    <button id="save" type="submit">{actionBtnLabel}</button>
+  </div>
+</form>
