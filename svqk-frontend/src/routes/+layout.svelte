@@ -1,5 +1,5 @@
 <!--
-  The section marked with "__PLACEHOLDER__" is dynamically replaced.
+  The section marked with "__****__" is dynamically replaced.
   Do not remove or modify it.
 -->
 <script lang="ts">
@@ -36,7 +36,7 @@
       <a id="issue" href="/issues">{$t('msg.issue')}</a>
     </li>
     <!-- <==FOR_REFIMPL== -->
-    <!-- __PLACEHOLDER__ -->
+    <!-- __LINK__ -->
   </ul>
 </nav>
 

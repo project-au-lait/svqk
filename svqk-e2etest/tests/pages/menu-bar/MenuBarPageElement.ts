@@ -1,5 +1,5 @@
 /**
- * The section marked with "__PLACEHOLDER__" is dynamically replaced.
+ * The section marked with "__****__" is dynamically replaced.
  * Do not remove or modify it.
  */
 import BasePageElement from '@arch/BasePageElement';
@@ -15,5 +15,5 @@ export default class MenuBarPageElement extends BasePageElement {
   }
   // <==FOR_REFIMPL==
 
-  /* __PLACEHOLDER__ */
+  /* __CLICK__ */
 }
