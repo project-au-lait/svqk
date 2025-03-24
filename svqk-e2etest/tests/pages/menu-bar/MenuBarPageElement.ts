@@ -9,9 +9,11 @@ export default class MenuBarPageElement extends BasePageElement {
     return 'MenuBar';
   }
 
+  // ==FOR_REFIMPL==>
   async clickIssueLink() {
     await this.click('#issue');
   }
+  // <==FOR_REFIMPL==
 
   /* __PLACEHOLDER__ */
 }

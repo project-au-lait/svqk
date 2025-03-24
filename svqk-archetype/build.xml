@@ -178,12 +178,12 @@
     <antcall target="adjust-archetype-metadata" />
     <antcall target="adjust-generator-conf" />
     <antcall target="add-post-generate-script" />
+    <antcall target="remove-unnecessary-code" />
 
     <if>
       <equals arg1="${archetype.type}" arg2="arch" />
       <then>
         <antcall target="add-top-page" />
-        <antcall target="remove-domain-code" />
       </then>
     </if>
 
@@ -250,22 +250,32 @@
   </target>
 
 
-  <target name="remove-domain-code">
-    <replaceregexp flags="g"
-      file="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-frontend/src/routes/+layout.svelte"
-      match=" +&lt;li((?!&lt;li)[\s\S])*?issue((?!&lt;li)[\s\S])*?&lt;/li&gt;\n"
-      replace="" />
+  <target name="remove-unnecessary-code">
+    <fileset id="refimpl.code.files"
+      dir="${archetype.gendir}/src/main/resources/archetype-resources/">
+      <include name="__rootArtifactId__-frontend/src/routes/+layout.svelte" />
+      <include name="__rootArtifactId__-e2etest/tests/pages/menu-bar/MenuBar.ts" />
+      <include name="__rootArtifactId__-e2etest/tests/pages/menu-bar/MenuBarPageElement.ts" />
+    </fileset>
 
-    <replaceregexp flags="g">
-      <regexp
-        pattern="(import| +async).*Issue.*?(;|\{[\s\S]*?\}\n)\n" />
-      <substitution expression="" />
-      <fileset
-        dir="${archetype.gendir}/src/main/resources/archetype-resources/__rootArtifactId__-e2etest/tests/pages/menu-bar">
-        <include name="MenuBar.ts" />
-        <include name="MenuBarPageElement.ts" />
-      </fileset>
-    </replaceregexp>
+    <if>
+      <equals arg1="${archetype.type}" arg2="arch" />
+      <then>
+        <replaceregexp flags="g" match=".+==FOR_REFIMPL==&gt;[\s\S]*?&lt;==FOR_REFIMPL==.*[\r\n]+"
+          replace="">
+          <fileset refid="refimpl.code.files" />
+        </replaceregexp>
+      </then>
+    </if>
+
+    <if>
+      <equals arg1="${archetype.type}" arg2="refimpl" />
+      <then>
+        <replaceregexp flags="g" match=".+==FOR_REFIMPL==.*[\r\n]" replace="">
+          <fileset refid="refimpl.code.files" />
+        </replaceregexp>
+      </then>
+    </if>
   </target>
 
 
