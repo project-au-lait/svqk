@@ -12,7 +12,7 @@ function getImpDcl(type) {
 
 function getImpDclIdType(type) {
   const from = type === "frontend" ? "$lib/arch/api/Api": "@api/Api" ;
-  return `import type { ${entityNmPascal}idModel } from "${from}";`;
+  return compIdFields ? `import type { ${entityNmPascal}idModel } from "${from}";` : "";
 }
 
 tscom = {

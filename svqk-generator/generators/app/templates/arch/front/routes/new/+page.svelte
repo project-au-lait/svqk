@@ -1,7 +1,7 @@
 <%_ include('../../../../lib/typescript-common'); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
+  <%- tscom.impDclF %>
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
   import { t } from '$lib/translations';
 
