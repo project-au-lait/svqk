@@ -4,7 +4,9 @@
  */
 import BasePageElement from '@arch/BasePageElement';
 import MenuBarPageElement from '@pages/menu-bar/MenuBarPageElement';
+// ==FOR_REFIMPL==>
 import IssueListPage from '@pages/issue-list/IssueListPage';
+// <==FOR_REFIMPL==
 /* __IMPORT__ */
 
 export default class MenuBar {
@@ -14,10 +16,12 @@ export default class MenuBar {
     this.menuBarEl = new MenuBarPageElement(page);
   }
 
+  // ==FOR_REFIMPL==>
   async gotoIssueListPage() {
     await this.menuBarEl.clickIssueLink();
     return new IssueListPage(this.menuBarEl);
   }
+  // <==FOR_REFIMPL==
 
   /* __GOTO__ */
 }

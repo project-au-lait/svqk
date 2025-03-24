@@ -31,9 +31,11 @@
     <li>
       <a href="about:blank">{$t('msg.activity')}</a>
     </li>
+    <!-- ==FOR_REFIMPL==> -->
     <li>
       <a id="issue" href="/issues">{$t('msg.issue')}</a>
     </li>
+    <!-- <==FOR_REFIMPL== -->
     <!-- __LINK__ -->
   </ul>
 </nav>
