@@ -37,7 +37,7 @@ public class <%= entityNmPascal %>Controller {
   @GET
   @Path(<%= entityNmAllCaps %>_ID_PATH)
   public <%= entityNmPascal %>Dto get(<%- idMethodArgs %>) {
-<%= ifcom.entityBuilder %>
+<%= ifcom.buildEntity %>
 
     return BeanUtils.map(entity, <%= entityNmPascal %>Dto.class);
   }
@@ -48,7 +48,7 @@ public class <%= entityNmPascal %>Controller {
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
-<%= ifcom.returnStringBuilder("savedEntity") %>
+<%= ifcom.buildReturnString("savedEntity") %>
   }
 
   @PUT
@@ -57,7 +57,7 @@ public class <%= entityNmPascal %>Controller {
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
-<%= ifcom.returnStringBuilder("updatedEntity") %>
+<%= ifcom.buildReturnString("updatedEntity") %>
   }
 
   @DELETE
@@ -65,11 +65,11 @@ public class <%= entityNmPascal %>Controller {
   public <%= ifcom.interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
-<%= ifcom.entityIdBuilder %>
+<%= ifcom.buildEntityId %>
 
     <%= entityNmCamel %>Service.delete(entity);
 
-<%= ifcom.returnStringBuilder("entity") %>
+<%= ifcom.buildReturnString("entity") %>
   }
 
   @POST

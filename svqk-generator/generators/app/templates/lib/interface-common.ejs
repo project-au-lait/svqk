@@ -13,7 +13,7 @@ function buildImports() {
   return `${snippet}Entity;\n`.concat(compIdFields ? `${snippet}EntityId;\n` : [], `${snippet}Service;`);
 }
 
-function entityBuilder(num = 4) {
+function buildEntity(num = 4) {
   if (compIdFields) {
     return `${w(num)}${entityNmPascal}Entity entity = ${entityNmCamel}Service.find(${idField.javaType}.builder()${fieldsBuildString}.build());`;
   } else {
@@ -21,7 +21,7 @@ function entityBuilder(num = 4) {
   }
 }
 
-function entityIdBuilder(num = 4) {
+function buildEntityId(num = 4) {
   if (compIdFields) {
     return [
       `${w(num)}${idField.javaType} entityId = ${idField.javaType}.builder()${fieldsBuildString}.build();`,
@@ -32,7 +32,7 @@ function entityIdBuilder(num = 4) {
   }
 }
 
-function returnStringBuilder(entityVariable, num = 4) {
+function buildReturnString(entityVariable, num = 4) {
   if (compIdFields) {
     return `${w(num)}return BeanUtils.map(${entityVariable}.get${idField.fieldNmPascal}(), ${ifcom.interfaceIdType}.class);`;
   } else {
@@ -46,8 +46,8 @@ ifcom = {
   interfaceIdType: compIdFields ? `${entityNmPascal}IdDto` : idField.javaType,
   idPath: compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`,
   imports: buildImports(),
-  entityBuilder: entityBuilder(),
-  entityIdBuilder: entityIdBuilder(),
-  returnStringBuilder: (entityVariable) => returnStringBuilder(entityVariable),
+  buildEntity: buildEntity(),
+  buildEntityId: buildEntityId(),
+  buildReturnString: (entityVariable) => buildReturnString(entityVariable),
 }
 %>
