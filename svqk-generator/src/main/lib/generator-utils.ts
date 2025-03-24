@@ -114,7 +114,7 @@ export class GeneratorUtils {
               destinationPath: `${menuBarDestPath}/MenuBar.ts`,
               placeholder: "IMPORT",
               templateData: templateData,
-              checkString: `goto${templateData.entityNmPascal}ListPage`,
+              checkString: `import ${templateData.entityNmPascal}ListPage`,
             },
             {
               templatePath: `${menuBarTemplatePath}/MenuBarPageElement_CLICK.ejs`,
