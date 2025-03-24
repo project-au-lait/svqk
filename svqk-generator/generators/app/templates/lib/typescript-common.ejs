@@ -10,12 +10,19 @@ function getImpDcl(type) {
   return `import type { ${model}${idModel} } from "${from}";`;
 }
 
+function getImpDclIdType(type) {
+  const from = type === "frontend" ? "$lib/arch/api/Api": "@api/Api" ;
+  return `import type { ${entityNmPascal}idModel } from "${from}";`;
+}
+
 tscom = {
   idType: compIdFields ? entityNmPascal + "idModel" : (idField.javaType === "Integer" ? "number" : "string"),
   idObj: compIdFields ? `id: {} as ${entityNmPascal}idModel` : "",
   nonIdFields: fields.filter((field) => !field.id),
   impDclF:  getImpDcl("frontend"),
   impDclE2e: getImpDcl("e2etest"),
+  impDclIdTypeF:  getImpDclIdType("frontend"),
+  impDclIdTypeE2e: getImpDclIdType("e2etest"),
 
   fieldToProp: function(field, num = 6) {
     const fieldType = field.javaType;
