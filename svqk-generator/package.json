@@ -1,7 +1,7 @@
 {
   "name": "generator-svqk-generator",
   "version": "1.0.0",
-  "description": "Scaffold for SVQK project",
+  "description": "Generator for SVQK project",
   "type": "module",
   "files": [
     "generators"
