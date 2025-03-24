@@ -2,22 +2,26 @@ import rison from 'rison';
 
 export default class CriteriaUtils {
   private static readonly PARAM_KEY_CRITERIA = 'c';
-  private static readonly PARAM_KEY_OPTION = 'o';
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static encode(criteria: any, option?: any): string {
+  static encode(criteria: any, param?: { [key: string]: any }): string {
     const criteriaString = `?${this.PARAM_KEY_CRITERIA}=${this.encodeObj(criteria)}`;
 
-    if (!option) {
+    if (!param) {
       return criteriaString;
     }
 
-    return criteriaString + `&${this.PARAM_KEY_OPTION}=${this.encodeObj(option)}`;
+    const paramStr = Object.entries(param)
+      .map(([key, value]) => `${key}=${this.encodeObj(value)}`)
+      .join('&');
+
+    return criteriaString + `&${paramStr}`;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static decode(url: URL): any {
-    const criteria = this.decodeObj(url, this.PARAM_KEY_CRITERIA);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const criteria = this.decodeParam<any>(url, this.PARAM_KEY_CRITERIA) ?? {};
 
     if (!criteria.pageControl) {
       criteria.pageControl = {
@@ -28,18 +32,16 @@ export default class CriteriaUtils {
     return criteria;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static decodeOption(url: URL): any {
-    return this.decodeObj(url, this.PARAM_KEY_OPTION);
+  static decodeParam<T>(url: URL, key: string) {
+    const param = url.searchParams.get(key);
+
+    if (param) {
+      return rison.decode<T>(param);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static encodeObj(obj: any) {
     return rison.encode(obj);
-  }
-
-  private static decodeObj(url: URL, key: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return rison.decode<any>(url.searchParams.get(key) ?? '()');
   }
 }
