@@ -5,13 +5,13 @@ import { t } from '$lib/translations';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, url }) => {
+  // <.>
   const criteria = {
     issueStatuses: [],
-    ...CriteriaUtils.decode(url)
-  } as IssueSearchCriteriaModel; // <.>
+    ...CriteriaUtils.decode(url) // <.>
+  } as IssueSearchCriteriaModel;
 
-  let { open } = CriteriaUtils.decodeOption(url);
-  open = open ?? false;
+  const open = CriteriaUtils.decodeParam<boolean>(url, 'open') ?? false; // <.>
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
