@@ -5,13 +5,16 @@ import { locale } from '@arch/MultiLng';
 import TopPage from '@pages/top/TopPage';
 import IssueInputFactory from '@factories/IssueFactory';
 
+// <.>
 test('CRUD of Issue', async ({ browser }) => {
   const context = await browser.newContext({
     locale: locale
   });
+  // <.>
   const page = await context.newPage();
   const dryRun = DryRun.build();
 
+  // <.>
   const topPage = new TopPage(page, dryRun);
   const menuBar = await topPage.open();
 

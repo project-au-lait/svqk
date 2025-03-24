@@ -41,11 +41,12 @@ xref:../arch-desc/index.adoc#_service[アーキテクチャ記述] に従いServ
 .{project-artifactid}-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java
 [source,java]
 ----
-include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..17,33..37"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java[lines="1..18,43..46"]
+}
 ----
 
 <.> 検索を行うメソッドを定義します。引数には検索条件Voを、戻り値には検索結果Voを指定します。
-<.> 検索処理を行う `SearchUtils.search` メソッドの呼び出しを実装します。
+<.> 検索処理を行う `JpaSearchQueryExecutor.search` メソッドの呼び出しを実装します。
 
 ====== DTO
 
@@ -57,8 +58,7 @@ xref:../arch-desc/index.adoc#_dto[アーキテクチャ記述] に従いDTOのja
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java[]
 ----
 
-<.> `@EqualsAndHashCode` を設定します。
-<.> 共通基底検索条件DTOを継承します。
+<.> `@Data` を設定します。
 <.> 検索条件として使用する項目をフィールドとして定義します。
 
 ====== Factory
@@ -73,10 +73,10 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/is
 
 <.> 検索結果EntityからDTOへのマッピング設定を定義します。上記の例ではIssueEntityからIssueDtoへのマッピングにおいてIssueDto.journalsのマッピングを除外しています。
 <.> 検索条件DTOからVoを構築するメソッドを定義します。
-<.> `SearchConditionBuilder` に検索対象のEntityや検索条件DTOの項目を使用した抽出条件を設定します。
-<.> `SearchConditionBuilder` への設定結果を元に検索条件Voを構築して返却します。
-<.> 検索結果VoからDTOを構築するメソッドを定義します。
-<.> マッピング設定を使用して検索結果VoからDTOを構築して返却します。
+<.> `SearchCriteriaBuilder` に検索対象のEntityや検索条件DTOの項目を使用した抽出条件を設定します。
+<.> `SearchCriteriaBuilder` への設定結果を元に `SearchCriteria` を構築して返却します。
+<.> `SearchResult` からDTOを構築するメソッドを定義します。
+<.> マッピング設定を使用して `SearchResult` からDTOを構築して返却します。
 
 ====== Controller
 
@@ -108,14 +108,6 @@ include::../snippet/frontend-verification.ad[]
 VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
 生成されたAPI Clientは {project-artifactId}-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。
 
-.{project-artifactId}-frontend/src/lib/arch/api/Api.ts
-[source,ts]
-----
-include::{project_root}/svqk-frontend/src/lib/arch/api/Api.ts[lines="34..52,92..110,392,343,425..440"]
-  };
-}
-----
-
 ====== PageLoader
 
 xref:../arch-desc/index.adoc#_pageloader[アーキテクチャ記述] に従いPageLoaderのtsファイルを作成/更新します。
@@ -136,7 +128,8 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 .{project-artifactId}-frontend/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="2..29"]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="2..31"]
+
   }
 ----
 

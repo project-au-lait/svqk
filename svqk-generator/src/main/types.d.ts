@@ -48,6 +48,7 @@ type TemplateData = {
   entityNmKebab: string;
   fields: Field[];
   idField: Field;
+  nonIdFields: Field[];
   compIdFields?: Field[];
 };
 
@@ -58,10 +59,11 @@ type GenerateTarget = {
 };
 
 type SnippetInsertionTarget = {
-  filePath: string;
-  checkString: string;
+  templatePath: string;
+  destinationPath: string;
   placeholder: string;
-  rawTextList: string[];
+  templateData: TemplateData;
+  checkString: string;
 };
 
 type DestPaths = {

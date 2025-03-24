@@ -28,7 +28,6 @@ export class GeneratorUtils {
     inputTables: string[],
     destPaths: DestPaths
   ): GenerateTarget[] {
-
     let methods: ((
       templateData: TemplateData,
       destPaths: DestPaths,
@@ -45,9 +44,9 @@ export class GeneratorUtils {
       case "frontend":
         methods = [this.build_generate_targets_of_frontend];
         break;
-        case "e2e-test":
-          methods = [this.build_generate_targets_of_e2etest];
-          break;
+      case "e2e-test":
+        methods = [this.build_generate_targets_of_e2etest];
+        break;
       case "all":
         methods = [
           this.build_generate_targets_of_backend,
@@ -89,12 +88,6 @@ export class GeneratorUtils {
       return [];
     }
 
-    const menuBarDestPath = `${destPaths.destE2EPath}/pages/menu-bar`;
-
-    const PLACEHOLDER_FOR_TS = "/* __PLACEHOLDER__ */";
-    const PLACEHOLDER_FOR_IMPORT = "/* __PLACEHOLDER__:import */";
-    const PLACEHOLDER_FOR_HTML = "<!-- __PLACEHOLDER__ -->";
-
     const insertionTargets: SnippetInsertionTarget[] = [];
 
     metadataConfig.list.forEach((metaData) => {
@@ -103,59 +96,42 @@ export class GeneratorUtils {
         inputTables.includes(metaData.className)
       ) {
         const templateData = this.build_template_data(metaData, metadataConfig);
-        const href = `href="/${templateData.entityNmPlural}"`;
+        const menuBarTemplatePath =
+          "generators/app/templates/arch/e2etest/pages/menu-bar";
+        const menuBarDestPath = `${destPaths.destE2EPath}/pages/menu-bar`;
 
         if (component === "e2e-test" || component === "all") {
           insertionTargets.push(
             {
-              filePath: `${menuBarDestPath}/MenuBarPageElement.ts`,
+              templatePath: `${menuBarTemplatePath}/MenuBar_GOTO.ejs`,
+              destinationPath: `${menuBarDestPath}/MenuBar.ts`,
+              placeholder: "GOTO",
+              templateData: templateData,
+              checkString: `goto${templateData.entityNmPascal}ListPage`,
+            },
+            {
+              templatePath: `${menuBarTemplatePath}/MenuBar_IMPORT.ejs`,
+              destinationPath: `${menuBarDestPath}/MenuBar.ts`,
+              placeholder: "IMPORT",
+              templateData: templateData,
+              checkString: `import ${templateData.entityNmPascal}ListPage`,
+            },
+            {
+              templatePath: `${menuBarTemplatePath}/MenuBarPageElement_CLICK.ejs`,
+              destinationPath: `${menuBarDestPath}/MenuBarPageElement.ts`,
+              placeholder: "CLICK",
+              templateData: templateData,
               checkString: `click${templateData.entityNmPascal}Link`,
-              placeholder: PLACEHOLDER_FOR_TS,
-              rawTextList: [
-                `async click${templateData.entityNmPascal}Link() {`,
-                `  await this.click('#${templateData.entityNmCamel}');`,
-                "}",
-                "",
-                "",
-              ],
             },
             {
-              filePath: `${menuBarDestPath}/MenuBar.ts`,
-              checkString: `goto${templateData.entityNmPascal}ListPage`,
-              placeholder: PLACEHOLDER_FOR_IMPORT,
-              rawTextList: [
-                `import ${templateData.entityNmPascal}ListPage from '@pages/${templateData.entityNmKebab}-list/${templateData.entityNmPascal}ListPage';`,
-                "",
-              ],
-            },
-            {
-              filePath: `${menuBarDestPath}/MenuBar.ts`,
-              checkString: `goto${templateData.entityNmPascal}ListPage`,
-              placeholder: PLACEHOLDER_FOR_TS,
-              rawTextList: [
-                `async goto${templateData.entityNmPascal}ListPage() {`,
-                `  await this.menuBarEl.click${templateData.entityNmPascal}Link();`,
-                `  return new ${templateData.entityNmPascal}ListPage(this.menuBarEl);`,
-                "}",
-                "",
-                "",
-              ],
+              templatePath:
+                "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
+              destinationPath: `${destPaths.destFrontPath}/routes/+layout.svelte`,
+              placeholder: "LINK",
+              templateData: templateData,
+              checkString: `href="/${templateData.entityNmPlural}"`,
             }
           );
-        }
-
-        if (component === "frontend" || component === "all") {
-          insertionTargets.push({
-            filePath: `${destPaths.destFrontPath}/routes/+layout.svelte`,
-            checkString: href,
-            placeholder: PLACEHOLDER_FOR_HTML,
-            rawTextList: [
-              "<li>",
-              `  <a id="${templateData.entityNmCamel}" ${href}>${templateData.entityNmPascal}</a>`,
-              "</li>",
-              "",
-            ],
-          });
         }
       }
     });
@@ -163,7 +139,7 @@ export class GeneratorUtils {
     return insertionTargets;
   }
 
-  private static build_template_data(
+  public static build_template_data(
     metadata: Metadata,
     metadataConfig: MetadataConfig
   ): TemplateData {
@@ -182,6 +158,7 @@ export class GeneratorUtils {
       entityNmKebab: this.pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
+      nonIdFields: metadata.fields.filter((field) => !field.id),
       compIdFields: this.get_composite_id_fields(idField, metadataConfig),
     };
   }
@@ -372,7 +349,8 @@ export class GeneratorUtils {
   ): GenerateTarget[] {
     const entityPathCamel = `${destPaths.destFrontPath}/routes/${templateData.entityNmCamel}`;
     const entityPathPlural = `${destPaths.destFrontPath}/routes/${templateData.entityNmPlural}`;
-    const forntendPagePath = GeneratorUtils.build_frontend_page_path(templateData);
+    const forntendPagePath =
+      GeneratorUtils.build_frontend_page_path(templateData);
 
     let generateTargets: GenerateTarget[] = [];
 
@@ -508,5 +486,4 @@ export class GeneratorUtils {
   private static build_e2e_spec_path(tmplData: TemplateData): string {
     return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
   }
-
 }

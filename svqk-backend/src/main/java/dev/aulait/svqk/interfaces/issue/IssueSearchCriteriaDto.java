@@ -8,8 +8,8 @@ import java.util.List;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Data
-public class IssueSearchCriteriaDto { // <.>
+@Data // <.>
+public class IssueSearchCriteriaDto {
   // <.>
   private String text;
   private List<String> issueStatuses = new ArrayList<>();

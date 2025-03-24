@@ -240,7 +240,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     if (
       this.optionsValues.component === "all" ||
-      this.optionsValues.component === "frontend" ||
       this.optionsValues.component === "e2etest"
     ) {
       const snippetInsertionTargets: SnippetInsertionTarget[] =
@@ -251,13 +250,13 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           this.inputTables,
           this.destPaths
         );
-
       snippetInsertionTargets.forEach((target) => {
         this._insert_snippet(
-          target.filePath,
-          target.checkString,
+          target.templatePath,
+          target.destinationPath,
           target.placeholder,
-          target.rawTextList
+          target.templateData,
+          target.checkString
         );
       });
     }
@@ -285,35 +284,35 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   }
 
   _insert_snippet(
-    filePath: string,
-    checkString: string,
+    templatePath: string,
+    destinationPath: string,
     placeholder: string,
-    rawTextList: string[]
+    templateData: TemplateData,
+    checkString: string
   ) {
-    this.fs.copy(filePath, filePath, {
-      process: function (content) {
-        const originalText = content.toString();
-        const initialIndex = originalText.indexOf(placeholder);
+    const renderedPath = templatePath.replace(".ejs", ".txt");
+    this.fs.copyTpl(templatePath, renderedPath, templateData);
+    const renderedText = this.fs.read(renderedPath);
 
-        if (content.includes(checkString) || initialIndex === -1) {
-          return content;
-        }
-
-        let nextCharIndex = initialIndex - 1;
-        let indentCount = 0;
-        while (nextCharIndex >= 0) {
-          if (originalText[nextCharIndex] === LINE_BREAK) {
-            break;
+    if (renderedText) {
+      this.fs.copy(destinationPath, destinationPath, {
+        process: function (content) {
+          if (content.includes(checkString)) {
+            return content;
           }
-          indentCount++;
-          nextCharIndex--;
-        }
-        const snippet = rawTextList.join(LINE_BREAK + " ".repeat(indentCount));
-        const newSnippet = snippet + placeholder;
 
-        return originalText.replace(placeholder, newSnippet);
-      },
-    });
+          const originalText = content.toString();
+          const regex = new RegExp(`^.*__${placeholder}__.*${LINE_BREAK}`, "m");
+          const placeholderLine = RegExp(regex).exec(originalText);
+          return originalText.replace(
+            regex,
+            renderedText + LINE_BREAK + placeholderLine
+          );
+        },
+      });
+    }
+
+    this.fs.delete(renderedPath);
   }
 }
 

@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { afterNavigate, goto } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import type { IssueModel } from '$lib/arch/api/Api';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
+  import CriteriaUtils from '$lib/arch/search/CriteriaUtils';
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
@@ -12,10 +13,8 @@
   import type { PageData } from '../issues/$types';
 
   let { data }: { data: PageData } = $props();
-  let { condition } = $state(data);
+  let { criteria, open } = $state(data);
   let { result } = $derived(data);
-
-  let open = $state(false);
 
   const form = FormValidator.createForm({}, search); // <.>
 
@@ -28,20 +27,16 @@
     .add($t('msg.updatedAt'), 'i.updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
     .build(); // <.>
 
+  // <.>
   function search() {
-    goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
+    goto(CriteriaUtils.encode(criteria, { open }));
   }
-
-  afterNavigate(() => {
-    condition = data.condition;
-    open = Boolean(condition.subjectOnly || condition.issueStatuses?.length || condition.dueDate);
-  });
 </script>
 
 <section>
   <form use:form>
     <fieldset role="search">
-      <input type="search" bind:value={condition.text} />
+      <input type="search" bind:value={criteria.text} />
       <input type="submit" value="Search" />
     </fieldset>
 
@@ -53,7 +48,7 @@
           <CheckBox
             id="subject-only"
             label={$t('msg.searchBySubjectOnly')}
-            bind:checked={condition.subjectOnly}
+            bind:checked={criteria.subjectOnly}
           />
         </div>
 
@@ -63,7 +58,7 @@
             label={$t('msg.multipleStatuses')}
             options={$issueStatuses}
             multiple={true}
-            bind:value={condition.issueStatuses}
+            bind:value={criteria.issueStatuses}
           />
         </div>
 
@@ -72,7 +67,7 @@
             id="due-date"
             label={$t('msg.dueDate')}
             type="date"
-            bind:value={condition.dueDate}
+            bind:value={criteria.dueDate}
           />
         </div>
       </div>
@@ -88,8 +83,8 @@
   <ListTable
     {result}
     {columns}
-    bind:pageControl={condition.pageControl}
-    bind:sortOrders={condition.sortOrders}
+    bind:pageControl={criteria.pageControl}
+    bind:sortOrders={criteria.sortOrders}
     {search}
   />
 </section>

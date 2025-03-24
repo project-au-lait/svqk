@@ -93,8 +93,7 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/is
 <.> メソッド内部に以下の処理を実装します。
 .. `BeanUtils` を使用してDTOからEntityへ変換
 ..  Serviceを使用してEntityをDBへ保存
-.. `BeanUtils` を使用して保存後のEntityを DTOに変換
-.. DTOをレスポンスとして返却
+.. EntityのIDをレスポンスとして返却
 
 include::../snippet/backend-verification.ad[]
 

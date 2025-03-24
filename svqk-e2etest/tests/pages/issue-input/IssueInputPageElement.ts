@@ -1,13 +1,15 @@
 import BasePageElement from '@arch/BasePageElement';
 import { t } from '@arch/MultiLng';
 
+// <.>
 export default class IssueInputPageElement extends BasePageElement {
   get pageNameKey() {
     return 'newIssue';
   }
 
+  // <.>
   async inputSubject(subject: string) {
-    await this.inputText('#subject', subject);
+    await this.inputText('#subject', subject); // <.>
   }
 
   async inputDescription(description: string) {
@@ -22,6 +24,7 @@ export default class IssueInputPageElement extends BasePageElement {
     await this.expectGlobalMessage(t('saved'));
   }
 
+  // <.>
   async expectSubject(subject: string) {
     await this.expectText('#subject', subject);
   }
