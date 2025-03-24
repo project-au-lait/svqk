@@ -35,10 +35,11 @@ export default class CriteriaUtils {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static encodeObj(obj: any) {
-    return rison.encode(JSON.stringify(obj));
+    return rison.encode(obj);
   }
 
   private static decodeObj(url: URL, key: string) {
-    return JSON.parse(rison.decode(url.searchParams.get(key) ?? '{}'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return rison.decode<any>(url.searchParams.get(key) ?? '()');
   }
 }
