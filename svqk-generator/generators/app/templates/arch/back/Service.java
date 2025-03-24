@@ -2,9 +2,9 @@ package <%= domainPkgNm %>;
 
 import static dev.aulait.svqk.arch.jpa.JpaUtils.findByIdAsResource;
 
-import dev.aulait.svqk.arch.jpa.SearchUtils;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
+import dev.aulait.sqb.jpa.JpaSearchQueryExecutor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -17,6 +17,8 @@ public class <%= entityNmPascal %>Service {
   private final EntityManager em;
 
   private final <%= entityNmPascal %>Repository <%= entityNmCamel %>Repository;
+
+  private final JpaSearchQueryExecutor searchExecutor;
 
   public <%= entityNmPascal %>Entity find(<%= idField.javaType %> id) {
     return findByIdAsResource(<%= entityNmCamel %>Repository, id);
@@ -33,7 +35,8 @@ public class <%= entityNmPascal %>Service {
     <%= entityNmCamel %>Repository.delete(managedEntity);
   }
 
-  public SearchResultVo<<%= entityNmPascal %>Entity> search(SearchCriteriaVo criteria) {
-    return SearchUtils.search(em, criteria);
+  public SearchResult<<%= entityNmPascal %>Entity> search(SearchCriteria criteria) {
+    return searchExecutor.search(em, criteria);
   }
+
 }

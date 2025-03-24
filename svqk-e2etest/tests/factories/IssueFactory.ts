@@ -7,6 +7,7 @@ export default class IssueFactory {
     return issue;
   }
 
+  // <.>
   static createRandomIssue() {
     const issue = this.create();
     issue.subject = StringUtils.generateRandomString();

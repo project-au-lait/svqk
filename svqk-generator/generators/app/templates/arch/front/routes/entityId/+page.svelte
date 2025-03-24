@@ -1,5 +1,6 @@
 <%_ include('../../../../lib/typescript-common'); -%>
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
   import { t } from '$lib/translations';
@@ -11,6 +12,10 @@
   async function handleAfterSave(id?: <%= tscom.idType %>) {
     await invalidateAll();
   }
+
+  async function handleAfterDelete() {
+    await goto(`/<%= entityNmPlural %>/`);
+  }
 </script>
 
-<<%= entityNmPascal %>Form {<%= entityNmCamel %>} {handleAfterSave} actionBtnLabel={$t('msg.update')} />
+<<%= entityNmPascal %>Form {<%= entityNmCamel %>} updateMode={true} {handleAfterSave} {handleAfterDelete} />

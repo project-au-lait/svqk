@@ -14,10 +14,15 @@
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
     handleAfterSave: (id?: <%= tscom.idType %>) => Promise<void>;
-    actionBtnLabel: string;
+    handleAfterDelete?: (id?: <%= tscom.idType %>) => Promise<void>;
   }
 
-  let { <%= entityNmCamel %> = $bindable(), handleAfterSave, actionBtnLabel }: Props = $props();
+  let {
+    <%= entityNmCamel %> = $bindable(),
+     updateMode = false,
+     handleAfterSave,
+     handleAfterDelete = async (id) => {}
+  }: Props = $props();
 
   const spec = {
     <%_ for (field of fields) { _%>
@@ -27,15 +32,30 @@
     <%_ } _%>
   };
 
-  const form = FormValidator.createForm(spec, save);
+  const form = FormValidator.createForm(spec, save, del);
 
   async function save() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) => 
-      <%= entityNmCamel %>.id ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
 
     if (response) {
       await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
+    }
+  }
+
+  async function del() {
+    const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) =>
+      <%_ if (compIdFields) { _%>
+        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>)
+      <%_ } else { _%>
+        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%= entityNmCamel %>.id, <%= entityNmCamel %>)
+      <%_ } _%>        
+    );
+
+    if (response) {
+      await handleAfterDelete();
+      messageStore.show($t('msg.deleted'));
     }
   }
 </script>
@@ -59,7 +79,18 @@
   </div>
     <%_ } _%>
   <%_ } _%>
-  <div>
-    <button id="save" type="submit">{actionBtnLabel}</button>
+  <div class="grid">
+    <div>
+      <button type="submit" id="save" data-handler={save.name}
+      >{updateMode ? $t('msg.update') : $t('msg.register')}</button
+      >
+    </div>
+    {#if updateMode}
+      <div>
+        <button type="submit" id="del" data-handler={del.name}
+          >{$t('msg.delete')}</button
+        >
+      </div>
+    {/if}
   </div>
 </form>

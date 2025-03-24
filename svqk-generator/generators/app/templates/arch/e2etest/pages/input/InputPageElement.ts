@@ -1,4 +1,3 @@
-<% include('../../../../lib/data-factory-def', { fields }); -%>
 <%_
 const inputDef = (field) => {
   const required = field.required ? '' : '?';
@@ -97,6 +96,17 @@ export default class <%= entityNmPascal %>InputPageElement extends BasePageEleme
 
   async clickSaveBtn() {
     await this.click('#save');
+  }
+
+  async expectSavedSuccessfully() {
     await this.expectGlobalMessage(t('saved'));
+  }
+
+  async clickDeleteBtn() {
+    await this.click('#del');
+  }
+
+  async expectDeletedSuccessfully() {
+    await this.expectGlobalMessage(t('deleted'));
   }
 }

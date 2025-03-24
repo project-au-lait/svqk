@@ -1,7 +1,7 @@
 [[build-structure]]
 === ビルド構造
 
-ここでは、セットアップコマンド内の処理とその実現方式を説明します。
+ここでは、本システムの開発資材から実行モジュールを生成・テストするためのビルド処理とそれを実現するための構造を説明します。開発資材は、Mavenプロジェクト、Node.jsプロジェクト、及びDockerコンテナ用の資材を格納するプロジェクトから構成されます。各プロジェクトのビルド処理はMavenのビルドプロセスに統合されており、以下のセットアップコマンドで実行します。
 
 .セットアップコマンド
 [source,sh]
@@ -9,10 +9,11 @@
 # Windows
 mvnw install -P setup
 
-#macOS
+# macOS
 ./mvnw install -P setup
 ----
 
+以降では、セットアップコマンド内の処理とその実現方式を説明します。
 セットアップコマンドを実行すると、各プロジェクトのビルドが順次実行されます。これらのビルドの処理を以下に示します。
 
 .各プロジェクトのビルドコマンドの処理
@@ -56,7 +57,7 @@ mvnw flyway:info
 DBマイグレーションの実行 +
 DBマイグレーションの状態を表示
 
-|front
+|frontend
 |pnpm install +
 vite build +
 mvnw resources:resources +
@@ -72,7 +73,7 @@ mvnw jar:jar
 |Entityのjavaファイルをコンパイル +
 Entityクラスを含むjarファイルを作成
 
-|back
+|backend
 |mvnw resources:resources +
 mvnw compiler:compile +
 mvnw surefire:test +
