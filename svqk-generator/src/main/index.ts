@@ -63,6 +63,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   generateEntity: boolean | null = null;
   backendGenerator: BackendGenerator;
   frontendGenerator: FrontendGenerator;
+  templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -227,6 +228,20 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       throw new Error("Please generate entities.");
     }
+
+    this.metadataConfig.list.forEach((metaData) => {
+      if (
+        this.inputTables.includes(metaData.tableName) ||
+        this.inputTables.includes(metaData.className)
+      ) {
+        const tmplData = GeneratorUtils.build_template_data(
+          metaData,
+          this.metadataConfig
+        );
+
+        this.templateDataList.push(tmplData);
+      }
+    });
   }
 
   writing() {
@@ -237,66 +252,54 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       return;
     }
 
-    this.metadataConfig.list.forEach((metaData) => {
-      if (
-        !this.inputTables.includes(metaData.tableName) &&
-        !this.inputTables.includes(metaData.className)
-      ) {
-        return;
-      }
-
-      const tmplData = GeneratorUtils.build_template_data(
-        metaData,
-        this.metadataConfig
-      );
-
+    this.templateDataList.forEach((templateData) => {
       switch (this.optionsValues.component) {
         case "backend":
           this.backendGenerator.generate_backend(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destBackPath
           );
           break;
         case "integration-test":
           this.backendGenerator.generate_integrationtest(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destITPath
           );
           break;
         case "frontend":
           this.frontendGenerator.generate_frontend(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destFrontPath
           );
           break;
         case "e2e-test":
           this.frontendGenerator.generate_e2etest(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destE2EPath
           );
           break;
         case "all":
           this.backendGenerator.generate_backend(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destBackPath
           );
           this.backendGenerator.generate_integrationtest(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destITPath
           );
           this.frontendGenerator.generate_frontend(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destFrontPath
           );
           this.frontendGenerator.generate_e2etest(
-            tmplData,
+            templateData,
             this.optionsValues.templateType,
             this.destPaths.destE2EPath
           );
