@@ -22,16 +22,16 @@ export class FrontendGenerator {
   }
 
   public generate_frontend(
-    tmplData: TemplateData,
+    templateData: TemplateData,
     templateType: string,
     destinationPath: string
   ) {
     let pathPairs: [string, string][] = [];
 
-    const entityPathCamel = `${destinationPath}/routes/${tmplData.entityNmCamel}`;
-    const entityPathPlural = `${destinationPath}/routes/${tmplData.entityNmPlural}`;
+    const entityPathCamel = `${destinationPath}/routes/${templateData.entityNmCamel}`;
+    const entityPathPlural = `${destinationPath}/routes/${templateData.entityNmPlural}`;
     const forntendPagePath =
-      FrontendGenerator.build_frontend_page_path(tmplData);
+      FrontendGenerator.build_frontend_page_path(templateData);
 
     if (templateType === "skeleton") {
       pathPairs = [
@@ -52,7 +52,7 @@ export class FrontendGenerator {
         ["front/routes/new/+page.ts", `${entityPathPlural}/new/+page.ts`],
         [
           "front/lib/Form.svelte",
-          `${destinationPath}/lib/domain/${tmplData.entityNmPlural}/${tmplData.entityNmPascal}Form.svelte`,
+          `${destinationPath}/lib/domain/${templateData.entityNmPlural}/${templateData.entityNmPascal}Form.svelte`,
         ],
 
         // For update page
@@ -68,12 +68,12 @@ export class FrontendGenerator {
     }
 
     for (const [srcPath, destPath] of pathPairs) {
-      this.output_file(srcPath, destPath, tmplData, templateType);
+      this.output_file(srcPath, destPath, templateData, templateType);
     }
   }
 
   public generate_e2etest(
-    tmplData: TemplateData,
+    templateData: TemplateData,
     templateType: string,
     destinationPath: string
   ) {
@@ -81,51 +81,51 @@ export class FrontendGenerator {
 
     const inputTmplPath = "e2etest/pages/input";
     const listTmplPath = "e2etest/pages/list";
-    const inputDestPath = `${destinationPath}/pages/${tmplData.entityNmKebab}-input`;
-    const listDestPath = `${destinationPath}/pages/${tmplData.entityNmKebab}-list`;
+    const inputDestPath = `${destinationPath}/pages/${templateData.entityNmKebab}-input`;
+    const listDestPath = `${destinationPath}/pages/${templateData.entityNmKebab}-list`;
 
     if (templateType === "skeleton") {
       pathPairs = [
         [
           "e2etest/spec.ts",
-          `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(tmplData)}`,
+          `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(templateData)}`,
         ],
       ];
     } else if (templateType === "arch") {
       pathPairs = [
         [
           "e2etest/spec.ts",
-          `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(tmplData)}`,
+          `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(templateData)}`,
         ],
         [
           "e2etest/Facade.ts",
-          `${destinationPath}/facades/${tmplData.entityNmPascal}Facade.ts`,
+          `${destinationPath}/facades/${templateData.entityNmPascal}Facade.ts`,
         ],
         [
           "e2etest/Factory.ts.ejs",
-          `${destinationPath}/factories/${tmplData.entityNmPascal}Factory.ts`,
+          `${destinationPath}/factories/${templateData.entityNmPascal}Factory.ts`,
         ],
         [
           `${inputTmplPath}/InputPage.ts`,
-          `${inputDestPath}/${tmplData.entityNmPascal}InputPage.ts`,
+          `${inputDestPath}/${templateData.entityNmPascal}InputPage.ts`,
         ],
         [
           `${inputTmplPath}/InputPageElement.ts`,
-          `${inputDestPath}/${tmplData.entityNmPascal}InputPageElement.ts`,
+          `${inputDestPath}/${templateData.entityNmPascal}InputPageElement.ts`,
         ],
         [
           `${listTmplPath}/ListPage.ts`,
-          `${listDestPath}/${tmplData.entityNmPascal}ListPage.ts`,
+          `${listDestPath}/${templateData.entityNmPascal}ListPage.ts`,
         ],
         [
           `${listTmplPath}/ListPageElement.ts`,
-          `${listDestPath}/${tmplData.entityNmPascal}ListPageElement.ts`,
+          `${listDestPath}/${templateData.entityNmPascal}ListPageElement.ts`,
         ],
       ];
     }
 
     for (const [srcPath, destPath] of pathPairs) {
-      this.output_file(srcPath, destPath, tmplData, templateType);
+      this.output_file(srcPath, destPath, templateData, templateType);
     }
   }
 
@@ -141,13 +141,13 @@ export class FrontendGenerator {
   private output_file(
     tmplPath: string,
     destinationPath: string,
-    tmplData: TemplateData,
+    templateData: TemplateData,
     templateType: string
   ) {
     this.fs.copyTpl(
       this.templatePath(`${templateType}/${tmplPath}`),
       this.destinationPath(destinationPath),
-      tmplData
+      templateData
     );
   }
 }

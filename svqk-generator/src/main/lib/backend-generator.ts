@@ -22,18 +22,18 @@ export class BackendGenerator {
   }
 
   public generate_backend(
-    tmplData: TemplateData,
+    templateData: TemplateData,
     templateType: string,
     destinationPath: string
   ) {
     const destBackDomainPkgPath = BackendGenerator.build_dest_package_path(
       destinationPath,
-      tmplData.domainPkgNm
+      templateData.domainPkgNm
     );
 
     const destBackIfPkgPath = BackendGenerator.build_dest_package_path(
       destinationPath,
-      tmplData.interfacesPkgNm
+      templateData.interfacesPkgNm
     );
 
     if (templateType === "arch" || templateType === "skeleton") {
@@ -41,7 +41,7 @@ export class BackendGenerator {
       this.output_backend_file(
         ["Repository", "Service"],
         destBackDomainPkgPath,
-        tmplData,
+        templateData,
         templateType
       );
 
@@ -49,15 +49,15 @@ export class BackendGenerator {
       this.output_backend_file(
         ["Dto", "Controller"],
         destBackIfPkgPath,
-        tmplData,
+        templateData,
         templateType
       );
 
-      if (tmplData.compIdFields) {
+      if (templateData.compIdFields) {
         this.output_backend_file(
           ["IdDto"],
           destBackIfPkgPath,
-          tmplData,
+          templateData,
           templateType
         );
       }
@@ -68,25 +68,25 @@ export class BackendGenerator {
       this.output_backend_file(
         ["Factory", "SearchCriteriaDto"],
         destBackIfPkgPath,
-        tmplData,
+        templateData,
         templateType
       );
     }
   }
 
   public generate_integrationtest(
-    tmplData: TemplateData,
+    templateData: TemplateData,
     templateType: string,
     destinationPath: string
   ) {
     const destITPkgPath = BackendGenerator.build_dest_package_path(
       destinationPath,
-      tmplData.interfacesPkgNm
+      templateData.interfacesPkgNm
     );
     this.output_backend_file(
       ["Client", "ControllerIT", "DataFactory"],
       destITPkgPath,
-      tmplData,
+      templateData,
       templateType
     );
   }
@@ -94,16 +94,16 @@ export class BackendGenerator {
   private output_backend_file(
     components: string[],
     destPkgPath: string,
-    tmplData: TemplateData,
+    templateData: TemplateData,
     templateType: string
   ) {
     components.forEach((component) => {
       this.fs.copyTpl(
         this.templatePath(`${templateType}/back/${component}.java`),
         this.destinationPath(
-          `${destPkgPath}/${tmplData.entityNmPascal}${component}.java`
+          `${destPkgPath}/${templateData.entityNmPascal}${component}.java`
         ),
-        tmplData
+        templateData
       );
     });
   }
