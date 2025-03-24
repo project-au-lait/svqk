@@ -14,22 +14,28 @@
 
   interface Props {
     issue: IssueModel;
+    updateMode?: boolean;
     handleAfterSave: (id?: number) => Promise<void>;
-    handleAfterDelete: (id?: number) => Promise<void>;
+    handleAfterDelete?: (id?: number) => Promise<void>;
   }
 
-  let { issue = $bindable(), handleAfterSave, handleAfterDelete }: Props = $props();
+  let {
+    issue = $bindable(),
+    updateMode = false,
+    handleAfterSave,
+    handleAfterDelete = async (id) => {}
+  }: Props = $props();
   let journal = $state({ issueId: issue.id } as JournalModel);
 
   const spec = {
     subject: yup.string().required().label($t('msg.label.issue.subject'))
   };
 
-  const form = FormValidator.createForm(spec, save, deleteIssue);
+  const form = FormValidator.createForm(spec, save, del);
 
   async function save() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
-      issue.id
+      updateMode
         ? api.issues.issuesUpdate(issue.id, { issue, journal })
         : api.issues.issuesCreate(issue)
     );
@@ -41,7 +47,7 @@
     }
   }
 
-  async function deleteIssue() {
+  async function del() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
       api.issues.issuesDelete(issue.id, issue)
     );
@@ -81,19 +87,21 @@
       <InputField id="dueDate" type="date" label={$t('msg.dueDate')} bind:value={issue.dueDate} />
     </div>
   </div>
-  {#if issue.id}
+  {#if updateMode}
     <div>
       <TextArea id="notes" label={$t('msg.notes')} bind:value={journal.notes} />
     </div>
   {/if}
-  <div>
-    <button type="submit" id="save" data-handler={save.name}
-      >{issue.id ? $t('msg.update') : $t('msg.register')}</button
-    >
-    {#if issue.id}
-      <button type="submit" id="deleteIssue" data-handler={deleteIssue.name}
-        >{$t('msg.delete')}</button
+  <div class="grid">
+    <div>
+      <button type="submit" id="save" data-handler={save.name}
+        >{updateMode ? $t('msg.update') : $t('msg.register')}</button
       >
+    </div>
+    {#if updateMode}
+      <div>
+        <button type="submit" id="del" data-handler={del.name}>{$t('msg.delete')}</button>
+      </div>
     {/if}
   </div>
 </form>

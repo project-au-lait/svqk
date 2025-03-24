@@ -34,7 +34,7 @@ export default class IssueInputPageElement extends BasePageElement {
   }
 
   async clickDeleteBtn() {
-    await this.click('#deleteIssue');
+    await this.click('#del');
   }
 
   async expectDeletedSuccessfully() {
