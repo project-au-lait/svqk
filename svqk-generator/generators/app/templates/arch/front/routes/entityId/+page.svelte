@@ -19,4 +19,4 @@
   }
 </script>
 
-<<%= entityNmPascal %>Form {<%= entityNmCamel %>} {handleAfterSave} {handleAfterDelete} />
+<<%= entityNmPascal %>Form {<%= entityNmCamel %>} updateMode={true} {handleAfterSave} {handleAfterDelete} />

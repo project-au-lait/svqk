@@ -14,15 +14,15 @@
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
     handleAfterSave: (id?: <%= idType %>) => Promise<void>;
-    handleAfterDelete: (id?: <%= idType %>) => Promise<void>;
+    handleAfterDelete?: (id?: <%= idType %>) => Promise<void>;
   }
 
-  let { <%= entityNmCamel %> = $bindable(), handleAfterSave, handleAfterDelete }: Props = $props();
-  <%_ if (compIdFields) { _%>
-  let isUpdate = <%- compIdFields.map(field => `${entityNmCamel}?.id?.${field.fieldName} != null`).join(' && ') %>;
-  <%_ } else { _%>
-  let isUpdate = <%= entityNmCamel %>?.id != null;
-  <%_ } _%>
+  let {
+    <%= entityNmCamel %> = $bindable(),
+     updateMode = false,
+     handleAfterSave,
+     handleAfterDelete = async (id) => {}
+  }: Props = $props();
 
   <%_ 
     const dataType = (javaType) => {
@@ -45,11 +45,11 @@
     <%_ } _%>
   };
 
-  const form = FormValidator.createForm(spec, save, delete<%= entityNmPascal %>);
+  const form = FormValidator.createForm(spec, save, del);
 
   async function save() {
     const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) => 
-      isUpdate ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
 
     if (response) {
       await handleAfterSave(response);
@@ -57,7 +57,7 @@
     }
   }
 
-  async function delete<%= entityNmPascal %>() {
+  async function del() {
     const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) =>
       <%_ if (compIdFields) { _%>
         api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>)
@@ -103,10 +103,10 @@
   <%_ } _%>
   <div>
     <button type="submit" id="save" data-handler={save.name}
-      >{isUpdate ? $t('msg.update') : $t('msg.register')}</button
+      >{updateMode ? $t('msg.update') : $t('msg.register')}</button
     >
-    {#if isUpdate}
-      <button type="submit" id="delete<%= entityNmPascal %>" data-handler={delete<%= entityNmPascal %>.name}
+    {#if updateMode}
+      <button type="submit" id="del" data-handler={del.name}
         >{$t('msg.delete')}</button
       >
     {/if}

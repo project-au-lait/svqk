@@ -103,7 +103,7 @@ export default class <%= entityNmPascal %>InputPageElement extends BasePageEleme
   }
 
   async clickDeleteBtn() {
-    await this.click('#delete<%= entityNmPascal %>');
+    await this.click('#del');
   }
 
   async expectDeletedSuccessfully() {
