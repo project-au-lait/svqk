@@ -52,12 +52,6 @@ type TemplateData = {
   compIdFields?: Field[];
 };
 
-type GenerateTarget = {
-  templatePath: string;
-  destinationPath: string;
-  templateData: TemplateData;
-};
-
 type SnippetInsertionTarget = {
   filePath: string;
   checkString: string;
@@ -71,7 +65,6 @@ type DestPaths = {
   destFrontPath: string;
   destE2EPath: string;
 };
-
 declare module "**/jeg-metadata.json" {
   const data: Metadata[];
   export default data;
@@ -85,7 +78,6 @@ export {
   GenApiClientConfig,
   Field,
   TemplateData,
-  GenerateTarget,
   SnippetInsertionTarget,
   DestPaths,
 };

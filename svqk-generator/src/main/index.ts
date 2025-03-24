@@ -5,11 +5,12 @@ import {
   MetadataConfig,
   OptionsValues,
   TemplateData,
-  GenerateTarget,
   DestPaths,
   SnippetInsertionTarget,
 } from "./types.js";
 import { GeneratorUtils } from "./lib/generator-utils.js";
+import { BackendGenerator } from "./lib/backend-generator.js";
+import { FrontendGenerator } from "./lib/frontend-generator.js";
 import { EntityGenerator } from "./lib/entity-generator.js";
 import { ApiClientGenerator } from "./lib/api-client-generator.js";
 
@@ -60,9 +61,23 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     e2eApiClientPath: "",
   };
   generateEntity: boolean | null = null;
+  backendGenerator: BackendGenerator;
+  frontendGenerator: FrontendGenerator;
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
+
+    this.backendGenerator = new BackendGenerator({
+      fs: this.fs,
+      templatePath: this.templatePath.bind(this),
+      destinationPath: this.destinationPath.bind(this),
+    });
+
+    this.frontendGenerator = new FrontendGenerator({
+      fs: this.fs,
+      templatePath: this.templatePath.bind(this),
+      destinationPath: this.destinationPath.bind(this),
+    });
 
     this.option("component", {
       type: String,
@@ -222,21 +237,71 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       return;
     }
 
-    const generateTargets: GenerateTarget[] =
-      GeneratorUtils.build_generate_targets(
-        this.metadataConfig,
-        this.optionsValues.component,
-        this.optionsValues.templateType,
-        this.inputTables,
-        this.destPaths
+    this.metadataConfig.list.forEach((metaData) => {
+      if (
+        !this.inputTables.includes(metaData.tableName) &&
+        !this.inputTables.includes(metaData.className)
+      ) {
+        return;
+      }
+
+      const tmplData = GeneratorUtils.build_template_data(
+        metaData,
+        this.metadataConfig
       );
 
-    generateTargets.forEach((target) => {
-      this._generate_file(
-        target.templatePath,
-        target.destinationPath,
-        target.templateData
-      );
+      switch (this.optionsValues.component) {
+        case "backend":
+          this.backendGenerator.generate_backend(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destBackPath
+          );
+          break;
+        case "integration-test":
+          this.backendGenerator.generate_integrationtest(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destITPath
+          );
+          break;
+        case "frontend":
+          this.frontendGenerator.generate_frontend(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destFrontPath
+          );
+          break;
+        case "e2e-test":
+          this.frontendGenerator.generate_e2etest(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destE2EPath
+          );
+          break;
+        case "all":
+          this.backendGenerator.generate_backend(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destBackPath
+          );
+          this.backendGenerator.generate_integrationtest(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destITPath
+          );
+          this.frontendGenerator.generate_frontend(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destFrontPath
+          );
+          this.frontendGenerator.generate_e2etest(
+            tmplData,
+            this.optionsValues.templateType,
+            this.destPaths.destE2EPath
+          );
+          break;
+      }
     });
 
     if (
