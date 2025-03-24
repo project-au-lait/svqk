@@ -9,7 +9,9 @@ export default class IssueInputPage {
     this.issueInputPageEl = new IssueInputPageElement(page);
   }
 
+  // <.>
   async save(issue: IssueModel) {
+    // <.>
     await this.issueInputPageEl.inputSubject(issue.subject);
     await this.issueInputPageEl.inputDescription(issue.description!);
 
@@ -20,6 +22,7 @@ export default class IssueInputPage {
     await this.issueInputPageEl.expectSavedSuccessfully();
   }
 
+  // <.>
   async expectIssue(issue: IssueModel) {
     await this.issueInputPageEl.expectSubject(issue.subject);
     await this.issueInputPageEl.expectDescription(issue.description);

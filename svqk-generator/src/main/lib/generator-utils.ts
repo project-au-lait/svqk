@@ -28,7 +28,6 @@ export class GeneratorUtils {
     inputTables: string[],
     destPaths: DestPaths
   ): GenerateTarget[] {
-
     let methods: ((
       templateData: TemplateData,
       destPaths: DestPaths,
@@ -45,9 +44,9 @@ export class GeneratorUtils {
       case "frontend":
         methods = [this.build_generate_targets_of_frontend];
         break;
-        case "e2e-test":
-          methods = [this.build_generate_targets_of_e2etest];
-          break;
+      case "e2e-test":
+        methods = [this.build_generate_targets_of_e2etest];
+        break;
       case "all":
         methods = [
           this.build_generate_targets_of_backend,
@@ -115,8 +114,6 @@ export class GeneratorUtils {
                 `async click${templateData.entityNmPascal}Link() {`,
                 `  await this.click('#${templateData.entityNmCamel}');`,
                 "}",
-                "",
-                "",
               ],
             },
             {
@@ -125,7 +122,6 @@ export class GeneratorUtils {
               placeholder: PLACEHOLDER_FOR_IMPORT,
               rawTextList: [
                 `import ${templateData.entityNmPascal}ListPage from '@pages/${templateData.entityNmKebab}-list/${templateData.entityNmPascal}ListPage';`,
-                "",
               ],
             },
             {
@@ -137,8 +133,6 @@ export class GeneratorUtils {
                 `  await this.menuBarEl.click${templateData.entityNmPascal}Link();`,
                 `  return new ${templateData.entityNmPascal}ListPage(this.menuBarEl);`,
                 "}",
-                "",
-                "",
               ],
             }
           );
@@ -153,7 +147,6 @@ export class GeneratorUtils {
               "<li>",
               `  <a id="${templateData.entityNmCamel}" ${href}>${templateData.entityNmPascal}</a>`,
               "</li>",
-              "",
             ],
           });
         }
@@ -182,6 +175,7 @@ export class GeneratorUtils {
       entityNmKebab: this.pascal_to_kebab(entityNmPascal),
       fields: metadata.fields,
       idField: idField,
+      nonIdFields: metadata.fields.filter((field) => !field.id),
       compIdFields: this.get_composite_id_fields(idField, metadataConfig),
     };
   }
@@ -372,7 +366,8 @@ export class GeneratorUtils {
   ): GenerateTarget[] {
     const entityPathCamel = `${destPaths.destFrontPath}/routes/${templateData.entityNmCamel}`;
     const entityPathPlural = `${destPaths.destFrontPath}/routes/${templateData.entityNmPlural}`;
-    const forntendPagePath = GeneratorUtils.build_frontend_page_path(templateData);
+    const forntendPagePath =
+      GeneratorUtils.build_frontend_page_path(templateData);
 
     let generateTargets: GenerateTarget[] = [];
 
@@ -508,5 +503,4 @@ export class GeneratorUtils {
   private static build_e2e_spec_path(tmplData: TemplateData): string {
     return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
   }
-
 }

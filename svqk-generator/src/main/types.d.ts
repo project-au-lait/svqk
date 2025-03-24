@@ -48,6 +48,7 @@ type TemplateData = {
   entityNmKebab: string;
   fields: Field[];
   idField: Field;
+  nonIdFields: Field[];
   compIdFields?: Field[];
 };
 

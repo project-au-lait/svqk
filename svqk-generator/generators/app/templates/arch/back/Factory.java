@@ -1,8 +1,8 @@
 package <%= interfacesPkgNm %>;
 
-import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchCriteriaBuilder;
+import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
 import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
@@ -16,13 +16,14 @@ public class <%= entityNmPascal %>Factory {
       BeanUtils.buildConfig(<%= entityNmPascal %>Entity.class, <%= entityNmPascal %>Dto.class)
           .build(); 
 
-  public SearchCriteriaVo build(<%= entityNmPascal %>SearchCriteriaDto criteria) {
+  public SearchCriteria build(<%= entityNmPascal %>SearchCriteriaDto criteria) {
     return new SearchCriteriaBuilder()
         .select("SELECT i FROM <%= entityNmPascal %>Entity i")
+        .selectCount("SELECT COUNT(i) FROM <%= entityNmPascal %>Entity i")
         .build(criteria.getPageControl());
   }
 
-  public <%= entityNmPascal %>SearchResultDto build(SearchResultVo<<%= entityNmPascal %>Entity> vo) { 
+  public <%= entityNmPascal %>SearchResultDto build(SearchResult<<%= entityNmPascal %>Entity> vo) { 
     return BeanUtils.map(searchResultConfig, vo, <%= entityNmPascal %>SearchResultDto.class); 
   }
 }

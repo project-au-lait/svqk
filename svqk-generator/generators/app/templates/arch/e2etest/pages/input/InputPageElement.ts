@@ -1,4 +1,3 @@
-<% include('../../../../lib/data-factory-def', { fields }); -%>
 <%_
 const inputDef = (field) => {
   const required = field.required ? '' : '?';

@@ -105,7 +105,7 @@ packages:
 <.> packages属性にEntityの生成先パッケージとテーブル名を追加します。
 ** "Entityの生成先パッケージ" : ["テーブル名"]
 
-jeg設定ファイルを更新したらVSCode Task: `gen-entity` を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
+jeg設定ファイルを更新したらVSCode Task: `generate` を実行、プロンプトの `component` で `entity` を選択し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。
 
 .{project-artifactid}-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java
 [source,java]
@@ -156,7 +156,7 @@ xref:../arch-desc/index.adoc#_controller[アーキテクチャ記述] に従いC
 include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java[]
 ----
 
-<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@GET` を設定します。
+<.> 画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには `@GET` を設定します。
 <.> ServiceからのEntityの取得、 `BeanUtils` を使用したDTOへの変換、レスポンスとしての返却を実装します。
 
 include::../snippet/backend-verification.ad[]
@@ -169,12 +169,6 @@ API Clientを生成し、MasterStoreとWeb APIの呼び出し処理を実装し�
 
 VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
 生成されたAPI Clientは {project-artifactId}-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。
-
-.{project-artifactId}-frontend/src/lib/arch/api/Api.ts
-[source,ts]
-----
-include::{project_root}/svqk-frontend/src/lib/arch/api/Api.ts[lines="53..59,343,376..391,488"]
-----
 
 ===== MasterStore
 

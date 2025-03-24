@@ -90,4 +90,5 @@ include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/he
 
 <.> `@Data` をDTOクラスに設定します。これにより、フィールドのGetter、Setter等が自動生成されます。
 <.> リクエスト及びレスポンスのプロパティとなるフィールドを定義します。
-** リクエスト及びレスポンスのJSONプロパティに必ず登場させるフィールドに対しては `required = true` を指定します。NOT NULLのカラムの値を格納するフィールド等がこれに該当します。** リクエストで指定された値をWeb APIの内部処理で使用しないフィールドに対しては `readOnly = true` を指定します。Primary Keyの値を格納するフィールド等がこれに該当します。
+** リクエスト及びレスポンスのJSONプロパティに必ず登場させるフィールドに対しては `@Schema(required = true)` を指定します。NOT NULLのカラムの値を格納するフィールド等がこれに該当します。
+** リクエストで指定された値をWeb APIの内部処理で使用しないフィールドに対しては `@Schema(readOnly = true)` 及び `@JsonProperty(access = JsonProperty.Access.READ_ONLY)` を指定します。Primary Keyの値を格納するフィールド等がこれに該当します。

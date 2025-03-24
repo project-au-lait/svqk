@@ -23,7 +23,7 @@ WindowsではChocolateyを使用してソフトウェアをインストールし
 管理者権限でPowershellを起動します。(起動操作は下記参照)
 
 1. ショートカットキー kbd:[Windows+R] を実行します。
-2. 表示された `ファイル名を選択して実行` ダイアログで `powershell` と入力します。
+2. 表示されたダイアログで `powershell` と入力します。
 3. ショートカットキー kbd:[Ctrl+Shift+Enter] を実行します。
 
 表示されたPowershellウィンドウで以下のコマンドを実行します。
@@ -162,19 +162,11 @@ Command: mvnw -f svqk-migration compile -P setup
 実行が終了すると、migrationプロジェクト内のマイグレーション資材(sql、java)がDBに反映されます。 +
 この操作はDBMSが起動した状態で実行可能です。
 
-|Entityの生成
-|VSCode Task: `gen-entity` 
-|jpa-entity-generatorが実行されます。 +
-実行が終了すると、JPA Entityのjavaファイルがentityプロジェクト内に生成されます。 +
+|ソースファイル生成
+|VSCode Task: `generate` 
+|https://github.com/project-au-lait/svqk/tree/main/svqk-generator[Generator] が起動し、
+生成対象のコンポーネントやテーブルを指定するプロンプトが表示されます。 +
 この操作はDBMSが起動した状態で実行可能です。
-
-|Front用API Clientの生成
-|VSCode Task: `gen-api-client` +
-Command: pnpm gen-api-client +
-(at svqk-frontend directory)
-|swagger-typescript-apiが実行されます。
-実行が終了すると、API Clientがfrontendプロジェクトとe2etestプロジェクト内に生成されます。 +
-この操作はBackendが起動した状態で実行可能です。
 |====
 
 

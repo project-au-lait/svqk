@@ -5,9 +5,8 @@ idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${fi
 -%>
 package <%= interfacesPkgNm %>;
 
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultDto;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
 <%_ if(compIdFields) { -%>
@@ -37,7 +36,7 @@ public class <%= entityNmPascal %>Controller {
 
   static final String <%= entityNmAllCaps %>_SEARCH_PATH = "search";
 
-  public static class <%= entityNmPascal %>SearchResultDto extends SearchResultDto<<%= entityNmPascal %>Dto> {} 
+  public static class <%= entityNmPascal %>SearchResultDto extends SearchResult<<%= entityNmPascal %>Dto> {} 
 
   @GET
   @Path(<%= entityNmAllCaps %>_ID_PATH)
@@ -110,8 +109,8 @@ public class <%= entityNmPascal %>Controller {
   @POST
   @Path(<%= entityNmAllCaps %>_SEARCH_PATH)
   public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {
-    SearchCriteriaVo vo = <%= entityNmCamel %>Factory.build(dto);
-    SearchResultVo<<%= entityNmPascal %>Entity> result = <%= entityNmCamel %>Service.search(vo);
+    SearchCriteria searchCriteria = <%= entityNmCamel %>Factory.build(dto);
+    SearchResult<<%= entityNmPascal %>Entity> result = <%= entityNmCamel %>Service.search(searchCriteria);
 
     return <%= entityNmCamel %>Factory.build(result);
   }

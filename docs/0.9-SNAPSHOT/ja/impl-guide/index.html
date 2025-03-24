@@ -244,7 +244,7 @@
 <p>ショートカットキー <span class="keyseq"><kbd>Windows</kbd>+<kbd>R</kbd></span> を実行します。</p>
 </li>
 <li>
-<p>表示された <code>ファイル名を選択して実行</code> ダイアログで <code>powershell</code> と入力します。</p>
+<p>表示されたダイアログで <code>powershell</code> と入力します。</p>
 </li>
 <li>
 <p>ショートカットキー <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd></span> を実行します。</p>
@@ -437,10 +437,10 @@ Command: mvnw -f svqk-container compile -P setup</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Backendの起動</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>start-back</code><br>
-Command: mvnw -f svqk-back quarkus:dev</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>start-backend</code><br>
+Command: mvnw -f svqk-backend quarkus:dev</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Backendサーバー(Quarkus)が起動します。<br>
-Backendサーバーが起動すると、backプロジェクト内で実装されているWeb APIアプリが使用可能になります。</p></td>
+Backendサーバーが起動すると、backendプロジェクト内で実装されているWeb APIアプリが使用可能になります。</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Backendのデバッグ実行</p></td>
@@ -466,20 +466,11 @@ Command: mvnw -f svqk-migration compile -P setup</p></td>
 この操作はDBMSが起動した状態で実行可能です。</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Entityの生成</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>gen-entity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">jpa-entity-generatorが実行されます。<br>
-実行が終了すると、JPA Entityのjavaファイルがentityプロジェクト内に生成されます。<br>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ソースファイル生成</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>generate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/project-au-lait/svqk/tree/main/svqk-generator">Generator</a> が起動し、
+生成対象のコンポーネントやテーブルを指定するプロンプトが表示されます。<br>
 この操作はDBMSが起動した状態で実行可能です。</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Front用API Clientの生成</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VSCode Task: <code>gen-api-client</code><br>
-Command: pnpm gen-api-client<br>
-(at svqk-frontend directory)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swagger-typescript-apiが実行されます。
-実行が終了すると、API Clientがfrontendプロジェクトとe2etestプロジェクト内に生成されます。<br>
-この操作はBackendが起動した状態で実行可能です。</p></td>
 </tr>
 </tbody>
 </table>
@@ -580,6 +571,15 @@ Command: pnpm gen-api-client<br>
 <div class="sect1">
 <h2 id="dev-process">実装手順(自動生成)</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>実装手順(自動生成)は、 <a href="https://github.com/project-au-lait/svqk/tree/main/svqk-generator">Generator</a> を使用してソースファイルを自動生成する手順をガイドしたものです。</p>
+</div>
+<div class="paragraph">
+<p>Generatorを使うことで、アーキテクチャ記述に準拠したアプリケーション(Frontend、Backend)、自動テスト(Integration Test、End to End Test)の動作可能なソースファイルが生成できます。</p>
+</div>
+<div class="paragraph">
+<p>開発者は、Generatorを使用して生成されたソースファイルに対し、要件の詳細を実装します。</p>
+</div>
 <div class="sect2">
 <h3 id="_db">DB</h3>
 <div class="paragraph">
@@ -640,10 +640,10 @@ Entityの生成先パッケージ :<br>
 <div class="paragraph">
 <p>VSCode Task: <code>generate</code> を実行します。
 生成対象のコンポーネントに <code>all</code> を選択し、生成元のEntityに <code>Issue</code> と入力します。
-Generatorの実行結果は以下の通りです。</p>
+Generatorが生成するソースファイルは以下の通りです。</p>
 </div>
 <div class="listingblock">
-<div class="title">自動生成されたソースファイル</div>
+<div class="title">生成されたソースファイル</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">📁 svqk
 ├── 📁 svqk-entity
@@ -713,6 +713,9 @@ Generatorの実行結果は以下の通りです。</p>
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>以降は、生成されたソースファイルに対し、要件の詳細を実装します。</p>
 </div>
 </div>
 </div>
@@ -887,7 +890,7 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <div class="listingblock">
 <div class="title">svqk-frontend/src/routes/issues/new/+page.svelte マークアップセクション</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;IssueForm {issue} {handleAfterSave} actionBtnLabel={$t('msg.register')} /&gt; <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;IssueForm bind:issue {handleAfterSave} /&gt; <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1153,22 +1156,25 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.processing.Generated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Generated("dev.aulait.jeg:jpa-entity-generator")
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "issue")
 public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
     implements java.io.Serializable {
 
+  @EqualsAndHashCode.Include
   @Id
   @Column(name = "id")
   @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -1185,15 +1191,15 @@ public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
 
   @Builder.Default
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "issue_id", insertable = false, updatable = false)
+  @JoinColumn(name = "issue_id", referencedColumnName = "id", insertable = false, updatable = false)
   private Set&lt;JournalEntity&gt; journals = new HashSet&lt;&gt;();
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "tracker_id")
+  @JoinColumn(name = "tracker_id", referencedColumnName = "id")
   private TrackerEntity tracker;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "status_id")
+  @JoinColumn(name = "status_id", referencedColumnName = "id")
   private IssueStatusEntity issueStatus;
 }</code></pre>
 </div>
@@ -1205,7 +1211,7 @@ public class IssueEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
 <p><a href="../arch-desc/index.html#_repository">アーキテクチャ記述</a> に従いRepositoryのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueRepository.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.domain.issue;
 
@@ -1227,7 +1233,7 @@ public interface IssueRepository extends JpaRepository&lt;IssueEntity, Integer&g
 <p><a href="../arch-desc/index.html#_service">アーキテクチャ記述</a> に従いServiceのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.domain.issue;
 
@@ -1263,10 +1269,11 @@ public class IssueService {
 <p><a href="../arch-desc/index.html#_dto">アーキテクチャ記述</a> に従いDTOのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueDto.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1278,6 +1285,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class IssueDto {
 
   @Schema(required = true, readOnly = true)
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private Integer id;
 
   @Schema(required = true)
@@ -1312,7 +1320,7 @@ public class IssueDto {
 <p><a href="../arch-desc/index.html#_controller">アーキテクチャ記述</a> に従いControllerのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
@@ -1352,10 +1360,7 @@ public class IssueController {
 <p>Serviceを使用してEntityをDBへ保存</p>
 </li>
 <li>
-<p><code>BeanUtils</code> を使用して保存後のEntityを DTOに変換</p>
-</li>
-<li>
-<p>DTOをレスポンスとして返却</p>
+<p>EntityのIDをレスポンスとして返却</p>
 </li>
 </ol>
 </div></td>
@@ -1596,13 +1601,13 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <p><a href="../arch-desc/index.html#_service">アーキテクチャ記述</a> に従いServiceのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueService.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.domain.issue;
 
-import dev.aulait.svqk.arch.jpa.SearchUtils;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
+import dev.aulait.sqb.jpa.JpaSearchQueryExecutor;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -1615,10 +1620,12 @@ public class IssueService {
 
   private final IssueRepository repository;
   private final EntityManager em;
+  private final JpaSearchQueryExecutor searchExecutor;
 
-  public SearchResultVo&lt;IssueEntity&gt; search(SearchCriteriaVo criteria) { <i class="conum" data-value="1"></i><b>(1)</b>
-    return SearchUtils.search(em, criteria); <i class="conum" data-value="2"></i><b>(2)</b>
-  }</code></pre>
+  public SearchResult&lt;IssueEntity&gt; search(SearchCriteria criteria) { <i class="conum" data-value="1"></i><b>(1)</b>
+    return searchExecutor.search(em, criteria); <i class="conum" data-value="2"></i><b>(2)</b>
+  }
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1629,7 +1636,7 @@ public class IssueService {
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>検索処理を行う <code>SearchUtils.search</code> メソッドの呼び出しを実装します。</td>
+<td>検索処理を行う <code>JpaSearchQueryExecutor.search</code> メソッドの呼び出しを実装します。</td>
 </tr>
 </table>
 </div>
@@ -1640,19 +1647,20 @@ public class IssueService {
 <p><a href="../arch-desc/index.html#_dto">アーキテクチャ記述</a> に従いDTOのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueSearchCriteriaDto.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.PageControlDto;
+import dev.aulait.sqb.PageControl;
+import dev.aulait.sqb.SortOrder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@Data
-public class IssueSearchCriteriaDto { <i class="conum" data-value="1"></i><b>(1)</b>
+@Data <i class="conum" data-value="1"></i><b>(1)</b>
+public class IssueSearchCriteriaDto {
   <i class="conum" data-value="2"></i><b>(2)</b>
   private String text;
   private List&lt;String&gt; issueStatuses = new ArrayList&lt;&gt;();
@@ -1660,7 +1668,9 @@ public class IssueSearchCriteriaDto { <i class="conum" data-value="1"></i><b>(1)
   private boolean subjectOnly;
 
   @Schema(required = true)
-  private PageControlDto pageControl = new PageControlDto();
+  private PageControl pageControl = new PageControl();
+
+  private List&lt;SortOrder&gt; sortOrders = new ArrayList&lt;&gt;();
 }</code></pre>
 </div>
 </div>
@@ -1668,14 +1678,10 @@ public class IssueSearchCriteriaDto { <i class="conum" data-value="1"></i><b>(1)
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>@EqualsAndHashCode</code> を設定します。</td>
+<td><code>@Data</code> を設定します。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>共通基底検索条件DTOを継承します。</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>検索条件として使用する項目をフィールドとして定義します。</td>
 </tr>
 </table>
@@ -1687,16 +1693,17 @@ public class IssueSearchCriteriaDto { <i class="conum" data-value="1"></i><b>(1)
 <p>検索条件のDTOからVoを構築するFactoryのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueFactory.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
-import static dev.aulait.svqk.arch.search.ComparisonOperatorCd.*;
-import static dev.aulait.svqk.arch.search.LogicalOperatorCd.*;
+import static dev.aulait.sqb.ComparisonOperator.*;
+import static dev.aulait.sqb.LogicalOperator.*;
 
-import dev.aulait.svqk.arch.search.SearchCriteriaBuilder;
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.LikePattern;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchCriteriaBuilder;
+import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.arch.util.BeanUtils.MappingConfig;
 import dev.aulait.svqk.domain.issue.IssueEntity;
@@ -1713,27 +1720,26 @@ public class IssueFactory {
           .skip(IssueDto::setJournals)
           .build(); <i class="conum" data-value="1"></i><b>(1)</b>
 
-  public SearchCriteriaVo build(IssueSearchCriteriaDto criteria) { <i class="conum" data-value="2"></i><b>(2)</b>
-    return new SearchCriteriaBuilder()
+  public SearchCriteria build(IssueSearchCriteriaDto criteria) { <i class="conum" data-value="2"></i><b>(2)</b>
+    Object text = LikePattern.contains(criteria.getText());
+
+    return new SearchCriteriaBuilder() <i class="conum" data-value="3"></i><b>(3)</b>
         .select("SELECT i FROM IssueEntity i")
         .select("JOIN FETCH i.issueStatus")
         .select("JOIN FETCH i.tracker")
-        .where("i.subject", LIKE, criteria.getText())
-        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : criteria.getText())
+        .where("i.subject", LIKE, text)
+        .where(OR, "i.description", LIKE, criteria.isSubjectOnly() ? null : text)
         .where("i.issueStatus.id", IN, criteria.getIssueStatuses())
         .where("i.dueDate", criteria.getDueDate())
         .defaultOrderBy("i.id", false)
-        .build(criteria.getPageControl()); <i class="conum" data-value="3"></i><b>(3)</b>
+        .orderBy(criteria.getSortOrders())
+        .build(criteria.getPageControl()); <i class="conum" data-value="4"></i><b>(4)</b>
   }
 
-  public IssueTrackingDto buildIssueTracking(List&lt;IssueTrackingRs&gt; issueTrackings) {
-    IssueTrackingDto dto = new IssueTrackingDto();
-
-    for (IssueTrackingRs issueTracking : issueTrackings) {
-      dto.add(
-          issueTracking.getTracker().getId(),
-          issueTracking.getIssueStatus().getId(),
-          issueTracking.getCount());</code></pre>
+  public IssueSearchResultDto build(SearchResult&lt;IssueEntity&gt; vo) { <i class="conum" data-value="5"></i><b>(5)</b>
+    return BeanUtils.map(searchResultConfig, vo, IssueSearchResultDto.class); <i class="conum" data-value="6"></i><b>(6)</b>
+  }
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1748,19 +1754,19 @@ public class IssueFactory {
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><code>SearchConditionBuilder</code> に検索対象のEntityや検索条件DTOの項目を使用した抽出条件を設定します。</td>
+<td><code>SearchCriteriaBuilder</code> に検索対象のEntityや検索条件DTOの項目を使用した抽出条件を設定します。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td><code>SearchConditionBuilder</code> への設定結果を元に検索条件Voを構築して返却します。</td>
+<td><code>SearchCriteriaBuilder</code> への設定結果を元に <code>SearchCriteria</code> を構築して返却します。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>検索結果VoからDTOを構築するメソッドを定義します。</td>
+<td><code>SearchResult</code> からDTOを構築するメソッドを定義します。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>マッピング設定を使用して検索結果VoからDTOを構築して返却します。</td>
+<td>マッピング設定を使用して <code>SearchResult</code> からDTOを構築して返却します。</td>
 </tr>
 </table>
 </div>
@@ -1771,18 +1777,18 @@ public class IssueFactory {
 <p><a href="../arch-desc/index.html#_conttoller">アーキテクチャ記述</a> に従いControllerのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
-import dev.aulait.svqk.arch.search.SearchCriteriaVo;
-import dev.aulait.svqk.arch.search.SearchResultDto;
-import dev.aulait.svqk.arch.search.SearchResultVo;
+import dev.aulait.sqb.SearchCriteria;
+import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
 import dev.aulait.svqk.domain.issue.IssueEntity;
 import dev.aulait.svqk.domain.issue.IssueService;
 import dev.aulait.svqk.domain.issue.JournalEntity;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -1802,18 +1808,18 @@ public class IssueController {
 
   static final String ISSUES_SEARCH_PATH = "search";
 
-  public static class IssueSearchResultDto extends SearchResultDto&lt;IssueDto&gt; {} <i class="conum" data-value="1"></i><b>(1)</b>
-
-  @POST
-  @Path(ISSUES_SEARCH_PATH)
-  public IssueSearchResultDto search(IssueSearchCriteriaDto dto) { <i class="conum" data-value="2"></i><b>(2)</b>
-    <i class="conum" data-value="3"></i><b>(3)</b>
-    SearchCriteriaVo vo = factory.build(dto);
-    SearchResultVo&lt;IssueEntity&gt; result = service.search(vo);
-
-    return factory.build(result);
+  public static class IssueSearchResultDto extends SearchResult&lt;IssueDto&gt; {} <i class="conum" data-value="1"></i><b>(1)</b>
   }
 
+  @DELETE
+  @Path(ISSUES_ID_PATH)
+  public Integer delete(@PathParam("issueId") int id, @Valid IssueDto dto) {
+    IssueEntity entity = BeanUtils.map(dto, IssueEntity.class);
+    entity.setId(id);
+    service.delete(entity);
+
+    return entity.getId();
+  }
 }</code></pre>
 </div>
 </div>
@@ -1890,69 +1896,6 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <p>VSCode Task: <code>gen-api-client</code> を実行し、API Clientを生成します。
 生成されたAPI Clientは svqk-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
 </div>
-<div class="listingblock">
-<div class="title">svqk-frontend/src/lib/arch/api/Api.ts</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">export interface IssueSearchCriteriaModel {
-  text?: string;
-  issueStatuses?: string[];
-  dueDate?: LocalDate;
-  subjectOnly?: boolean;
-  pageControl: PageControlModel;
-}
-
-export interface IssueSearchResultModel {
-  list: IssueModel[];
-  pageResult: PageResultModel;
-}
-
-export interface IssueStatusModel {
-  id: string;
-  name: string;
-  /** @format int64 */
-  version: number;
-}
-  pageNumsRange?: number;
-  sortOrders?: SortOrderModel[];
-  /** @format int32 */
-  offset?: number;
-}
-
-export interface PageResultModel {
-  /** @format int64 */
-  count: number;
-  /** @format int32 */
-  start: number;
-  /** @format int64 */
-  end: number;
-  /** @format int32 */
-  lastPageNum: number;
-  pageNums: number[];
-}
-
-export interface SortOrderModel {
-/**
-        format: 'json',
-        type: ContentType.Json,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Issue Controller
-     * @name IssuesSearch
-     * @request POST:/api/issues/search
-     */
-    issuesSearch: (data: IssueSearchCriteriaModel, params: RequestParams = {}) =&gt;
-      this.request&lt;IssueSearchResultModel, any&gt;({
-        path: `/api/issues/search`,
-        method: 'POST',
-        body: data,
-  };
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect5">
 <h6 id="_pageloader">PageLoader</h6>
@@ -1974,12 +1917,12 @@ export const load: PageLoad = async ({ fetch, url }) =&gt; {
       pageNumber: 1
     },
     ...JSON.parse(decodeURIComponent(url.searchParams.get('q') ?? '{}'))
-  } as IssueSearchCriteriaModel;
+  } as IssueSearchCriteriaModel; <i class="conum" data-value="1"></i><b>(1)</b>
 
   const result =
     (await ApiHandler.handle&lt;IssueSearchResultModel&gt;(fetch, (api) =&gt;
       api.issues.issuesSearch(condition)
-    )) || ({} as IssueSearchResultModel); <i class="conum" data-value="1"></i><b>(1)</b>
+    )) || ({} as IssueSearchResultModel); <i class="conum" data-value="2"></i><b>(2)</b>
 
   return {
     title: t.get('msg.issue'),
@@ -2038,6 +1981,9 @@ export const load: PageLoad = async ({ fetch, url }) =&gt; {
     .add($t('msg.dueDate'), 'i.dueDate', (issue) =&gt; DateUtils.date(issue.dueDate))
     .add($t('msg.updatedAt'), 'i.updatedAt', (issue) =&gt; DateUtils.datetime(issue.updatedAt))
     .build(); <i class="conum" data-value="2"></i><b>(2)</b>
+
+  function search() { <i class="conum" data-value="3"></i><b>(3)</b>
+
   }</code></pre>
 </div>
 </div>
@@ -2175,28 +2121,16 @@ Frontendサーバーの起動方法は<a href="#project-usage">プロジェク�
 <div class="listingblock">
 <div class="title">svqk-frontend/src/routes/issues/+page.svelte スクリプトセクション</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">    .build(); <i class="conum" data-value="1"></i><b>(1)</b>
-
-  function search() {
+<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">  function search() { <i class="conum" data-value="1"></i><b>(1)</b>
     goto(`?q=${encodeURIComponent(JSON.stringify(condition))}`);
-  }
-
-  afterNavigate(() =&gt; {
-    condition = data.condition;
-    open = Boolean(condition.subjectOnly || condition.issueStatuses?.length || condition.dueDate);
-  });
-&lt;/script&gt;</code></pre>
+  }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>ApiHandler.handle</code> 関数を使用してWeb APIを呼び出します。</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Web APIの呼び出し結果が正常に取得できた場合に、検索結果Objectを上書きます。</td>
+<td>検索条件オブジェクトをJSON文字列に変換しURIエンコードしたものをURLパラメータに付与して自画面に遷移します。</td>
 </tr>
 </table>
 </div>
@@ -2395,7 +2329,7 @@ public class V002__AddRecords extends BaseJavaCsvMigration {}</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>jeg設定ファイルを更新したらVSCode Task: <code>gen-entity</code> を実行し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。</p>
+<p>jeg設定ファイルを更新したらVSCode Task: <code>generate</code> を実行、プロンプトの <code>component</code> で <code>entity</code> を選択し、entityプロジェクト以下にEntityのjavaファイルが生成されていることを確認します。</p>
 </div>
 <div class="listingblock">
 <div class="title">svqk-entity/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusEntity.java</div>
@@ -2406,22 +2340,25 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import javax.annotation.processing.Generated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Generated("dev.aulait.jeg:jpa-entity-generator")
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "issue_status")
 public class IssueStatusEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
     implements java.io.Serializable {
 
+  @EqualsAndHashCode.Include
   @Id
   @Column(name = "id")
   private String id;
@@ -2438,7 +2375,7 @@ public class IssueStatusEntity extends dev.aulait.svqk.arch.jpa.BaseEntity
 <p><a href="../arch-desc/index.html#_repository">アーキテクチャ記述</a> に従いRepositoryのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusRepository.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.domain.issue;
 
@@ -2454,7 +2391,7 @@ public interface IssueStatusRepository extends JpaRepository&lt;IssueStatusEntit
 <p><a href="../arch-desc/index.html#_service">アーキテクチャ記述</a> に従いServiceのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/domain/issue/IssueStatusService.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.domain.issue;
 
@@ -2493,7 +2430,7 @@ public class IssueStatusService {
 <p><a href="../arch-desc/index.html#_dto">アーキテクチャ記述</a> に従いDTOのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusDto.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
@@ -2526,7 +2463,7 @@ public class IssueStatusDto implements Comparable&lt;IssueStatusDto&gt; {
 <p><a href="../arch-desc/index.html#_controller">アーキテクチャ記述</a> に従いControllerのjavaファイルを作成/更新します。</p>
 </div>
 <div class="listingblock">
-<div class="title">svqk-back/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java</div>
+<div class="title">svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueStatusController.java</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.issue;
 
@@ -2556,7 +2493,7 @@ public class IssueStatusController {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには`@GET` を設定します。</td>
+<td>画面で使用するマスターデータを取得するWeb APIのエンドポイントとなるメソッドを定義します。メソッドには <code>@GET</code> を設定します。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -2591,35 +2528,6 @@ Backendサーバーの起動方法は<a href="#project-usage">プロジェクト
 <div class="paragraph">
 <p>VSCode Task: <code>gen-api-client</code> を実行し、API Clientを生成します。
 生成されたAPI Clientは svqk-frontend/src/lib/arch/api/Api.ts ファイルに出力されます。</p>
-</div>
-<div class="listingblock">
-<div class="title">svqk-frontend/src/lib/arch/api/Api.ts</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts">export interface IssueTrackingModel {
-  trackerStatusCountMap: Record&lt;string, Record&lt;string, number&gt;&gt;;
-  trackerCountMap: Record&lt;string, number&gt;;
-}
-
-export interface IssueUpdateModel {
-/**
-        format: 'json',
-        ...params
-      })
-  };
-  issueStatuses = {
-    /**
-     * No description
-     *
-     * @tags Issue Status Controller
-     * @name IssueStatusesList
-     * @request GET:/api/issue-statuses
-     */
-    issueStatusesList: (params: RequestParams = {}) =&gt;
-      this.request&lt;IssueStatusModel[], any&gt;({
-        path: `/api/issue-statuses`,
-        method: 'GET',
-        format: 'json',</code></pre>
-</div>
 </div>
 </div>
 <div class="sect4">

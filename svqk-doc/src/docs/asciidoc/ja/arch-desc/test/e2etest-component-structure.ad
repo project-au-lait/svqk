@@ -1,3 +1,4 @@
+:project_root: ../../../../../../../
 ==== コンポーネント構造
 
 テストプログラムを構成するコンポーネントとそれらの相互作用を以下の通り定義します。
@@ -54,38 +55,14 @@ Specには、テストシナリオをPlaywrightのテストケースとして実
 .Specの実装
 [source,ts]
 ----
-import { test } from '@playwright/test';
-import { IssueFacade } from '../facades/IssueFacade';
-import { DryRun } from '../arch/DryRun';
-import TopPage from '../pages/top/TopPage';
-import IssueInputFactory from '../factories/IssueFactory';
-
-// <.>
-test('CRUD of Issue', async ({ page }) => {
-  // <.>
-  const dryRun = DryRun.build();
-  const topPage = new TopPage(page, dryRun);
-
-  // <.>
-  const menuBar = await topPage.open();
-  let issueListPage = await menuBar.gotoIssueListPage();
-  let issueInputPage = await issueListPage.gotoNewIssuePage();
-
-  // Create
-  const issue = IssueInputFactory.createRandomIssue();
-  await issueInputPage.save(issue);
-
-  // Rererence
-  const issueFacade = new IssueFacade(dryRun);
-  issueInputPage = await issueFacade.referenceIssueBySubject(menuBar, issue.subject);
-
+include::{project_root}/svqk-e2etest/tests/specs/issue.spec.ts[lines="1..32"]
   // ...
 });
 ----
 
 . Playwrightが提供するtest関数を使用してテストケースを定義します。これが実行可能なテストのエントリーポイントとなります。
 . テストシナリオの実行に必要なコンポーネントの初期化を行います。
-. Facade、PageObjectを使用してテストシナリオを実装します。上記の例の3行では「トップページを開く、メニューバーを操作してチケット一覧画面へ遷移、チケット一覧画面を操作してチケット登録画面へ遷移」というシナリオを実装しています。
+. Facade、PageObjectを使用してテストシナリオを実装します。上記の例では「トップページを開く、メニューバーを操作してチケット一覧画面へ遷移、チケット一覧画面を操作してチケット登録画面へ遷移」というシナリオを実装しています。
 
 ===== Facade
 
@@ -96,23 +73,7 @@ Facadeには、これらを行うメソッドをPageObjectを使用して実装�
 .Facadeの実装
 [source,ts]
 ----
-import BaseFacade from '../arch/BaseFacade';
-import MenuBar from '../pages/menu-bar/MenuBar';
-
-export class IssueFacade extends BaseFacade {
-  // <.>
-  async referenceIssueBySubject(menuBar: MenuBar, subject: string) {
-    this.logStart('Issue Reference');
-
-    // <.>
-    const issueListPage = await menuBar.gotoIssueListPage();
-    await issueListPage.searchIssue({ text: subject });
-    const issueInputPage = await issueListPage.gotoIssueBySubject(subject);
-
-    // <.>
-    return issueInputPage;
-  }
-}
+include::{project_root}/svqk-e2etest/tests/facades/IssueFacade.ts[]
 ----
 
 . Facadeのメソッドは以下を引数に持ちます。
@@ -129,32 +90,7 @@ PageObjectには、これらを行うメソッドをPageElementを使用して�
 .PageObjectの実装
 [source,ts]
 ----
-import IssueInputPageElement from './IssueInputPageElement';
-import type { IssueModel } from '../../api/Api';
-import BasePageElement from '../../arch/BasePageElement';
-
-export default class IssueInputPage {
-  private issueInputPageEl: IssueInputPageElement;
-
-  constructor(page: BasePageElement) {
-    // <.>
-    this.issueInputPageEl = new IssueInputPageElement(page);
-  }
-
-  // <.>
-  async save(issue: IssueModel) {
-    // <.>
-    await this.issueInputPageEl.inputSubject(issue.subject);
-    await this.issueInputPageEl.inputDescription(issue.description!);
-
-    await this.issueInputPageEl.clickSaveBtn();
-  }
-
-  // <.>
-  async expectIssue(issue: IssueModel) {
-    await this.issueInputPageEl.expectSubject(issue.subject);
-    await this.issueInputPageEl.expectDescription(issue.description);
-  }
+include::{project_root}/svqk-e2etest/tests/pages/issue-input/IssueInputPage.ts[lines="1..17,22..29"]
 }
 ----
 
@@ -171,30 +107,12 @@ PageElemntには、これらを行うメソッドをBasePageElementを使用し�
 .PageElementの実装
 [source,ts]
 ----
-import BasePageElement from '../../arch/BasePageElement';
-
-// <.>
-export default class IssueInputPageElement extends BasePageElement {
-  get pageNameKey() {
-    return 'newIssue';
-  }
-
-  // <.>
-  async inputSubject(subject: string) {
-    // <.>
-    await this.inputText('#subject', subject);
-  }
-
-  // <.>
-  async expectSubject(subject: string) {
-    await this.expectText('#subject', subject);
-  }
-
+include::{project_root}/svqk-e2etest/tests/pages/issue-input/IssueInputPageElement.ts[lines="1..14,27..31"]
 }
 ----
 
 . PageElementの共通基底クラスであるBasePageElementを継承します。これにより開発者はPlaywrightのAPIを意識せずにPageElementを実装できます。
-. 1つの画面項目に対する操作を1メソッドとして定義します。上記の例では「 `題名` 項目に引数で指定された文字列を入力する」メソッドを定義しています。
+. 1つの画面項目に対する操作を1メソッドとして定義します。上記の例では「 `subject` 項目に引数で指定された文字列を入力する」メソッドを定義しています。
 . BasePageElementが提供するAPIを使用して画面要素に対する操作を実装します。上記の例では、「ロケーター `#subject` で指定される画面要素に対し、引数で指定された文字列を入力する」という操作を実装しています。
 . 1つの画面項目に対する期待値の検証を1メソッドとして定義します。
 
@@ -205,24 +123,7 @@ Factoryは、テストで使用するModelの生成を担うコンポーネン�
 .Factoryの実装
 [source,ts]
 ----
-import type { IssueModel, IssueStatusModel } from '../api/Api';
-import StringUtils from '../arch/StringUtils';
-
-export default class IssueFactory {
-  static create() {
-    const issue = { issueStatus: {} as IssueStatusModel } as IssueModel;
-    return issue;
-  }
-
-  // <.>
-  static createRandomIssue() {
-    const issue = this.create();
-    issue.subject = StringUtils.generateRandomString();
-    issue.description = `${issue.subject}の説明`;
-
-    return issue;
-  }
-}
+include::{project_root}/svqk-e2etest/tests/factories/IssueFactory.ts[]
 ----
 
-. テストに使用するModelを生成するメソッドを実装します。上記の例では `題名`、`説明`にランダムな文字列を持つ `issue` Modelを生成しています。
+. テストに使用するModelを生成するメソッドを実装します。上記の例では `subject`、`description`にランダムな文字列を持つ `issue` Modelを生成しています。
