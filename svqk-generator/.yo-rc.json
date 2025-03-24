@@ -5,7 +5,7 @@
     "destITPath": "../svqk-backend/src/integration-test/java",
     "destFrontPath": "../svqk-frontend/src",
     "destE2EPath": "../svqk-e2etest/tests",
-    "templateType": "skeleton",
+    "templateType": "arch",
     "genEntityCmd":"./mvnw -f svqk-entity -P gen-entity",
     "genOpenApiJsonCmd":"./mvnw -T 1C -pl svqk-backend -am -P gen-openapi-spec package",
     "frontApiClientPath": "../svqk-frontend/src/lib/arch/api",
