@@ -252,37 +252,45 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       return;
     }
 
-    this.templateDataList.forEach((templateData) => {
-      switch (this.optionsValues.component) {
-        case "backend":
+    switch (this.optionsValues.component) {
+      case "backend":
+        this.templateDataList.forEach((templateData) => {
           this.backendGenerator.generate_backend(
             templateData,
             this.optionsValues.templateType,
             this.destPaths.destBackPath
           );
-          break;
-        case "integration-test":
+        });
+        break;
+      case "integration-test":
+        this.templateDataList.forEach((templateData) => {
           this.backendGenerator.generate_integrationtest(
             templateData,
             this.optionsValues.templateType,
             this.destPaths.destITPath
           );
-          break;
-        case "frontend":
+        });
+        break;
+      case "frontend":
+        this.templateDataList.forEach((templateData) => {
           this.frontendGenerator.generate_frontend(
             templateData,
             this.optionsValues.templateType,
             this.destPaths.destFrontPath
           );
-          break;
-        case "e2e-test":
+        });
+        break;
+      case "e2e-test":
+        this.templateDataList.forEach((templateData) => {
           this.frontendGenerator.generate_e2etest(
             templateData,
             this.optionsValues.templateType,
             this.destPaths.destE2EPath
           );
-          break;
-        case "all":
+        });
+        break;
+      case "all":
+        this.templateDataList.forEach((templateData) => {
           this.backendGenerator.generate_backend(
             templateData,
             this.optionsValues.templateType,
@@ -303,9 +311,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
             this.optionsValues.templateType,
             this.destPaths.destE2EPath
           );
-          break;
-      }
-    });
+        });
+        break;
+    }
 
     if (
       this.optionsValues.component === "all" ||
