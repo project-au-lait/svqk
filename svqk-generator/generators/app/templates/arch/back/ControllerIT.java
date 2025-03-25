@@ -1,6 +1,6 @@
-<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<% include('../../lib/interface-common'); -%>
 <%_
-clientIdArgs = compIdFields ? buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
+clientIdArgs = compIdFields ? ifcom.buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -30,10 +30,10 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= interfaceIdType %> id = dto.get<%= idField.fieldNmPascal %>();
+    <%= ifcom.interfaceIdType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
-    <%= interfaceIdType %> createdId = client.save(dto);
+    <%= ifcom.interfaceIdType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference
@@ -42,7 +42,7 @@ class <%= entityNmPascal %>ControllerIT {
 
     // Update
     // TODO Implementation of assembling a request and assertion
-    <%= interfaceIdType %> updatedId = client.update(dto);
+    <%= ifcom.interfaceIdType %> updatedId = client.update(dto);
 
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();
@@ -52,7 +52,7 @@ class <%= entityNmPascal %>ControllerIT {
     <%= entityNmPascal %>Dto updated<%= entityNmPascal %> = client.get(<%= clientIdArgs %>);
 
     // Delete
-    <%= interfaceIdType %> deletedId = client.delete(<%= clientIdArgs %>, updated<%= entityNmPascal %>);
+    <%= ifcom.interfaceIdType %> deletedId = client.delete(<%= clientIdArgs %>, updated<%= entityNmPascal %>);
     assertEquals(deletedId, id);
 
     ErrorResponseDto error = client.getWithError(<%= clientIdArgs %>);

@@ -1,6 +1,6 @@
-<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<% include('../../lib/interface-common'); -%>
 <%_
-clientGetArgs = compIdFields ? buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
+clientGetArgs = compIdFields ? ifcom.buildArgs((field) => `id.get${field.fieldNmPascal}()`) : "id";
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -25,10 +25,10 @@ class <%= entityNmPascal %>ControllerIT {
   @Test
   void testCrud() {
     <%= entityNmPascal %>Dto dto = <%= entityNmPascal %>DataFactory.create<%= entityNmPascal %>();
-    <%= interfaceIdType %> id = dto.get<%= idField.fieldNmPascal %>();
+    <%= ifcom.interfaceIdType %> id = dto.get<%= idField.fieldNmPascal %>();
 
     // Create
-    <%= interfaceIdType %> createdId = client.save(dto);
+    <%= ifcom.interfaceIdType %> createdId = client.save(dto);
     assertEquals(id, createdId);
 
     // Reference

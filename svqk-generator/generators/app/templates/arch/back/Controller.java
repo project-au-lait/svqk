@@ -1,18 +1,14 @@
-<%_ include('../../lib/interface-common', { idField, compIdFields }); -%>
+<% include('../../lib/interface-common'); -%>
 <%_
-idPath = idFields.map((field) => `{${field.fieldName}}`).join("/");
-idMethodArgs = buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
+idPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
+idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
 -%>
 package <%= interfacesPkgNm %>;
 
 import dev.aulait.sqb.SearchCriteria;
 import dev.aulait.sqb.SearchResult;
 import dev.aulait.svqk.arch.util.BeanUtils;
-import <%= domainPkgNm %>.<%= entityNmPascal %>Entity;
-<%_ if(compIdFields) { -%>
-import <%= domainPkgNm %>.<%= entityNmPascal %>EntityId;
-<%_ } -%>
-import <%= domainPkgNm %>.<%= entityNmPascal %>Service;
+<%= ifcom.imports %>
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -41,69 +37,39 @@ public class <%= entityNmPascal %>Controller {
   @GET
   @Path(<%= entityNmAllCaps %>_ID_PATH)
   public <%= entityNmPascal %>Dto get(<%- idMethodArgs %>) {
-  <%_ if (compIdFields) { -%>
-    <%= entityNmPascal %>Entity entity =
-        <%= entityNmCamel %>Service.find(
-            <%= idField.javaType %>.builder()
-              <%_ compIdFields.forEach((compIdField) => { -%>
-                .<%= compIdField.fieldName %>(<%= compIdField.fieldName %>)
-              <%_ }); -%>
-                .build());
-  <%_ } else { -%>
-    <%= entityNmPascal %>Entity entity = <%= entityNmCamel %>Service.find(<%= idField.fieldName %>);
-  <%_ } -%>
+<%= ifcom.buildEntity %>
 
     return BeanUtils.map(entity, <%= entityNmPascal %>Dto.class);
   }
 
   @POST
-  public <%= interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
 
-  <%_ if (compIdFields) { -%>
-    return BeanUtils.map(savedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
-  <%_ } else { -%>
-    return savedEntity.get<%= idField.fieldNmPascal %>();
-  <%_ } -%>
+<%= ifcom.buildReturnString("savedEntity") %>
   }
 
   @PUT
-  public <%= interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
-  <%_ if (compIdFields) { -%>
-    return BeanUtils.map(updatedEntity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
-  <%_ } else { -%>
-    return updatedEntity.get<%= idField.fieldNmPascal %>();
-  <%_ } -%>
+<%= ifcom.buildReturnString("updatedEntity") %>
   }
 
   @DELETE
   @Path(<%= entityNmAllCaps %>_ID_PATH)
-  public <%= interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
+  public <%= ifcom.interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
-    <%_ if (compIdFields) { -%>
-      <%= idField.javaType %> entityId = <%= idField.javaType %>.builder()
-                                  <%_ compIdFields.forEach((compIdField) => { -%>
-                                    .<%= compIdField.fieldName %>(<%= compIdField.fieldName %>)
-                                  <%_ }); -%>.build();
-      entity.setId(entityId);
-    <%_ } else { -%>
-      entity.setId(id);
-    <%_ } -%>
+<%= ifcom.buildEntityId %>
 
     <%= entityNmCamel %>Service.delete(entity);
 
-    <%_ if (compIdFields) { -%>
-      return BeanUtils.map(entity.get<%= idField.fieldNmPascal %>(), <%= interfaceIdType %>.class);
-    <%_ } else { -%>
-      return entity.get<%= idField.fieldNmPascal %>();
-    <%_ } -%>
+<%= ifcom.buildReturnString("entity") %>
   }
 
   @POST

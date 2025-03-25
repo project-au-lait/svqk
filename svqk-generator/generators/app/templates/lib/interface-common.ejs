@@ -1,10 +1,53 @@
-<%# args: (idField: Field, compIdFields?: Field[]) %>
 <%
-idFields = compIdFields ?? [idField];
+const idFields = compIdFields ?? [idField];
+const fieldsBuildString = compIdFields ? compIdFields.map((compIdField) => {
+  return `.${compIdField.fieldName}(${compIdField.fieldName})`
+}).join("") : "";
 
-buildArgs = (argTemplate) => idFields.map(argTemplate).join(", ");
+function createIndent(num) {
+  return " ".repeat(num);
+}
 
-interfaceIdType = compIdFields ? `${entityNmPascal}IdDto` : idField.javaType;
+function buildImports() {
+  const snippet = `import ${domainPkgNm}.${entityNmPascal}`;
+  return `${snippet}Entity;\n`.concat(compIdFields ? `${snippet}EntityId;\n` : [], `${snippet}Service;`);
+}
 
-idPath = compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`;
+function buildEntity(num = 4) {
+  if (compIdFields) {
+    return `${createIndent(num)}${entityNmPascal}Entity entity = ${entityNmCamel}Service.find(${idField.javaType}.builder()${fieldsBuildString}.build());`;
+  } else {
+    return `${createIndent(num)}${entityNmPascal}Entity entity = ${entityNmCamel}Service.find(${idField.fieldName});`;
+  }
+}
+
+function buildEntityId(num = 4) {
+  if (compIdFields) {
+    return [
+      `${createIndent(num)}${idField.javaType} entityId = ${idField.javaType}.builder()${fieldsBuildString}.build();`,
+      `${createIndent(num)}entity.setId(entityId);`
+      ].join("\n");
+  } else {
+    return `${createIndent(num)}entity.setId(id);`;
+  }
+}
+
+function buildReturnString(entityVariable, num = 4) {
+  if (compIdFields) {
+    return `${createIndent(num)}return BeanUtils.map(${entityVariable}.get${idField.fieldNmPascal}(), ${ifcom.interfaceIdType}.class);`;
+  } else {
+    return `${createIndent(num)}return ${entityVariable}.get${idField.fieldNmPascal}();`;
+  }
+}
+
+ifcom = {
+  idFields: idFields,
+  buildArgs: (argTemplate) => idFields.map(argTemplate).join(", "),
+  interfaceIdType: compIdFields ? `${entityNmPascal}IdDto` : idField.javaType,
+  idPath: compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`,
+  imports: buildImports(),
+  buildEntity: buildEntity(),
+  buildEntityId: buildEntityId(),
+  buildReturnString: (entityVariable) => buildReturnString(entityVariable),
+}
 %>
