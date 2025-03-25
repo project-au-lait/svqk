@@ -26,12 +26,12 @@ export class BackendGenerator {
     templateType: string,
     destinationPath: string
   ) {
-    const destBackDomainPkgPath = BackendGenerator.build_dest_package_path(
+    const destBackDomainPkgPath = this.build_dest_package_path(
       destinationPath,
       templateData.domainPkgNm
     );
 
-    const destBackIfPkgPath = BackendGenerator.build_dest_package_path(
+    const destBackIfPkgPath = this.build_dest_package_path(
       destinationPath,
       templateData.interfacesPkgNm
     );
@@ -79,7 +79,7 @@ export class BackendGenerator {
     templateType: string,
     destinationPath: string
   ) {
-    const destITPkgPath = BackendGenerator.build_dest_package_path(
+    const destITPkgPath = this.build_dest_package_path(
       destinationPath,
       templateData.interfacesPkgNm
     );
@@ -91,7 +91,7 @@ export class BackendGenerator {
     );
   }
 
-  private static build_dest_package_path(
+  private build_dest_package_path(
     destRootPath: string,
     pkgNm: string
   ): string {

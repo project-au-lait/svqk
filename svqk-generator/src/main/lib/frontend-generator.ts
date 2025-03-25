@@ -30,8 +30,7 @@ export class FrontendGenerator {
 
     const entityPathCamel = `${destinationPath}/routes/${templateData.entityNmCamel}`;
     const entityPathPlural = `${destinationPath}/routes/${templateData.entityNmPlural}`;
-    const forntendPagePath =
-      FrontendGenerator.build_frontend_page_path(templateData);
+    const forntendPagePath = this.build_frontend_page_path(templateData);
 
     if (templateType === "skeleton") {
       pathPairs = [
@@ -88,14 +87,14 @@ export class FrontendGenerator {
       pathPairs = [
         [
           "e2etest/spec.ts",
-          `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(templateData)}`,
+          `${destinationPath}/${this.build_e2e_spec_path(templateData)}`,
         ],
       ];
     } else if (templateType === "arch") {
       pathPairs = [
         [
           "e2etest/spec.ts",
-          `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(templateData)}`,
+          `${destinationPath}/${this.build_e2e_spec_path(templateData)}`,
         ],
         [
           "e2etest/Facade.ts.ejs",
@@ -129,12 +128,12 @@ export class FrontendGenerator {
     }
   }
 
-  private static build_frontend_page_path(tmplData: TemplateData): string {
+  private build_frontend_page_path(tmplData: TemplateData): string {
     const idFields = tmplData.compIdFields || [tmplData.idField];
     return idFields.map((idField) => `[${idField.fieldName}]`).join("/");
   }
 
-  private static build_e2e_spec_path(tmplData: TemplateData): string {
+  private build_e2e_spec_path(tmplData: TemplateData): string {
     return `specs/${tmplData.domainPkgNm.split(".").slice(-1)[0]}/${tmplData.entityNmCamel}.spec.ts`;
   }
 
