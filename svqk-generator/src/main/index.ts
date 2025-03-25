@@ -67,17 +67,17 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
 
-    this.backendGenerator = new BackendGenerator({
-      fs: this.fs,
-      templatePath: this.templatePath.bind(this),
-      destinationPath: this.destinationPath.bind(this),
-    });
+    this.backendGenerator = new BackendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this)
+    );
 
-    this.frontendGenerator = new FrontendGenerator({
-      fs: this.fs,
-      templatePath: this.templatePath.bind(this),
-      destinationPath: this.destinationPath.bind(this),
-    });
+    this.frontendGenerator = new FrontendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this)
+    );
 
     this.option("component", {
       type: String,

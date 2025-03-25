@@ -1,25 +1,13 @@
 import { TemplateData } from "../types.js";
 
 export class FrontendGenerator {
-  private readonly fs: {
-    copyTpl: (src: string, dest: string, data: TemplateData) => void;
-  };
-  private readonly templatePath: (...pathSegments: string[]) => string;
-  private readonly destinationPath: (...pathSegments: string[]) => string;
-
-  constructor({
-    fs,
-    templatePath,
-    destinationPath,
-  }: {
-    fs: { copyTpl: (src: string, dest: string, data: TemplateData) => void };
-    templatePath: (...pathSegments: string[]) => string;
-    destinationPath: (...pathSegments: string[]) => string;
-  }) {
-    this.fs = fs;
-    this.templatePath = templatePath;
-    this.destinationPath = destinationPath;
-  }
+  constructor(
+    private readonly fs: {
+      copyTpl: (src: string, dest: string, data: TemplateData) => void;
+    },
+    private readonly templatePath: (...pathSegments: string[]) => string,
+    private readonly destinationPath: (...pathSegments: string[]) => string
+  ) {}
 
   public generate_frontend(
     templateData: TemplateData,
