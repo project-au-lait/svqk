@@ -64,7 +64,7 @@
       </try>
 
       <finally>
-        <exec executable="docker" dir="${projectdir}/${project}-container">
+        <exec executable="docker" dir="${projectdir}/${project}-container" failonerror="true">
           <arg line="compose down" />
         </exec>
       </finally>
