@@ -91,6 +91,13 @@ export class BackendGenerator {
     );
   }
 
+  private static build_dest_package_path(
+    destRootPath: string,
+    pkgNm: string
+  ): string {
+    return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
+  }
+
   private output_backend_file(
     components: string[],
     destPkgPath: string,
@@ -106,12 +113,5 @@ export class BackendGenerator {
         templateData
       );
     });
-  }
-
-  private static build_dest_package_path(
-    destRootPath: string,
-    pkgNm: string
-  ): string {
-    return `${destRootPath}/${pkgNm.replace(/\./g, "/")}`;
   }
 }
