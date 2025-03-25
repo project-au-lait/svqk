@@ -63,7 +63,7 @@
 <form use:form>
   <%_ for (field of compIdFields || [idField]){ _%>
   <div>
-    <%- tscom.inputField(field, true) %>
+    <%- tscom.inputField(field, !!compIdFields) %>
   </div>
   <%_ } _%>
   <%_ for (field of nonIdFields) { _%>
