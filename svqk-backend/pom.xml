@@ -17,8 +17,9 @@
     <compiler-plugin.version>3.12.1</compiler-plugin.version>
 
     <jackson.version>2.17.1</jackson.version>
+    <jacoco.version>0.8.12</jacoco.version>
 
-    <quarkus.container-image.build>true</quarkus.container-image.build>
+    <quarkus.container-image.build>false</quarkus.container-image.build>
     <quarkus.container-image.group>${project.parent.artifactId}</quarkus.container-image.group>
     <quarkus.container-image.registry>${image.registry}</quarkus.container-image.registry>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
@@ -131,6 +132,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
@@ -216,10 +222,50 @@
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <maven.home>${maven.home}</maven.home>
             <quarkus.datasource.jdbc.url>
-              jdbc:postgresql://host.docker.internal:${db.port}/${db.name}?currentSchema=${db.schema}</quarkus.datasource.jdbc.url>
+              jdbc:postgresql://localhost:${db.port}/${db.name}?currentSchema=${db.schema}</quarkus.datasource.jdbc.url>
+            <quarkus.test.arg-line>${argLine}</quarkus.test.arg-line>
             <tz>Asia/Tokyo</tz>
           </systemPropertyVariables>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
+              <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
+              <append>true</append>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-prepare-agent-integration</id>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+            <configuration>
+              <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
+              <append>true</append>
+            </configuration>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/jacoco-quarkus.exec</dataFile>
+              <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
@@ -261,7 +307,7 @@
     <profile>
       <id>setup</id>
       <properties>
-        <quarkus.container-image.build>true</quarkus.container-image.build>
+        <quarkus.container-image.build>false</quarkus.container-image.build>
       </properties>
     </profile>
 
@@ -272,7 +318,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.12</version>
+            <version>${jacoco.version}</version>
             <executions>
               <execution>
                 <goals>
