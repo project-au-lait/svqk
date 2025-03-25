@@ -98,7 +98,7 @@ export class FrontendGenerator {
           `${destinationPath}/${FrontendGenerator.build_e2e_spec_path(templateData)}`,
         ],
         [
-          "e2etest/Facade.ts",
+          "e2etest/Facade.ts.ejs",
           `${destinationPath}/facades/${templateData.entityNmPascal}Facade.ts`,
         ],
         [
@@ -114,11 +114,11 @@ export class FrontendGenerator {
           `${inputDestPath}/${templateData.entityNmPascal}InputPageElement.ts`,
         ],
         [
-          `${listTmplPath}/ListPage.ts`,
+          `${listTmplPath}/ListPage.ts.ejs`,
           `${listDestPath}/${templateData.entityNmPascal}ListPage.ts`,
         ],
         [
-          `${listTmplPath}/ListPageElement.ts`,
+          `${listTmplPath}/ListPageElement.ts.ejs`,
           `${listDestPath}/${templateData.entityNmPascal}ListPageElement.ts`,
         ],
       ];
