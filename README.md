@@ -17,16 +17,16 @@ An asset consists of:
 - **Maven Archetype**
   - The asset contains Maven Archetype.
   - When you start a new project with assets, you create a project from this Maven Archetype.
-- **Archetecture Specification**
+- **Archetecture Description**
   - A document specifying the architecture to which a reference implementation conforms.
 - **Implementation Guide**
   - This document helps you understand the contents of the Architecture Specification and Reference Implementation.
 
 This repository contains the set of materials that make up the above assets.
 
-## Website
+## Quick Start
 
-[aulait.dev/#svqk](https://aulait.dev/#svqk)
+[Quick Start](https://aulait.dev/#svqk)
 
 ## Document
 
