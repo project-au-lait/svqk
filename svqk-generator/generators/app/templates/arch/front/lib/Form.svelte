@@ -45,7 +45,7 @@
   }
 
   async function del() {
-    const response = await ApiHandler.handle<<%= idType %>>(fetch, (api) =>
+    const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) =>
       <%_ if (compIdFields) { _%>
         api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>)
       <%_ } else { _%>
@@ -61,36 +61,28 @@
 </script>
 
 <form use:form>
-  <%_ if(compIdFields) { _%>
-    <%_ for (field of compIdFields || []) { _%>
+  <%_ for (field of compIdFields || [idField]){ _%>
   <div>
     <%- tscom.inputField(field, true) %>
   </div>
-    <%_ } _%>  
-    <%_ for (field of nonIdFields) { _%>
+  <%_ } _%>
+  <%_ for (field of nonIdFields) { _%>
   <div>
     <%- tscom.inputField(field, false) %>
   </div>
-    <%_ } _%>
-  <%_ } else { _%>
-    <%_ for (field of fields) { _%>
-  <div>
-    <%- tscom.inputField(field, false) %>
-  </div>
-    <%_ } _%>
   <%_ } _%>
   <div class="grid">
     <div>
-      <button type="submit" id="save" data-handler={save.name}
-      >{updateMode ? $t('msg.update') : $t('msg.register')}</button
-      >
+      <button type="submit" id="save" data-handler={save.name}>
+        {updateMode ? $t('msg.update') : $t('msg.register')}
+      </button>
     </div>
-    {#if updateMode}
-      <div>
-        <button type="submit" id="del" data-handler={del.name}
-          >{$t('msg.delete')}</button
-        >
-      </div>
-    {/if}
+  {#if updateMode}
+    <div>
+      <button type="submit" id="del" data-handler={del.name}>
+        {$t('msg.delete')}
+      </button>
+    </div>
+  {/if}
   </div>
 </form>
