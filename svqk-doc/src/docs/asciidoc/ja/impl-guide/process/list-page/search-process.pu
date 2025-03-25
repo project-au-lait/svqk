@@ -7,16 +7,12 @@ actor User
 
 box "Frontend" #ffffff
   participant Page
+  participant PageLoader
 end box
 
-box "Backend" #ffffff
-  participant Controller
-end box
 
 User -> Page: action
-Page -> Controller: POST condidion \l model -> dto
-autonumber stop
-Controller -> : 
-Page <-- Controller: result \l model <- dto
-autonumber resume
-Page -> Page: render
+Page -> Page: navigate\nwith criteria
+group Initialization process
+  Page -> PageLoader: load
+end

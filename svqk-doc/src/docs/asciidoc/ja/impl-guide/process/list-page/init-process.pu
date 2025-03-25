@@ -14,7 +14,7 @@ box "Backend" #ffffff
   participant Controller
   participant Factory
   participant Service
-  participant SearchUtils
+  participant Search
 end box
 
 database DB
@@ -28,17 +28,17 @@ autonumber stop
 Controller <-- Factory
 autonumber resume
 Controller -> Service: search(condition)
-Service -> SearchUtils: search(condition)
-SearchUtils -> DB: SELECT COUNT
+Service -> SearchExecutor: search(condition)
+SearchExecutor -> DB: SELECT COUNT
 autonumber stop
-SearchUtils <-- DB: count
+SearchExecutor <-- DB: count
 alt count > 0
   autonumber resume
-  SearchUtils -> DB: SELECT
+  SearchExecutor -> DB: SELECT
   autonumber stop
-  SearchUtils <-- DB
+  SearchExecutor <-- DB
 end alt
-Service <-- SearchUtils: result
+Service <-- SearchExecutor: result
 Controller <-- Service: result
 autonumber resume
 Controller -> Factory: build(result) \l vo -> dto

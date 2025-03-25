@@ -25,9 +25,9 @@ a|[.description]
 . PageLoaderが空の検索条件で検索Web APIを呼び出します。取得した結果はmodelとしてPageに返却します。
 . ControllerがFactroyを使用して検索条件をDTOからVoに変換します。
 . ControllerがServiceを呼び出します。
-. ServiceがSearchUtilsを呼び出します。
-. SearchUtilsがDBに対しSELECTを実行して検索結果件数を取得します。
-. 検索結果件数が0より大きい場合、SearchUtilsがDBに対しSELECTを実行して検索結果を取得します。
+. ServiceがSearchExecutorを呼び出します。
+. SearchExecutorがDBに対しSELECTを実行して検索結果件数を取得します。
+. 検索結果件数が0より大きい場合、SearchExecutorがDBに対しSELECTを実行して検索結果を取得します。
 . ControllerがFactoryを使用して検索結果をVoからDTOに変換します。
 |===
 
@@ -85,7 +85,7 @@ xref:../arch-desc/index.adoc#_conttoller[アーキテクチャ記述] に従いC
 .{project-artifactid}-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java
 [source,java]
 ----
-include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..26s,31..34,63..73"]
+include::{project_root}/svqk-backend/src/main/java/dev/aulait/svqk/interfaces/issue/IssueController.java[lines="1..26,31..35,75..83"]
 }
 ----
 
@@ -115,10 +115,16 @@ xref:../arch-desc/index.adoc#_pageloader[アーキテクチャ記述] に従いP
 .{project-artifactId}-frontend/src/routes/issues/+page.ts
 [source,ts]
 ----
-include::{project_root}/svqk-frontend/src/routes/issues/+page.ts[]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.ts[lines="1..10,12"]
+
+  const open = false; // <.>
+
+include::{project_root}/svqk-frontend/src/routes/issues/+page.ts[lines="16..27"]
+
 ----
 
 <.> 検索条件を格納するModelを定義します。
+<.> 検索条件以外に検索処理前後で状態を保持する値を定義します。
 <.> `ApiHandler.handle` 関数を使用して検索Web APIの呼び出しを実装します。
 
 ====== Page

@@ -20,13 +20,27 @@ include::search-process.pu[]
 ----
 a|[.description]
 . ユーザーが画面操作を行います。
-. Pageが検索条件で検索Web APIを呼び出します。取得した結果はmodelとしてPageに返却します。検索Web APIは初期化処理と同じものです。左図では記載を省略しています。
-. Pageが取得したmodelを元に画面のHTMLを構築します。
+. Pageが検索条件をURLパラメーターにエンコードし、そのパラメーターを指定して自画面に遷移します。
+. PageLoaderがURLパラメーターから検索条件をデコードし、それをもとに検索処理を実行します。以降の処理は初期化処理と同じです。
 |===
 
 ===== Frontend
 
 include::../snippet/frontend-verification.ad[]
+
+====== PageLoader
+
+.{project-artifactId}-frontend/src/routes/issues/+page.ts
+[source,ts]
+----
+include::{project_root}/svqk-frontend/src/routes/issues/+page.ts[lines="1..7,9..14"]
+
+  :
+}
+----
+
+<.> `CriteriaUtils.decode` を使用してURLから検索条件を取得します。
+<.> `CriteriaUtils.decodeParam` を使用してURLから検索条件以外のパラメータを取得します。
 
 ====== Page
 
@@ -35,7 +49,8 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
 .{project-artifactId}-frontend/src/routes/issues/+page.svelte スクリプトセクション
 [source,ts]
 ----
-include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="31..33"]
+include::{project_root}/svqk-frontend/src/routes/issues/+page.svelte[lines="30..33"]
 ----
 
-<.> 検索条件オブジェクトをJSON文字列に変換しURIエンコードしたものをURLパラメータに付与して自画面に遷移します。
+<.> `CriteriaUtils.encode` 関数を使用して検索条件をURLパラメーターにエンコードし、`goto` 関数に指定します。これにより、URLパラメーターとともに自画面へ遷移し、PageLoaderで実装された検索処理が実行されます。
+
