@@ -448,12 +448,12 @@ export class GeneratorUtils {
           templateData: templateData,
         },
         {
-          templatePath: `${templateType}/e2etest/Facade.ts`,
+          templatePath: `${templateType}/e2etest/Facade.ts.ejs`,
           destinationPath: `${destPaths.destE2EPath}/facades/${templateData.entityNmPascal}Facade.ts`,
           templateData: templateData,
         },
         {
-          templatePath: `${templateType}/e2etest/Factory.ts`,
+          templatePath: `${templateType}/e2etest/Factory.ts.ejs`,
           destinationPath: `${destPaths.destE2EPath}/factories/${templateData.entityNmPascal}Factory.ts`,
           templateData: templateData,
         },
@@ -468,12 +468,12 @@ export class GeneratorUtils {
           templateData: templateData,
         },
         {
-          templatePath: `${templateType}/${listTmplPath}/ListPage.ts`,
+          templatePath: `${templateType}/${listTmplPath}/ListPage.ts.ejs`,
           destinationPath: `${listDestPath}/${templateData.entityNmPascal}ListPage.ts`,
           templateData: templateData,
         },
         {
-          templatePath: `${templateType}/${listTmplPath}/ListPageElement.ts`,
+          templatePath: `${templateType}/${listTmplPath}/ListPageElement.ts.ejs`,
           destinationPath: `${listDestPath}/${templateData.entityNmPascal}ListPageElement.ts`,
           templateData: templateData,
         },

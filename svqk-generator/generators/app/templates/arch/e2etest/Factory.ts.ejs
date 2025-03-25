@@ -16,7 +16,7 @@ export default class <%= entityNmPascal %>Factory {
     } as <%= entityNmPascal %>Model;
   }
 
-  static createRandom<%= entityNmPascal %>WithId(id : <%= idType %>) {
+  static createRandom<%= entityNmPascal %>WithId(id : <%= tscom.idType %>) {
     return {
       id,
 <%= tscom.fieldsToProps(nonIdFields) %>

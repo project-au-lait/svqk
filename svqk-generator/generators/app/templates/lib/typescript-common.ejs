@@ -3,30 +3,43 @@ function w(num) {
   return " ".repeat(num);
 }
 
-function   getImpDcl(type) {
+function getImpDcl(type) {
   const from = type === "frontend" ? "$lib/arch/api/Api": "@api/Api" ;
   const model = `${entityNmPascal}Model`;
-  const idModel = compIdFields ? `, ${entityNmPascal}idModel` : "";
+  const idModel = compIdFields ? `, ${entityNmPascal}IdModel` : "";
   return `import type { ${model}${idModel} } from "${from}";`;
 }
 
+function getImpDclIdType(type) {
+  const from = type === "frontend" ? "$lib/arch/api/Api": "@api/Api" ;
+  return compIdFields ? `import type { ${entityNmPascal}IdModel } from "${from}";` : "";
+}
+
 tscom = {
-  idType: compIdFields ? entityNmPascal + "idModel" : (idField.javaType === "Integer" ? "number" : "string"),
-  idObj: compIdFields ? `id: {} as ${entityNmPascal}idModel` : "",
+  idType: compIdFields ? entityNmPascal + "IdModel" : (idField.javaType === "Integer" ? "number" : "string"),
+  idObj: compIdFields ? `id: {} as ${entityNmPascal}IdModel` : "",
   impDclF:  getImpDcl("frontend"),
   impDclE2e: getImpDcl("e2etest"),
+  impDclIdTypeF:  getImpDclIdType("frontend"),
+  impDclIdTypeE2e: getImpDclIdType("e2etest"),
 
   fieldToProp: function(field, num = 6) {
     const fieldType = field.javaType;
     const t = w(num);
-  
-    if (fieldType === "String") {
-      return `${t}${field.fieldName}: StringUtils.generateRandomString()`;
-    } else if (fieldType === "Integer") {
-      return `${t}${field.fieldName}: NumberUtils.generateRandomNumber()`;
-    } else {
+
+    const typeMap = {
+      'String': 'StringUtils.generateRandomString()',
+      'Integer': 'NumberUtils.generateRandomNumber()',
+      'java.time.LocalDate': 'DateUtils.generateRandomLocalDate()',
+      'java.time.LocalDateTime': 'DateUtils.generateRandomLocalDateTime()',
+      'Boolean': 'BooleanUtils.generateRandomBoolean()'
+    };
+    const generator = typeMap[fieldType];
+    if (!generator) {
       console.log(`Skip to generate for field type: ${fieldType}`);
+      return;
     }
+    return `${t}${field.fieldName}: ${generator}`;
   },
 
   fieldsToProps: function(fields, num = 6) {
@@ -36,6 +49,42 @@ tscom = {
       .join(",\n");
   },
 
+  dataType: function(javaType) {
+    const typeMap = {
+      'Integer': 'number',
+      'String': 'string',
+      'java.time.LocalDate': 'date',
+      'java.time.LocalDateTime': 'date',
+      'Boolean': 'boolean'
+    };
+    return typeMap[javaType] || 'string';
+  },
+
+  inputField: function(field, isId) {
+    const id = `id='${field.fieldName}'`;
+    const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
+    const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
+
+    switch (field.javaType) {
+      case 'Integer':
+        return `<InputField type='number' ${id} ${label} ${bindValue} />`;
+      case 'String':
+        if (field.stringLength && field.stringLength <= 128) {
+          return `<InputField ${id} ${label} ${bindValue} />`;
+        } else {
+          return `<TextArea ${id} ${label} ${bindValue} />`;
+        }
+      case 'java.time.LocalDate':
+        return `<InputField type='date' ${id} ${label} ${bindValue} />`;
+      case 'java.time.LocalDateTime':
+        return `<InputField type='datetime-local' ${id} ${label} />`;
+      case 'Boolean':
+        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} />`;
+      default:
+        const multiple = field.multiple ? 'multiple' : '';
+        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} />`;
+    }
+  },
 }
 
 tscom.idProperty = compIdFields
