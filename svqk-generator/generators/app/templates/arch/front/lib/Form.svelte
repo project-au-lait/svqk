@@ -101,14 +101,18 @@
       </div>
     <%_ } _%>
   <%_ } _%>
-  <div>
-    <button type="submit" id="save" data-handler={save.name}
+  <div class="grid">
+    <div>
+      <button type="submit" id="save" data-handler={save.name}
       >{updateMode ? $t('msg.update') : $t('msg.register')}</button
-    >
-    {#if updateMode}
-      <button type="submit" id="del" data-handler={del.name}
-        >{$t('msg.delete')}</button
       >
+    </div>
+    {#if updateMode}
+      <div>
+        <button type="submit" id="del" data-handler={del.name}
+          >{$t('msg.delete')}</button
+        >
+      </div>
     {/if}
   </div>
 </form>
