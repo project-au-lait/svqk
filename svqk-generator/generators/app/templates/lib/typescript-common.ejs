@@ -64,7 +64,6 @@ tscom = {
     const id = `id='${field.fieldName}'`;
     const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
     const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
-    const multiple = field.multiple ? 'multiple' : '';
 
     switch (field.javaType) {
       case 'Integer':
@@ -82,6 +81,7 @@ tscom = {
       case 'Boolean':
         return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} />`;
       default:
+        const multiple = field.multiple ? 'multiple' : '';
         return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} />`;
     }
   },
