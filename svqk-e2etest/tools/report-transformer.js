@@ -23,7 +23,7 @@ function transform() {
   const failsafeReport = `<?xml version="1.0" encoding="UTF-8"?>
   <failsafe-summary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/failsafe-summary.xsd" result="null" timeout="false">
       <completed>${report.stats.expected}</completed>
-      <errors>0</errors>
+      <errors>${report.errors.length}</errors>
       <failures>${report.stats.unexpected}</failures>
       <skipped>${report.stats.skipped}</skipped>
       <failureMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
