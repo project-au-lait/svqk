@@ -26,23 +26,20 @@ tscom = {
   fieldToProp: function(field, num = 6) {
     const fieldType = field.javaType;
     const t = w(num);
-    let fieldToProp = `${t}${field.fieldName}: `;
 
-    if (fieldType === "String") {
-      fieldToProp += `StringUtils.generateRandomString()`;
-    } else if (fieldType === "Integer") {
-      fieldToProp += `NumberUtils.generateRandomNumber()`;
-    } else if (fieldType === "java.time.LocalDate") {
-      fieldToProp += `DateUtils.generateRandomLocalDate()`;
-    } else if (fieldType === "java.time.LocalDateTime") {
-      fieldToProp += `DateUtils.generateRandomLocalDateTime()`;
-    } else if (fieldType === "Boolean") {
-      fieldToProp += `BooleanUtils.generateRandomBoolean()`;
-    } else {
+    const typeMap = {
+      'String': 'StringUtils.generateRandomString()',
+      'Integer': 'NumberUtils.generateRandomNumber()',
+      'java.time.LocalDate': 'DateUtils.generateRandomLocalDate()',
+      'java.time.LocalDateTime': 'DateUtils.generateRandomLocalDateTime()',
+      'Boolean': 'BooleanUtils.generateRandomBoolean()'
+    };
+    const generator = typeMap[fieldType];
+    if (!generator) {
       console.log(`Skip to generate for field type: ${fieldType}`);
       return;
     }
-    return fieldToProp;
+    return `${t}${field.fieldName}: ${generator}`;
   },
 
   fieldsToProps: function(fields, num = 6) {
