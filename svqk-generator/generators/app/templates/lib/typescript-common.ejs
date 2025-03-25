@@ -64,26 +64,28 @@ tscom = {
   },
 
   inputField: function(field, isId) {
-    const fieldBinding = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
-    const label = `{$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
+    const id = `id='${field.fieldName}'`;
+    const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
+    const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
+    const multiple = field.multiple ? 'multiple' : '';
 
-    if (field.javaType === 'Integer') {
-      return `<InputField type='number' id='${field.fieldName}' label=${label} ${fieldBinding} />`;
-    } else if (field.javaType === 'String') {
-      if (field.stringLength && field.stringLength <= 128) {
-        return `<InputField id='${field.fieldName}' label=${label} ${fieldBinding} />`;
-      } else {
-        return `<TextArea id='${field.fieldName}' label=${label} ${fieldBinding} />`;
-      }
-    } else if (field.javaType === 'java.time.LocalDate') {
-      return `<InputField type='date' id='${field.fieldName}' label=${label} ${fieldBinding} />`;
-    } else if (field.javaType === 'java.time.LocalDateTime') {
-      return `<InputField type='datetime-local' id='${field.fieldName}' label=${label} />`;
-    } else if (field.javaType === 'Boolean') {
-      return `<CheckBox id='${field.fieldName}' label=${label} bind:checked={${entityNmCamel}.${field.fieldName}} />`;
-    } else {
-      const multiple = field.multiple ? 'multiple' : '';
-      return `<SelectBox id='${field.fieldName}' label=${label} ${fieldBinding} options={[]} ${multiple} />`;
+    switch (field.javaType) {
+      case 'Integer':
+        return `<InputField type='number' ${id} ${label} ${bindValue} />`;
+      case 'String':
+        if (field.stringLength && field.stringLength <= 128) {
+          return `<InputField ${id} ${label} ${bindValue} />`;
+        } else {
+          return `<TextArea ${id} ${label} ${bindValue} />`;
+        }
+      case 'java.time.LocalDate':
+        return `<InputField type='date' ${id} ${label} ${bindValue} />`;
+      case 'java.time.LocalDateTime':
+        return `<InputField type='datetime-local' ${id} ${label} />`;
+      case 'Boolean':
+        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} />`;
+      default:
+        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} />`;
     }
   },
 }
