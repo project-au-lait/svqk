@@ -1,4 +1,4 @@
-import { TemplateData } from "../types.js";
+import { TemplateData, DestPaths } from "../types.js";
 
 export class BackendGenerator {
   constructor(
@@ -6,31 +6,29 @@ export class BackendGenerator {
       copyTpl: (src: string, dest: string, data: TemplateData) => void;
     },
     private readonly templatePath: (...pathSegments: string[]) => string,
-    private readonly destinationPath: (...pathSegments: string[]) => string
+    private readonly destinationPath: (...pathSegments: string[]) => string,
+    private readonly templateType: string,
+    private readonly destPaths: DestPaths
   ) {}
 
-  public generate_backend(
-    templateData: TemplateData,
-    templateType: string,
-    destinationPath: string
-  ) {
+  public generate_backend(templateData: TemplateData) {
     const destBackDomainPkgPath = this.build_dest_package_path(
-      destinationPath,
+      this.destPaths.destBackPath,
       templateData.domainPkgNm
     );
 
     const destBackIfPkgPath = this.build_dest_package_path(
-      destinationPath,
+      this.destPaths.destBackPath,
       templateData.interfacesPkgNm
     );
 
-    if (templateType === "arch" || templateType === "skeleton") {
+    if (this.templateType === "arch" || this.templateType === "skeleton") {
       // Generate files for domain package
       this.output_backend_file(
         ["Repository", "Service"],
         destBackDomainPkgPath,
         templateData,
-        templateType
+        this.templateType
       );
 
       // Generate files for interfaces package
@@ -38,7 +36,7 @@ export class BackendGenerator {
         ["Dto", "Controller"],
         destBackIfPkgPath,
         templateData,
-        templateType
+        this.templateType
       );
 
       if (templateData.compIdFields) {
@@ -46,36 +44,32 @@ export class BackendGenerator {
           ["IdDto"],
           destBackIfPkgPath,
           templateData,
-          templateType
+          this.templateType
         );
       }
     }
 
-    if (templateType === "arch") {
+    if (this.templateType === "arch") {
       // Generate files for interfaces package
       this.output_backend_file(
         ["Factory", "SearchCriteriaDto"],
         destBackIfPkgPath,
         templateData,
-        templateType
+        this.templateType
       );
     }
   }
 
-  public generate_integrationtest(
-    templateData: TemplateData,
-    templateType: string,
-    destinationPath: string
-  ) {
+  public generate_integrationtest(templateData: TemplateData) {
     const destITPkgPath = this.build_dest_package_path(
-      destinationPath,
+      this.destPaths.destITPath,
       templateData.interfacesPkgNm
     );
     this.output_backend_file(
       ["Client", "ControllerIT", "DataFactory"],
       destITPkgPath,
       templateData,
-      templateType
+      this.templateType
     );
   }
 

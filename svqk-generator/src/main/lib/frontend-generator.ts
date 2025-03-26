@@ -1,4 +1,4 @@
-import { TemplateData } from "../types.js";
+import { TemplateData, DestPaths } from "../types.js";
 
 export class FrontendGenerator {
   constructor(
@@ -6,26 +6,25 @@ export class FrontendGenerator {
       copyTpl: (src: string, dest: string, data: TemplateData) => void;
     },
     private readonly templatePath: (...pathSegments: string[]) => string,
-    private readonly destinationPath: (...pathSegments: string[]) => string
+    private readonly destinationPath: (...pathSegments: string[]) => string,
+    private readonly templateType: string,
+    private readonly destPaths: DestPaths
   ) {}
 
-  public generate_frontend(
-    templateData: TemplateData,
-    templateType: string,
-    destinationPath: string
-  ) {
+  public generate_frontend(templateData: TemplateData) {
+    const destinationPath = this.destPaths.destFrontPath;
     let pathPairs: [string, string][] = [];
 
     const entityPathCamel = `${destinationPath}/routes/${templateData.entityNmCamel}`;
     const entityPathPlural = `${destinationPath}/routes/${templateData.entityNmPlural}`;
     const forntendPagePath = this.build_frontend_page_path(templateData);
 
-    if (templateType === "skeleton") {
+    if (this.templateType === "skeleton") {
       pathPairs = [
         ["front/+page.svelte", `${entityPathCamel}/+page.svelte`],
         ["front/+page.ts", `${entityPathCamel}/+page.ts`],
       ];
-    } else if (templateType === "arch") {
+    } else if (this.templateType === "arch") {
       pathPairs = [
         // For list page
         ["front/routes/list/+page.svelte", `${entityPathPlural}/+page.svelte`],
@@ -55,15 +54,12 @@ export class FrontendGenerator {
     }
 
     for (const [srcPath, destPath] of pathPairs) {
-      this.output_file(srcPath, destPath, templateData, templateType);
+      this.output_file(srcPath, destPath, templateData, this.templateType);
     }
   }
 
-  public generate_e2etest(
-    templateData: TemplateData,
-    templateType: string,
-    destinationPath: string
-  ) {
+  public generate_e2etest(templateData: TemplateData) {
+    const destinationPath = this.destPaths.destE2EPath;
     let pathPairs: [string, string][] = [];
 
     const inputTmplPath = "e2etest/pages/input";
@@ -71,14 +67,14 @@ export class FrontendGenerator {
     const inputDestPath = `${destinationPath}/pages/${templateData.entityNmKebab}-input`;
     const listDestPath = `${destinationPath}/pages/${templateData.entityNmKebab}-list`;
 
-    if (templateType === "skeleton") {
+    if (this.templateType === "skeleton") {
       pathPairs = [
         [
           "e2etest/spec.ts",
           `${destinationPath}/${this.build_e2e_spec_path(templateData)}`,
         ],
       ];
-    } else if (templateType === "arch") {
+    } else if (this.templateType === "arch") {
       pathPairs = [
         [
           "e2etest/spec.ts",
@@ -112,7 +108,7 @@ export class FrontendGenerator {
     }
 
     for (const [srcPath, destPath] of pathPairs) {
-      this.output_file(srcPath, destPath, templateData, templateType);
+      this.output_file(srcPath, destPath, templateData, this.templateType);
     }
   }
 

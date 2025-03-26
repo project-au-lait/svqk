@@ -60,24 +60,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     e2eApiClientPath: "",
   };
   generateEntity: boolean | null = null;
-  backendGenerator: BackendGenerator;
-  frontendGenerator: FrontendGenerator;
+  backendGenerator: BackendGenerator | null = null;
+  frontendGenerator: FrontendGenerator | null = null;
   templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
-
-    this.backendGenerator = new BackendGenerator(
-      this.fs,
-      this.templatePath.bind(this),
-      this.destinationPath.bind(this)
-    );
-
-    this.frontendGenerator = new FrontendGenerator(
-      this.fs,
-      this.templatePath.bind(this),
-      this.destinationPath.bind(this)
-    );
 
     this.option("component", {
       type: String,
@@ -120,6 +108,22 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.metadataConfig.list = await GeneratorUtils.load_json_file(
       `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`
+    );
+
+    this.backendGenerator = new BackendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
+    );
+
+    this.frontendGenerator = new FrontendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
     );
   }
 
@@ -254,54 +258,22 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     this.templateDataList.forEach((templateData) => {
       switch (this.optionsValues.component) {
         case "backend":
-          this.backendGenerator.generate_backend(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destBackPath
-          );
+          this.backendGenerator?.generate_backend(templateData);
           break;
         case "integration-test":
-          this.backendGenerator.generate_integrationtest(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destITPath
-          );
+          this.backendGenerator?.generate_integrationtest(templateData);
           break;
         case "frontend":
-          this.frontendGenerator.generate_frontend(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destFrontPath
-          );
+          this.frontendGenerator?.generate_frontend(templateData);
           break;
         case "e2e-test":
-          this.frontendGenerator.generate_e2etest(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destE2EPath
-          );
+          this.frontendGenerator?.generate_e2etest(templateData);
           break;
         case "all":
-          this.backendGenerator.generate_backend(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destBackPath
-          );
-          this.backendGenerator.generate_integrationtest(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destITPath
-          );
-          this.frontendGenerator.generate_frontend(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destFrontPath
-          );
-          this.frontendGenerator.generate_e2etest(
-            templateData,
-            this.optionsValues.templateType,
-            this.destPaths.destE2EPath
-          );
+          this.backendGenerator?.generate_backend(templateData);
+          this.backendGenerator?.generate_integrationtest(templateData);
+          this.frontendGenerator?.generate_frontend(templateData);
+          this.frontendGenerator?.generate_e2etest(templateData);
           break;
       }
     });
