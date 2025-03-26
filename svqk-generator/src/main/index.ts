@@ -5,11 +5,12 @@ import {
   MetadataConfig,
   OptionsValues,
   TemplateData,
-  GenerateTarget,
   DestPaths,
   SnippetInsertionTarget,
 } from "./types.js";
 import { GeneratorUtils } from "./lib/generator-utils.js";
+import { BackendGenerator } from "./lib/backend-generator.js";
+import { FrontendGenerator } from "./lib/frontend-generator.js";
 import { EntityGenerator } from "./lib/entity-generator.js";
 import { ApiClientGenerator } from "./lib/api-client-generator.js";
 
@@ -59,6 +60,9 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     e2eApiClientPath: "",
   };
   generateEntity: boolean | null = null;
+  backendGenerator: BackendGenerator | null = null;
+  frontendGenerator: FrontendGenerator | null = null;
+  templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -104,6 +108,22 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.metadataConfig.list = await GeneratorUtils.load_json_file(
       `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`
+    );
+
+    this.backendGenerator = new BackendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
+    );
+
+    this.frontendGenerator = new FrontendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
     );
   }
 
@@ -211,6 +231,20 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       throw new Error("Please generate entities.");
     }
+
+    this.metadataConfig.list.forEach((metaData) => {
+      if (
+        this.inputTables.includes(metaData.tableName) ||
+        this.inputTables.includes(metaData.className)
+      ) {
+        const tmplData = GeneratorUtils.build_template_data(
+          metaData,
+          this.metadataConfig
+        );
+
+        this.templateDataList.push(tmplData);
+      }
+    });
   }
 
   writing() {
@@ -221,21 +255,27 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       return;
     }
 
-    const generateTargets: GenerateTarget[] =
-      GeneratorUtils.build_generate_targets(
-        this.metadataConfig,
-        this.optionsValues.component,
-        this.optionsValues.templateType,
-        this.inputTables,
-        this.destPaths
-      );
-
-    generateTargets.forEach((target) => {
-      this._generate_file(
-        target.templatePath,
-        target.destinationPath,
-        target.templateData
-      );
+    this.templateDataList.forEach((templateData) => {
+      switch (this.optionsValues.component) {
+        case "backend":
+          this.backendGenerator?.generate_backend(templateData);
+          break;
+        case "integration-test":
+          this.backendGenerator?.generate_integrationtest(templateData);
+          break;
+        case "frontend":
+          this.frontendGenerator?.generate_frontend(templateData);
+          break;
+        case "e2e-test":
+          this.frontendGenerator?.generate_e2etest(templateData);
+          break;
+        case "all":
+          this.backendGenerator?.generate_backend(templateData);
+          this.backendGenerator?.generate_integrationtest(templateData);
+          this.frontendGenerator?.generate_frontend(templateData);
+          this.frontendGenerator?.generate_e2etest(templateData);
+          break;
+      }
     });
 
     if (
@@ -269,18 +309,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       ApiClientGenerator.exec(this.genApiClientConfig);
     }
-  }
-
-  _generate_file(
-    templatePath: string,
-    destinationPath: string,
-    tmplData: TemplateData
-  ) {
-    this.fs.copyTpl(
-      this.templatePath(templatePath),
-      this.destinationPath(destinationPath),
-      tmplData
-    );
   }
 
   _insert_snippet(
