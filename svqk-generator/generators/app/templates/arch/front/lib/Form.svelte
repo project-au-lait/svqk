@@ -2,6 +2,7 @@
 <script lang="ts">
   <%- tscom.impDclF %>
   import ApiHandler from '$lib/arch/api/ApiHandler';
+  import DisplayField from '$lib/arch/form/DisplayField.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import TextArea from '$lib/arch/form/TextArea.svelte';
@@ -25,7 +26,7 @@
   }: Props = $props();
 
   const spec = {
-    <%_ for (field of fields) { _%>
+    <%_ for (field of nonIdFields) { _%>
       <%_ if (field.required) { _%>
         <%= field.fieldName %>: <%= tscom.dataType(field.javaType) %>().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
       <%_ } _%>
@@ -36,9 +37,13 @@
 
   async function save() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) => 
-      updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      <%_ if (compIdFields) { _%>
+        updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      <%_ } else { _%>
+        updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>.id, <%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      <%_ } _%>
 
-    if (response) {
+      if (response) {
       await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
     }
@@ -63,7 +68,11 @@
 <form use:form>
   <%_ for (field of compIdFields || [idField]){ _%>
   <div>
-    <%- tscom.inputField(field, !!compIdFields) %>
+    {#if updateMode}
+      <%- tscom.displayField(field, !!compIdFields) %>
+    {:else}
+      <%- tscom.inputField(field, !!compIdFields) %>
+    {/if}
   </div>
   <%_ } _%>
   <%_ for (field of nonIdFields) { _%>

@@ -85,10 +85,19 @@ tscom = {
         return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} />`;
     }
   },
+
+  displayField: function(field, isId) {
+    const id = `id='${field.fieldName}'`;
+    const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
+    const value = isId
+      ? `value={${entityNmCamel}.id.${field.fieldName}}`
+      : `value={${entityNmCamel}.${field.fieldName}}`;
+  
+    return `<DisplayField ${id} ${label} ${value} />`;
+  },
 }
 
 tscom.idProperty = compIdFields
       ? `id: {\n${tscom.fieldsToProps(compIdFields, 8)}\n${w(6)}},`
       : "";
-
 %>
