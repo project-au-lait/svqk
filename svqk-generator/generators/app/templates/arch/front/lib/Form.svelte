@@ -15,7 +15,7 @@
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
     handleAfterSave: (id?: <%= tscom.idType %>) => Promise<void>;
-    handleAfterDelete?: (id?: <%= tscom.idType %>) => Promise<void>;
+    handleAfterDelete?: () => Promise<void>;
   }
 
   let {
