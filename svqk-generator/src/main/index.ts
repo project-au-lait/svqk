@@ -12,7 +12,7 @@ import { BackendGenerator } from "./lib/backend-generator.js";
 import { FrontendGenerator } from "./lib/frontend-generator.js";
 import { EntityGenerator } from "./lib/entity-generator.js";
 import { ApiClientGenerator } from "./lib/api-client-generator.js";
-import { MenuEditrer } from "./lib/menu-editer.js";
+import { MenuEditer } from "./lib/menu-editer.js";
 
 const allowedComponentValues = [
   "entity",
@@ -60,7 +60,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   generateEntity: boolean | null = null;
   backendGenerator: BackendGenerator | null = null;
   frontendGenerator: FrontendGenerator | null = null;
-  menuEditrer: MenuEditrer | null = null;
+  menuEditer: MenuEditer | null = null;
   templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
@@ -125,7 +125,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.destPaths
     );
 
-    this.menuEditrer = new MenuEditrer(
+    this.menuEditer = new MenuEditer(
       this.fs,
       this.optionsValues.templateType,
       this.destPaths
@@ -273,14 +273,14 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
         case "e2e-test":
           this.frontendGenerator?.generate_e2etest(templateData);
-          this.menuEditrer?.update_menu(templateData);
+          this.menuEditer?.update_menu(templateData);
           break;
         case "all":
           this.backendGenerator?.generate_backend(templateData);
           this.backendGenerator?.generate_integrationtest(templateData);
           this.frontendGenerator?.generate_frontend(templateData);
           this.frontendGenerator?.generate_e2etest(templateData);
-          this.menuEditrer?.update_menu(templateData);
+          this.menuEditer?.update_menu(templateData);
           break;
       }
     });

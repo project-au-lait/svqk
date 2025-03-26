@@ -1,7 +1,7 @@
 import { SnippetInsertionTarget, DestPaths, TemplateData } from "../types.js";
-import { FileEditor } from "./file-editer.js";
+import { FileEditer } from "./file-editer.js";
 
-export class MenuEditrer {
+export class MenuEditer {
   constructor(
     private readonly fs: {
       copyTpl: (src: string, dest: string, data: TemplateData) => void;
@@ -14,10 +14,10 @@ export class MenuEditrer {
     private readonly destPaths: DestPaths
   ) {}
 
-  fileEditor: FileEditor | null = null;
+  fileEditer: FileEditer | null = null;
 
   async initializing() {
-    this.fileEditor = new FileEditor(this.fs);
+    this.fileEditer = new FileEditer(this.fs);
   }
 
   public update_menu(templateData: TemplateData) {
@@ -63,6 +63,6 @@ export class MenuEditrer {
       }
     );
 
-    this.fileEditor?.insert_snippet(insertionTargetList);
+    this.fileEditer?.insert_snippet(insertionTargetList);
   }
 }

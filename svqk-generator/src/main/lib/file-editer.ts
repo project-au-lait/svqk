@@ -2,7 +2,7 @@ import { SnippetInsertionTarget, TemplateData } from "../types.js";
 
 const LINE_BREAK = "\n";
 
-export class FileEditor {
+export class FileEditer {
   constructor(
     private readonly fs: {
       copyTpl: (src: string, dest: string, data: TemplateData) => void;
