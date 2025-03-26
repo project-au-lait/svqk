@@ -2,11 +2,6 @@ import { SnippetInsertionTarget, TemplateData } from "../types.js";
 
 const LINE_BREAK = "\n";
 
-export interface CopyOptions {
-  process?: (content: string) => string;
-  globOptions?: object;
-}
-
 export class FileEditor {
   constructor(
     private readonly fs: {
