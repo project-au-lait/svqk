@@ -14,17 +14,12 @@ export class MenuEditer {
     private readonly destPaths: DestPaths
   ) {}
 
-  fileEditer: FileEditer | null = null;
-
-  async initializing() {
-    this.fileEditer = new FileEditer(this.fs);
-  }
-
   public update_menu(templateData: TemplateData) {
     if (this.templateType === "skeleton") {
       return [];
     }
 
+    const fileEditer = new FileEditer(this.fs);
     const insertionTargetList: SnippetInsertionTarget[] = [];
 
     const menuBarTemplatePath =
@@ -63,6 +58,6 @@ export class MenuEditer {
       }
     );
 
-    this.fileEditer?.insert_snippet(insertionTargetList);
+    fileEditer?.insert_snippet(insertionTargetList);
   }
 }
