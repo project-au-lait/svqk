@@ -1,12 +1,5 @@
 import pluralize from "pluralize";
-import {
-  Field,
-  Metadata,
-  MetadataConfig,
-  TemplateData,
-  SnippetInsertionTarget,
-  DestPaths,
-} from "../types.js";
+import { Field, Metadata, MetadataConfig, TemplateData } from "../types.js";
 
 export class GeneratorUtils {
   static async load_json_file(filePath: string) {
@@ -42,68 +35,6 @@ export class GeneratorUtils {
       nonIdFields: metadata.fields.filter((field) => !field.id),
       compIdFields: this.get_composite_id_fields(idField, metadataConfig),
     };
-  }
-
-  static build_snippet_insert_targets(
-    metadataConfig: MetadataConfig,
-    component: string,
-    templateType: string,
-    inputTables: string[],
-    destPaths: DestPaths
-  ): SnippetInsertionTarget[] {
-    if (templateType === "skeleton") {
-      return [];
-    }
-
-    const insertionTargets: SnippetInsertionTarget[] = [];
-
-    metadataConfig.list.forEach((metaData) => {
-      if (
-        inputTables.includes(metaData.tableName) ||
-        inputTables.includes(metaData.className)
-      ) {
-        const templateData = this.build_template_data(metaData, metadataConfig);
-        const menuBarTemplatePath =
-          "generators/app/templates/arch/e2etest/pages/menu-bar";
-        const menuBarDestPath = `${destPaths.destE2EPath}/pages/menu-bar`;
-
-        if (component === "e2e-test" || component === "all") {
-          insertionTargets.push(
-            {
-              templatePath: `${menuBarTemplatePath}/MenuBar_GOTO.ejs`,
-              destinationPath: `${menuBarDestPath}/MenuBar.ts`,
-              placeholder: "GOTO",
-              templateData: templateData,
-              checkString: `goto${templateData.entityNmPascal}ListPage`,
-            },
-            {
-              templatePath: `${menuBarTemplatePath}/MenuBar_IMPORT.ejs`,
-              destinationPath: `${menuBarDestPath}/MenuBar.ts`,
-              placeholder: "IMPORT",
-              templateData: templateData,
-              checkString: `import ${templateData.entityNmPascal}ListPage`,
-            },
-            {
-              templatePath: `${menuBarTemplatePath}/MenuBarPageElement_CLICK.ejs`,
-              destinationPath: `${menuBarDestPath}/MenuBarPageElement.ts`,
-              placeholder: "CLICK",
-              templateData: templateData,
-              checkString: `click${templateData.entityNmPascal}Link`,
-            },
-            {
-              templatePath:
-                "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
-              destinationPath: `${destPaths.destFrontPath}/routes/+layout.svelte`,
-              placeholder: "LINK",
-              templateData: templateData,
-              checkString: `href="/${templateData.entityNmPlural}"`,
-            }
-          );
-        }
-      }
-    });
-
-    return insertionTargets;
   }
 
   private static extract_entity_name(entityClassNm: string): string {
