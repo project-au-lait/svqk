@@ -52,8 +52,11 @@ public class <%= entityNmPascal %>Controller {
   }
 
   @PUT
-  public <%= ifcom.interfaceIdType %> update(@Valid <%= entityNmPascal %>Dto dto) {
+  @Path(<%= entityNmAllCaps %>_ID_PATH)
+  public <%= ifcom.interfaceIdType %> update(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
+
+<%= ifcom.buildEntityId %>
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 
