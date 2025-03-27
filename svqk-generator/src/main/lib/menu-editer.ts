@@ -1,4 +1,4 @@
-import { SnippetInsertionTarget, DestPaths, TemplateData } from "../types.js";
+import { DestPaths, TemplateData } from "../types.js";
 import { FileEditer } from "./file-editer.js";
 
 export class MenuEditer {
@@ -23,43 +23,37 @@ export class MenuEditer {
       return [];
     }
 
-    const insertionTargetList: SnippetInsertionTarget[] = [];
     const menuBarTemplatePath =
       "generators/app/templates/arch/e2etest/pages/menu-bar";
     const menuBarDestPath = `${this.destPaths.destE2EPath}/pages/menu-bar`;
 
-    insertionTargetList.push(
-      {
-        templatePath: `${menuBarTemplatePath}/MenuBar_GOTO.ejs`,
-        destinationPath: `${menuBarDestPath}/MenuBar.ts`,
-        placeholder: "GOTO",
-        templateData: templateData,
-        checkString: `goto${templateData.entityNmPascal}ListPage`,
-      },
-      {
-        templatePath: `${menuBarTemplatePath}/MenuBar_IMPORT.ejs`,
-        destinationPath: `${menuBarDestPath}/MenuBar.ts`,
-        placeholder: "IMPORT",
-        templateData: templateData,
-        checkString: `import ${templateData.entityNmPascal}ListPage`,
-      },
-      {
-        templatePath: `${menuBarTemplatePath}/MenuBarPageElement_CLICK.ejs`,
-        destinationPath: `${menuBarDestPath}/MenuBarPageElement.ts`,
-        placeholder: "CLICK",
-        templateData: templateData,
-        checkString: `click${templateData.entityNmPascal}Link`,
-      },
-      {
-        templatePath:
-          "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
-        destinationPath: `${this.destPaths.destFrontPath}/routes/+layout.svelte`,
-        placeholder: "LINK",
-        templateData: templateData,
-        checkString: `href="/${templateData.entityNmPlural}"`,
-      }
+    this.fileEditer?.insert_snippet(
+      `${menuBarTemplatePath}/MenuBar_GOTO.ejs`,
+      `${menuBarDestPath}/MenuBar.ts`,
+      "GOTO",
+      templateData,
+      `goto${templateData.entityNmPascal}ListPage`
     );
-
-    this.fileEditer?.insert_snippet(insertionTargetList);
+    this.fileEditer?.insert_snippet(
+      `${menuBarTemplatePath}/MenuBar_IMPORT.ejs`,
+      `${menuBarDestPath}/MenuBar.ts`,
+      "IMPORT",
+      templateData,
+      `import ${templateData.entityNmPascal}ListPage`
+    );
+    this.fileEditer?.insert_snippet(
+      `${menuBarTemplatePath}/MenuBarPageElement_CLICK.ejs`,
+      `${menuBarDestPath}/MenuBarPageElement.ts`,
+      "CLICK",
+      templateData,
+      `click${templateData.entityNmPascal}Link`
+    );
+    this.fileEditer?.insert_snippet(
+      "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
+      `${this.destPaths.destFrontPath}/routes/+layout.svelte`,
+      "LINK",
+      templateData,
+      `href="/${templateData.entityNmPlural}"`
+    );
   }
 }

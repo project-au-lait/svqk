@@ -52,14 +52,6 @@ type TemplateData = {
   compIdFields?: Field[];
 };
 
-type SnippetInsertionTarget = {
-  templatePath: string;
-  destinationPath: string;
-  placeholder: string;
-  templateData: TemplateData;
-  checkString: string;
-};
-
 type DestPaths = {
   destBackPath: string;
   destITPath: string;
