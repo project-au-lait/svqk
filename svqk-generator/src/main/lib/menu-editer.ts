@@ -2,6 +2,8 @@ import { SnippetInsertionTarget, DestPaths, TemplateData } from "../types.js";
 import { FileEditer } from "./file-editer.js";
 
 export class MenuEditer {
+  fileEditer: FileEditer | null = null;
+
   constructor(
     private readonly fs: {
       copyTpl: (src: string, dest: string, data: TemplateData) => void;
@@ -12,16 +14,16 @@ export class MenuEditer {
     },
     private readonly templateType: string,
     private readonly destPaths: DestPaths
-  ) {}
+  ) {
+    this.fileEditer = new FileEditer(this.fs);
+  }
 
   public update_menu(templateData: TemplateData) {
     if (this.templateType === "skeleton") {
       return [];
     }
 
-    const fileEditer = new FileEditer(this.fs);
     const insertionTargetList: SnippetInsertionTarget[] = [];
-
     const menuBarTemplatePath =
       "generators/app/templates/arch/e2etest/pages/menu-bar";
     const menuBarDestPath = `${this.destPaths.destE2EPath}/pages/menu-bar`;
@@ -58,6 +60,6 @@ export class MenuEditer {
       }
     );
 
-    fileEditer?.insert_snippet(insertionTargetList);
+    this.fileEditer?.insert_snippet(insertionTargetList);
   }
 }
