@@ -14,7 +14,7 @@ export class MenuEditor {
 
   public update_menu(templateData: TemplateData) {
     if (this.templateType === "skeleton") {
-      return [];
+      return;
     }
 
     this.fileEditor?.insert_snippet(
@@ -28,7 +28,7 @@ export class MenuEditor {
 
   public update_menu_test(templateData: TemplateData) {
     if (this.templateType === "skeleton") {
-      return [];
+      return;
     }
 
     const menuBarTemplatePath =
