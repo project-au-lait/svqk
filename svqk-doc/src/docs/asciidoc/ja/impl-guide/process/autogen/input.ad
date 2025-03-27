@@ -17,8 +17,9 @@ include::../snippet/entity-generation.ad[]
 === Generator
 
 VSCode Task: `generate` を実行します。
-生成対象のコンポーネントに `all` を選択し、生成元のEntityに `Issue` と入力します。
-Generatorが生成するソースファイルは以下の通りです。
+表示されたプロンプトで生成対象のコンポーネントと生成元のテーブルを入力します。
+以下は、コンポーネントに `all` 、テーブルに `issue` を入力した場合のGeneratorが生成するソースファイルの例です。
+Generatorの詳細な使用方法は https://github.com/project-au-lait/svqk/tree/main/svqk-generator[こちら] を参照してください。 
 
 .生成されたソースファイル
 [source,txt]

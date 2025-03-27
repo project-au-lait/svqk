@@ -741,7 +741,6 @@ public interface HelloRepository extends JpaRepository&lt;HelloEntity, Integer&g
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package dev.aulait.svqk.interfaces.hello;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -749,8 +748,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Data <i class="conum" data-value="1"></i><b>(1)</b>
 @Builder
 public class HelloDto {
-  @Schema(required = true, readOnly = true) <i class="conum" data-value="2"></i><b>(2)</b>
-  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  @Schema(required = true) <i class="conum" data-value="2"></i><b>(2)</b>
   private Integer id;
 
   private String message;
@@ -770,9 +768,6 @@ public class HelloDto {
 <ul>
 <li>
 <p>リクエスト及びレスポンスのJSONプロパティに必ず登場させるフィールドに対しては <code>@Schema(required = true)</code> を指定します。NOT NULLのカラムの値を格納するフィールド等がこれに該当します。</p>
-</li>
-<li>
-<p>リクエストで指定された値をWeb APIの内部処理で使用しないフィールドに対しては <code>@Schema(readOnly = true)</code> 及び <code>@JsonProperty(access = JsonProperty.Access.READ_ONLY)</code> を指定します。Primary Keyの値を格納するフィールド等がこれに該当します。</p>
 </li>
 </ul>
 </div></td>
