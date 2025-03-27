@@ -86,6 +86,25 @@ tscom = {
         return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} ${disabled} />`;
     }
   },
+
+  save: function(entityNmCamel, compIdFields) {
+    const updateParams = compIdFields
+      ? compIdFields.map((compIdField) => `${entityNmCamel}.id.${compIdField.fieldName}`).join(", ")
+      : `${entityNmCamel}.id`;
+  
+    const createCall = `api.${entityNmCamel}.${entityNmCamel}Create(${entityNmCamel})`;
+    const updateCall = `api.${entityNmCamel}.${entityNmCamel}Update(${updateParams}, ${entityNmCamel})`;
+  
+    return `updateMode ? ${updateCall} : ${createCall}`;
+  },
+  
+  delete: function(entityNmCamel, compIdFields) {
+    const deleteParams = compIdFields
+      ? compIdFields.map((compIdField) => `${entityNmCamel}.id.${compIdField.fieldName}`).join(", ")
+      : `${entityNmCamel}.id`;
+  
+    return `api.${entityNmCamel}.${entityNmCamel}Delete(${deleteParams}, ${entityNmCamel})`;
+  },
 }
 
 tscom.idProperty = compIdFields

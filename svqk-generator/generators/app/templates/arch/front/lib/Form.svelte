@@ -2,7 +2,6 @@
 <script lang="ts">
   <%- tscom.impDclF %>
   import ApiHandler from '$lib/arch/api/ApiHandler';
-  import DisplayField from '$lib/arch/form/DisplayField.svelte';
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import TextArea from '$lib/arch/form/TextArea.svelte';
@@ -37,11 +36,8 @@
 
   async function save() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) => 
-      <%_ if (compIdFields) { _%>
-        updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
-      <%_ } else { _%>
-        updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>.id, <%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
-      <%_ } _%>
+      <%- tscom.save(entityNmCamel, compIdFields) %>
+    );
 
     if (response) {
       await handleAfterSave(response);
@@ -51,11 +47,7 @@
 
   async function del() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) =>
-      <%_ if (compIdFields) { _%>
-        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>)
-      <%_ } else { _%>
-        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%= entityNmCamel %>.id, <%= entityNmCamel %>)
-      <%_ } _%>        
+      <%- tscom.delete(entityNmCamel, compIdFields) %>
     );
 
     if (response) {
