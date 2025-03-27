@@ -43,7 +43,7 @@
         updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>.id, <%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
       <%_ } _%>
 
-      if (response) {
+    if (response) {
       await handleAfterSave(response);
       messageStore.show($t('msg.saved'));
     }
