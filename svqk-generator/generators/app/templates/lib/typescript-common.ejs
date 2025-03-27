@@ -60,40 +60,31 @@ tscom = {
     return typeMap[javaType] || 'string';
   },
 
-  inputField: function(field, isId) {
+  inputField: function(field, isId, isDisabled = false) {
     const id = `id='${field.fieldName}'`;
     const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
     const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
+    const disabled = isDisabled ? `disabled={${isDisabled}}` : '';
 
     switch (field.javaType) {
       case 'Integer':
-        return `<InputField type='number' ${id} ${label} ${bindValue} />`;
+        return `<InputField type='number' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'String':
         if (field.stringLength && field.stringLength <= 128) {
-          return `<InputField ${id} ${label} ${bindValue} />`;
+          return `<InputField ${id} ${label} ${bindValue} ${disabled} />`;
         } else {
-          return `<TextArea ${id} ${label} ${bindValue} />`;
+          return `<TextArea ${id} ${label} ${bindValue} ${disabled} />`;
         }
       case 'java.time.LocalDate':
-        return `<InputField type='date' ${id} ${label} ${bindValue} />`;
+        return `<InputField type='date' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'java.time.LocalDateTime':
-        return `<InputField type='datetime-local' ${id} ${label} />`;
+        return `<InputField type='datetime-local' ${id} ${label} ${disabled} />`;
       case 'Boolean':
-        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} />`;
+        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} ${disabled} />`;
       default:
         const multiple = field.multiple ? 'multiple' : '';
-        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} />`;
+        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} ${disabled} />`;
     }
-  },
-
-  displayField: function(field, isId) {
-    const id = `id='${field.fieldName}'`;
-    const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
-    const value = isId
-      ? `value={${entityNmCamel}.id.${field.fieldName}}`
-      : `value={${entityNmCamel}.${field.fieldName}}`;
-  
-    return `<DisplayField ${id} ${label} ${value} />`;
   },
 }
 

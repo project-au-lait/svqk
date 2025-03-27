@@ -66,12 +66,12 @@
 </script>
 
 <form use:form>
-  <%_ for (field of compIdFields || [idField]){ _%>
+  <%_ for (field of compIdFields || [idField]) { _%>
   <div>
     {#if updateMode}
-      <%- tscom.displayField(field, !!compIdFields) %>
+      <%- tscom.inputField(field, !!compIdFields, true) %>
     {:else}
-      <%- tscom.inputField(field, !!compIdFields) %>
+      <%- tscom.inputField(field, !!compIdFields, false) %>
     {/if}
   </div>
   <%_ } _%>
