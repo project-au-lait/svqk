@@ -274,6 +274,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
         case "e2e-test":
           this.frontendGenerator?.generate_e2etest(templateData);
+          this.menuEditor?.update_menu(templateData);
           this.menuEditor?.update_menu_test(templateData);
           break;
         case "all":
