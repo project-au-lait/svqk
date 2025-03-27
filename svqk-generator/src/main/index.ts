@@ -6,13 +6,13 @@ import {
   OptionsValues,
   TemplateData,
   DestPaths,
-  SnippetInsertionTarget,
 } from "./types.js";
 import { GeneratorUtils } from "./lib/generator-utils.js";
 import { BackendGenerator } from "./lib/backend-generator.js";
 import { FrontendGenerator } from "./lib/frontend-generator.js";
 import { EntityGenerator } from "./lib/entity-generator.js";
 import { ApiClientGenerator } from "./lib/api-client-generator.js";
+import { MenuEditor } from "./lib/menu-editor.js";
 
 const allowedComponentValues = [
   "entity",
@@ -34,8 +34,6 @@ const YO_RC_KEY_GEN_OPEN_API_JSON_CMD = "genOpenApiJsonCmd";
 const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
-
-const LINE_BREAK = "\n";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues = {
@@ -62,6 +60,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   generateEntity: boolean | null = null;
   backendGenerator: BackendGenerator | null = null;
   frontendGenerator: FrontendGenerator | null = null;
+  menuEditor: MenuEditor | null = null;
   templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
@@ -122,6 +121,12 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.fs,
       this.templatePath.bind(this),
       this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
+    );
+
+    this.menuEditor = new MenuEditor(
+      this.fs,
       this.optionsValues.templateType,
       this.destPaths
     );
@@ -265,41 +270,23 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
         case "frontend":
           this.frontendGenerator?.generate_frontend(templateData);
+          this.menuEditor?.update_menu(templateData);
           break;
         case "e2e-test":
           this.frontendGenerator?.generate_e2etest(templateData);
+          this.menuEditor?.update_menu(templateData);
+          this.menuEditor?.update_menu_test(templateData);
           break;
         case "all":
           this.backendGenerator?.generate_backend(templateData);
           this.backendGenerator?.generate_integrationtest(templateData);
           this.frontendGenerator?.generate_frontend(templateData);
           this.frontendGenerator?.generate_e2etest(templateData);
+          this.menuEditor?.update_menu(templateData);
+          this.menuEditor?.update_menu_test(templateData);
           break;
       }
     });
-
-    if (
-      this.optionsValues.component === "all" ||
-      this.optionsValues.component === "e2etest"
-    ) {
-      const snippetInsertionTargets: SnippetInsertionTarget[] =
-        GeneratorUtils.build_snippet_insert_targets(
-          this.metadataConfig,
-          this.optionsValues.component,
-          this.optionsValues.templateType,
-          this.inputTables,
-          this.destPaths
-        );
-      snippetInsertionTargets.forEach((target) => {
-        this._insert_snippet(
-          target.templatePath,
-          target.destinationPath,
-          target.placeholder,
-          target.templateData,
-          target.checkString
-        );
-      });
-    }
   }
 
   end() {
@@ -309,38 +296,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       ApiClientGenerator.exec(this.genApiClientConfig);
     }
-  }
-
-  _insert_snippet(
-    templatePath: string,
-    destinationPath: string,
-    placeholder: string,
-    templateData: TemplateData,
-    checkString: string
-  ) {
-    const renderedPath = templatePath.replace(".ejs", ".txt");
-    this.fs.copyTpl(templatePath, renderedPath, templateData);
-    const renderedText = this.fs.read(renderedPath);
-
-    if (renderedText) {
-      this.fs.copy(destinationPath, destinationPath, {
-        process: function (content) {
-          if (content.includes(checkString)) {
-            return content;
-          }
-
-          const originalText = content.toString();
-          const regex = new RegExp(`^.*__${placeholder}__.*${LINE_BREAK}`, "m");
-          const placeholderLine = RegExp(regex).exec(originalText);
-          return originalText.replace(
-            regex,
-            renderedText + LINE_BREAK + placeholderLine
-          );
-        },
-      });
-    }
-
-    this.fs.delete(renderedPath);
   }
 }
 

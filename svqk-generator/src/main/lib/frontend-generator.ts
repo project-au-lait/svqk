@@ -1,10 +1,8 @@
-import { TemplateData, DestPaths } from "../types.js";
+import { Fs, TemplateData, DestPaths } from "../types.js";
 
 export class FrontendGenerator {
   constructor(
-    private readonly fs: {
-      copyTpl: (src: string, dest: string, data: TemplateData) => void;
-    },
+    private readonly fs: Fs,
     private readonly templatePath: (...pathSegments: string[]) => string,
     private readonly destinationPath: (...pathSegments: string[]) => string,
     private readonly templateType: string,
