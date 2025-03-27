@@ -2,7 +2,7 @@ import { Fs, TemplateData } from "../types.js";
 
 const LINE_BREAK = "\n";
 
-export class FileEditer {
+export class FileEditor {
   constructor(private readonly fs: Fs) {}
 
   public insert_snippet(
