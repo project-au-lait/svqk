@@ -17,6 +17,20 @@ export class MenuEditor {
       return [];
     }
 
+    this.fileEditor?.insert_snippet(
+      "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
+      `${this.destPaths.destFrontPath}/routes/+layout.svelte`,
+      "LINK",
+      templateData,
+      `href="/${templateData.entityNmPlural}"`
+    );
+  }
+
+  public update_menu_test(templateData: TemplateData) {
+    if (this.templateType === "skeleton") {
+      return [];
+    }
+
     const menuBarTemplatePath =
       "generators/app/templates/arch/e2etest/pages/menu-bar";
     const menuBarDestPath = `${this.destPaths.destE2EPath}/pages/menu-bar`;
@@ -41,13 +55,6 @@ export class MenuEditor {
       "CLICK",
       templateData,
       `click${templateData.entityNmPascal}Link`
-    );
-    this.fileEditor?.insert_snippet(
-      "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
-      `${this.destPaths.destFrontPath}/routes/+layout.svelte`,
-      "LINK",
-      templateData,
-      `href="/${templateData.entityNmPlural}"`
     );
   }
 }

@@ -12,7 +12,7 @@ import { BackendGenerator } from "./lib/backend-generator.js";
 import { FrontendGenerator } from "./lib/frontend-generator.js";
 import { EntityGenerator } from "./lib/entity-generator.js";
 import { ApiClientGenerator } from "./lib/api-client-generator.js";
-import { MenuEditer } from "./lib/menu-editer.js";
+import { MenuEditor } from "./lib/menu-editor.js";
 
 const allowedComponentValues = [
   "entity",
@@ -60,7 +60,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   generateEntity: boolean | null = null;
   backendGenerator: BackendGenerator | null = null;
   frontendGenerator: FrontendGenerator | null = null;
-  menuEditer: MenuEditer | null = null;
+  menuEditor: MenuEditor | null = null;
   templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
@@ -125,7 +125,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       this.destPaths
     );
 
-    this.menuEditer = new MenuEditer(
+    this.menuEditor = new MenuEditor(
       this.fs,
       this.optionsValues.templateType,
       this.destPaths
@@ -270,17 +270,19 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
           break;
         case "frontend":
           this.frontendGenerator?.generate_frontend(templateData);
+          this.menuEditor?.update_menu(templateData);
           break;
         case "e2e-test":
           this.frontendGenerator?.generate_e2etest(templateData);
-          this.menuEditer?.update_menu(templateData);
+          this.menuEditor?.update_menu_test(templateData);
           break;
         case "all":
           this.backendGenerator?.generate_backend(templateData);
           this.backendGenerator?.generate_integrationtest(templateData);
           this.frontendGenerator?.generate_frontend(templateData);
           this.frontendGenerator?.generate_e2etest(templateData);
-          this.menuEditer?.update_menu(templateData);
+          this.menuEditor?.update_menu(templateData);
+          this.menuEditor?.update_menu_test(templateData);
           break;
       }
     });
