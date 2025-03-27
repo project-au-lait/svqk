@@ -1,17 +1,11 @@
-import { DestPaths, TemplateData } from "../types.js";
+import { Fs, DestPaths, TemplateData } from "../types.js";
 import { FileEditer } from "./file-editer.js";
 
 export class MenuEditer {
   fileEditer: FileEditer | null = null;
 
   constructor(
-    private readonly fs: {
-      copyTpl: (src: string, dest: string, data: TemplateData) => void;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      copy: (src: string, dest: string, options?: any) => void;
-      delete: (filepath: string) => void;
-      read: (filepath: string) => string | null;
-    },
+    private readonly fs: Fs,
     private readonly templateType: string,
     private readonly destPaths: DestPaths
   ) {

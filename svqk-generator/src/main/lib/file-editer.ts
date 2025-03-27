@@ -1,17 +1,9 @@
-import { TemplateData } from "../types.js";
+import { Fs, TemplateData } from "../types.js";
 
 const LINE_BREAK = "\n";
 
 export class FileEditer {
-  constructor(
-    private readonly fs: {
-      copyTpl: (src: string, dest: string, data: TemplateData) => void;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      copy: (src: string, dest: string, options?: any) => void;
-      delete: (filepath: string) => void;
-      read: (filepath: string) => string | null;
-    }
-  ) {}
+  constructor(private readonly fs: Fs) {}
 
   public insert_snippet(
     templatePath: string,
