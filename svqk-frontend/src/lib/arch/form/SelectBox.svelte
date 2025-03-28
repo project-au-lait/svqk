@@ -6,9 +6,10 @@
     options: { id: any; name: string }[];
     multiple?: boolean;
     size?: number;
+    disabled?: boolean;
   }
 
-  let { id, label, value = $bindable(), options, multiple = false, size = 3 }: Props = $props();
+  let { id, label, value = $bindable(), options, multiple = false, size = 3, disabled = false }: Props = $props();
 
   let stateOptions = $state(options);
 </script>
@@ -17,13 +18,13 @@
 
 {#if stateOptions.length}
   {#if multiple}
-    <select {id} multiple {size} bind:value>
+    <select {id} multiple {size} bind:value {disabled}>
       {#each stateOptions as option}
         <option value={option.id}>{option.name}</option>
       {/each}
     </select>
   {:else}
-    <select {id} bind:value>
+    <select {id} bind:value {disabled}>
       {#each stateOptions as option}
         <option value={option.id}>{option.name}</option>
       {/each}

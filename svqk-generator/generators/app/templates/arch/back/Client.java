@@ -1,7 +1,7 @@
 <% include('../../lib/interface-common'); -%>
 <%_
 idMethodArgs = ifcom.buildArgs((field) => `${field.javaType} ${field.fieldName}`);
-givenGetArgs = ifcom.buildArgs((field) => field.fieldName);
+givenIdArgs = ifcom.buildArgs((field) => field.fieldName);
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -15,23 +15,23 @@ public class <%= entityNmPascal %>Client {
   private static final String <%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH = <%= entityNmAllCaps %>_PATH + "/" + <%= entityNmAllCaps %>_ID_PATH;
 
   public <%= entityNmPascal %>Dto get(<%= idMethodArgs %>) {
-    return RestClientUtils.get(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, <%= entityNmPascal %>Dto.class, <%= givenGetArgs %>);
+    return RestClientUtils.get(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, <%= entityNmPascal %>Dto.class, <%= givenIdArgs %>);
   }
 
   public ErrorResponseDto getWithError(<%= idMethodArgs %>) {
-    return RestClientUtils.getWithError(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, <%= givenGetArgs %>);
+    return RestClientUtils.getWithError(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, <%= givenIdArgs %>);
   }
 
   public <%= ifcom.interfaceIdType %> save(<%= entityNmPascal %>Dto dto) {
     return RestClientUtils.post(<%= entityNmAllCaps %>_PATH, dto, <%= ifcom.interfaceIdType %>.class);
   }
 
-  public <%= ifcom.interfaceIdType %> update(<%= entityNmPascal %>Dto dto) {
-    return RestClientUtils.put(<%= entityNmAllCaps %>_PATH, dto, <%= ifcom.interfaceIdType %>.class);
+  public <%= ifcom.interfaceIdType %> update(<%= idMethodArgs %>, <%= entityNmPascal %>Dto dto) {
+    return RestClientUtils.put(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, dto, <%= ifcom.interfaceIdType %>.class, <%= givenIdArgs %>);
   }
 
-  public <%= ifcom.interfaceIdType %> delete(<%= idMethodArgs %>, <%= entityNmPascal %>Dto <%= entityNmCamel %>) {
-    return RestClientUtils.delete(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, <%= entityNmCamel %>, <%= ifcom.interfaceIdType %>.class, <%= givenGetArgs %>);
+  public <%= ifcom.interfaceIdType %> delete(<%= idMethodArgs %>, <%= entityNmPascal %>Dto dto) {
+    return RestClientUtils.delete(<%= entityNmAllCaps %>_AND_<%= entityNmAllCaps %>_ID_PATH, dto, <%= ifcom.interfaceIdType %>.class, <%= givenIdArgs %>);
   }
 
   public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {

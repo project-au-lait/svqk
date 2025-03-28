@@ -60,35 +60,54 @@ tscom = {
     return typeMap[javaType] || 'string';
   },
 
-  inputField: function(field, isId) {
+  inputField: function(field, isId, isDisabled = false) {
     const id = `id='${field.fieldName}'`;
     const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
     const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
+    const disabled = isDisabled ? `disabled={${isDisabled}}` : '';
 
     switch (field.javaType) {
       case 'Integer':
-        return `<InputField type='number' ${id} ${label} ${bindValue} />`;
+        return `<InputField type='number' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'String':
         if (field.stringLength && field.stringLength <= 128) {
-          return `<InputField ${id} ${label} ${bindValue} />`;
+          return `<InputField ${id} ${label} ${bindValue} ${disabled} />`;
         } else {
-          return `<TextArea ${id} ${label} ${bindValue} />`;
+          return `<TextArea ${id} ${label} ${bindValue} ${disabled} />`;
         }
       case 'java.time.LocalDate':
-        return `<InputField type='date' ${id} ${label} ${bindValue} />`;
+        return `<InputField type='date' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'java.time.LocalDateTime':
-        return `<InputField type='datetime-local' ${id} ${label} />`;
+        return `<InputField type='datetime-local' ${id} ${label} ${disabled} />`;
       case 'Boolean':
-        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} />`;
+        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} ${disabled} />`;
       default:
         const multiple = field.multiple ? 'multiple' : '';
-        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} />`;
+        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} ${disabled} />`;
     }
+  },
+
+  buildSaveApiCall: function(entityNmCamel, compIdFields) {
+    const updateParams = compIdFields
+      ? compIdFields.map((compIdField) => `${entityNmCamel}.id.${compIdField.fieldName}`).join(", ")
+      : `${entityNmCamel}.id`;
+  
+    const createCall = `api.${entityNmCamel}.${entityNmCamel}Create(${entityNmCamel})`;
+    const updateCall = `api.${entityNmCamel}.${entityNmCamel}Update(${updateParams}, ${entityNmCamel})`;
+  
+    return `updateMode ? ${updateCall} : ${createCall}`;
+  },
+  
+  buildDeleteApiCall: function(entityNmCamel, compIdFields) {
+    const deleteParams = compIdFields
+      ? compIdFields.map((compIdField) => `${entityNmCamel}.id.${compIdField.fieldName}`).join(", ")
+      : `${entityNmCamel}.id`;
+  
+    return `api.${entityNmCamel}.${entityNmCamel}Delete(${deleteParams}, ${entityNmCamel})`;
   },
 }
 
 tscom.idProperty = compIdFields
       ? `id: {\n${tscom.fieldsToProps(compIdFields, 8)}\n${w(6)}},`
       : "";
-
 %>

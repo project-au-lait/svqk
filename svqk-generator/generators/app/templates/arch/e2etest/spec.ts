@@ -22,7 +22,7 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
 
   // Create
   const <%= entityNmCamel %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>();
-  await <%= entityNmCamel %>InputPage.save(<%= entityNmCamel %>);
+  await <%= entityNmCamel %>InputPage.create(<%= entityNmCamel %>);
   await <%= entityNmCamel %>InputPage.expectSavedSuccessfully();
 
   // Rererence
@@ -31,7 +31,7 @@ test('CRUD of <%= entityNmPascal %>', async ({ browser }) => {
 
   // Update
   const updating<%= entityNmPascal %> = <%= entityNmPascal %>InputFactory.createRandom<%= entityNmPascal %>WithId(<%= entityNmCamel %>.<%= idField.fieldName %>);
-  await <%= entityNmCamel %>InputPage.save(updating<%= entityNmPascal %>);
+  await <%= entityNmCamel %>InputPage.update(updating<%= entityNmPascal %>);
   await <%= entityNmCamel %>InputPage.expectSavedSuccessfully();
   await <%= entityNmCamel %>InputPage.expect<%= entityNmPascal %>(updating<%= entityNmPascal %>);
 
