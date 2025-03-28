@@ -36,7 +36,7 @@
 
   async function save() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) => 
-      <%- tscom.save(entityNmCamel, compIdFields) %>
+      <%- tscom.buildSaveApiCall(entityNmCamel, compIdFields) %>
     );
 
     if (response) {
@@ -47,7 +47,7 @@
 
   async function del() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) =>
-      <%- tscom.delete(entityNmCamel, compIdFields) %>
+      <%- tscom.buildDeleteApiCall(entityNmCamel, compIdFields) %>
     );
 
     if (response) {
