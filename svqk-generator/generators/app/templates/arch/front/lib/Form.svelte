@@ -60,11 +60,7 @@
 <form use:form>
   <%_ for (field of compIdFields || [idField]) { _%>
   <div>
-    {#if updateMode}
-      <%- tscom.inputField(field, !!compIdFields, true) %>
-    {:else}
-      <%- tscom.inputField(field, !!compIdFields, false) %>
-    {/if}
+    <%- tscom.inputField(field, !!compIdFields, 'updateMode') %>
   </div>
   <%_ } _%>
   <%_ for (field of nonIdFields) { _%>
