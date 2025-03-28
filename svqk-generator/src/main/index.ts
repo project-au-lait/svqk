@@ -7,12 +7,12 @@ import {
   TemplateData,
   DestPaths,
 } from "./types.js";
-import { GeneratorUtils } from "./lib/generator-utils.js";
-import { BackendGenerator } from "./lib/backend-generator.js";
-import { FrontendGenerator } from "./lib/frontend-generator.js";
-import { EntityGenerator } from "./lib/entity-generator.js";
-import { ApiClientGenerator } from "./lib/api-client-generator.js";
-import { MenuEditor } from "./lib/menu-editor.js";
+import { GeneratorUtils } from "./lib/GeneratorUtils.js";
+import { BackendGenerator } from "./lib/BackendGenerator.js";
+import { FrontendGenerator } from "./lib/FrontendGenerator.js";
+import { EntityGenerator } from "./lib/EntityGenerator.js";
+import { ApiClientGenerator } from "./lib/ApiClientGenerator.js";
+import { MenuEditor } from "./lib/MenuEditor.js";
 
 const allowedComponentValues = [
   "entity",

@@ -1,5 +1,5 @@
 import { Fs, DestPaths, TemplateData } from "../types.js";
-import { FileEditor } from "./file-editor.js";
+import { FileEditor } from "./FileEditor.js";
 
 export class MenuEditor {
   fileEditor: FileEditor | null = null;
@@ -18,7 +18,7 @@ export class MenuEditor {
     }
 
     this.fileEditor?.insert_snippet(
-      "generators/app/templates/arch/front/routes/+layout_LINK.ejs",
+      "generators/app/templates/arch/frontend/routes/+layout_LINK.ejs",
       `${this.destPaths.destFrontPath}/routes/+layout.svelte`,
       "LINK",
       templateData,
