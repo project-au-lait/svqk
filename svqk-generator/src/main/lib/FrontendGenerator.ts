@@ -19,33 +19,33 @@ export class FrontendGenerator {
 
     if (this.templateType === "skeleton") {
       pathPairs = [
-        ["front/+page.svelte", `${entityPathCamel}/+page.svelte`],
-        ["front/+page.ts", `${entityPathCamel}/+page.ts`],
+        ["frontend/+page.svelte", `${entityPathCamel}/+page.svelte`],
+        ["frontend/+page.ts", `${entityPathCamel}/+page.ts`],
       ];
     } else if (this.templateType === "arch") {
       pathPairs = [
         // For list page
-        ["front/routes/list/+page.svelte", `${entityPathPlural}/+page.svelte`],
-        ["front/routes/list/+page.ts", `${entityPathPlural}/+page.ts`],
+        ["frontend/routes/list/+page.svelte", `${entityPathPlural}/+page.svelte`],
+        ["frontend/routes/list/+page.ts", `${entityPathPlural}/+page.ts`],
 
         // For create page
         [
-          "front/routes/new/+page.svelte",
+          "frontend/routes/new/+page.svelte",
           `${entityPathPlural}/new/+page.svelte`,
         ],
-        ["front/routes/new/+page.ts", `${entityPathPlural}/new/+page.ts`],
+        ["frontend/routes/new/+page.ts", `${entityPathPlural}/new/+page.ts`],
         [
-          "front/lib/Form.svelte",
+          "frontend/lib/Form.svelte",
           `${destinationPath}/lib/domain/${templateData.entityNmPlural}/${templateData.entityNmPascal}Form.svelte`,
         ],
 
         // For update page
         [
-          "front/routes/entityId/+page.svelte",
+          "frontend/routes/entityId/+page.svelte",
           `${entityPathPlural}/${forntendPagePath}/+page.svelte`,
         ],
         [
-          "front/routes/entityId/+page.ts",
+          "frontend/routes/entityId/+page.ts",
           `${entityPathPlural}/${forntendPagePath}/+page.ts`,
         ],
       ];

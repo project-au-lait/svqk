@@ -83,7 +83,7 @@ export class BackendGenerator {
   ) {
     components.forEach((component) => {
       this.fs.copyTpl(
-        this.templatePath(`${templateType}/back/${component}.java`),
+        this.templatePath(`${templateType}/backend/${component}.java`),
         this.destinationPath(
           `${destPkgPath}/${templateData.entityNmPascal}${component}.java`
         ),
