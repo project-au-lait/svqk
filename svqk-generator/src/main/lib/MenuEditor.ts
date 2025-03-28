@@ -1,5 +1,5 @@
 import { Fs, DestPaths, TemplateData } from "../types.js";
-import { FileEditor } from "./file-editor.js";
+import { FileEditor } from "./FileEditor.js";
 
 export class MenuEditor {
   fileEditor: FileEditor | null = null;
