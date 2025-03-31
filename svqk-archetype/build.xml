@@ -217,6 +217,10 @@
       file="${archetype.metadata.file}"
       match="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
       replace="\1*.ts\3" />
+    <replaceregexp flags="g"
+      file="${archetype.metadata.file}"
+      match="(directory&gt;src/main&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
+      replace="\1*.ts\3" />
   </target>
 
   <target name="adjust-generator-conf">
