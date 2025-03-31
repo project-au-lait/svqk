@@ -10,6 +10,21 @@ const javaTypeDefs = [
     valueCode: "RandomStringUtils.randomAscii(@varchar.size@)",
     imports: ["org.apache.commons.lang3.RandomStringUtils"],
   },
+  {
+    type: "Boolean",
+    valueCode: "new Random().nextBoolean()",
+    imports: ["java.util.Random"],
+  },
+  {
+    type: "java.time.LocalDate",
+    valueCode: "LocalDate.now().minusDays(ThreadLocalRandom.current().nextInt(36500))",
+    imports: ["java.time.LocalDate", "java.util.concurrent.ThreadLocalRandom"],
+  },
+  {
+    type: "java.time.LocalDateTime",
+    valueCode: "LocalDateTime.now().minusSeconds(ThreadLocalRandom.current().nextLong(315360000))",
+    imports: ["java.time.LocalDateTime", "java.time.ZoneOffset", "java.util.concurrent.ThreadLocalRandom"],
+  },
 ];
 
 function findTypeDef(type) {

@@ -1,7 +1,20 @@
 <% include('../../lib/interface-common'); -%>
 <%_
 getMethodArgs = ifcom.buildArgs((field) => `${field.javaType} ${field.fieldName}`);
-givenGetArgs = ifcom.buildArgs((field) => field.fieldName);
+givenGetArgs = ifcom.buildArgs((field) => {
+  const needsEncoding = field.javaType === "java.lang.String";
+  const needsToString = [
+    "java.time.LocalDate",
+    "java.time.LocalDateTime",
+    "java.lang.Boolean",
+    "java.lang.Integer"
+  ].includes(field.javaType);
+
+  const valueExpr = `${field.fieldName}${needsToString ? ".toString()" : ""}`;
+  return needsEncoding
+    ? `URLEncoder.encode(${valueExpr}, StandardCharsets.UTF_8)`
+    : valueExpr;
+});
 -%>
 package <%= interfacesPkgNm %>;
 
@@ -10,6 +23,8 @@ import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 import org.eclipse.microprofile.config.Config;
