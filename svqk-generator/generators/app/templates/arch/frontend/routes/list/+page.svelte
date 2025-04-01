@@ -23,7 +23,7 @@
 <section>
   <form use:form>
     <fieldset role="search">
-      <input type="search" bind:value={criteria.text} />
+      <input id="search" type="search" bind:value={criteria.text} />
       <input type="submit" value="Search" />
     </fieldset>
   </form>
