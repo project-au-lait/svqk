@@ -1,7 +1,9 @@
 <% include('../../lib/interface-common'); -%>
 <%_
 getMethodArgs = ifcom.buildArgs((field) => `${field.javaType} ${field.fieldName}`);
-givenGetArgs = ifcom.buildArgs((field) => field.fieldName);
+givenGetArgs = ifcom.buildArgs((field) =>
+  `${field.fieldName}.toString()`
+);
 -%>
 package <%= interfacesPkgNm %>;
 
