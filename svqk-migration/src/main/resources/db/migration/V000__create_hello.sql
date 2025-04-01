@@ -19,55 +19,13 @@ VALUES (1, 'Hello');
 
 
 CREATE table hello_world (
-    int_id INT,
-    char_id VARCHAR(128),
-    bool_id BOOLEAN,
-    date_id DATE,
-    timestamp_id TIMESTAMP,
-    text_id VARCHAR(129),
-    int_col INT,
-    char_col VARCHAR(128),
-    bool_col BOOLEAN,
-    date_col DATE,
-    timestamp_col TIMESTAMP,
-    text_col VARCHAR(129),
+    id INT,
+    seq_no INT,
+    message VARCHAR(255) NOT NULL,
     --${commonColumns},
-    PRIMARY KEY (
-        int_id,
-        char_id,
-        bool_id,
-        date_id,
-        timestamp_id,
-        text_id
-    )
+    PRIMARY KEY (id, seq_no)
 );
 
 
-INSERT INTO hello_world (
-        int_id,
-        char_id,
-        bool_id,
-        date_id,
-        timestamp_id,
-        text_id,
-        int_col,
-        char_col,
-        bool_col,
-        date_col,
-        timestamp_col,
-        text_col
-    )
-VALUES (
-        1,
-        '1',
-        TRUE,
-        '2025-03-31',
-        '2025-03-31 00:00:00',
-        'Hello World',
-        1,
-        '1',
-        TRUE,
-        '2025-03-31',
-        '2025-03-31 00:00:00',
-        'Hello World'
-    );
+INSERT INTO hello_world (id, seq_no, message)
+VALUES (1, 1, 'Hello World');
