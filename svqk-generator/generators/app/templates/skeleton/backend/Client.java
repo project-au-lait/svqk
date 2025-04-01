@@ -12,8 +12,6 @@ import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.*;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 import org.eclipse.microprofile.config.Config;
