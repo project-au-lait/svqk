@@ -1,20 +1,9 @@
 <% include('../../lib/interface-common'); -%>
 <%_
 getMethodArgs = ifcom.buildArgs((field) => `${field.javaType} ${field.fieldName}`);
-givenGetArgs = ifcom.buildArgs((field) => {
-  const needsEncoding = field.javaType === "java.lang.String";
-  const needsToString = [
-    "java.time.LocalDate",
-    "java.time.LocalDateTime",
-    "java.lang.Boolean",
-    "java.lang.Integer"
-  ].includes(field.javaType);
-
-  const valueExpr = `${field.fieldName}${needsToString ? ".toString()" : ""}`;
-  return needsEncoding
-    ? `URLEncoder.encode(${valueExpr}, StandardCharsets.UTF_8)`
-    : valueExpr;
-});
+givenGetArgs = ifcom.buildArgs((field) =>
+  `${field.fieldName}.toString()`
+);
 -%>
 package <%= interfacesPkgNm %>;
 
