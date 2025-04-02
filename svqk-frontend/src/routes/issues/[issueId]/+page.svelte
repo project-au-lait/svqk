@@ -10,7 +10,7 @@
   let issue = $derived(data.issue);
   let newIssue = $state(data.issue);
   $effect(() => {
-    newIssue = { ...issue, version: issue.version };
+    newIssue = issue;
   });
 
   async function handleAfterSave(id?: number) {

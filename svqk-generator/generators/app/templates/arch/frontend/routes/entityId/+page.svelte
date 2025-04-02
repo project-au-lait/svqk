@@ -10,7 +10,7 @@
   let <%= entityNmCamel %> = $derived(data.<%= entityNmCamel %>);
   let new<%= entityNmPascal %> = $state(data.<%= entityNmCamel %>);
   $effect(() => {
-    new<%= entityNmPascal %> = { ...<%= entityNmCamel %>, version: <%= entityNmCamel %>.version };
+    new<%= entityNmPascal %> = <%= entityNmCamel %>;
   });
 
   async function handleAfterSave(id?: <%= tscom.idType %>) {
