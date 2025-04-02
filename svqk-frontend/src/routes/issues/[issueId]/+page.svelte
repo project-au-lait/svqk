@@ -8,6 +8,10 @@
 
   let { data }: { data: PageData } = $props();
   let issue = $derived(data.issue);
+  let newIssue = $state(data.issue);
+  $effect(() => {
+    newIssue = { ...issue, version: issue.version };
+  });
 
   async function handleAfterSave(id?: number) {
     await invalidateAll();
@@ -18,5 +22,5 @@
   }
 </script>
 
-<IssueForm {issue} updateMode={true} {handleAfterSave} {handleAfterDelete} />
-<Journals journals={issue.journals} />
+<IssueForm bind:issue={newIssue} updateMode={true} {handleAfterSave} {handleAfterDelete} />
+<Journals journals={newIssue.journals} />
