@@ -22,4 +22,4 @@
   }
 </script>
 
-<<%= entityNmPascal %>Form bind:<%= entityNmCamel %>={new<%= entityNmCamel %>} updateMode={true} {handleAfterSave} {handleAfterDelete} />
+<<%= entityNmPascal %>Form bind:<%= entityNmCamel %>={new<%= entityNmPascal %>} updateMode={true} {handleAfterSave} {handleAfterDelete} />
