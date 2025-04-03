@@ -8,6 +8,9 @@
 
   let { data }: { data: PageData } = $props();
   let <%= entityNmCamel %> = $state(data.<%= entityNmCamel %>);
+  $effect(() => {
+    <%= entityNmCamel %> = data.<%= entityNmCamel %>;
+  });
 
   async function handleAfterSave(id?: <%= tscom.idType %>) {
     await invalidateAll();

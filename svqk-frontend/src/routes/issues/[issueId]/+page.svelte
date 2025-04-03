@@ -8,6 +8,9 @@
 
   let { data }: { data: PageData } = $props();
   let issue = $state(data.issue);
+  $effect(() => {
+    issue = data.issue;
+  });
 
   async function handleAfterSave(id?: number) {
     await invalidateAll();
