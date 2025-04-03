@@ -65,6 +65,7 @@ public class <%= entityNmPascal %>Controller {
 <%= ifcom.buildEntityId %>
 
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
+
 <%= ifcom.buildReturnString("updatedEntity") %>
   }
 
@@ -77,6 +78,7 @@ public class <%= entityNmPascal %>Controller {
 <%= ifcom.buildEntityId %>
 
     <%= entityNmCamel %>Service.delete(entity);
+
 <%= ifcom.buildReturnString("entity") %>
   }
 
