@@ -6,7 +6,18 @@ export default class DateUtils {
   }
 
   static generateRandomLocalDateTime(): LocalDate {
-    return DateUtils.generateRandomDate().toISOString();
+    const date = new Date(
+      Date.now() - Math.floor(Math.random() * 10 * 365 * 24 * 60 * 60 * 1000) // 約10年分の範囲でランダム
+    );
+
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const yyyy = date.getFullYear();
+    const mm = pad(date.getMonth() + 1);
+    const dd = pad(date.getDate());
+    const hh = pad(date.getHours());
+    const min = pad(date.getMinutes());
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
   }
 
   static generateRandomLocalDate(): LocalDateTime {
