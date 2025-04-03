@@ -43,13 +43,16 @@ public class <%= entityNmPascal %>Controller {
   <%- operationParametersAnnotation %>
   public <%= entityNmPascal %>Dto get(<%- idMethodArgs %>) {
 <%= ifcom.buildEntity %>
+
     return BeanUtils.map(entity, <%= entityNmPascal %>Dto.class);
   }
 
   @POST
   public <%= ifcom.interfaceIdType %> save(@Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
+
     <%= entityNmPascal %>Entity savedEntity = <%= entityNmCamel %>Service.save(entity);
+
 <%= ifcom.buildReturnString("savedEntity") %>
   }
 
@@ -58,7 +61,9 @@ public class <%= entityNmPascal %>Controller {
   <%- operationParametersAnnotation %>
   public <%= ifcom.interfaceIdType %> update(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
+
 <%= ifcom.buildEntityId %>
+
     <%= entityNmPascal %>Entity updatedEntity = <%= entityNmCamel %>Service.save(entity);
 <%= ifcom.buildReturnString("updatedEntity") %>
   }
@@ -68,7 +73,9 @@ public class <%= entityNmPascal %>Controller {
   <%- operationParametersAnnotation %>
   public <%= ifcom.interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
+
 <%= ifcom.buildEntityId %>
+
     <%= entityNmCamel %>Service.delete(entity);
 <%= ifcom.buildReturnString("entity") %>
   }
@@ -78,6 +85,7 @@ public class <%= entityNmPascal %>Controller {
   public <%= entityNmPascal %>SearchResultDto search(<%= entityNmPascal %>SearchCriteriaDto dto) {
     SearchCriteria searchCriteria = <%= entityNmCamel %>Factory.build(dto);
     SearchResult<<%= entityNmPascal %>Entity> result = <%= entityNmCamel %>Service.search(searchCriteria);
+
     return <%= entityNmCamel %>Factory.build(result);
   }
 }
