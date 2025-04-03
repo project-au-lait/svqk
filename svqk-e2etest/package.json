@@ -22,6 +22,7 @@
     "dotenv": "^16.4.7",
     "i18next": "^24.2.3",
     "i18next-fs-backend": "^2.6.0",
+    "luxon": "^3.6.1",
     "os-locale": "^6.0.2"
   },
   "type": "module"

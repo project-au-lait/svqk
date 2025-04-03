@@ -64,8 +64,9 @@ tscom = {
     const id = `id='${field.fieldName}'`;
     const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
     const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
+    const bindChecked = isId ? `bind:checked={${entityNmCamel}.id.${field.fieldName}}` : `bind:checked={${entityNmCamel}.${field.fieldName}}`;
     const disabled = isDisabled ? `disabled={${isDisabled}}` : '';
-
+  
     switch (field.javaType) {
       case 'Integer':
         return `<InputField type='number' ${id} ${label} ${bindValue} ${disabled} />`;
@@ -78,14 +79,14 @@ tscom = {
       case 'java.time.LocalDate':
         return `<InputField type='date' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'java.time.LocalDateTime':
-        return `<InputField type='datetime-local' ${id} ${label} ${disabled} />`;
+        return `<InputField type='datetime-local' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'Boolean':
-        return `<CheckBox ${id} ${label} bind:checked={${entityNmCamel}.${field.fieldName}} ${disabled} />`;
+        return `<CheckBox ${id} ${label} ${bindChecked} ${disabled} />`;
       default:
         const multiple = field.multiple ? 'multiple' : '';
         return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} ${disabled} />`;
     }
-  },
+  }, 
 
   buildSaveApiCall: function(entityNmCamel, compIdFields) {
     const updateParams = compIdFields
