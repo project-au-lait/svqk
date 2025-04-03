@@ -18,10 +18,8 @@ export default class <%= entityNmPascal %>ListPageElement extends BasePageElemen
     <%_ } else { -%>
     const rowId = <%- compIdFields.map(field => {
       const name = `id.${field.fieldName}`;
-      if (field.javaType === 'java.time.LocalDate' || field.javaType === 'java.time.LocalDateTime') {
-        const isTimestamp = field.javaType === 'java.time.LocalDateTime';
-        const format = isTimestamp ? "yyyy-MM-dd'T'HH:mm:ss" : "yyyy-MM-dd";
-        return `DateTime.fromISO(${name}).toFormat("${format}")`;
+      if (field.javaType === 'java.time.LocalDateTime') {
+        return `DateTime.fromISO(${name}).toFormat("yyyy-MM-dd'T'HH:mm:ss")`;
       }
       return name;
     }).join(' + "/" + ') %>;
