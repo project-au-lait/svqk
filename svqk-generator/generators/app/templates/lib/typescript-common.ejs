@@ -98,6 +98,22 @@ tscom = {
   
     return `updateMode ? ${updateCall} : ${createCall}`;
   },
+
+  buildDetailApiCall: function(entityNmCamel, compIdFields) {
+    const convertParam = (field) => {
+      if (field.javaType === "Integer") {
+        return `Number(params.${field.fieldName})`;
+      } else if (field.javaType === "Boolean") {
+        return `params.${field.fieldName} === 'true'`;
+      } else {
+        return `params.${field.fieldName}`;
+      }
+    };
+  
+    const apiCallArgs = (compIdFields ?? [idField]).map(convertParam).join(", ");
+  
+    return `api.${entityNmCamel}.${entityNmCamel}Detail(${apiCallArgs})`;
+  },
   
   buildDeleteApiCall: function(entityNmCamel, compIdFields) {
     const deleteParams = compIdFields
