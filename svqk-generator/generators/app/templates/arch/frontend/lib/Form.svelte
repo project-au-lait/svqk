@@ -22,7 +22,7 @@
     <%= entityNmCamel %> = $bindable(),
      updateMode = false,
      handleAfterSave,
-     handleAfterDelete
+     handleAfterDelete = async (id) => {}
   }: Props = $props();
 
   const spec = {
