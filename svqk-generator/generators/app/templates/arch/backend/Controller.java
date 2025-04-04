@@ -2,7 +2,7 @@
 <%_
 idPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
 idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
-operationParametersAnnotation = `@Parameters({\n  ` +
+parametersAnnotation = `@Parameters({\n  ` +
   ifcom.idFields.map((field) =>
     `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
   ).join(",\n  ") + `\n})`;
@@ -40,7 +40,7 @@ public class <%= entityNmPascal %>Controller {
 
   @GET
   @Path(<%= entityNmAllCaps %>_ID_PATH)
-  <%- operationParametersAnnotation %>
+  <%- parametersAnnotation %>
   public <%= entityNmPascal %>Dto get(<%- idMethodArgs %>) {
 <%= ifcom.buildEntity %>
 
@@ -58,7 +58,7 @@ public class <%= entityNmPascal %>Controller {
 
   @PUT
   @Path(<%= entityNmAllCaps %>_ID_PATH)
-  <%- operationParametersAnnotation %>
+  <%- parametersAnnotation %>
   public <%= ifcom.interfaceIdType %> update(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
@@ -71,7 +71,7 @@ public class <%= entityNmPascal %>Controller {
 
   @DELETE
   @Path(<%= entityNmAllCaps %>_ID_PATH)
-  <%- operationParametersAnnotation %>
+  <%- parametersAnnotation %>
   public <%= ifcom.interfaceIdType %> delete(<%- idMethodArgs %>, @Valid <%= entityNmPascal %>Dto dto) {
     <%= entityNmPascal %>Entity entity = BeanUtils.map(dto, <%= entityNmPascal %>Entity.class);
 
