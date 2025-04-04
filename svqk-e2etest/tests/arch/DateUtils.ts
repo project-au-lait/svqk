@@ -5,11 +5,11 @@ export default class DateUtils {
     return new Date(Math.floor(Math.random() * new Date().getTime()));
   }
 
-  static generateRandomLocalDateTime(): LocalDate {
-    return DateUtils.generateRandomDate().toISOString();
+  static generateRandomLocalDateTime(): LocalDateTime {
+    return DateUtils.generateRandomDate().toISOString().slice(0, 19);
   }
 
-  static generateRandomLocalDate(): LocalDateTime {
+  static generateRandomLocalDate(): LocalDate {
     return DateUtils.generateRandomDate().toISOString().split('T')[0];
   }
 }

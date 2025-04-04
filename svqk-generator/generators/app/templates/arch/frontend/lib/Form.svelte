@@ -13,6 +13,7 @@
 
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
+    updateMode?: boolean;
     handleAfterSave: (id?: <%= tscom.idType %>) => Promise<void>;
     handleAfterDelete?: () => Promise<void>;
   }
