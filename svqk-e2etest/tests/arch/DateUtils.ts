@@ -6,7 +6,7 @@ export default class DateUtils {
   }
 
   static generateRandomLocalDateTime(): LocalDateTime {
-    return DateUtils.generateRandomDate().toISOString().slice(0, 16);
+    return DateUtils.generateRandomDate().toISOString().slice(0, 19);
   }
 
   static generateRandomLocalDate(): LocalDate {

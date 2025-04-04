@@ -1,6 +1,5 @@
 <%_ include('../../../../lib/typescript-common'); -%>
 import BasePageElement from '@arch/BasePageElement';
-import { DateTime } from 'luxon';
 <%- tscom.impDclIdTypeE2e %>
 
 export default class <%= entityNmPascal %>ListPageElement extends BasePageElement {
@@ -13,17 +12,9 @@ export default class <%= entityNmPascal %>ListPageElement extends BasePageElemen
   }
 
   async click<%= entityNmPascal %>NoLinkById(id: <%= tscom.idType %>) {
-    <%_ if (!compIdFields) { -%>
-    const rowId = id;
-    <%_ } else { -%>
-    const rowId = <%- compIdFields.map(field => {
-      const name = `id.${field.fieldName}`;
-      if (field.javaType === 'java.time.LocalDateTime') {
-        return `DateTime.fromISO(${name}).toFormat("yyyy-MM-dd'T'HH:mm:ss")`;
-      }
-      return name;
-    }).join(' + "/" + ') %>;
-    <%_ } -%>
-    await this.clickInRowID(rowId);
+    <%_
+    const id = compIdFields ? compIdFields.map((field) => `id.${field.fieldName}`).join(" + '/' + ") : "id";
+    -%>
+    await this.clickInRowID(<%- id %>);
   }
 }
