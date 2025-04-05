@@ -156,7 +156,7 @@ Command: pnpm dev --open +
 Frontendサーバーが起動すると、ブラウザが起動しfrontendプロジェクト内で実装されているWebアプリが表示されます。
 
 |DBマイグレーションの実行
-|VSCode Task: `migrage` +
+|VSCode Task: `migrate-db` +
 Command: mvnw -f svqk-migration compile -P setup
 |DSマイグレーションツール(Flyway)が実行されます。 +
 実行が終了すると、migrationプロジェクト内のマイグレーション資材(sql、java)がDBに反映されます。 +

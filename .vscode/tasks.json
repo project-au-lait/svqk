@@ -52,7 +52,7 @@
       "problemMatcher": []
     },
     {
-      "label": "migrage",
+      "label": "migrate-db",
       "type": "shell",
       "osx": {
         "command": "./mvnw"
