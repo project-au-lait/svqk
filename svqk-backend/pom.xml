@@ -139,7 +139,7 @@
     <dependency>
       <groupId>dev.aulait.sqb</groupId>
       <artifactId>sqb-jpa</artifactId>
-      <version>0.8-SNAPSHOT</version>
+      <version>0.8</version>
     </dependency>
   </dependencies>
 
