@@ -30,8 +30,8 @@ This repository contains the set of materials that make up the above assets.
 
 ## Document
 
-- [Implementation Guide](https://aulait.dev/svqk/0.8/en/impl-guide/)
-- [Archetecture Description](https://aulait.dev/svqk/0.8/en/arch-desc/)
+- [Implementation Guide](https://aulait.dev/svqk/0.9/en/impl-guide/)
+- [Archetecture Description](https://aulait.dev/svqk/0.9/en/arch-desc/)
 
 ## License
 
