@@ -19,7 +19,7 @@ a|
   VSCodeの各種設定
 
 
-.6+|
+.7+|
 |{project-artifactId}-container
 a|
 ローカル開発環境・CIで使用するコンテナを作成するための資材を格納します。
@@ -100,4 +100,18 @@ End to End Testの資材を格納します。
   Playwrightの実行をMavenのビルドプロセスに統合
 * compose.yml +
   End to Endで使用するコンテナの定義
+
+
+|{project-artifactId}-generator
+a|
+ソースコード自動生成ツール(Generator)の資材を格納します。GeneratorはYeomanのモジュールとして実装されており、このプロジェクトはそのモジュールを作成するためのものです。
+
+* package.json +
+  Yeomanの実行の設定
+* .yo-rc.json +
+  Yeomanの設定ファイル
+* src/main/index.ts +
+  Yeomanのエントリポイントとなるファイル
+* generators/app/* +
+  Yeomanのテンプレートファイル
 |===
