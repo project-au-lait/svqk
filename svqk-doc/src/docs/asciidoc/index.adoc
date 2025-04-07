@@ -32,4 +32,9 @@ a|
 a|
 * link:0.8/en/index.html[English]
 * link:0.8/ja/index.html[日本語]
+
+|0.9
+a|
+* link:0.9/en/index.html[English]
+* link:0.9/ja/index.html[日本語]
 |===
