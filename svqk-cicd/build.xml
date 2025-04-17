@@ -10,6 +10,10 @@
 
 
   <target name="test">
+    <condition property="goal" value="install" else="verify">
+      <equals arg1="${analyze}" arg2="true" />
+    </condition>
+
     <condition property="test.later" value=",test-later" else="">
       <equals arg1="${analyze}" arg2="true" />
     </condition>
@@ -23,7 +27,7 @@
     <trycatch>
       <try>
         <exec executable="${mvn.cmd}" dir="${prjdir}" failonerror="true">
-          <arg line="-T 1C clean verify -P setup${test.later}" />
+          <arg line="-T 1C clean ${goal} -P setup${test.later}" />
           <arg line="-D db.port=${db.port.random} -D backend.port=${backend.port.random}" />
           <arg line="-D org.slf4j.simpleLogger.showThreadName=true" />
         </exec>
