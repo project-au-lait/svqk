@@ -7,7 +7,10 @@
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
-  let issue = $derived(data.issue);
+  let issue = $state(data.issue);
+  $effect(() => {
+    issue = data.issue;
+  });
 
   async function handleAfterSave(id?: number) {
     await invalidateAll();
@@ -18,5 +21,5 @@
   }
 </script>
 
-<IssueForm {issue} updateMode={true} {handleAfterSave} {handleAfterDelete} />
+<IssueForm bind:issue updateMode={true} {handleAfterSave} {handleAfterDelete} />
 <Journals journals={issue.journals} />

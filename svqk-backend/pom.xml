@@ -9,7 +9,7 @@
   <parent>
     <groupId>dev.aulait.svqk</groupId>
     <artifactId>svqk</artifactId>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9</version>
     <relativePath>../</relativePath>
   </parent>
 
@@ -23,7 +23,7 @@
     <quarkus.container-image.registry>${image.registry}</quarkus.container-image.registry>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.15.2</quarkus.platform.version>
+    <quarkus.platform.version>3.20.0</quarkus.platform.version>
   </properties>
 
   <dependencyManagement>
@@ -144,7 +144,7 @@
     <dependency>
       <groupId>dev.aulait.sqb</groupId>
       <artifactId>sqb-jpa</artifactId>
-      <version>0.8-SNAPSHOT</version>
+      <version>0.8</version>
     </dependency>
   </dependencies>
 

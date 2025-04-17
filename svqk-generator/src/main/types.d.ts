@@ -52,25 +52,19 @@ type TemplateData = {
   compIdFields?: Field[];
 };
 
-type GenerateTarget = {
-  templatePath: string;
-  destinationPath: string;
-  templateData: TemplateData;
-};
-
-type SnippetInsertionTarget = {
-  templatePath: string;
-  destinationPath: string;
-  placeholder: string;
-  templateData: TemplateData;
-  checkString: string;
-};
-
 type DestPaths = {
   destBackPath: string;
   destITPath: string;
   destFrontPath: string;
   destE2EPath: string;
+};
+
+type Fs = {
+  copyTpl: (src: string, dest: string, data: TemplateData) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  copy: (src: string, dest: string, options?: any) => void;
+  delete: (filepath: string) => void;
+  read: (filepath: string) => string | null;
 };
 
 declare module "**/jeg-metadata.json" {
@@ -86,7 +80,6 @@ export {
   GenApiClientConfig,
   Field,
   TemplateData,
-  GenerateTarget,
-  SnippetInsertionTarget,
   DestPaths,
+  Fs,
 };

@@ -7,7 +7,10 @@
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
-  let <%= entityNmCamel %> = $derived(data.<%= entityNmCamel %>);
+  let <%= entityNmCamel %> = $state(data.<%= entityNmCamel %>);
+  $effect(() => {
+    <%= entityNmCamel %> = data.<%= entityNmCamel %>;
+  });
 
   async function handleAfterSave(id?: <%= tscom.idType %>) {
     await invalidateAll();
@@ -18,4 +21,4 @@
   }
 </script>
 
-<<%= entityNmPascal %>Form {<%= entityNmCamel %>} updateMode={true} {handleAfterSave} {handleAfterDelete} />
+<<%= entityNmPascal %>Form bind:<%= entityNmCamel %> updateMode={true} {handleAfterSave} {handleAfterDelete} />

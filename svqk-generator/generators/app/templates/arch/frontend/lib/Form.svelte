@@ -13,8 +13,9 @@
 
   interface Props {
     <%= entityNmCamel %>: <%= entityNmPascal %>Model;
+    updateMode?: boolean;
     handleAfterSave: (id?: <%= tscom.idType %>) => Promise<void>;
-    handleAfterDelete?: (id?: <%= tscom.idType %>) => Promise<void>;
+    handleAfterDelete?: () => Promise<void>;
   }
 
   let {
@@ -25,7 +26,7 @@
   }: Props = $props();
 
   const spec = {
-    <%_ for (field of fields) { _%>
+    <%_ for (field of nonIdFields) { _%>
       <%_ if (field.required) { _%>
         <%= field.fieldName %>: <%= tscom.dataType(field.javaType) %>().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
       <%_ } _%>
@@ -36,7 +37,8 @@
 
   async function save() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) => 
-      updateMode ? api.<%= entityNmCamel %>.<%= entityNmCamel %>Update(<%= entityNmCamel %>) : api.<%= entityNmCamel %>.<%= entityNmCamel %>Create(<%= entityNmCamel %>));
+      <%- tscom.buildSaveApiCall(entityNmCamel, compIdFields) %>
+    );
 
     if (response) {
       await handleAfterSave(response);
@@ -46,11 +48,7 @@
 
   async function del() {
     const response = await ApiHandler.handle<<%= tscom.idType %>>(fetch, (api) =>
-      <%_ if (compIdFields) { _%>
-        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%_ for (compIdField of compIdFields) { _%><%= entityNmCamel %>.id.<%= compIdField.fieldName %>,<%_ } _%><%= entityNmCamel %>)
-      <%_ } else { _%>
-        api.<%= entityNmCamel %>.<%= entityNmCamel %>Delete(<%= entityNmCamel %>.id, <%= entityNmCamel %>)
-      <%_ } _%>        
+      <%- tscom.buildDeleteApiCall(entityNmCamel, compIdFields) %>
     );
 
     if (response) {
@@ -61,9 +59,9 @@
 </script>
 
 <form use:form>
-  <%_ for (field of compIdFields || [idField]){ _%>
+  <%_ for (field of compIdFields || [idField]) { _%>
   <div>
-    <%- tscom.inputField(field, !!compIdFields) %>
+    <%- tscom.inputField(field, !!compIdFields, 'updateMode') %>
   </div>
   <%_ } _%>
   <%_ for (field of nonIdFields) { _%>

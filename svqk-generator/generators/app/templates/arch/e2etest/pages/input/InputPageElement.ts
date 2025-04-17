@@ -61,7 +61,7 @@ const expectImpl = (field) => {
   return `await this.${inputMethod}('#${field.fieldName}', ${field.fieldName}${required});`;
 }
 %>
-import { LocalDate } from '@api/Api';
+import { LocalDate, LocalDateTime } from '@api/Api';
 import BasePageElement from '@arch/BasePageElement';
 import { t } from '@arch/MultiLng';
 

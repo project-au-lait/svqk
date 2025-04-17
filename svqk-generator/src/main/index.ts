@@ -5,13 +5,14 @@ import {
   MetadataConfig,
   OptionsValues,
   TemplateData,
-  GenerateTarget,
   DestPaths,
-  SnippetInsertionTarget,
 } from "./types.js";
-import { GeneratorUtils } from "./lib/generator-utils.js";
-import { EntityGenerator } from "./lib/entity-generator.js";
-import { ApiClientGenerator } from "./lib/api-client-generator.js";
+import { GeneratorUtils } from "./lib/GeneratorUtils.js";
+import { BackendGenerator } from "./lib/BackendGenerator.js";
+import { FrontendGenerator } from "./lib/FrontendGenerator.js";
+import { EntityGenerator } from "./lib/EntityGenerator.js";
+import { ApiClientGenerator } from "./lib/ApiClientGenerator.js";
+import { MenuEditor } from "./lib/MenuEditor.js";
 
 const allowedComponentValues = [
   "entity",
@@ -33,8 +34,6 @@ const YO_RC_KEY_GEN_OPEN_API_JSON_CMD = "genOpenApiJsonCmd";
 const YO_RC_KEY_GEN_ENTITY_CMD = "genEntityCmd";
 const YO_RC_KEY_FRONT_API_CLIENT_PATH = "frontApiClientPath";
 const YO_RC_KEY_E2E_API_CLIENT_PATH = "E2EApiClientPath";
-
-const LINE_BREAK = "\n";
 
 class SvqkCodeGenerator extends Generator<CustomOptions> {
   optionsValues: OptionsValues = {
@@ -59,6 +58,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     e2eApiClientPath: "",
   };
   generateEntity: boolean | null = null;
+  backendGenerator: BackendGenerator | null = null;
+  frontendGenerator: FrontendGenerator | null = null;
+  menuEditor: MenuEditor | null = null;
+  templateDataList: TemplateData[] = [];
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -104,6 +107,28 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
 
     this.metadataConfig.list = await GeneratorUtils.load_json_file(
       `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`
+    );
+
+    this.backendGenerator = new BackendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
+    );
+
+    this.frontendGenerator = new FrontendGenerator(
+      this.fs,
+      this.templatePath.bind(this),
+      this.destinationPath.bind(this),
+      this.optionsValues.templateType,
+      this.destPaths
+    );
+
+    this.menuEditor = new MenuEditor(
+      this.fs,
+      this.optionsValues.templateType,
+      this.destPaths
     );
   }
 
@@ -211,6 +236,20 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       throw new Error("Please generate entities.");
     }
+
+    this.metadataConfig.list.forEach((metaData) => {
+      if (
+        this.inputTables.includes(metaData.tableName) ||
+        this.inputTables.includes(metaData.className)
+      ) {
+        const tmplData = GeneratorUtils.build_template_data(
+          metaData,
+          this.metadataConfig
+        );
+
+        this.templateDataList.push(tmplData);
+      }
+    });
   }
 
   writing() {
@@ -221,45 +260,33 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       return;
     }
 
-    const generateTargets: GenerateTarget[] =
-      GeneratorUtils.build_generate_targets(
-        this.metadataConfig,
-        this.optionsValues.component,
-        this.optionsValues.templateType,
-        this.inputTables,
-        this.destPaths
-      );
-
-    generateTargets.forEach((target) => {
-      this._generate_file(
-        target.templatePath,
-        target.destinationPath,
-        target.templateData
-      );
+    this.templateDataList.forEach((templateData) => {
+      switch (this.optionsValues.component) {
+        case "backend":
+          this.backendGenerator?.generate_backend(templateData);
+          break;
+        case "integration-test":
+          this.backendGenerator?.generate_integrationtest(templateData);
+          break;
+        case "frontend":
+          this.frontendGenerator?.generate_frontend(templateData);
+          this.menuEditor?.update_menu(templateData);
+          break;
+        case "e2e-test":
+          this.frontendGenerator?.generate_e2etest(templateData);
+          this.menuEditor?.update_menu(templateData);
+          this.menuEditor?.update_menu_test(templateData);
+          break;
+        case "all":
+          this.backendGenerator?.generate_backend(templateData);
+          this.backendGenerator?.generate_integrationtest(templateData);
+          this.frontendGenerator?.generate_frontend(templateData);
+          this.frontendGenerator?.generate_e2etest(templateData);
+          this.menuEditor?.update_menu(templateData);
+          this.menuEditor?.update_menu_test(templateData);
+          break;
+      }
     });
-
-    if (
-      this.optionsValues.component === "all" ||
-      this.optionsValues.component === "e2etest"
-    ) {
-      const snippetInsertionTargets: SnippetInsertionTarget[] =
-        GeneratorUtils.build_snippet_insert_targets(
-          this.metadataConfig,
-          this.optionsValues.component,
-          this.optionsValues.templateType,
-          this.inputTables,
-          this.destPaths
-        );
-      snippetInsertionTargets.forEach((target) => {
-        this._insert_snippet(
-          target.templatePath,
-          target.destinationPath,
-          target.placeholder,
-          target.templateData,
-          target.checkString
-        );
-      });
-    }
   }
 
   end() {
@@ -269,50 +296,6 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
     ) {
       ApiClientGenerator.exec(this.genApiClientConfig);
     }
-  }
-
-  _generate_file(
-    templatePath: string,
-    destinationPath: string,
-    tmplData: TemplateData
-  ) {
-    this.fs.copyTpl(
-      this.templatePath(templatePath),
-      this.destinationPath(destinationPath),
-      tmplData
-    );
-  }
-
-  _insert_snippet(
-    templatePath: string,
-    destinationPath: string,
-    placeholder: string,
-    templateData: TemplateData,
-    checkString: string
-  ) {
-    const renderedPath = templatePath.replace(".ejs", ".txt");
-    this.fs.copyTpl(templatePath, renderedPath, templateData);
-    const renderedText = this.fs.read(renderedPath);
-
-    if (renderedText) {
-      this.fs.copy(destinationPath, destinationPath, {
-        process: function (content) {
-          if (content.includes(checkString)) {
-            return content;
-          }
-
-          const originalText = content.toString();
-          const regex = new RegExp(`^.*__${placeholder}__.*${LINE_BREAK}`, "m");
-          const placeholderLine = RegExp(regex).exec(originalText);
-          return originalText.replace(
-            regex,
-            renderedText + LINE_BREAK + placeholderLine
-          );
-        },
-      });
-    }
-
-    this.fs.delete(renderedPath);
   }
 }
 

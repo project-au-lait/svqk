@@ -640,8 +640,9 @@ Entityの生成先パッケージ :<br>
 <h3 id="_generator">Generator</h3>
 <div class="paragraph">
 <p>VSCode Task: <code>generate</code> を実行します。
-生成対象のコンポーネントに <code>all</code> を選択し、生成元のEntityに <code>Issue</code> と入力します。
-Generatorが生成するソースファイルは以下の通りです。</p>
+表示されたプロンプトで生成対象のコンポーネントと生成元のテーブルを入力します。
+以下は、コンポーネントに <code>all</code> 、テーブルに <code>issue</code> を入力した場合のGeneratorが生成するソースファイルの例です。
+Generatorの詳細な使用方法は <a href="https://github.com/project-au-lait/svqk/tree/main/svqk-generator">こちら</a> を参照してください。</p>
 </div>
 <div class="listingblock">
 <div class="title">生成されたソースファイル</div>
@@ -2172,7 +2173,7 @@ export const load: PageLoad = async ({ fetch, url }) =&gt; {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><code>CriteriaUtils.encode</code> 関数を使用し、検索条件と検索処理前後で状態を保持する値をURLパラメーターにエンコードし、<code>goto</code> 関数に指定します。これにより、PageLoaderで実装された検索処理が実行されます。</td>
+<td><code>CriteriaUtils.encode</code> 関数を使用して検索条件をURLパラメーターにエンコードし、<code>goto</code> 関数に指定します。これにより、URLパラメーターとともに自画面へ遷移し、PageLoaderで実装された検索処理が実行されます。</td>
 </tr>
 </table>
 </div>

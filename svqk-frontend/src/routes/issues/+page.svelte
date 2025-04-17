@@ -36,7 +36,7 @@
 <section>
   <form use:form>
     <fieldset role="search">
-      <input type="search" bind:value={criteria.text} />
+      <input id="search" type="search" bind:value={criteria.text} />
       <input type="submit" value="Search" />
     </fieldset>
 
@@ -44,7 +44,7 @@
       <summary style="display: flex; justify-content: end;">{$t('msg.advancedSearch')}</summary>
       <div class="grid">
         <div>
-          <label for="option">{$t('msg.option')}</label>
+          <label for="subject-only">{$t('msg.option')}</label>
           <CheckBox
             id="subject-only"
             label={$t('msg.searchBySubjectOnly')}

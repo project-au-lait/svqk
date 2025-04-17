@@ -42,7 +42,7 @@ class <%= entityNmPascal %>ControllerIT {
 
     // Update
     // TODO Implementation of assembling a request and assertion
-    <%= ifcom.interfaceIdType %> updatedId = client.update(dto);
+    <%= ifcom.interfaceIdType %> updatedId = client.update(<%= clientIdArgs %>, dto);
 
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();

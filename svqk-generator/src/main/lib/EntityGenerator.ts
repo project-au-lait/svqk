@@ -1,4 +1,4 @@
-import { ExternalCommandExecutor } from "./external-command-executer.js";
+import { ExternalCommandExecutor } from "./ExternalCommandExecuter.js";
 
 export class EntityGenerator {
   static exec(generateEntityCommand: string) {

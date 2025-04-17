@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "node:path";
 import { generateApi } from "swagger-typescript-api";
 import { GenApiClientConfig } from "../types.js";
-import { ExternalCommandExecutor } from "./external-command-executer.js";
+import { ExternalCommandExecutor } from "./ExternalCommandExecuter.js";
 
 export class ApiClientGenerator {
   static exec(genApiClientConfig: GenApiClientConfig) {

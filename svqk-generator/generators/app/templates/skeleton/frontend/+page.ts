@@ -3,8 +3,17 @@ import { env } from '$env/dynamic/public';
 
 export const load: PageLoad = async ({ fetch }) => {
   <%_
-  const id = compIdFields ? compIdFields.map((field) => '1').join('/') : '1';
-  -%>
+  const id = compIdFields
+    ? [
+        '1',
+        '1',
+        'true',
+        '2025-03-31',
+        '2025-03-31T00:00:00',
+        'Hello World'
+      ].map(encodeURIComponent).join('/')
+    : '1';
+  -%>      
   const response = await fetch(`${env.PUBLIC_BACKEND_URL}/api/<%= entityNmCamel %>/<%= id %>`);
   const <%= entityNmCamel %> = await response.json();
 
