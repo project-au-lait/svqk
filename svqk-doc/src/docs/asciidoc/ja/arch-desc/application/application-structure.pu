@@ -6,18 +6,18 @@ skinparam rectangle {
 
 actor User
 
-component "Frontend" as Frontend <<SvelteKit>>
-component "Backend" as Backend <<Quarkus>>
-database DB <<PostgreSQL>>
+component Svelte <<Frontend>>
+component Quarkus <<Backend>>
+database PostgreSQL <<DB>>
 
-User -> Frontend: HTTP \n(with Browser)
-Frontend -> Backend: HTTP
-Backend -> DB: JDBC
+User -> Svelte: HTTP \n(with Browser)
+Svelte -> Quarkus: HTTP
+Quarkus -> PostgreSQL: JDBC
 
 rectangle "* User Interface\n* Validatioin\n* Web API Call" as fnote {
 }
-Frontend .. fnote
+Svelte .. fnote
 
 rectangle "* Web API\n* Validation\n* Transaction\n* Business Logic\n* DB Access" as bnote {
 }
-Backend .. bnote
+Quarkus .. bnote
