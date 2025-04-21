@@ -16,6 +16,8 @@
   <properties>
     <compiler-plugin.version>3.12.1</compiler-plugin.version>
 
+    <it.db.host>${db.host}</it.db.host>
+
     <jackson.version>2.17.1</jackson.version>
     <jacoco.version>0.8.12</jacoco.version>
 
@@ -221,7 +223,7 @@
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <maven.home>${maven.home}</maven.home>
             <quarkus.datasource.jdbc.url>
-              jdbc:postgresql://${db.host}:${db.port}/${db.name}?currentSchema=${db.schema}</quarkus.datasource.jdbc.url>
+              jdbc:postgresql://${it.db.host}:${db.port}/${db.name}?currentSchema=${db.schema}</quarkus.datasource.jdbc.url>
             <quarkus.test.arg-line>${argLine}</quarkus.test.arg-line>
             <tz>Asia/Tokyo</tz>
           </systemPropertyVariables>
@@ -266,13 +268,21 @@
     <profile>
       <id>setup</id>
       <properties>
+        <it.db.host>host.docker.internal</it.db.host>
         <quarkus.container-image.build>true</quarkus.container-image.build>
-        <db.host>host.docker.internal</db.host>
       </properties>
     </profile>
 
     <profile>
       <id>analyze</id>
+
+      <properties>
+        <it.db.host>${db.host}</it.db.host>
+        <quarkus.container-image.build>false</quarkus.container-image.build>
+        <quarkus.package.jar.type>uber-jar</quarkus.package.jar.type>
+        <quarkus.package.write-transformed-bytecode-to-build-output>true</quarkus.package.write-transformed-bytecode-to-build-output>
+      </properties>
+
       <build>
         <plugins>
           <plugin>
@@ -326,15 +336,6 @@
           ../${project.parent.artifactId}-generator/target</quarkus.smallrye-openapi.store-schema-directory>
       </properties>
     </profile>
-
-    <profile>
-      <id>test-later</id>
-
-      <properties>
-        <maven.test.skip>true</maven.test.skip>
-      </properties>
-    </profile>
-
   </profiles>
 
 </project>

@@ -227,6 +227,65 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>analyze</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-plugin-version}</version>
+            <executions>
+              <execution>
+                <?m2e ignore?>
+                <id>start-backend</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <async>true</async>
+                  <executable>java</executable>
+                  <commandlineArgs>
+                    -jar
+                    ${project.parent.basedir}/svqk-backend/target/svqk-backend-${project.version}-runner.jar</commandlineArgs>
+                  <environmentVariables>
+                    <QUARKUS_LOG_CONSOLE_ENABLE>false</QUARKUS_LOG_CONSOLE_ENABLE>
+                    <QUARKUS_LOG_FILE_ENABLE>true</QUARKUS_LOG_FILE_ENABLE>
+                    <QUARKUS_LOG_FILE_PATH>${project.build.directory}/quarkus.log</QUARKUS_LOG_FILE_PATH>
+                    <QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS>false</QUARKUS_HIBERNATE_ORM_LOG_BIND_PARAMETERS>
+                    <QUARKUS_HIBERNATE_ORM_LOG_SQL>false</QUARKUS_HIBERNATE_ORM_LOG_SQL>
+                  </environmentVariables>
+                </configuration>
+              </execution>
+              <execution>
+                <?m2e ignore?>
+                <id>wait-backend</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>docker</executable>
+                  <commandlineArgs>run --rm jwilder/dockerize dockerize -wait
+                    http://host.docker.internal:${backend.port} -timeout 60s</commandlineArgs>
+                </configuration>
+              </execution>
+              <execution>
+                <?m2e ignore?>
+                <id>stop-backend</id>
+                <phase>post-integration-test</phase>
+                <configuration>
+                  <skip>true</skip>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
 </project>
