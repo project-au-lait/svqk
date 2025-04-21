@@ -250,7 +250,8 @@
                   <executable>java</executable>
                   <commandlineArgs>
                     -jar
-                    ${project.parent.basedir}/svqk-backend/target/svqk-backend-${project.version}-runner.jar</commandlineArgs>
+                    ${project.parent.basedir}/${project.parent.artifactId}-backend/target/${project.parent.artifactId}-backend-${project.version}-runner.jar
+                  </commandlineArgs>
                   <environmentVariables>
                     <QUARKUS_LOG_CONSOLE_ENABLE>false</QUARKUS_LOG_CONSOLE_ENABLE>
                     <QUARKUS_LOG_FILE_ENABLE>true</QUARKUS_LOG_FILE_ENABLE>
@@ -269,8 +270,10 @@
                 </goals>
                 <configuration>
                   <executable>docker</executable>
-                  <commandlineArgs>run --rm jwilder/dockerize dockerize -wait
-                    http://host.docker.internal:${backend.port} -timeout 60s</commandlineArgs>
+                  <commandlineArgs>
+                    run --rm jwilder/dockerize
+                    dockerize -wait http://host.docker.internal:${backend.port} -timeout 60s
+                  </commandlineArgs>
                 </configuration>
               </execution>
               <execution>
