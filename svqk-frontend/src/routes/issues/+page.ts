@@ -15,7 +15,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
 
   const result =
     (await ApiHandler.handle<IssueSearchResultModel>(fetch, (api) =>
-      api.issues.issuesSearch(criteria)
+      api.issues.search(criteria)
     )) || ({} as IssueSearchResultModel); // <.>
 
   return {

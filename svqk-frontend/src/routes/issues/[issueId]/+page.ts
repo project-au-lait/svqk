@@ -4,7 +4,7 @@ import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, params }) => {
   const issue = (await ApiHandler.handle<IssueModel>(fetch, (api) =>
-    api.issues.issuesDetail(Number(params.issueId))
+    api.issues.get(Number(params.issueId))
   ))!;
 
   return {

@@ -32,18 +32,8 @@ export class ApiClientGenerator {
       output: path.resolve(process.cwd(), frontApiClientPath),
       moduleNameIndex: 1,
       hooks: {
-        onFormatRouteName: (routeInfo, templateRouteName) => {
-          const newTemplateRouteName = templateRouteName.replace(
-            /SearchCreate$/,
-            "Search"
-          );
-
-          if (templateRouteName !== newTemplateRouteName) {
-            console.log(
-              `Replace templateRouteName ${templateRouteName} to ${newTemplateRouteName}`
-            );
-          }
-          return newTemplateRouteName;
+        onFormatRouteName: (routeInfo) => {
+          return routeInfo.operationId;
         },
         onFormatTypeName: (typeName, rawTypeName, schemaType) => {
           if (schemaType === "type-name" && typeName.endsWith("Dto")) {
@@ -69,12 +59,16 @@ export class ApiClientGenerator {
     frontApiClientPath: string,
     e2eApiClientPath: string
   ) {
-    fs.copyFile(`${frontApiClientPath}/Api.ts`, `${e2eApiClientPath}/Api.ts`, (err) => {
-      if (err) {
-        throw new Error(`Copy failed: ${err}`);
-      } else {
-        console.log("Files copied successfully.");
+    fs.copyFile(
+      `${frontApiClientPath}/Api.ts`,
+      `${e2eApiClientPath}/Api.ts`,
+      (err) => {
+        if (err) {
+          throw new Error(`Copy failed: ${err}`);
+        } else {
+          console.log("Files copied successfully.");
+        }
       }
-    });
+    );
   }
 }

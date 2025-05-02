@@ -36,8 +36,8 @@
   async function save() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
       updateMode
-        ? api.issues.issuesUpdate(issue.id, { issue, journal })
-        : api.issues.issuesCreate(issue)
+        ? api.issues.update(issue.id, { issue, journal })
+        : api.issues.create(issue)
     );
 
     if (response) {
@@ -49,7 +49,7 @@
 
   async function del() {
     const response = await ApiHandler.handle<number>(fetch, (api) =>
-      api.issues.issuesDelete(issue.id, issue)
+      api.issues.delete(issue.id, issue)
     );
 
     if (response) {
