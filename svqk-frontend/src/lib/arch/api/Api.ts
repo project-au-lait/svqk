@@ -72,16 +72,10 @@ export interface JournalModel {
   version: number;
 }
 
-/**
- * @format date
- * @example "2022-03-10"
- */
+/** @format date */
 export type LocalDate = string;
 
-/**
- * @format date-time
- * @example "2022-03-10T12:15:50"
- */
+/** @format date-time */
 export type LocalDateTime = string;
 
 export interface PageControl {
@@ -365,7 +359,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title svqk-backend API
- * @version 0.9-SNAPSHOT
+ * @version 0.10-SNAPSHOT
  * @baseUrl http://localhost:8081
  */
 export class Api<
@@ -376,11 +370,12 @@ export class Api<
      * No description
      *
      * @tags Hello Controller
-     * @name HelloCreate
+     * @name Save
+     * @summary Save
      * @request POST:/api/hello
      */
-    helloCreate: (data: HelloModel, params: RequestParams = {}) =>
-      this.request<number, any>({
+    save: (data: HelloModel, params: RequestParams = {}) =>
+      this.request<number, void>({
         path: `/api/hello`,
         method: "POST",
         body: data,
@@ -392,10 +387,11 @@ export class Api<
      * No description
      *
      * @tags Hello Controller
-     * @name HelloDetail
+     * @name Get
+     * @summary Get
      * @request GET:/api/hello/{id}
      */
-    helloDetail: (id: number, params: RequestParams = {}) =>
+    get: (id: number, params: RequestParams = {}) =>
       this.request<HelloModel, any>({
         path: `/api/hello/${id}`,
         method: "GET",
@@ -408,10 +404,11 @@ export class Api<
      * No description
      *
      * @tags Issue Status Controller
-     * @name IssueStatusesList
+     * @name Get
+     * @summary Get
      * @request GET:/api/issue-statuses
      */
-    issueStatusesList: (params: RequestParams = {}) =>
+    get: (params: RequestParams = {}) =>
       this.request<IssueStatusModel[], any>({
         path: `/api/issue-statuses`,
         method: "GET",
@@ -424,11 +421,12 @@ export class Api<
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesCreate
+     * @name Create
+     * @summary Create
      * @request POST:/api/issues
      */
-    issuesCreate: (data: IssueModel, params: RequestParams = {}) =>
-      this.request<number, any>({
+    create: (data: IssueModel, params: RequestParams = {}) =>
+      this.request<number, void>({
         path: `/api/issues`,
         method: "POST",
         body: data,
@@ -440,14 +438,12 @@ export class Api<
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesSearch
+     * @name Search
+     * @summary Search
      * @request POST:/api/issues/search
      */
-    issuesSearch: (
-      data: IssueSearchCriteriaModel,
-      params: RequestParams = {}
-    ) =>
-      this.request<IssueSearchResultModel, any>({
+    search: (data: IssueSearchCriteriaModel, params: RequestParams = {}) =>
+      this.request<IssueSearchResultModel, void>({
         path: `/api/issues/search`,
         method: "POST",
         body: data,
@@ -460,10 +456,11 @@ export class Api<
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesTrackingList
+     * @name GetTracking
+     * @summary Get Tracking
      * @request GET:/api/issues/tracking
      */
-    issuesTrackingList: (params: RequestParams = {}) =>
+    getTracking: (params: RequestParams = {}) =>
       this.request<IssueTrackingModel, any>({
         path: `/api/issues/tracking`,
         method: "GET",
@@ -475,30 +472,16 @@ export class Api<
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesDetail
-     * @request GET:/api/issues/{issueId}
-     */
-    issuesDetail: (issueId: number, params: RequestParams = {}) =>
-      this.request<IssueModel, any>({
-        path: `/api/issues/${issueId}`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Issue Controller
-     * @name IssuesUpdate
+     * @name Update
+     * @summary Update
      * @request PUT:/api/issues/{issueId}
      */
-    issuesUpdate: (
+    update: (
       issueId: number,
       data: IssueUpdateModel,
       params: RequestParams = {}
     ) =>
-      this.request<number, any>({
+      this.request<number, void>({
         path: `/api/issues/${issueId}`,
         method: "PUT",
         body: data,
@@ -510,14 +493,27 @@ export class Api<
      * No description
      *
      * @tags Issue Controller
-     * @name IssuesDelete
+     * @name Get
+     * @summary Get
+     * @request GET:/api/issues/{issueId}
+     */
+    get: (issueId: number, params: RequestParams = {}) =>
+      this.request<IssueModel, any>({
+        path: `/api/issues/${issueId}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Issue Controller
+     * @name Delete
+     * @summary Delete
      * @request DELETE:/api/issues/{issueId}
      */
-    issuesDelete: (
-      issueId: number,
-      data: IssueModel,
-      params: RequestParams = {}
-    ) =>
+    delete: (issueId: number, data: IssueModel, params: RequestParams = {}) =>
       this.request<number, any>({
         path: `/api/issues/${issueId}`,
         method: "DELETE",
@@ -531,10 +527,11 @@ export class Api<
      * No description
      *
      * @tags Tracker Controller
-     * @name TrackerList
+     * @name GetAllTrackers
+     * @summary Get All Trackers
      * @request GET:/api/tracker
      */
-    trackerList: (params: RequestParams = {}) =>
+    getAllTrackers: (params: RequestParams = {}) =>
       this.request<TrackerModel[], any>({
         path: `/api/tracker`,
         method: "GET",
