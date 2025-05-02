@@ -93,8 +93,8 @@ tscom = {
       ? compIdFields.map((compIdField) => `${entityNmCamel}.id.${compIdField.fieldName}`).join(", ")
       : `${entityNmCamel}.id`;
   
-    const createCall = `api.${entityNmCamel}.${entityNmCamel}Create(${entityNmCamel})`;
-    const updateCall = `api.${entityNmCamel}.${entityNmCamel}Update(${updateParams}, ${entityNmCamel})`;
+    const createCall = `api.${entityNmCamel}.save(${entityNmCamel})`;
+    const updateCall = `api.${entityNmCamel}.update(${updateParams}, ${entityNmCamel})`;
   
     return `updateMode ? ${updateCall} : ${createCall}`;
   },
@@ -112,7 +112,7 @@ tscom = {
   
     const apiCallArgs = (compIdFields ?? [idField]).map(convertParam).join(", ");
   
-    return `api.${entityNmCamel}.${entityNmCamel}Detail(${apiCallArgs})`;
+    return `api.${entityNmCamel}.get(${apiCallArgs})`;
   },
   
   buildDeleteApiCall: function(entityNmCamel, compIdFields) {
@@ -120,7 +120,7 @@ tscom = {
       ? compIdFields.map((compIdField) => `${entityNmCamel}.id.${compIdField.fieldName}`).join(", ")
       : `${entityNmCamel}.id`;
   
-    return `api.${entityNmCamel}.${entityNmCamel}Delete(${deleteParams}, ${entityNmCamel})`;
+    return `api.${entityNmCamel}.delete(${deleteParams}, ${entityNmCamel})`;
   },
 }
 

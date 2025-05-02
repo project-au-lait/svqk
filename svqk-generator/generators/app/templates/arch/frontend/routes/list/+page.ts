@@ -10,7 +10,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
 
   const result =
     (await ApiHandler.handle<<%= entityNmPascal %>SearchResultModel>(fetch, (api) =>
-      api.<%= entityNmCamel %>.<%= entityNmCamel %>Search(criteria)
+      api.<%= entityNmCamel %>.search(criteria)
     )) || ({} as <%= entityNmPascal %>SearchResultModel);
 
   return {
