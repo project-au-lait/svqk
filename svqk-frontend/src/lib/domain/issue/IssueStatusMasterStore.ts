@@ -11,7 +11,7 @@ export let issueStatuses = readable([] as IssueStatusModel[]); // <.>
 @provide(TYPES.MasterStore) // <.>
 export class IssueStatusMasterStore extends MasterStoreBase<IssueStatusModel[]> {
   constructor() {
-    super((api) => api.issueStatuses.issueStatusesList()); // <.>
+    super((api) => api.issueStatuses.get()); // <.>
   }
 
   // <.>
