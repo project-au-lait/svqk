@@ -5,6 +5,8 @@
 node_modules
 target
 
+/svqk.code-workspace
+
 svqk-backend/.env
 
 svqk-container/.env

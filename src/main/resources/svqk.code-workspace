@@ -81,13 +81,13 @@
     "sqltools.connections": [
       {
         "previewLimit": 50,
-        "server": "localhost",
-        "port": 5431,
+        "server": "${db.host}",
+        "port": ${db.port},
         "driver": "PostgreSQL",
-        "name": "svqk",
+        "name": "${project.artifactId}",
         "database": "postgres",
-        "username": "svqk",
-        "password": "svqk"
+        "username": "${db.username}",
+        "password": "${db.password}"
       }
     ],
     "terminal.integrated.defaultProfile.windows": "Command Prompt",
