@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
   ))!;
 
   return {
-    title: `<%= idPath %>`,
+    title: `<%= tscom.idPath %>`,
     <%= entityNmCamel %>
   };
 };

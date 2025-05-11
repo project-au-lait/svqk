@@ -22,6 +22,9 @@ tscom = {
   impDclE2e: getImpDcl("e2etest"),
   impDclIdTypeF:  getImpDclIdType("frontend"),
   impDclIdTypeE2e: getImpDclIdType("e2etest"),
+  idPath: compIdFields
+      ? compIdFields.map((compIdField) => `\${${entityNmCamel}.id.${compIdField.fieldName}}`).join("/")
+      : `\${${entityNmCamel}.${idField.fieldName}}`,
 
   fieldToProp: function(field, num = 6) {
     const fieldType = field.javaType;
@@ -124,7 +127,7 @@ tscom = {
   },
 
   buildAddColumn: function(field) {  
-    return `.add('${field.fieldName}', '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName})`;
+    return `.add(\$t('msg.${field.fieldName}'), '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName})`;
   }
 }
 

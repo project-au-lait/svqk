@@ -48,9 +48,6 @@
     {search} />
 </section>
 
-<%_
-idPath = compIdFields ? compIdFields.map((field) => `\${${entityNmCamel}.id.${field.fieldName}}`).join("/") : `\${${entityNmCamel}.id}`;
--%>
 {#snippet <%= entityNmCamel %>IdAnchor(<%= entityNmCamel %>: <%= entityNmPascal %>Model)}
-  <a href={`/<%= entityNmPlural %>/<%= idPath %>`}>{`<%= idPath %>`}</a>
+  <a href={`/<%= entityNmPlural %>/<%= tscom.idPath %>`}>{`<%= tscom.idPath %>`}</a>
 {/snippet}

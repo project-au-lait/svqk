@@ -13,8 +13,8 @@ export default class <%= entityNmPascal %>ListPageElement extends BasePageElemen
 
   async click<%= entityNmPascal %>NoLinkById(id: <%= tscom.idType %>) {
     <%_
-    const id = compIdFields ? compIdFields.map((field) => `id.${field.fieldName}`).join(" + '/' + ") : "id";
+    const id = compIdFields ? "`" + compIdFields.map((field) => `\${id.${field.fieldName}}`).join("/") + "`" : "id";
     -%>
-    await this.clickInRowID(<%- id %>);
+    await this.clickInRow(<%- id %>);
   }
 }
