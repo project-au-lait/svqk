@@ -46,6 +46,7 @@ type TemplateData = {
   entityNmAllCaps: string;
   entityNmPlural: string;
   entityNmKebab: string;
+  entityNmFirstLetter: string;
   fields: Field[];
   idField: Field;
   nonIdFields: Field[];

@@ -18,8 +18,8 @@ public class <%= entityNmPascal %>Factory {
 
   public SearchCriteria build(<%= entityNmPascal %>SearchCriteriaDto criteria) {
     return new SearchCriteriaBuilder()
-        .select("SELECT i FROM <%= entityNmPascal %>Entity i")
-        .selectCount("SELECT COUNT(i) FROM <%= entityNmPascal %>Entity i")
+        .select("SELECT <%= entityNmFirstLetter %> FROM <%= entityNmPascal %>Entity <%= entityNmFirstLetter %>")
+        .orderBy(criteria.getSortOrders())
         .build(criteria.getPageControl());
   }
 

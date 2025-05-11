@@ -124,7 +124,7 @@ tscom = {
   },
 
   buildAddColumn: function(field) {  
-    return `.add('${field.fieldName}', 'i.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName})`;
+    return `.add('${field.fieldName}', '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName})`;
   }
 }
 

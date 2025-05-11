@@ -15,7 +15,7 @@
   const form = FormValidator.createForm({}, search);
 
   const columns = new ColumnsBuilder<<%= entityNmPascal %>Model>()
-    .add('#', 'i.id', () => <%= entityNmCamel %>IdAnchor)
+    .add('#', '<%= entityNmFirstLetter %>.id', () => <%= entityNmCamel %>IdAnchor)
     <%_ for (field of nonIdFields) { _%>
     <%- tscom.buildAddColumn(field) %>
     <%_ } _%>

@@ -30,6 +30,7 @@ export class GeneratorUtils {
       entityNmAllCaps: entityNmPascal.toUpperCase(),
       entityNmPlural: pluralize(entityNmPascal.toLowerCase()),
       entityNmKebab: this.pascal_to_kebab(entityNmPascal),
+      entityNmFirstLetter: entityNmPascal.charAt(0).toLowerCase(),
       fields: metadata.fields,
       idField: idField,
       nonIdFields: metadata.fields.filter((field) => !field.id),
