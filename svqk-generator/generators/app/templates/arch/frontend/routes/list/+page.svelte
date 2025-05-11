@@ -1,3 +1,4 @@
+<%_ include('../../../../lib/typescript-common'); -%>
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { <%= entityNmPascal %>Model } from '$lib/arch/api/Api';
@@ -13,7 +14,12 @@
 
   const form = FormValidator.createForm({}, search);
 
-  const columns = new ColumnsBuilder<<%= entityNmPascal %>Model>().add('#', 'i.id', () => <%= entityNmCamel %>IdAnchor).build();
+  const columns = new ColumnsBuilder<<%= entityNmPascal %>Model>()
+    .add('#', 'i.id', () => <%= entityNmCamel %>IdAnchor)
+    <%_ for (field of nonIdFields) { _%>
+    <%- tscom.buildAddColumn(field) %>
+    <%_ } _%>
+    .build();
 
   function search() {
     goto(CriteriaUtils.encode(criteria));
@@ -34,7 +40,12 @@
 </section>
 
 <section>
-  <ListTable {result} {columns} bind:pageControl={criteria.pageControl} {search} />
+  <ListTable
+    {result}
+    {columns}
+    bind:pageControl={criteria.pageControl}
+    bind:sortOrders={criteria.sortOrders}
+    {search} />
 </section>
 
 <%_

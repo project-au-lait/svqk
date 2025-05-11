@@ -122,6 +122,10 @@ tscom = {
   
     return `api.${entityNmCamel}.${entityNmCamel}Delete(${deleteParams}, ${entityNmCamel})`;
   },
+
+  buildAddColumn: function(field) {  
+    return `.add('${field.fieldName}', 'i.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName})`;
+  }
 }
 
 tscom.idProperty = compIdFields
