@@ -60,7 +60,7 @@
         <plugin>
           <groupId>dev.aulait.jeg</groupId>
           <artifactId>jpa-entity-generator-maven-plugin</artifactId>
-          <version>0.11</version>
+          <version>0.11.1</version>
           <configuration>
             <configFilePath>${project.build.outputDirectory}/jeg-config.yml</configFilePath>
             <metadataOutputDir>

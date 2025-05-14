@@ -4,7 +4,7 @@
   export interface ListTableColumn<T> {
     label: string;
     sortKey: string;
-    tdBody: (t: T) => string | Snippet<[T]>;
+    tdBody: (t: T) => Snippet<[T]> | any;
     tdClass?: string[];
   }
 
@@ -15,12 +15,7 @@
       return this.columns;
     }
 
-    add(
-      label: string,
-      sortKey: string,
-      tdBody: (t: T) => string | Snippet<[T]>,
-      tdClass?: string[]
-    ) {
+    add(label: string, sortKey: string, tdBody: (t: T) => Snippet<[T]> | any, tdClass?: string[]) {
       this.columns.push({ label, sortKey, tdBody, tdClass });
       return this;
     }
@@ -72,10 +67,10 @@
             {#each columns as col}
               {@const data = col.tdBody(item)}
               <td class={col.tdClass?.join(' ')}>
-                {#if typeof data === 'string'}
-                  {@html data}
-                {:else}
+                {#if typeof data === 'function'}
                   {@render data(item)}
+                {:else}
+                  {@html data}
                 {/if}
               </td>
             {/each}

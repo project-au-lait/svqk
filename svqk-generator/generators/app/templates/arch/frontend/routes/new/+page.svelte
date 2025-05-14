@@ -8,7 +8,7 @@
   let <%= entityNmCamel %> = $state({<%= tscom.idObj %>} as <%= entityNmPascal %>Model);
 
   async function handleAfterSave(id?: <%= tscom.idType %>) {
-    await goto(`/<%= entityNmPlural %>/<%= idPath %>`);
+    await goto(`/<%= entityNmPlural %>/<%= tscom.idPath %>`);
   }
 </script>
 
