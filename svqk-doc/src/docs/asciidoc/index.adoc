@@ -38,3 +38,9 @@ a|
 * link:0.9/en/index.html[English]
 * link:0.9/ja/index.html[日本語]
 |===
+
+|0.9.1
+a|
+* link:0.9.1/en/index.html[English]
+* link:0.9.1/ja/index.html[日本語]
+|===
