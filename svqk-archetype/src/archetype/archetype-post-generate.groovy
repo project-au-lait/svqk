@@ -1,18 +1,19 @@
-def renameFile(String fromPath, String toPath) {
+def setupGitignore() {
+    def projectDir = request.artifactId
+    def fromPath = "${projectDir}/.gitignore.archetype"
+    def toPath = "${projectDir}/.gitignore"
     def file = new File(fromPath)
     file.renameTo(new File(toPath))
 }
 
-def makeFileExecutable(String path) {
-    def file = new File(path)
-    file.setExecutable(true, true)
+def makeMvnwExecutableIfNotWin() {
+    def osName = System.getProperty("os.name").toLowerCase()
+    if (!osName.contains("windows")) {
+        def projectDir = request.artifactId
+        def file = new File("${projectDir}/mvnw")
+        file.setExecutable(true, true)
+    }
 }
 
-def projectDir = request.artifactId
-
-renameFile("${projectDir}/.gitignore.archetype", "${projectDir}/.gitignore")
-
-def osName = System.getProperty("os.name").toLowerCase()
-if (!osName.contains("windows")) {
-    makeFileExecutable("${projectDir}/mvnw")
-}
+setupGitignore()
+makeMvnwExecutableIfNotWin()
