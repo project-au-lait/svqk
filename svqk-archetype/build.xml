@@ -46,8 +46,6 @@
       <os family="windows" />
     </condition>
 
-    <chmod perm="u+x" file="${projectdir}/mvnw" />
-
     <antcall target="cicd-test">
       <param name="container.keep" value="true" />
     </antcall>
