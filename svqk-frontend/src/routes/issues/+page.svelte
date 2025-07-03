@@ -10,9 +10,9 @@
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { t } from '$lib/translations';
-  import type { PageData } from '../issues/$types';
+  import type { PageProps } from '../issues/$types';
 
-  let { data }: { data: PageData } = $props();
+  let { data }: PageProps = $props();
   let { criteria, open } = $state(data);
   let { result } = $derived(data);
 
