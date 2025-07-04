@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
   import { t } from '$lib/translations';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { trackers } from '$lib/domain/issue/TrackerMasterStore';
 
-  let { data }: { data: PageData } = $props();
+  let { data }: PageProps = $props();
   let { issueTracking } = data;
 </script>
 

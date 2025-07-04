@@ -4,9 +4,9 @@
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
   import { t } from '$lib/translations';
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
 
-  let { data }: { data: PageData } = $props();
+  let { data }: PageProps = $props();
   let <%= entityNmCamel %> = $state(data.<%= entityNmCamel %>);
   $effect(() => {
     <%= entityNmCamel %> = data.<%= entityNmCamel %>;

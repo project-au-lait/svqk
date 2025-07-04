@@ -5,10 +5,10 @@
   import FormValidator from '$lib/arch/form/FormValidator';
   import CriteriaUtils from '$lib/arch/search/CriteriaUtils';
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
-  import type { PageData } from '../<%= entityNmPlural %>/$types';
+  import type { PageProps } from '../<%= entityNmPlural %>/$types';
   import { t } from '$lib/translations';
 
-  let { data }: { data: PageData } = $props();
+  let { data }: PageProps = $props();
   let { criteria } = $state(data);
   let { result } = $derived(data);
 

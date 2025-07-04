@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { PageProps } from './$types';
 
-  let { data }: { data: PageData } = $props();
+  let { data }: PageProps = $props();
   const entries = Object.entries(data.<%= entityNmCamel %>).map(([key, value]) => ({key, value}))
 </script>
 
