@@ -7,37 +7,33 @@ class MessageModel {
   ) {}
 }
 
-function create() {
-  const { subscribe, update } = writable(new MessageModel());
+class MessageStore {
+  private writable = writable(new MessageModel());
+  private update = this.writable.update;
+  subscribe = this.writable.subscribe;
 
-  const show = (messageText: string) => {
-    update((message) => {
+  show(messageText: string) {
+    this.update((message) => {
       message.text = messageText;
       message.display = true;
       return message;
     });
 
     setTimeout(() => {
-      update((message) => {
+      this.update((message) => {
         message.text = '';
         message.display = false;
         return message;
       });
     }, 3000);
-  };
+  }
 
-  const hide = () => {
-    update((message) => {
+  hide() {
+    this.update((message) => {
       message.display = false;
       return message;
     });
-  };
-
-  return {
-    subscribe,
-    show,
-    hide
-  };
+  }
 }
 
-export const messageStore = create();
+export const messageStore = new MessageStore();
