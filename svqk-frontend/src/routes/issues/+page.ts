@@ -1,7 +1,7 @@
 import type { IssueSearchCriteriaModel, IssueSearchResultModel } from '$lib/arch/api/Api';
 import ApiHandler from '$lib/arch/api/ApiHandler';
 import CriteriaUtils from '$lib/arch/search/CriteriaUtils';
-import { t } from '$lib/translations';
+import * as m from '$lib/paraglide/messages';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, url }) => {
@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
     )) || ({} as IssueSearchResultModel); // <.>
 
   return {
-    title: t.get('msg.issue'),
+    title: m.issue(),
     criteria,
     open,
     result

@@ -1,7 +1,7 @@
 import type { IssueTrackingModel } from '$lib/arch/api/Api';
 import ApiHandler from '$lib/arch/api/ApiHandler';
 import type { PageLoad } from './$types';
-import { t } from '$lib/translations';
+import * as m from '$lib/paraglide/messages';
 
 export const load: PageLoad = async ({ fetch }) => {
   const issueTracking = (await ApiHandler.handle<IssueTrackingModel>(fetch, (api) =>
@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ fetch }) => {
   ))!;
 
   return {
-    title: t.get('msg.home'),
+    title: m.home(),
     issueTracking
   };
 };

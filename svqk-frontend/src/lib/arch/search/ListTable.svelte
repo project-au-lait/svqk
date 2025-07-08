@@ -26,7 +26,7 @@
   import type { PageControl, PageResult, SortOrder } from '$lib/arch/api/Api';
   import Pagination from '$lib/arch/search/Pagination.svelte';
   import SortDirection from '$lib/arch/search/SortDirection.svelte';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
 
   interface Props {
     result: {
@@ -84,7 +84,7 @@
     <Pagination pageResult={result.pageResult} bind:pageNumber={pageControl.pageNumber} {search} />
   </section>
 {:else}
-  {$t('msg.noData')}
+  {m.noData()}
 {/if}
 
 <style>

@@ -24,6 +24,7 @@ svqk-frontend/.env.*
 svqk-frontend/!.env.example
 svqk-frontend/vite.config.js.timestamp-*
 svqk-frontend/vite.config.ts.timestamp-*
+svqk-frontend/src/lib/paraglide
 
 svqk-generator/generators/app/lib/*.js
 svqk-generator/generators/app/lib/*.js.map

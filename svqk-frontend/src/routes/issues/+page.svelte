@@ -9,7 +9,7 @@
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import DateUtils from '$lib/arch/util/DateUtils';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
   import type { PageProps } from '../issues/$types';
 
   let { data }: PageProps = $props();
@@ -20,11 +20,11 @@
 
   const columns = new ColumnsBuilder<IssueModel>()
     .add('#', 'i.id', () => issueIdAnchor)
-    .add($t('msg.tracker'), 'i.tracker', (issue) => issue.tracker.name)
-    .add($t('msg.status'), 'i.issueStatus', (issue) => issue.issueStatus.name)
-    .add($t('msg.subject'), 'i.subject', (issue) => issue.subject, ['align-left'])
-    .add($t('msg.dueDate'), 'i.dueDate', (issue) => DateUtils.date(issue.dueDate))
-    .add($t('msg.updatedAt'), 'i.updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
+    .add(m.tracker(), 'i.tracker', (issue) => issue.tracker.name)
+    .add(m.status(), 'i.issueStatus', (issue) => issue.issueStatus.name)
+    .add(m.subject(), 'i.subject', (issue) => issue.subject, ['align-left'])
+    .add(m.dueDate(), 'i.dueDate', (issue) => DateUtils.date(issue.dueDate))
+    .add(m.updatedAt(), 'i.updatedAt', (issue) => DateUtils.datetime(issue.updatedAt))
     .build(); // <.>
 
   // <.>
@@ -41,13 +41,13 @@
     </fieldset>
 
     <details {open}>
-      <summary style="display: flex; justify-content: end;">{$t('msg.advancedSearch')}</summary>
+      <summary style="display: flex; justify-content: end;">{m.advancedSearch()}</summary>
       <div class="grid">
         <div>
-          <label for="subject-only">{$t('msg.option')}</label>
+          <label for="subject-only">{m.option()}</label>
           <CheckBox
             id="subject-only"
-            label={$t('msg.searchBySubjectOnly')}
+            label={m.searchBySubjectOnly()}
             bind:checked={criteria.subjectOnly}
           />
         </div>
@@ -55,7 +55,7 @@
         <div>
           <SelectBox
             id="status"
-            label={$t('msg.multipleStatuses')}
+            label={m.multipleStatuses()}
             options={$issueStatuses}
             multiple={true}
             bind:value={criteria.issueStatuses}
@@ -65,7 +65,7 @@
         <div>
           <InputField
             id="due-date"
-            label={$t('msg.dueDate')}
+            label={m.dueDate()}
             type="date"
             bind:value={criteria.dueDate}
           />
@@ -76,7 +76,7 @@
 </section>
 
 <section>
-  <a id="newIssue" href="/issues/new"> {$t('msg.newIssue')} </a>
+  <a id="newIssue" href="/issues/new"> {m.newIssue()} </a>
 </section>
 
 <section>

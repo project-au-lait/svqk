@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import type { IssueModel, IssueStatusModel, TrackerModel } from '$lib/arch/api/Api';
   import IssueForm from '$lib/domain/issue/IssueForm.svelte';
-  import { t } from '$lib/translations';
 
   let issue = $state({
     issueStatus: {} as IssueStatusModel,

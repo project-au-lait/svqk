@@ -6,7 +6,7 @@
   import { messageStore } from '$lib/arch/global/MessageStore';
   import '@picocss/pico/css/pico.min.css';
   import '@picocss/pico/css/pico.colors.min.css';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
   import { page } from '$app/stores';
   interface Props {
     children?: import('svelte').Snippet;
@@ -24,16 +24,16 @@
     <li><strong>SVQK</strong></li>
   </ul>
   <ul>
-    <a href="/">{$t('msg.home')}</a>
+    <a href="/">{m.home()}</a>
     <li>
-      <a href="about:blank">{$t('msg.project')}</a>
+      <a href="about:blank">{m.project()}</a>
     </li>
     <li>
-      <a href="about:blank">{$t('msg.activity')}</a>
+      <a href="about:blank">{m.activity()}</a>
     </li>
     <!-- ==FOR_REFIMPL==> -->
     <li>
-      <a id="issue" href="/issues">{$t('msg.issue')}</a>
+      <a id="issue" href="/issues">{m.issue()}</a>
     </li>
     <!-- <==FOR_REFIMPL== -->
     <!-- __LINK__ -->

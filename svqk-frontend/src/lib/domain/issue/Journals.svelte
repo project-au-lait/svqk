@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import type { JournalModel } from '$lib/arch/api/Api';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
   import { marked } from 'marked';
   import { onMount } from 'svelte';
 
@@ -12,8 +12,8 @@
   let { journals }: Props = $props();
   let hash = $state();
 
-  const hashchange = () => hash = $page.url.hash;
-  const noteClass = (notehash: string) => hash == notehash ? 'note-highlight' : '';
+  const hashchange = () => (hash = $page.url.hash);
+  const noteClass = (notehash: string) => (hash == notehash ? 'note-highlight' : '');
 
   onMount(hashchange);
 
@@ -23,7 +23,7 @@
 <svelte:window on:hashchange={hashchange} />
 
 {#if journals.length}
-  <h3>{$t('msg.history')}</h3>
+  <h3>{m.history()}</h3>
   {#each journals as { seqNo, notes }}
     {@const noteId = `note-${seqNo}`}
     <article id={noteId} class={noteClass(`#${noteId}`)}>

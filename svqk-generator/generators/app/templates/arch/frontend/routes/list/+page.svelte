@@ -6,7 +6,7 @@
   import CriteriaUtils from '$lib/arch/search/CriteriaUtils';
   import ListTable, { ColumnsBuilder } from '$lib/arch/search/ListTable.svelte';
   import type { PageProps } from '../<%= entityNmPlural %>/$types';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
 
   let { data }: PageProps = $props();
   let { criteria } = $state(data);
@@ -36,7 +36,7 @@
 </section>
 
 <section>
-  <a id="new<%= entityNmPascal %>" href="/<%= entityNmPlural %>/new"> {$t('msg.newEntity')} </a>
+  <a id="new<%= entityNmPascal %>" href="/<%= entityNmPlural %>/new"> {m.newEntity()} </a>
 </section>
 
 <section>
