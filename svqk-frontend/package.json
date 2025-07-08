@@ -41,6 +41,7 @@
   "type": "module",
   "dependencies": {
     "@felte/validator-yup": "^1.1.4",
+    "@inlang/paraglide-js": "^2.0.0",
     "@picocss/pico": "^2.1.1",
     "dayjs": "^1.11.13",
     "felte": "^1.3.0",
