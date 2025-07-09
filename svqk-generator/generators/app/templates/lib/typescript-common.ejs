@@ -136,7 +136,7 @@ tscom = {
   },
 
   buildAddColumn: function(field) {  
-    return `.add("${field.fieldName} (placeholder)", '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName}) // TODO: implement m.label_${entityNmCamel}_${field.fieldName}() and use id at (placeholder)`;
+    return `.add("${field.fieldName} (placeholder)", '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName}) // TODO: implement m.label_${entityNmCamel}_${field.fieldName}() and use it at (placeholder)`;
   }
 }
 
