@@ -62,6 +62,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   frontendGenerator: FrontendGenerator | null = null;
   menuEditor: MenuEditor | null = null;
   templateDataList: TemplateData[] = [];
+  metadataConfigPath: string = "";
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -105,8 +106,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       e2eApiClientPath: this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH),
     };
 
+    this.metadataConfigPath = `${this.destinationRoot()}/${this.metadataConfig.filePath}`;
+
     this.metadataConfig.list = await GeneratorUtils.load_json_file(
-      `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`
+      this.metadataConfigPath
     );
 
     this.backendGenerator = new BackendGenerator(
@@ -210,7 +213,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       EntityGenerator.exec(this.genEntityCmd);
 
       this.metadataConfig.list = await GeneratorUtils.load_json_file(
-        `${this.destinationRoot()}/${this.metadataConfig.filePath}?t=${Date.now()}`
+        this.metadataConfigPath
       );
     }
 

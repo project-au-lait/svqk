@@ -1,10 +1,11 @@
 import pluralize from "pluralize";
 import { Field, Metadata, MetadataConfig, TemplateData } from "../types.js";
+import url from "node:url";
 
 export class GeneratorUtils {
   static async load_json_file(filePath: string) {
     try {
-      const module = await import(filePath, {
+      const module = await import(`${url.pathToFileURL(filePath).href}?t=${Date.now()}`, {
         with: { type: "json" },
       });
       return module.default;
