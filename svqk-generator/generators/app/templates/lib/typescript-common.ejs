@@ -65,31 +65,40 @@ tscom = {
 
   inputField: function(field, isId, isDisabled = false) {
     const id = `id='${field.fieldName}'`;
-    const label = `label={$t('msg.label.${entityNmCamel}.${field.fieldName}')}`;
-    const bindValue = isId ? `bind:value={${entityNmCamel}.id.${field.fieldName}}` : `bind:value={${entityNmCamel}.${field.fieldName}}`;
-    const bindChecked = isId ? `bind:checked={${entityNmCamel}.id.${field.fieldName}}` : `bind:checked={${entityNmCamel}.${field.fieldName}}`;
+    const labelPlaceholder = `${field.fieldName} (placeholder)`;
+    const labelComment = `<!-- TODO: implement m.label_${entityNmCamel}_${field.fieldName}() and use it at (placeholder)-->`;
+    const label = `label="${labelPlaceholder}"`;
+
+    const bindValue = isId
+      ? `bind:value={${entityNmCamel}.id.${field.fieldName}}`
+      : `bind:value={${entityNmCamel}.${field.fieldName}}`;
+
+    const bindChecked = isId
+      ? `bind:checked={${entityNmCamel}.id.${field.fieldName}}`
+      : `bind:checked={${entityNmCamel}.${field.fieldName}}`;
+
     const disabled = isDisabled ? `disabled={${isDisabled}}` : '';
-  
+
     switch (field.javaType) {
       case 'Integer':
-        return `<InputField type='number' ${id} ${label} ${bindValue} ${disabled} />`;
+        return `${labelComment}\n<InputField type='number' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'String':
         if (field.stringLength && field.stringLength <= 128) {
-          return `<InputField ${id} ${label} ${bindValue} ${disabled} />`;
+          return `${labelComment}\n<InputField ${id} ${label} ${bindValue} ${disabled} />`;
         } else {
-          return `<TextArea ${id} ${label} ${bindValue} ${disabled} />`;
+          return `${labelComment}\n<TextArea ${id} ${label} ${bindValue} ${disabled} />`;
         }
       case 'java.time.LocalDate':
-        return `<InputField type='date' ${id} ${label} ${bindValue} ${disabled} />`;
+        return `${labelComment}\n<InputField type='date' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'java.time.LocalDateTime':
-        return `<InputField type='datetime-local' ${id} ${label} ${bindValue} ${disabled} />`;
+        return `${labelComment}\n<InputField type='datetime-local' ${id} ${label} ${bindValue} ${disabled} />`;
       case 'Boolean':
-        return `<CheckBox ${id} ${label} ${bindChecked} ${disabled} />`;
+        return `${labelComment}\n<CheckBox ${id} ${label} ${bindChecked} ${disabled} />`;
       default:
         const multiple = field.multiple ? 'multiple' : '';
-        return `<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} ${disabled} />`;
+        return `${labelComment}\n<SelectBox ${id} ${label} ${bindValue} options={[]} ${multiple} ${disabled} />`;
     }
-  }, 
+  },
 
   buildSaveApiCall: function(entityNmCamel, compIdFields) {
     const updateParams = compIdFields
@@ -127,7 +136,7 @@ tscom = {
   },
 
   buildAddColumn: function(field) {  
-    return `.add(\$t('msg.${field.fieldName}'), '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName})`;
+    return `.add("${field.fieldName} (placeholder)", '${entityNmFirstLetter}.${field.fieldName}', (${entityNmCamel}) => ${entityNmCamel}.${field.fieldName}) // TODO: implement m.label_${entityNmCamel}_${field.fieldName}() and use it at (placeholder)`;
   }
 }
 

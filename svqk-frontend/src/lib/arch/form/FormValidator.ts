@@ -1,9 +1,9 @@
-import { locale } from '$lib/translations';
 import { reporter } from '@felte/reporter-svelte';
 import { validator } from '@felte/validator-yup';
 import { createForm } from 'felte';
 import * as yup from 'yup';
 import * as ja from 'yup-locale-ja';
+import { getLocale } from '$lib/paraglide/runtime.js';
 
 export default class FormValidator {
   static createForm(
@@ -12,7 +12,7 @@ export default class FormValidator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...submitHandlers: ((values?: any) => void)[]
   ) {
-    if (locale.get() === 'ja') {
+    if (getLocale() === 'ja') {
       yup.setLocale(ja.suggestive);
     }
 

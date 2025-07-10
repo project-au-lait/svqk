@@ -136,7 +136,7 @@ VSCode Task: `gen-api-client` を実行し、API Clientを生成します。
     // <.>
     if (response) {
       await handleAfterSave(response.id);
-      messageStore.show($t('msg.saved'));
+      messageStore.show(m.saved());
     }
   }
 ----

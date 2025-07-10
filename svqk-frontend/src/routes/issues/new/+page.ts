@@ -1,8 +1,8 @@
-import { t } from '$lib/translations';
+import * as m from '$lib/paraglide/messages';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async () => {
   return {
-    title: t.get('msg.newIssue')
+    title: m.newIssue()
   };
 };

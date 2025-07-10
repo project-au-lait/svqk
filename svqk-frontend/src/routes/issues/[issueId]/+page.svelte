@@ -3,7 +3,6 @@
   import { invalidateAll } from '$app/navigation';
   import IssueForm from '$lib/domain/issue/IssueForm.svelte';
   import Journals from '$lib/domain/issue/Journals.svelte';
-  import { t } from '$lib/translations';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();

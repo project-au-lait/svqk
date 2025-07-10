@@ -3,7 +3,6 @@
   import { goto } from '$app/navigation';
   import { invalidateAll } from '$app/navigation';
   import <%= entityNmPascal %>Form from '$lib/domain/<%= entityNmPlural %>/<%= entityNmPascal %>Form.svelte';
-  import { t } from '$lib/translations';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();

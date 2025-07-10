@@ -8,7 +8,7 @@
   import SelectBox from '$lib/arch/form/SelectBox.svelte';
   import CheckBox from '$lib/arch/form/CheckBox.svelte';
   import { messageStore } from '$lib/arch/global/MessageStore';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
   import { string, date, boolean, number } from 'yup';
 
   interface Props {
@@ -28,7 +28,7 @@
   const spec = {
     <%_ for (field of nonIdFields) { _%>
       <%_ if (field.required) { _%>
-        <%= field.fieldName %>: <%= tscom.dataType(field.javaType) %>().required().label($t('msg.label.<%= entityNmCamel %>.<%= field.fieldName %>')),
+        <%= field.fieldName %>: <%= tscom.dataType(field.javaType) %>().required().label(m.label_<%= entityNmCamel %>_<%= field.fieldName %>),
       <%_ } _%>
     <%_ } _%>
   };
@@ -42,7 +42,7 @@
 
     if (response) {
       await handleAfterSave(response);
-      messageStore.show($t('msg.saved'));
+      messageStore.show(m.saved());
     }
   }
 
@@ -53,7 +53,7 @@
 
     if (response) {
       await handleAfterDelete();
-      messageStore.show($t('msg.deleted'));
+      messageStore.show(m.deleted());
     }
   }
 </script>
@@ -72,13 +72,13 @@
   <div class="grid">
     <div>
       <button type="submit" id="save" data-handler={save.name}>
-        {updateMode ? $t('msg.update') : $t('msg.register')}
+        {updateMode ? m.update() : m.register()}
       </button>
     </div>
   {#if updateMode}
     <div>
       <button type="submit" id="del" data-handler={del.name}>
-        {$t('msg.delete')}
+        {m.delete()}
       </button>
     </div>
   {/if}

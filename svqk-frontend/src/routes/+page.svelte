@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from './$types';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
   import { trackers } from '$lib/domain/issue/TrackerMasterStore';
 
@@ -9,7 +9,7 @@
 </script>
 
 <article>
-  <header><h3><strong>{$t('msg.issueTracking')}</strong></h3></header>
+  <header><h3><strong>{m.issueTracking()}</strong></h3></header>
   <table class="striped">
     <thead>
       <tr>
@@ -17,7 +17,7 @@
         {#each $issueStatuses as issueStatus}
           <th id="status">{issueStatus.name}</th>
         {/each}
-        <th id="total">{$t('msg.total')}</th>
+        <th id="total">{m.total()}</th>
       </tr>
     </thead>
     <tbody>
@@ -32,7 +32,7 @@
       {/each}
     </tbody>
   </table>
-  <footer><a href="/issues">{$t('msg.viewAllIssues')}</a></footer>
+  <footer><a href="/issues">{m.viewAllIssues()}</a></footer>
 </article>
 
 <style>

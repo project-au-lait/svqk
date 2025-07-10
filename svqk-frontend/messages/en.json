@@ -26,36 +26,22 @@
   "issueTracking": "Issue tracking",
   "viewAllIssues": "View all issues",
   "total": "total",
-  "label": {
-    "hello": {
-      "id": "ID",
-      "message": "Message"
-    },
-    "issue": {
-      "id": "ID",
-      "subject": "Subject",
-      "dueDate": "Due Date",
-      "description": "Description",
-      "journals": "Journals",
-      "tracker": "Tracker",
-      "issueStatus": "Issue status"
-    },
-    "issueStatus": {
-      "id": "ID",
-      "name": "Name"
-    },
-    "journal": {
-      "issueId": "Issue ID",
-      "seqNo": "Seq No",
-      "notes": "Notes"
-    },
-    "tracker": {
-      "id": "ID",
-      "name": "Name"
-    },
-    "world": {
-      "id": "ID",
-      "message": "Message"
-    }
-  }
+  "label_hello_id": "ID",
+  "label_hello_message": "Message",
+  "label_issue_id": "ID",
+  "label_issue_subject": "Subject",
+  "label_issue_dueDate": "Due Date",
+  "label_issue_description": "Description",
+  "label_issue_journals": "Journals",
+  "label_issue_tracker": "Tracker",
+  "label_issue_issueStatus": "Issue status",
+  "label_issueStatus_id": "ID",
+  "label_issueStatus_name": "Name",
+  "label_journal_issueId": "Issue ID",
+  "label_journal_seqNo": "Seq No",
+  "label_journal_notes": "Notes",
+  "label_tracker_id": "ID",
+  "label_tracker_name": "Name",
+  "label_world_id": "ID",
+  "label_world_message": "Message"
 }
