@@ -13,7 +13,6 @@ import { FrontendGenerator } from "./lib/FrontendGenerator.js";
 import { EntityGenerator } from "./lib/EntityGenerator.js";
 import { ApiClientGenerator } from "./lib/ApiClientGenerator.js";
 import { MenuEditor } from "./lib/MenuEditor.js";
-import url from "node:url";
 
 const allowedComponentValues = [
   "entity",
@@ -63,7 +62,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
   frontendGenerator: FrontendGenerator | null = null;
   menuEditor: MenuEditor | null = null;
   templateDataList: TemplateData[] = [];
-  metaDataConfigPath: string = "";
+  metadataConfigUrl: string = "";
 
   constructor(args: string | string[], opts: CustomOptions) {
     super(args, opts);
@@ -107,10 +106,10 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       e2eApiClientPath: this.config.get(YO_RC_KEY_E2E_API_CLIENT_PATH),
     };
 
-    this.metaDataConfigPath = `${this.destinationRoot()}/${this.metadataConfig.filePath}`;
+    this.metadataConfigUrl = `${this.destinationRoot()}/${this.metadataConfig.filePath}`;
 
     this.metadataConfig.list = await GeneratorUtils.load_json_file(
-       `${url.pathToFileURL(this.metaDataConfigPath).href}?t=${Date.now()}`
+      this.metadataConfigUrl
     );
 
     this.backendGenerator = new BackendGenerator(
@@ -214,7 +213,7 @@ class SvqkCodeGenerator extends Generator<CustomOptions> {
       EntityGenerator.exec(this.genEntityCmd);
 
       this.metadataConfig.list = await GeneratorUtils.load_json_file(
-        `${url.pathToFileURL(this.metaDataConfigPath).href}?t=${Date.now()}`
+        this.metadataConfigUrl
       );
     }
 
