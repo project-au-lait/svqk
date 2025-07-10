@@ -49,7 +49,7 @@ xref:../arch-desc/index.adoc#_page[アーキテクチャ記述] に従いPageの
   import { goto } from '$app/navigation';
   import { pageStore } from '$lib/arch/global/PageStore';
   import IssueForm from '$lib/domain/issue/IssueForm.svelte';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
 
   const issue = $state({ // <.>
     subject: ''
@@ -82,7 +82,7 @@ UIComponentのsvelteファイルを作成/更新します。
   import FormValidator from '$lib/arch/form/FormValidator';
   import InputField from '$lib/arch/form/InputField.svelte';
   import { issueStatuses } from '$lib/domain/issue/IssueStatusMasterStore';
-  import { t } from '$lib/translations';
+  import * as m from '$lib/paraglide/messages';
   import * as yup from 'yup';
 
   // <.>
@@ -97,7 +97,7 @@ UIComponentのsvelteファイルを作成/更新します。
 
   // <.>
   const spec = {
-    subject: yup.string().required().label($t('msg.label.issue.subject'))
+    subject: yup.string().required().label(m.label_issue_subject())
     // ...
   };
 
@@ -131,7 +131,7 @@ UIComponentのsvelteファイルを作成/更新します。
     <div>
       <SelectBox
         id="status"
-        label={$t('msg.status')}
+        label={m.status()}
         options={$issueStatuses}   <.>
         bind:value={issue.issueStatus.id}
       />
