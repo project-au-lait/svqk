@@ -1,5 +1,6 @@
 import { Fs, TemplateData } from "../types.js";
 
+const LINE_BREAK_PATTERN = "\r?\n";
 const LINE_BREAK = "\n";
 
 export class FileEditor {
@@ -24,7 +25,10 @@ export class FileEditor {
           }
 
           const originalText = content.toString();
-          const regex = new RegExp(`^.*__${placeholder}__.*${LINE_BREAK}`, "m");
+          const regex = new RegExp(
+            `^.*__${placeholder}__.*${LINE_BREAK_PATTERN}`,
+            "m"
+          );
           const placeholderLine = RegExp(regex).exec(originalText);
           return originalText.replace(
             regex,
