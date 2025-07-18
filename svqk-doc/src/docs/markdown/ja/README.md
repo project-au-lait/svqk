@@ -30,8 +30,8 @@ SVQK は、SvelteKit と Quarkus で Web アプリケーションを開発する
 
 ## ドキュメント
 
-- [実装ガイド](https://aulait.dev/svqk/0.9.2/en/impl-guide/)
-- [アーキテクチャ記述](https://aulait.dev/svqk/0.9.2/en/arch-desc/)
+- [実装ガイド](https://aulait.dev/svqk/0.9.3/en/impl-guide/)
+- [アーキテクチャ記述](https://aulait.dev/svqk/0.9.3/en/arch-desc/)
 
 ## ライセンス
 
