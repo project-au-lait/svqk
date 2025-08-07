@@ -15,6 +15,7 @@ svqk-e2etest/.env
 svqk-e2etest/playwright-report
 svqk-e2etest/test-results
 svqk-e2etest/dry_run_logs
+svqk-e2etest/project.inlang/cache/plugins
 
 svqk-frontend/build
 svqk-frontend/.svelte-kit

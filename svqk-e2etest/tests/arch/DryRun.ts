@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { format } from 'date-fns';
-import { t, locale } from '@arch/MultiLng';
+import * as m from '../paraglide/messages';
+import { getLocale } from '../paraglide/runtime.js';
 
 export enum Action {
   GOTO,
@@ -23,7 +24,7 @@ class SpecLogFormatter implements LogFormatter {
   }
 
   format(pageName: string, itemName: string, action: Action, input?: string): string {
-    return locale == 'ja'
+    return getLocale() == 'ja'
       ? this.format_ja(pageName, itemName, action, input)
       : this.format_en(pageName, itemName, action, input);
   }
@@ -133,8 +134,8 @@ export class DryRun {
   }
 
   log(pageNameKey: string, itemNameKey: string, action: Action, input?: string) {
-    const pageName = this.resolvePageName(pageNameKey);
-    const itemName = this.resolveItemName(itemNameKey);
+    const pageName = this.resolveName(pageNameKey);
+    const itemName = this.resolveName(itemNameKey);
 
     const logStr = this.formatter.format(pageName, itemName, action, input);
 
@@ -149,17 +150,15 @@ export class DryRun {
     }
   }
 
-  resolvePageName(pageNameKey: string) {
-    return t(pageNameKey);
-  }
+  resolveName(nameKey: string) {
+    const normalizedKey = nameKey.startsWith('#') ? nameKey.slice(1) : nameKey;
 
-  resolveItemName(itemNameKey: string) {
-    let itemName = t(itemNameKey);
+    const translateFn = (m as Record<string, any>)[normalizedKey];
 
-    if (itemName == itemNameKey) {
-      itemName = t(itemNameKey.replace(/^#/, ''));
+    if (typeof translateFn === 'function') {
+      return translateFn();
     }
 
-    return itemName;
+    return normalizedKey;
   }
 }
