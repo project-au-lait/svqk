@@ -63,7 +63,7 @@ const expectImpl = (field) => {
 %>
 import { LocalDate, LocalDateTime } from '@api/Api';
 import BasePageElement from '@arch/BasePageElement';
-import { t } from '@arch/MultiLng';
+import * as m from '@paraglide/messages';
 
 export default class <%= entityNmPascal %>InputPageElement extends BasePageElement {
   get pageNameKey() {
@@ -99,7 +99,7 @@ export default class <%= entityNmPascal %>InputPageElement extends BasePageEleme
   }
 
   async expectSavedSuccessfully() {
-    await this.expectGlobalMessage(t('saved'));
+    await this.expectGlobalMessage(m.saved());
   }
 
   async clickDeleteBtn() {
@@ -107,6 +107,6 @@ export default class <%= entityNmPascal %>InputPageElement extends BasePageEleme
   }
 
   async expectDeletedSuccessfully() {
-    await this.expectGlobalMessage(t('deleted'));
+    await this.expectGlobalMessage(m.deleted());
   }
 }

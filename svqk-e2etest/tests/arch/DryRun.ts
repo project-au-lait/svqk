@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { format } from 'date-fns';
-import * as m from '../paraglide/messages';
-import { getLocale } from '../paraglide/runtime.js';
+import * as m from '@paraglide/messages';
+import { getLocale } from '@paraglide/runtime.js';
 
 export enum Action {
   GOTO,

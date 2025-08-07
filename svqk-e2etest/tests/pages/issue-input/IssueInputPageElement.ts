@@ -1,5 +1,5 @@
 import BasePageElement from '@arch/BasePageElement';
-import * as m from '../../paraglide/messages';
+import * as m from '@paraglide/messages';
 
 // <.>
 export default class IssueInputPageElement extends BasePageElement {

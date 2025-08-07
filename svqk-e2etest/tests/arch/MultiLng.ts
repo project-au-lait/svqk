@@ -1,5 +1,5 @@
 import { osLocaleSync } from 'os-locale';
-import { setLocale } from '../paraglide/runtime';
+import { setLocale } from '@paraglide/runtime';
 
 export const locale = osLocaleSync().split('-')[0];
 
