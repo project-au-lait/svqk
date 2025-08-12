@@ -190,6 +190,16 @@
                   <commandlineArgs>playwright-install</commandlineArgs>
                 </configuration>
               </execution>
+              <execution>
+                <id>pnpm-paraglide-generate</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <commandlineArgs>run generate:i18n</commandlineArgs>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
         </plugins>

@@ -10,21 +10,23 @@
     "transform-report": "node tools/report-transformer.js",
     "dry-run": "cross-env DRY_RUN=true playwright test --reporter=list",
     "dry-run-csv": "cross-env DRY_RUN=true DRY_RUN_LOG=csv playwright test --reporter=list",
-    "build": "paraglide-js compile --project ./project.inlang --outdir ./tests\\paraglide",
-    "machine-translate": "inlang machine translate --project project.inlang"
+    "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./tests\\paraglide --watch=true",
+    "machine-translate": "inlang machine translate --project project.inlang",
+    "build:vite": "vite"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@inlang/cli": "^3.0.0",
+    "@inlang/paraglide-js": "2.2.0",
     "@playwright/test": "^1.51.0",
     "@types/node": "^22.13.10",
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "os-locale": "^6.0.2",
-    "@inlang/paraglide-js": "2.2.0",
-    "@inlang/cli": "^3.0.0"
+    "vite": "^7.1.2"
   },
   "type": "module"
 }
