@@ -10,7 +10,7 @@
     "transform-report": "node tools/report-transformer.js",
     "dry-run": "cross-env DRY_RUN=true playwright test --reporter=list",
     "dry-run-csv": "cross-env DRY_RUN=true DRY_RUN_LOG=csv playwright test --reporter=list",
-    "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./tests\\paraglide --watch=true",
+    "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./tests\\paraglide",
     "machine-translate": "inlang machine translate --project project.inlang",
     "build:vite": "vite"
   },
