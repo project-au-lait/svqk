@@ -11,7 +11,8 @@
     "dry-run": "cross-env DRY_RUN=true playwright test --reporter=list",
     "dry-run-csv": "cross-env DRY_RUN=true DRY_RUN_LOG=csv playwright test --reporter=list",
     "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./tests\\paraglide",
-    "machine-translate": "inlang machine translate --project project.inlang"
+    "machine-translate": "inlang machine translate --project project.inlang",
+    "watch:paraglide": "chokidar \"tests/translations/*.json\" -c \"pnpm run generate:i18n\""
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "@inlang/paraglide-js": "2.2.0",
     "@playwright/test": "^1.51.0",
     "@types/node": "^22.13.10",
+    "chokidar-cli": "^3.0.0",
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
