@@ -80,19 +80,6 @@
       },
       "args": ["-f", "svqk-backend", "package", "-P", "setup"],
       "problemMatcher": []
-    },
-    {
-      "label": "vite:dev (e2etest)",
-      "type": "shell",
-      "command": "pnpm build:vite",
-      "options": {
-        "cwd": "./svqk-e2etest"
-      },
-      "isBackground": true,
-      "problemMatcher": [],
-      "runOptions": {
-        "runOn": "folderOpen"
-      }
     }
   ]
 }

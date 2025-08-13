@@ -11,8 +11,7 @@
     "dry-run": "cross-env DRY_RUN=true playwright test --reporter=list",
     "dry-run-csv": "cross-env DRY_RUN=true DRY_RUN_LOG=csv playwright test --reporter=list",
     "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./tests\\paraglide",
-    "machine-translate": "inlang machine translate --project project.inlang",
-    "build:vite": "vite"
+    "machine-translate": "inlang machine translate --project project.inlang"
   },
   "keywords": [],
   "author": "",
@@ -25,8 +24,7 @@
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
-    "os-locale": "^6.0.2",
-    "vite": "^7.1.2"
+    "os-locale": "^6.0.2"
   },
   "type": "module"
 }
