@@ -80,18 +80,6 @@
       },
       "args": ["-f", "svqk-backend", "package", "-P", "setup"],
       "problemMatcher": []
-    },
-    {
-      "label": "Watch paraglide (chokidar)",
-      "type": "shell",
-      "command": "pnpm",
-      "options": {
-        "cwd": "./svqk-e2etest"
-      },
-      "args": ["run", "watch:paraglide"],
-      "isBackground": true,
-      "problemMatcher": [],
-      "runOptions": { "runOn": "folderOpen" }
     }
   ]
 }
