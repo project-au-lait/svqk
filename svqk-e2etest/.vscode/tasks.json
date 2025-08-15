@@ -7,6 +7,15 @@
       "command": "pnpm",
       "args": ["playwright", "show-report"],
       "problemMatcher": []
+    },
+    {
+      "label": "watch-i18n-compile",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "watch:paraglide"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "runOptions": { "runOn": "folderOpen" }
     }
   ]
 }

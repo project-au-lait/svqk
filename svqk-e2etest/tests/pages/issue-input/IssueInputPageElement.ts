@@ -1,5 +1,5 @@
 import BasePageElement from '@arch/BasePageElement';
-import { t } from '@arch/MultiLng';
+import * as m from '@paraglide/messages';
 
 // <.>
 export default class IssueInputPageElement extends BasePageElement {
@@ -21,7 +21,7 @@ export default class IssueInputPageElement extends BasePageElement {
   }
 
   async expectSavedSuccessfully() {
-    await this.expectGlobalMessage(t('saved'));
+    await this.expectGlobalMessage(m.saved());
   }
 
   // <.>
@@ -38,6 +38,6 @@ export default class IssueInputPageElement extends BasePageElement {
   }
 
   async expectDeletedSuccessfully() {
-    await this.expectGlobalMessage(t('deleted'));
+    await this.expectGlobalMessage(m.deleted());
   }
 }

@@ -18,7 +18,8 @@
       "@api/*": ["tests/api/*"],
       "@facades/*": ["tests/facades/*"],
       "@factories/*": ["tests/factories/*"],
-      "@pages/*": ["tests/pages/*"]
+      "@pages/*": ["tests/pages/*"],
+      "@paraglide/*": ["tests/paraglide/*"]
     }
   }
 }
