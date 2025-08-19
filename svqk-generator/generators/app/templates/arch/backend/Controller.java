@@ -4,10 +4,12 @@ idPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
 idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
 if(ifcom.idFields.length > 1) {
   parametersAnnotation =
-  `@Parameters({ // @Parameters is added to explicitly document multiple path parameters in OpenAPI.\n  ` +
-  ifcom.idFields.map((field) =>
-    `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
-  ).join(",\n  ") + `\n})`;
+    `// @Parameters is added to explicitly document multiple path parameters in OpenAPI.\n` +
+    `  @Parameters({\n    ` +
+    ifcom.idFields.map((field) =>
+      `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
+    ).join(",\n    ") +
+    `\n  })`;
 } else {
   parametersAnnotation = "";
 }
