@@ -3,10 +3,11 @@
 idPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
 idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
 if(ifcom.idFields.length > 1) {
-  parametersAnnotation = `@Parameters({\n  ` +
-    ifcom.idFields.map((field) =>
-      `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
-    ).join(",\n  ") + `\n})`; // (1)
+  parametersAnnotation =
+  `@Parameters({ // @Parameters is added to explicitly document multiple path parameters in OpenAPI.\n ` +
+  ifcom.idFields.map((field) =>
+    `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
+  ).join(",\n  ") + `\n})`;
 } else {
   parametersAnnotation = "";
 }
@@ -31,15 +32,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
 <% if(ifcom.idFields.length > 1) { %>
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter; // (a)
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
-
-// (a)
-// @Parameter is added to explicitly document multiple path parameters 
-// in OpenAPI (e.g., orderId and productId).
-// This ensures that the API specification correctly describes 
-// all required parameter and their order.
 <% } %>
 
 @Path(<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_PATH)
