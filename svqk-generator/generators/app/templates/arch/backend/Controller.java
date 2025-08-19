@@ -2,16 +2,25 @@
 <%_
 idPath = ifcom.idFields.map((field) => `{${field.fieldName}}`).join("/");
 idMethodArgs = ifcom.buildArgs((field) => `@PathParam("${field.fieldName}") ${field.javaType} ${field.fieldName}`);
-parametersAnnotation = `@Parameters({\n  ` +
-  ifcom.idFields.map((field) =>
-    `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
-  ).join(",\n  ") + `\n})`;
+if(ifcom.idFields.length > 1) {
+  parametersAnnotation = `@Parameters({\n  ` +
+    ifcom.idFields.map((field) =>
+      `@Parameter(name = "${field.fieldName}", in = ParameterIn.PATH, required = true)`
+    ).join(",\n  ") + `\n})`; // (1)
+} else {
+  parametersAnnotation = "";
+}
+
+// (1) parametersAnnotation
+// Used to reflect REST API parameter metadata (name, type, location, required/optional, description) in OpenAPI docs.
+// Required when the source table has a composite primary key.
+// Without it, OpenAPI cannot correctly reflect the order of multiple input parameters.
 -%>
 package <%= interfacesPkgNm %>;
 
 import dev.aulait.sqb.SearchCriteria;
 import dev.aulait.sqb.SearchResult;
-import dev.aulait.svqk.arch.util.BeanUtils;
+import my.group.id.arch.util.BeanUtils;
 <%= ifcom.imports %>
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
@@ -21,9 +30,17 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+<% if(ifcom.idFields.length > 1) { %>
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter; // (a)
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+
+// (a)
+// @Parameter is added to explicitly document multiple path parameters 
+// in OpenAPI (e.g., orderId and productId).
+// This ensures that the API specification correctly describes 
+// all required parameter and their order.
+<% } %>
 
 @Path(<%= entityNmPascal %>Controller.<%= entityNmAllCaps %>_PATH)
 @RequiredArgsConstructor
