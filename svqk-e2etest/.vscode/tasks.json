@@ -2,6 +2,13 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "dry-run",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dry-run", "${input:spec.ts}"],
+      "problemMatcher": []
+    },
+    {
       "label": "show-e2etest-report",
       "type": "shell",
       "command": "pnpm",
@@ -16,6 +23,14 @@
       "isBackground": true,
       "problemMatcher": [],
       "runOptions": { "runOn": "folderOpen" }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "spec.ts",
+      "type": "promptString",
+      "description": "Enter spec.ts file for dry-run",
+      "default": ""
     }
   ]
 }

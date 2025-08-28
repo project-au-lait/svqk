@@ -206,3 +206,19 @@ a|
 * Hosted on Backend:
 ** http://localhost:{backend-port} 
 |====
+
+
+=== テストの実行方法
+
+テストは一般的なVSCodeでの操作で実行できます。
+
+- https://code.visualstudio.com/docs/debugtest/testing#_automatic-test-discovery-in-testing-view[Testing View] > `TEST EXPLORER` でテストを選択し `Run Test` / `Debug Test` アイコン をクリックして実行
+- テストコードを開き、テストメソッド上部に表示される `Run Test` アイコンクリックして実行
+- 他
+
+Integration TestはBackendとDBが起動した状態で実行可能です。テスト側のログは `DEBUG CONSOLE` タブで、 Backend側のログは `TERMINAL` タブで確認できます。
+
+End to End TestはFrontendとBackendとDBが起動した状態で実行可能です。
+`PLAYWRIGHT` サイドバーで https://playwright.dev/docs/getting-started-vscode#debugging-your-tests[Show Trace Viewer] をONにしてテストを実行すると、テスト実行後に `Trace Viewer` が表示されます。 `Trace Viewer` の `Console` タブにはDry Runログが表示されます。
+
+VSCode Task: `dry-run` でテストを実行すると、Dry Runモードでテストが実行されます。Dry Runモードではブラウザ操作を行わずにテストコードを実行するため、テストの仕様確認等に便利です。Dry Runログは `dry_run_logs` ディレクトリに出力されます。  
