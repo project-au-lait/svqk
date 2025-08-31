@@ -19,17 +19,15 @@ export default class ApiHandler {
     handler: (api: Api<unknown>) => Promise<HttpResponse<D, unknown>>
   ): Promise<D | undefined> {
     const api = this.getApi(fetch);
-
-    // TODO show loading
-
-    const response = await handler(api);
-
-    if (response.ok) {
+    try {
+      const response = await handler(api);
       return response.data || (response.text() as D);
-    } else {
-      // TODO error handling
-      messageStore.show(response.statusText);
-      return undefined;
+    } catch (error) {
+      if (error instanceof Response) {
+        messageStore.show(error.statusText);
+      } else {
+        console.log(error);
+      }
     }
   }
 }
