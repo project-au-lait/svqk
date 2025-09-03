@@ -9,6 +9,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Data
 public class <%= entityNmPascal %>SearchCriteriaDto {
+  private String text;
+  
   @Schema(required = true)
   private PageControl pageControl = new PageControl();
 

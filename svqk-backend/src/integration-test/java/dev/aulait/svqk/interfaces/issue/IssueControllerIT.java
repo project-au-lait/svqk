@@ -27,7 +27,7 @@ class IssueControllerIT {
     assertEquals(issue.getSubject(), createdIssue.getSubject()); // <.>
 
     // Update
-    createdIssue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
+    createdIssue.setSubject("test subject: " + RandomStringUtils.insecure().nextAlphanumeric(5));
     client.update(
         IssueUpdateDto.builder().issue(createdIssue).journal(new JournalDto()).build(), issueId);
 

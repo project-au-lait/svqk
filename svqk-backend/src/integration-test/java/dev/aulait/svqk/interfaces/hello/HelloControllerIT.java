@@ -28,7 +28,7 @@ class HelloControllerIT {
     HelloDto hello =
         HelloDto.builder()
             .id(new Random().nextInt())
-            .message(RandomStringUtils.randomAscii(6))
+            .message(RandomStringUtils.insecure().nextAscii(6))
             .build();
 
     String id = request.body(hello).post(restPath + "/hello").then().extract().asString();
