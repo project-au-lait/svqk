@@ -9,7 +9,7 @@ public class IssueDataFactory {
 
   public static IssueDto createRandomIssue() { // <.>
     IssueDto issue = new IssueDto();
-    issue.setSubject("test subject: " + RandomStringUtils.randomAlphanumeric(5));
+    issue.setSubject("test subject: " + RandomStringUtils.insecure().nextAlphanumeric(5));
 
     IssueStatusDto status = new IssueStatusDto();
     status.setId("1");

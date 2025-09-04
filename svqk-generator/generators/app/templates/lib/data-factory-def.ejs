@@ -8,7 +8,7 @@ const javaTypeDefs = [
   {
     type: "String",
     // Only alphanumeric characters (a–z, A–Z, 0–9)
-    valueCode: "RandomStringUtils.random(@varchar.size@, true, true)",
+    valueCode: "RandomStringUtils.insecure().next(@varchar.size@, true, true)",
     imports: ["org.apache.commons.lang3.RandomStringUtils"],
   },
   {

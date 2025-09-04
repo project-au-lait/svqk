@@ -22,8 +22,11 @@ public class <%= entityNmPascal %>Dto {
   <%_ if (compIdFields && field.id) { -%>
   @Schema(required = true)
   private <%= entityNmPascal %>IdDto <%= field.fieldName %>;
+  <%_ } else if (field.multiple) { -%>
+  @Builder.Default
+  private List<<%= field.javaType %>> <%= field.fieldName %>;
   <%_ } else { -%>
-  private <%- field.multiple ? `List<${field.javaType}>` : field.javaType %> <%= field.fieldName %>;
+  private <%- field.javaType %> <%= field.fieldName %>;
   <%_ } -%>
 <%_ }); -%>
 }
