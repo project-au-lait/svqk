@@ -1,0 +1,25 @@
+{
+  "name": "svqk-dev-container",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "runArgs": ["--name", "svqk-dev-container"],
+  "workspaceMount": "source=svqk-dev-container-volume,target=/workspace,type=volume",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    {
+      "source": "svqk-dev-container-m2-volume",
+      "target": "/root/.m2",
+      "type": "volume"
+    }
+  ],
+  "remoteUser": "root",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "pnpm dlx playwright install-deps && git clone https://github.com/project-au-lait/svqk.git"
+}
