@@ -15,8 +15,9 @@
       "redhat.vscode-yaml",
       "sonarsource.sonarlint-vscode",
       "svelte.svelte-vscode",
-      "vmware.vscode-boot-dev-pack",
-      "vscjava.vscode-java-pack"
+      "vscjava.vscode-java-pack",
+      "ms-playwright.playwright",
+      "mtxr.sqltools-driver-pg",
     ]
   },
   "folders": [
