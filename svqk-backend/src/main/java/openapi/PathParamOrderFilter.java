@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.regex.Pattern;
 import org.eclipse.microprofile.openapi.OASFilter;
 import org.eclipse.microprofile.openapi.models.OpenAPI;
-import org.eclipse.microprofile.openapi.models.Operation;
 import org.eclipse.microprofile.openapi.models.PathItem;
 import org.eclipse.microprofile.openapi.models.parameters.Parameter;
 
@@ -19,18 +18,24 @@ public class PathParamOrderFilter implements OASFilter {
   public void filterOpenAPI(OpenAPI openAPI) {
     if (openAPI == null || openAPI.getPaths() == null) return;
 
-    for (Map.Entry<String, PathItem> e : openAPI.getPaths().getPathItems().entrySet()) {
-      String path = e.getKey();
-      List<String> pathParamNames = extractPathVariables(path);
-      if (pathParamNames.size() < 2) continue;
+    openAPI.getPaths().getPathItems().entrySet().stream()
+        .filter(e -> extractPathVariables(e.getKey()).size() >= 2)
+        .forEach(
+            e -> {
+              String path = e.getKey();
+              PathItem pathItem = e.getValue();
+              List<String> pathParamNames = extractPathVariables(path);
 
-      PathItem pathItem = e.getValue();
-      for (Operation op : pathItem.getOperations().values()) {
-        if (op.getParameters() != null) {
-          op.setParameters(reorder(op.getParameters(), pathParamNames));
-        }
-      }
-    }
+              pathItem
+                  .getOperations()
+                  .values()
+                  .forEach(
+                      op -> {
+                        if (op.getParameters() != null) {
+                          op.setParameters(reorder(op.getParameters(), pathParamNames));
+                        }
+                      });
+            });
   }
 
   private static List<String> extractPathVariables(String path) {
