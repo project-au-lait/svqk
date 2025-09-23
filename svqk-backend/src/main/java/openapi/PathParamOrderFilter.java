@@ -19,37 +19,44 @@ public class PathParamOrderFilter implements OASFilter {
     if (openAPI == null || openAPI.getPaths() == null) return;
 
     openAPI.getPaths().getPathItems().entrySet().stream()
-        .filter(e -> extractPathVariables(e.getKey()).size() >= 2)
-        .forEach(
-            e -> {
-              String path = e.getKey();
-              PathItem pathItem = e.getValue();
-              List<String> pathParamNames = extractPathVariables(path);
+        .filter(this::hasMultiplePathVariables)
+        .forEach(this::reorderPathParameters);
+  }
 
-              pathItem
-                  .getOperations()
-                  .values()
-                  .forEach(
-                      op -> {
-                        if (op.getParameters() != null) {
-                          op.setParameters(reorder(op.getParameters(), pathParamNames));
-                        }
-                      });
+  private boolean hasMultiplePathVariables(Map.Entry<String, PathItem> entry) {
+    return extractPathVariables(entry.getKey()).size() >= 2;
+  }
+
+  private void reorderPathParameters(Map.Entry<String, PathItem> entry) {
+    String path = entry.getKey();
+    PathItem pathItem = entry.getValue();
+    List<String> pathParamNames = extractPathVariables(path);
+
+    pathItem
+        .getOperations()
+        .values()
+        .forEach(
+            operation -> {
+              if (operation.getParameters() != null) {
+                operation.setParameters(reorder(operation.getParameters(), pathParamNames));
+              }
             });
   }
 
-  private static List<String> extractPathVariables(String path) {
+  private List<String> extractPathVariables(String path) {
     return PATH_VAR.matcher(path).results().map(match -> match.group(1)).toList();
   }
 
-  private static List<Parameter> reorder(List<Parameter> params, List<String> pathParamNames) {
+  private List<Parameter> reorder(List<Parameter> params, List<String> pathParamNames) {
     Map<String, Integer> indexMap = new HashMap<>();
     for (int i = 0; i < pathParamNames.size(); i++) {
       indexMap.put(pathParamNames.get(i), i);
     }
 
     return params.stream()
-        .sorted(Comparator.comparingInt(p -> indexMap.getOrDefault(p.getName(), Integer.MAX_VALUE)))
+        .sorted(
+            Comparator.comparingInt(
+                param -> indexMap.getOrDefault(param.getName(), Integer.MAX_VALUE)))
         .toList();
   }
 }
