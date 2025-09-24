@@ -57,8 +57,12 @@ public class PathParamOrderFilter implements OASFilter {
   }
 
   // (1) Reason for MAX_VALUE fallback:
-  // Non-path parameters keep their original order. This is achieved by assigning
+  // The order of non-path parameters is preserved. This is done by assigning
   // Integer.MAX_VALUE to parameters not found in pathParamNames so they are always
-  // sorted to the end. When multiple non-path parameters share this value, Java's
-  // stable sort preserves their original relative order.
+  // placed at the end. When multiple non-path parameters share this value, Java's
+  // stable sort ensures their original relative order is maintained. (a)
+  //
+  // References:
+  // (a)
+  // https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html#sort(java.util.List)
 }
