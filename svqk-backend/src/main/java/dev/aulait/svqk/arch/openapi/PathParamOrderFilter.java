@@ -1,4 +1,4 @@
-package openapi;
+package dev.aulait.svqk.arch.openapi;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkus.smallrye.openapi.OpenApiFilter;
@@ -18,36 +18,32 @@ public class PathParamOrderFilter implements OASFilter {
   public void filterOpenAPI(OpenAPI openAPI) {
     if (openAPI == null || openAPI.getPaths() == null) return;
 
-    openAPI.getPaths().getPathItems().entrySet().stream()
-        .filter(this::hasMultiplePathVariables)
-        .forEach(this::reorderPathParameters);
-  }
-
-  private boolean hasMultiplePathVariables(Map.Entry<String, PathItem> entry) {
-    return extractPathVariables(entry.getKey()).size() >= 2;
+    openAPI.getPaths().getPathItems().entrySet().stream().forEach(this::reorderPathParameters);
   }
 
   private void reorderPathParameters(Map.Entry<String, PathItem> entry) {
-    String path = entry.getKey();
-    PathItem pathItem = entry.getValue();
-    List<String> pathParamNames = extractPathVariables(path);
+    List<String> pathParamNames = extractPathParamNames(entry.getKey());
+    if (pathParamNames.size() < 2) {
+      return;
+    }
 
-    pathItem
+    entry
+        .getValue()
         .getOperations()
         .values()
         .forEach(
-            operation -> {
-              if (operation.getParameters() != null) {
-                operation.setParameters(reorder(operation.getParameters(), pathParamNames));
-              }
+            op -> {
+              List<Parameter> reordered = orderByPathParamNames(op.getParameters(), pathParamNames);
+              op.setParameters(reordered);
             });
   }
 
-  private List<String> extractPathVariables(String path) {
+  private List<String> extractPathParamNames(String path) {
     return PATH_VAR.matcher(path).results().map(match -> match.group(1)).toList();
   }
 
-  private List<Parameter> reorder(List<Parameter> params, List<String> pathParamNames) {
+  private List<Parameter> orderByPathParamNames(
+      List<Parameter> params, List<String> pathParamNames) {
     Map<String, Integer> indexMap = new HashMap<>();
     for (int i = 0; i < pathParamNames.size(); i++) {
       indexMap.put(pathParamNames.get(i), i);
@@ -56,7 +52,13 @@ public class PathParamOrderFilter implements OASFilter {
     return params.stream()
         .sorted(
             Comparator.comparingInt(
-                param -> indexMap.getOrDefault(param.getName(), Integer.MAX_VALUE)))
+                param -> indexMap.getOrDefault(param.getName(), Integer.MAX_VALUE))) // (1)
         .toList();
   }
+
+  // (1) Reason for MAX_VALUE fallback:
+  // Non-path parameters keep their original order. This is achieved by assigning
+  // Integer.MAX_VALUE to parameters not found in pathParamNames so they are always
+  // sorted to the end. When multiple non-path parameters share this value, Java's
+  // stable sort preserves their original relative order.
 }
