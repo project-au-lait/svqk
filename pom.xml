@@ -90,12 +90,12 @@
           </execution>
         </executions>
         <configuration>
-          <outputDirectory>${project.basedir}</outputDirectory>
+          <outputDirectory>${project.basedir}/.vscode</outputDirectory>
           <resources>
             <resource>
               <directory>${project.basedir}/src/main/resources</directory>
               <includes>
-                <include>*.code-workspace</include>
+                <include>*settings.json</include>
               </includes>
               <filtering>true</filtering>
             </resource>

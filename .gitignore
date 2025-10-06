@@ -5,7 +5,7 @@
 node_modules
 target
 
-/svqk.code-workspace
+.vscode/settings.json
 
 svqk-backend/.env
 
