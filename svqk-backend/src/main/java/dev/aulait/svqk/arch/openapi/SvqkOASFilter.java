@@ -32,11 +32,6 @@ public class SvqkOASFilter implements OASFilter {
    * GET/UPDATE/DELETE operations, path parameters are expected in the primary-key order of the
    * target table, which corresponds to the placeholder order in the API path (c).
    *
-   * <p>This filter is invoked during OpenAPI document generation and normalizes the order of path
-   * parameters from alphabetical order to the placeholder order.
-   *
-   * <p>References:
-   *
    * <p>(a) svqk-generator uses Quarkus to generate OpenAPI documents. See
    * svqk-generator/.yo-rc.json (genOpenApiJsonCmd).
    *
@@ -47,28 +42,47 @@ public class SvqkOASFilter implements OASFilter {
    * generators/app/templates/arch/frontend/routes/entityId/+page.ts
    * generators/app/templates/lib/typescript-common.ejs (buildDetailApiCall)
    *
-   * <p><b>Problematic Example</b>:
+   * <p><b>Problematic Example</b>
+   *
+   * <p>In the generated client, the parameters of the get function are listed in alphabetical
+   * order, while the caller passes arguments in the primary-key order that matches the path
+   * definition.
+   *
+   * <p><b>Function Definition (generated, alphabetical order)</b>
    *
    * <pre>{@code
-   * Path:
-   *   GET /api/user/{userId}/{accountId}
-   *
-   * Generated Api Client Function (alphabetical order):
-   *   get: (accountId: string, userId: string)
-   *
-   * Call site:
-   *   api.user.get(userId, accountId)
-   *
-   * Expected request:
-   *   GET /api/user/10/A
-   *
-   * Actual request:
-   *   GET /api/user/A/10
+   * get: (
+   *   accountId: string,
+   *   userId: string,
+   *   params: RequestParams = {}
+   * ) =>
+   *   this.request<UserModel, any>({
+   *     path: `/api/user/${userId}/${accountId}`,
+   *     method: "GET",
+   *     format: "json",
+   *     ...params,
+   *   }),
    * }</pre>
    *
-   * @param entry a map entry where the key is the API path string and the value is the {@link
-   *     PathItem} associated with that path; this method may update the ordering of parameters
-   *     within the {@code PathItem}.
+   * <p><b>Call Site (generated UI action, passing arguments in PK order)</b>
+   *
+   * <pre>{@code
+   * const user = (await ApiHandler.handle<UserModel>(
+   *   fetch,
+   *   (api) =>
+   *     api.user.get(
+   *       params.userId,     // PK1
+   *       params.accountId   // PK2
+   *     )
+   * ))!;
+   * }</pre>
+   *
+   * @param entry a map entry where the key is the API path string, and the value is the
+   *     corresponding {@link PathItem}. A {@code PathItem} represents an API path item that
+   *     contains multiple HTTP operations (such as GET, POST, PUT, DELETE), each of which can
+   *     declare its own parameters as well as path-level parameters. This method may update the
+   *     ordering of parameters within the {@code PathItem} to match the placeholder order in the
+   *     API path template
    */
   private void reorderPathParameters(Map.Entry<String, PathItem> entry) {
     List<String> pathParamNames = extractPathParamNames(entry.getKey());
