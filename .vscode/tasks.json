@@ -117,6 +117,18 @@
       "isBackground": true,
       "problemMatcher": [],
       "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "install-all-recommended-extensions",
+      "type": "shell",
+      "command": "node -e \"console.log(JSON.parse(require('fs').readFileSync('./.vscode/extensions.json')).recommendations.join('\\\\n'))\" | xargs -L 1 code --install-extension",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "presentation": {
+        "reveal": "silent"
+      },
+      "hide": true
     }
   ],
   "inputs": [
