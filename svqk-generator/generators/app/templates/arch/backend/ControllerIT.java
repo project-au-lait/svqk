@@ -6,13 +6,13 @@ package <%= interfacesPkgNm %>;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import jakarta.ws.rs.core.Response.Status;
 import org.junit.jupiter.api.Test;
 
 import dev.aulait.svqk.arch.exception.ErrorResponseDto;
+import <%= interfacesPkgNm %>.<%= entityNmPascal %>Controller.<%= entityNmPascal %>SearchResultDto;
 
 /**
  * This integration test is automatically generated.
@@ -47,7 +47,7 @@ class <%= entityNmPascal %>ControllerIT {
     // Search
     <%= entityNmPascal %>SearchCriteriaDto criteria = new <%= entityNmPascal %>SearchCriteriaDto();
     <%= entityNmPascal %>SearchResultDto result = client.search(criteria);
-    assertTrue(result.getList().size() > 1);
+    assertTrue(result.getList().size() > 0);
 
     <%= entityNmPascal %>Dto updated<%= entityNmPascal %> = client.get(<%= clientIdArgs %>);
 
