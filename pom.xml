@@ -95,7 +95,7 @@
             <resource>
               <directory>${project.basedir}/src/main/resources</directory>
               <includes>
-                <include>*settings.json</include>
+                <include>settings.json</include>
               </includes>
               <filtering>true</filtering>
             </resource>
