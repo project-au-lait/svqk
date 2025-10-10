@@ -27,13 +27,13 @@ public class SvqkOASFilter implements OASFilter {
    * relative order and are placed after the path parameters.
    *
    * <p><b>Background:</b> This reordering is performed to align with how svqk-generator specifies
-   * the order of path parameters in the generated OpenAPI document (a). Without this adjustment,
-   * the OpenAPI document would list path parameters in alphanumeric order by their names. From this
-   * OpenAPI document, svqk-generator generates the API Client (b). In addition, when svqk-generator
-   * generates code for single-record GET, UPDATE, or DELETE API calls, it arranges the path
-   * parameters in the order of the primary keys of the target table (c). This order corresponds to
-   * the order of placeholders defined in the API path. To keep these two parameter orders
-   * consistent, this method performs the reordering.
+   * the order of path parameters in the generated OpenAPI document (a). Without this reordering,
+   * the OpenAPI document would list path parameters in alphanumeric order by their names.
+   * svqk-generator generates an API Client (b) based on this OpenAPI document. In addition, when
+   * svqk-generator generates code for single-record GET, UPDATE, or DELETE API calls, it arranges
+   * the path parameters in the order of the primary keys of the target table (c). This order
+   * corresponds to the order of placeholders defined in the API path. To keep these two parameter
+   * orders consistent, this method performs the reordering.
    *
    * <p><b>(a)</b> svqk-generator uses Quarkus to generate the OpenAPI document. See <code>
    * svqk-generator/.yo-rc.json</code> (genOpenApiJsonCmd).
@@ -76,7 +76,7 @@ public class SvqkOASFilter implements OASFilter {
    *       params.userId,
    *       params.accountId
    *     )
-   * ))!;
+   * ));
    * </pre>
    *
    * @param entry An entry whose key is the API path and value is a PathItem. A PathItem contains
