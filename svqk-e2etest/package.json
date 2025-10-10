@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "playwright-install": "playwright install",
+    "playwright-install": "playwright install-deps",
     "e2etest": "cross-env NODE_OPTIONS=--no-experimental-strip-types playwright test --trace on",
     "playwright-show-report": "playwright show-report",
     "transform-report": "node tools/report-transformer.js",
