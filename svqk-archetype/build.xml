@@ -154,7 +154,7 @@
     <delete file="${propsfile}" />
     <propertyfile file="${propsfile}">
       <entry key="excludePatterns" value="${excludePatterns}" />
-      <entry key="archetype.filteredExtensions" value="java,json,code-workspace,yaml,archetype,xml" />
+      <entry key="archetype.filteredExtensions" value="java,json,yaml,archetype,xml" />
       <!-- This value is to avoid the possibility of incorrectly replacing the version string in
       package.json files. -->
       <entry key="version" value="string that cannot be matched" />
@@ -208,9 +208,6 @@
   <target name="adjust-archetype-metadata">
     <property name="archetype.metadata.file"
       value="${archetype.gendir}/src/main/resources/META-INF/maven/archetype-metadata.xml" />
-    <replace
-      file="${archetype.metadata.file}"
-      token="svqk.code-workspace" value="__artifactId__.code-workspace" />
     <replaceregexp flags="g"
       file="${archetype.metadata.file}"
       match="(directory&gt;src&lt;(.|\n)*?)\*{2}/\*\.ts((.|\n)*?/includes)"
