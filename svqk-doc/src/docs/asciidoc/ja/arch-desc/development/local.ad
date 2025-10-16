@@ -39,6 +39,6 @@ https://github.com/google/google-java-format/releases/tag/v1.22.0[v1.22.0]を使
 |yaml|redhat.vscode-yaml
 |===
 
-これらのフォーマッターのインストール、言語ごとの適用、保存時の実行は全て
-VSCodeのワークスペース設定ファイル(.code-workspace)に設定されています。
+これらのフォーマッターのインストールはVSCode Extension定義ファイル(.vscode/extensions.json)に設定されています。また、言語ごとの適用、保存時の実行は
+VSCodeの設定ファイル(.vscode/settings.json)に設定されています。
 

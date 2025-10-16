@@ -13,13 +13,20 @@ a|
 
 * pom.xml +
   DB接続情報など各プロジェクトで使用可能なプロパティを定義
-* .vscode/tasks.json, launch.json +
-  VSCode Taskと起動構成を定義
-* root.code-workspace +
-  VSCodeの各種設定
 
+.8+|
+|.vscode
+a|
+* extensions.json +
+  プロジェクト推奨VSCode Extensionを定義
+* launch.json +
+  起動構成を定義
+* settings.json +
+  設定
+* tasks.json +
+  VSCode Taskを定義
+  
 
-.7+|
 |{project-artifactId}-container
 a|
 ローカル開発環境・CIで使用するコンテナを作成するための資材を格納します。
