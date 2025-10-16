@@ -77,6 +77,7 @@ brew install --cask visual-studio-code
 ----
 # <.>
 git clone https://github.com/project-au-lait/svqk.git
+cd svqk
 
 # <.>
 chcp 65001
@@ -103,7 +104,7 @@ mvnw install -T 1C -P setup,browse-e2etest
 以下のコマンドを実行し、プロジェクトルートをカレントディレクトリとしてVSCodeを開きます。
 
 ```sh
-code svqk
+code .
 ```
 
 [NOTE]
