@@ -101,25 +101,25 @@ mvnw install -T 1C -P setup,browse-e2etest
 
 === プロジェクトを開く
 
-以下のコマンドを実行し、プロジェクトをVSCodeワークスペースとして開きます。
+以下のコマンドを実行し、プロジェクトルートをカレントディレクトリとしてVSCodeを開きます。
 
 ```sh
-code svqk.code-workspace
+code .
 ```
 
 [NOTE]
 ====
-VSCodeワークスペースが開いたら、ウィンドウ右下に表示される以下のダイアログで `Install` ボタンをクリックして拡張機能をインストールします。
+VSCodeが開いたら、ウィンドウ右下に表示される以下のダイアログで `Install` ボタンをクリックして拡張機能をインストールします。
 
 image::recommended-extension.png[width=450]
 ====
 
 [TIP]
 ====
-一度開いたVSCodeワークスペースは、以下の手順で開けるようになります。
+一度開いたプロジェクトは、以下の手順で開けるようになります。
 
 . VSCodeを起動
-.  `File` メニュー > `Open Recent` > svqk(Workspace)を選択
+.  `File` メニュー > `Open Recent` > svqkを選択
 ====
 
 [[project-usage]]
