@@ -43,11 +43,12 @@
         <targetPath>../../</targetPath>
       </resource>
       <resource>
-        <directory>../svqk-frontend/src/lib/translations</directory>
+        <directory>../svqk-frontend/src/lib/paraglide</directory>
         <includes>
-          <include>*.json</include>
+          <include>**/*</include>
         </includes>
-        <targetPath>../../tests/translations</targetPath>
+        <filtering>false</filtering>
+        <targetPath>../../tests/paraglide</targetPath>
       </resource>
     </resources>
 
@@ -188,16 +189,6 @@
                 </goals>
                 <configuration>
                   <commandlineArgs>playwright-install</commandlineArgs>
-                </configuration>
-              </execution>
-              <execution>
-                <id>pnpm-paraglide-generate</id>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <commandlineArgs>run generate:i18n</commandlineArgs>
                 </configuration>
               </execution>
             </executions>

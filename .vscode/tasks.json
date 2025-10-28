@@ -108,15 +108,6 @@
       "command": "pnpm",
       "args": ["-C", "svqk-e2etest", "playwright-show-report"],
       "problemMatcher": []
-    },
-    {
-      "label": "watch-i18n-compile",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["-C", "svqk-e2etest", "run", "watch:paraglide"],
-      "isBackground": true,
-      "problemMatcher": [],
-      "runOptions": { "runOn": "folderOpen" }
     }
   ],
   "inputs": [

@@ -9,20 +9,15 @@
     "playwright-show-report": "playwright show-report",
     "transform-report": "node tools/report-transformer.js",
     "dry-run": "cross-env DRY_RUN=true NODE_OPTIONS=--no-experimental-strip-types playwright test --reporter=list",
-    "dry-run-csv": "cross-env DRY_RUN=true DRY_RUN_LOG=csv NODE_OPTIONS=--no-experimental-strip-types playwright test --reporter=list",
-    "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./tests/paraglide",
-    "watch:paraglide": "chokidar tests/translations/*.json -c \"pnpm run generate:i18n\""
+    "dry-run-csv": "cross-env DRY_RUN=true DRY_RUN_LOG=csv NODE_OPTIONS=--no-experimental-strip-types playwright test --reporter=list"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.37.0",
-    "@inlang/cli": "^3.0.0",
-    "@inlang/paraglide-js": "2.2.0",
     "@playwright/test": "^1.51.0",
     "@types/node": "^22.13.10",
-    "chokidar-cli": "^3.0.0",
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
@@ -30,6 +25,7 @@
     "eslint-config-prettier": "^10.1.8",
     "globals": "^16.4.0",
     "os-locale": "^6.0.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.0"
   },
