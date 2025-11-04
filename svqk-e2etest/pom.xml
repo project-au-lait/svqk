@@ -43,7 +43,7 @@
         <targetPath>../../</targetPath>
       </resource>
       <resource>
-        <directory>../svqk-frontend/src/lib/paraglide</directory>
+        <directory>../${project.parent.artifactId}-frontend/src/lib/paraglide</directory>
         <includes>
           <include>**/*</include>
         </includes>
