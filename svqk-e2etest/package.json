@@ -24,7 +24,6 @@
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^16.4.0",
-    "os-locale": "^6.0.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.0"
   },
