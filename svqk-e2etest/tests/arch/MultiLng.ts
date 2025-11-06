@@ -1,7 +1,6 @@
-import { osLocaleSync } from 'os-locale';
 import { setLocale } from '@paraglide/runtime';
 
-export const locale = osLocaleSync().split('-')[0];
+export const locale = Intl.DateTimeFormat().resolvedOptions().locale.split('-')[0];
 
 // export const locale = 'en';
 console.log(`Runtime locale: ${locale}`);
