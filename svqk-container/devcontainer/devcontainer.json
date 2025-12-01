@@ -15,6 +15,7 @@
     "ghcr.io/devcontainers/features/java:1": {
       "version": "21"
     },
+    "ghcr.io/devcontainers-extra/features/maven-sdkman:2": {},
     "ghcr.io/devcontainers/features/node:1": {
       "version": "22"
     },
