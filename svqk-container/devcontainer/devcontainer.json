@@ -7,11 +7,10 @@
   "mounts": [
     {
       "source": "svqk-dev-container-m2-volume",
-      "target": "/root/.m2",
+      "target": "/home/vscode/.m2",
       "type": "volume"
     }
   ],
-  "remoteUser": "root",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
       "version": "21"
@@ -19,7 +18,7 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "22"
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {}
   },
-  "postCreateCommand": "pnpm dlx playwright install-deps && git clone https://github.com/project-au-lait/svqk.git"
+  "postCreateCommand": "sudo chown -R vscode:vscode /workspace /home/vscode/.m2"
 }
