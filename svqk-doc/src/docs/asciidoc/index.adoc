@@ -53,4 +53,9 @@ a|
 a|
 * link:0.9.3/en/index.html[English]
 * link:0.9.3/ja/index.html[日本語]
+
+|0.9.4
+a|
+* link:0.9.4/en/index.html[English]
+* link:0.9.4/ja/index.html[日本語]
 |===
