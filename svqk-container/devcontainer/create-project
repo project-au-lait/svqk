@@ -1,0 +1,38 @@
+#!/bin/bash
+
+read -p "Enter groupId (default: my.group.id): " groupId
+groupId=${groupId:-my.group.id}
+read -p "Enter artifactId (default: my-artifactid): " artifactId
+artifactId=${artifactId:-my-artifactid}
+
+echo "Select archetype:"
+echo "1. svqk-archetype-skeleton (Minimal)"
+echo "2. svqk-archetype-arch (Skeleton with Architecture)"
+echo "3. svqk-archetype-refimpl (Reference Implementation)"
+read -p "Enter selection (1-3): " archetypeSelection
+
+case $archetypeSelection in
+    1)
+        archetypeArtifactId="svqk-archetype-skeleton"
+        ;;
+    2)
+        archetypeArtifactId="svqk-archetype-arch"
+        ;;
+    3)
+        archetypeArtifactId="svqk-archetype-refimpl"
+        ;;
+    *)
+        echo "Invalid selection. Using default: svqk-archetype-refimpl"
+        archetypeArtifactId="svqk-archetype-refimpl"
+        ;;
+esac
+
+latestVersion=$(curl -s https://api.github.com/repos/project-au-lait/svqk/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+
+mvn archetype:generate \
+    -DarchetypeGroupId=dev.aulait.svqk \
+    -DarchetypeArtifactId="$archetypeArtifactId" \
+    -DarchetypeVersion="$latestVersion" \
+    -DgroupId="$groupId" \
+    -DartifactId="$artifactId" \
+    -Dversion=1.0-SNAPSHOT
